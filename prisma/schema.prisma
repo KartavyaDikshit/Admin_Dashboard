@@ -1,0 +1,733 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://tbi_user:karta123@localhost:5432/tbi_db"
+}
+
+// Enums
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  ACTIVE
+}
+
+enum TranslationStatus {
+  DRAFT
+  PENDING_REVIEW
+  IN_REVIEW
+  APPROVED
+  PUBLISHED
+  REJECTED
+}
+
+enum TranslationJobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  RETRY
+}
+
+enum ContentWorkflowStatus {
+  GENERATING
+  PENDING_REVIEW
+  IN_REVISION
+  REVISION_REQUIRED
+  APPROVED
+  PUBLISHED
+  REJECTED
+}
+
+enum ContentJobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum AdminRole {
+  SUPERADMIN
+  MANAGER
+  EDITOR
+  TRANSLATOR
+  MODERATOR
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
+enum LicenseType {
+  SINGLE
+  MULTIPLE
+  CORPORATE
+  ENTERPRISE
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL_SENT
+  NEGOTIATION
+  CONVERTED
+  CLOSED_LOST
+  CLOSED_WON
+}
+
+// Models
+model Category {
+  id                String                 @id @default(uuid()) @db.Uuid
+  shortcode         String                 @unique @db.VarChar(20)
+  slug              String                 @unique @db.VarChar(150)
+  title             String                 @db.VarChar(300)
+  description       String?                @db.Text
+  icon              String?                @db.VarChar(100)
+  featured          Boolean                @default(false)
+  sortOrder         Int                    @default(0) @map("sort_order")
+  seoKeywords       String[]               @default([]) @map("seo_keywords")
+  regionalKeywords  Json?                  @map("regional_keywords")
+  searchVolume      Json?                  @map("search_volume")
+  rankingFactors    Json?                  @map("ranking_factors")
+  metaTitle         String?                @db.VarChar(300) @map("meta_title")
+  metaDescription   String?                @db.VarChar(500) @map("meta_description")
+  canonicalUrl      String?                @db.VarChar(500) @map("canonical_url")
+  ogTitle           String?                @db.VarChar(300) @map("og_title")
+  ogDescription     String?                @db.VarChar(500) @map("og_description")
+  ogImage           String?                @db.VarChar(500) @map("og_image")
+  hreflangAlts      Json?                  @map("hreflang_alts")
+  status            ContentStatus          @default(PUBLISHED)
+  viewCount         BigInt                 @default(0) @map("view_count")
+  clickCount        BigInt                 @default(0) @map("click_count")
+  conversionRate    Decimal                @default(0) @db.Decimal(5, 4) @map("conversion_rate")
+  createdAt         DateTime               @default(now()) @map("created_at")
+  updatedAt         DateTime               @updatedAt @map("updated_at")
+  
+  // Relations
+  translations      CategoryTranslation[]
+  reports          Report[]
+  blogs            Blog[]
+
+  @@map("categories")
+}
+
+model CategoryTranslation {
+  id                        String            @id @default(uuid()) @db.Uuid
+  categoryId                String            @map("category_id") @db.Uuid
+  locale                    String            @db.VarChar(5)
+  title                     String            @db.VarChar(300)
+  description               String?           @db.Text
+  slug                      String            @db.VarChar(150)
+  seoKeywords               String[]          @default([]) @map("seo_keywords")
+  localizedKeywords         String[]          @default([]) @map("localized_keywords")
+  culturalKeywords          String[]          @default([]) @map("cultural_keywords")
+  longTailKeywords          String[]          @default([]) @map("long_tail_keywords")
+  metaTitle                 String?           @db.VarChar(300) @map("meta_title")
+  metaDescription           String?           @db.VarChar(500) @map("meta_description")
+  ogTitle                   String?           @db.VarChar(300) @map("og_title")
+  ogDescription             String?           @db.VarChar(500) @map("og_description")
+  translationJobId          String?           @map("translation_job_id") @db.Uuid
+  aiGenerated               Boolean           @default(false) @map("ai_generated")
+  humanReviewed             Boolean           @default(false) @map("human_reviewed")
+  translationQuality        Decimal?          @db.Decimal(3, 2) @map("translation_quality")
+  culturalAdaptation        String?           @db.Text @map("cultural_adaptation")
+  searchPerformance         Json?             @map("search_performance")
+  localRankings             Json?             @map("local_rankings")
+  status                    TranslationStatus @default(DRAFT)
+  createdAt                 DateTime          @default(now()) @map("created_at")
+  updatedAt                 DateTime          @updatedAt @map("updated_at")
+  
+  // Relations
+  category                  Category          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, locale])
+  @@map("category_translations")
+}
+
+model Report {
+  id                         String                @id @default(uuid()) @db.Uuid
+  categoryId                 String?               @map("category_id") @db.Uuid
+  sku                        String?               @unique @db.VarChar(50)
+  slug                       String                @unique @db.VarChar(200)
+  title                      String                @db.VarChar(500)
+  description                String                @db.Text
+  summary                    String?               @db.Text
+  pages                      Int                   @default(0)
+  publishedDate              DateTime              @map("published_date") @db.Date
+  baseYear                   Int?                  @map("base_year")
+  forecastPeriod             String?               @db.VarChar(50) @map("forecast_period")
+  tableOfContents            String?               @db.Text @map("table_of_contents")
+  listOfFigures              String?               @db.Text @map("list_of_figures")
+  methodology                String?               @db.Text
+  keyFindings                String[]              @default([]) @map("key_findings")
+  executiveSummary           String?               @db.Text @map("executive_summary")
+  marketData                 Json?                 @map("market_data")
+  competitiveLandscape       Json?                 @map("competitive_landscape")
+  marketSegmentation         Json?                 @map("market_segmentation")
+  regionalAnalysis           Json?                 @map("regional_analysis")
+  swotAnalysis               Json?                 @map("swot_analysis")
+  keyPlayers                 String[]              @default([]) @map("key_players")
+  regions                    String[]              @default([])
+  industryTags               String[]              @default([]) @map("industry_tags")
+  reportType                 String?               @db.VarChar(50) @map("report_type")
+  researchMethod             String?               @db.VarChar(100) @map("research_method")
+  keywords                   String[]              @default([])
+  semanticKeywords           String[]              @default([]) @map("semantic_keywords")
+  regionalKeywords           Json?                 @map("regional_keywords")
+  competitorKeywords         String[]              @default([]) @map("competitor_keywords")
+  trendingKeywords           String[]              @default([]) @map("trending_keywords")
+  longTailKeywords           String[]              @default([]) @map("long_tail_keywords")
+  metaTitle                  String                @db.VarChar(500) @map("meta_title")
+  metaDescription            String                @db.VarChar(500) @map("meta_description")
+  canonicalUrl               String?               @db.VarChar(500) @map("canonical_url")
+  ogTitle                    String?               @db.VarChar(500) @map("og_title")
+  ogDescription              String?               @db.VarChar(500) @map("og_description")
+  ogImage                    String?               @db.VarChar(500) @map("og_image")
+  twitterTitle               String?               @db.VarChar(500) @map("twitter_title")
+  twitterDescription         String?               @db.VarChar(500) @map("twitter_description")
+  schemaMarkup               Json?                 @map("schema_markup")
+  breadcrumbData             Json?                 @map("breadcrumb_data")
+  faqData                    Json?                 @map("faq_data")
+  singlePrice                Decimal?              @db.Decimal(10, 2) @map("single_price")
+  multiPrice                 Decimal?              @db.Decimal(10, 2) @map("multi_price")
+  corporatePrice             Decimal?              @db.Decimal(10, 2) @map("corporate_price")
+  enterprisePrice            Decimal?              @db.Decimal(10, 2) @map("enterprise_price")
+  currency                   String                @default("USD") @db.VarChar(3)
+  aiGenerated                Boolean               @default(false) @map("ai_generated")
+  contentGenerationWorkflowId String?              @map("content_generation_workflow_id") @db.Uuid
+  humanApproved              Boolean               @default(false) @map("human_approved")
+  contentQualityScore        Decimal?              @db.Decimal(3, 2) @map("content_quality_score")
+  aiConfidenceScore          Decimal?              @db.Decimal(3, 2) @map("ai_confidence_score")
+  status                     ContentStatus         @default(DRAFT)
+  featured                   Boolean               @default(false)
+  priority                   Int                   @default(0)
+  viewCount                  BigInt                @default(0) @map("view_count")
+  downloadCount              BigInt                @default(0) @map("download_count")
+  shareCount                 BigInt                @default(0) @map("share_count")
+  enquiryCount               BigInt                @default(0) @map("enquiry_count")
+  searchRankings             Json?                 @map("search_rankings")
+  clickThroughRate           Decimal?              @db.Decimal(5, 4) @map("click_through_rate")
+  averagePosition            Decimal?              @db.Decimal(5, 2) @map("average_position")
+  impressions                BigInt                @default(0)
+  clicks                     BigInt                @default(0)
+  bounceRate                 Decimal?              @db.Decimal(5, 4) @map("bounce_rate")
+  timeOnPage                 Int?                  @map("time_on_page")
+  avgRating                  Decimal?              @db.Decimal(3, 2) @map("avg_rating")
+  reviewCount                Int                   @default(0) @map("review_count")
+  totalRatingPoints          Int                   @default(0) @map("total_rating_points")
+  createdAt                  DateTime              @default(now()) @map("created_at")
+  updatedAt                  DateTime              @updatedAt @map("updated_at")
+  
+  // Relations
+  category                   Category?             @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  translations               ReportTranslation[]
+  orderItems                 OrderItem[]
+  enquiries                  Enquiry[]
+  reviews                    ReportReview[]
+  contentGenerationWorkflow  ContentGenerationWorkflow? @relation(fields: [contentGenerationWorkflowId], references: [id])
+
+  @@map("reports")
+}
+
+model ReportTranslation {
+  id                          String            @id @default(uuid()) @db.Uuid
+  reportId                    String            @map("report_id") @db.Uuid
+  locale                      String            @db.VarChar(5)
+  title                       String            @db.VarChar(500)
+  description                 String            @db.Text
+  summary                     String?           @db.Text
+  slug                        String            @db.VarChar(200)
+  tableOfContents             String?           @db.Text @map("table_of_contents")
+  listOfFigures               String?           @db.Text @map("list_of_figures")
+  methodology                 String?           @db.Text
+  keyFindings                 String[]          @default([]) @map("key_findings")
+  executiveSummary            String?           @db.Text @map("executive_summary")
+  keywords                    String[]          @default([])
+  semanticKeywords            String[]          @default([]) @map("semantic_keywords")
+  localizedKeywords           String[]          @default([]) @map("localized_keywords")
+  culturalKeywords            String[]          @default([]) @map("cultural_keywords")
+  longTailKeywords            String[]          @default([]) @map("long_tail_keywords")
+  localCompetitorKeywords     String[]          @default([]) @map("local_competitor_keywords")
+  metaTitle                   String            @db.VarChar(500) @map("meta_title")
+  metaDescription             String            @db.VarChar(500) @map("meta_description")
+  canonicalUrl                String?           @db.VarChar(500) @map("canonical_url")
+  ogTitle                     String?           @db.VarChar(500) @map("og_title")
+  ogDescription               String?           @db.VarChar(500) @map("og_description")
+  ogImage                     String?           @db.VarChar(500) @map("og_image")
+  twitterTitle                String?           @db.VarChar(500) @map("twitter_title")
+  twitterDescription          String?           @db.VarChar(500) @map("twitter_description")
+  schemaMarkup                Json?             @map("schema_markup")
+  breadcrumbData              Json?             @map("breadcrumb_data")
+  faqData                     Json?             @map("faq_data")
+  localBusinessSchema         Json?             @map("local_business_schema")
+  translationJobId            String?           @map("translation_job_id") @db.Uuid
+  aiGenerated                 Boolean           @default(false) @map("ai_generated")
+  humanReviewed               Boolean           @default(false) @map("human_reviewed")
+  translationQuality          Decimal?          @db.Decimal(3, 2) @map("translation_quality")
+  culturalAdaptationScore     Decimal?          @db.Decimal(3, 2) @map("cultural_adaptation_score")
+  culturalAdaptationNotes     String?           @db.Text @map("cultural_adaptation_notes")
+  localizationNotes           String?           @db.Text @map("localization_notes")
+  searchPerformance           Json?             @map("search_performance")
+  localRankings               Json?             @map("local_rankings")
+  regionalCtr                 Decimal?          @db.Decimal(5, 4) @map("regional_ctr")
+  regionalImpressions         BigInt            @default(0) @map("regional_impressions")
+  regionalClicks              BigInt            @default(0) @map("regional_clicks")
+  status                      TranslationStatus @default(DRAFT)
+  createdAt                   DateTime          @default(now()) @map("created_at")
+  updatedAt                   DateTime          @updatedAt @map("updated_at")
+  
+  // Relations
+  report                      Report            @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@unique([reportId, locale])
+  @@map("report_translations")
+}
+
+model ContentGenerationWorkflow {
+  id                    String                   @id @default(uuid()) @db.Uuid
+  industry              String                   @db.VarChar(255)
+  marketSize            String?                  @db.VarChar(255) @map("market_size")
+  geographicScope       String                   @db.VarChar(255) @map("geographic_scope")
+  timeframe             String                   @db.VarChar(50)
+  reportType            String                   @db.VarChar(50) @map("report_type")
+  customRequirements    String?                  @db.Text @map("custom_requirements")
+  phase1JobId           String?                  @map("phase1_job_id") @db.Uuid
+  phase2JobId           String?                  @map("phase2_job_id") @db.Uuid
+  phase3JobId           String?                  @map("phase3_job_id") @db.Uuid
+  phase4JobId           String?                  @map("phase4_job_id") @db.Uuid
+  marketAnalysis        String?                  @db.Text @map("market_analysis")
+  competitiveAnalysis   String?                  @db.Text @map("competitive_analysis")
+  trendsAnalysis        String?                  @db.Text @map("trends_analysis")
+  finalSynthesis        String?                  @db.Text @map("final_synthesis")
+  overallQualityScore   Decimal?                 @db.Decimal(3, 2) @map("overall_quality_score")
+  contentCoherence      Decimal?                 @db.Decimal(3, 2) @map("content_coherence")
+  factualAccuracy       Decimal?                 @db.Decimal(3, 2) @map("factual_accuracy")
+  marketInsightDepth    Decimal?                 @db.Decimal(3, 2) @map("market_insight_depth")
+  innovationScore       Decimal?                 @db.Decimal(3, 2) @map("innovation_score")
+  workflowStatus        ContentWorkflowStatus    @default(GENERATING) @map("workflow_status")
+  currentPhase          Int                      @default(1) @map("current_phase")
+  assignedReviewerId    String?                  @map("assigned_reviewer_id") @db.Uuid
+  reviewNotes           String?                  @db.Text @map("review_notes")
+  revisionRequests      String[]                 @default([]) @map("revision_requests")
+  approvedBy            String?                  @map("approved_by") @db.Uuid
+  approvedAt            DateTime?                @map("approved_at")
+  totalTokensUsed       Int                      @default(0) @map("total_tokens_used")
+  totalCost             Decimal                  @default(0) @db.Decimal(8, 4) @map("total_cost")
+  processingTime        Int?                     @map("processing_time")
+  createdAt             DateTime                 @default(now()) @map("created_at")
+  updatedAt             DateTime                 @updatedAt @map("updated_at")
+  createdBy             String                   @map("created_by") @db.Uuid
+  
+  // Relations
+  jobs                  ContentGenerationJob[]
+  reports               Report[]
+
+  @@map("content_generation_workflows")
+}
+
+model ContentGenerationJob {
+  id                  String               @id @default(uuid()) @db.Uuid
+  workflowId          String?              @map("workflow_id") @db.Uuid
+  phase               Int
+  promptTemplate      String               @db.Text @map("prompt_template")
+  contextData         Json?                @map("context_data")
+  aiModel             String               @default("gpt-4-turbo-preview") @db.VarChar(50) @map("ai_model")
+  temperature         Decimal              @default(0.4) @db.Decimal(3, 2)
+  maxTokens           Int                  @default(4000) @map("max_tokens")
+  inputPrompt         String               @db.Text @map("input_prompt")
+  outputText          String?              @db.Text @map("output_text")
+  qualityScore        Decimal?             @db.Decimal(3, 2) @map("quality_score")
+  relevanceScore      Decimal?             @db.Decimal(3, 2) @map("relevance_score")
+  innovationScore     Decimal?             @db.Decimal(3, 2) @map("innovation_score")
+  completenessScore   Decimal?             @db.Decimal(3, 2) @map("completeness_score")
+  status              ContentJobStatus     @default(PENDING)
+  processingTime      Int?                 @map("processing_time")
+  retryCount          Int                  @default(0) @map("retry_count")
+  inputTokens         Int?                 @map("input_tokens")
+  outputTokens        Int?                 @map("output_tokens")
+  totalTokens         Int?                 @map("total_tokens")
+  cost                Decimal?             @db.Decimal(8, 4)
+  errorMessage        String?              @db.Text @map("error_message")
+  errorCode           String?              @db.VarChar(50) @map("error_code")
+  createdAt           DateTime             @default(now()) @map("created_at")
+  updatedAt           DateTime             @updatedAt @map("updated_at")
+  
+  // Relations
+  workflow            ContentGenerationWorkflow? @relation(fields: [workflowId], references: [id])
+
+  @@map("content_generation_jobs")
+}
+
+model TranslationJob {
+  id                String                @id @default(uuid()) @db.Uuid
+  contentType       String                @db.VarChar(50) @map("content_type")
+  contentId         String                @map("content_id") @db.Uuid
+  sourceLocale      String                @db.VarChar(5) @map("source_locale")
+  targetLocale      String                @db.VarChar(5) @map("target_locale")
+  fieldName         String                @db.VarChar(50) @map("field_name")
+  originalText      String                @db.Text @map("original_text")
+  translatedText    String?               @db.Text @map("translated_text")
+  aiModel           String                @default("gpt-4") @db.VarChar(50) @map("ai_model")
+  promptTemplate    String?               @db.Text @map("prompt_template")
+  temperature       Decimal               @default(0.3) @db.Decimal(3, 2)
+  maxTokens         Int                   @default(2000) @map("max_tokens")
+  qualityScore      Decimal?              @db.Decimal(3, 2) @map("quality_score")
+  fluencyScore      Decimal?              @db.Decimal(3, 2) @map("fluency_score")
+  accuracyScore     Decimal?              @db.Decimal(3, 2) @map("accuracy_score")
+  culturalScore     Decimal?              @db.Decimal(3, 2) @map("cultural_score")
+  seoRelevanceScore Decimal?              @db.Decimal(3, 2) @map("seo_relevance_score")
+  status            TranslationJobStatus  @default(PENDING)
+  priority          Int                   @default(0)
+  retryCount        Int                   @default(0) @map("retry_count")
+  inputTokens       Int?                  @map("input_tokens")
+  outputTokens      Int?                  @map("output_tokens")
+  totalTokens       Int?                  @map("total_tokens")
+  estimatedCost     Decimal?              @db.Decimal(8, 4) @map("estimated_cost")
+  actualCost        Decimal?              @db.Decimal(8, 4) @map("actual_cost")
+  errorMessage      String?               @db.Text @map("error_message")
+  errorCode         String?               @db.VarChar(50) @map("error_code")
+  processingStarted DateTime?             @map("processing_started")
+  processingEnded   DateTime?             @map("processing_ended")
+  processingTime    Int?                  @map("processing_time")
+  createdAt         DateTime              @default(now()) @map("created_at")
+  updatedAt         DateTime              @updatedAt @map("updated_at")
+  createdBy         String?               @map("created_by") @db.Uuid
+
+  @@map("translation_jobs")
+}
+
+model AiPromptTemplate {
+  id               String   @id @default(uuid()) @db.Uuid
+  name             String   @unique @db.VarChar(255)
+  promptType       String   @db.VarChar(50) @map("prompt_type")
+  phase            Int?
+  templateText     String   @db.Text @map("template_text")
+  variables        Json?
+  version          Int      @default(1)
+  isActive         Boolean  @default(true) @map("is_active")
+  usageCount       Int      @default(0) @map("usage_count")
+  avgQualityScore  Decimal? @db.Decimal(3, 2) @map("avg_quality_score")
+  avgCost          Decimal? @db.Decimal(8, 4) @map("avg_cost")
+  successRate      Decimal? @db.Decimal(5, 4) @map("success_rate")
+  defaultModel     String   @default("gpt-4") @db.VarChar(50) @map("default_model")
+  defaultTemperature Decimal @default(0.3) @db.Decimal(3, 2) @map("default_temperature")
+  defaultMaxTokens Int      @default(2000) @map("default_max_tokens")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  createdBy        String   @map("created_by") @db.Uuid
+
+  @@map("ai_prompt_templates")
+}
+
+model ApiUsageLog {
+  id           String   @id @default(uuid()) @db.Uuid
+  serviceType  String   @db.VarChar(50) @map("service_type")
+  model        String   @db.VarChar(50)
+  requestId    String?  @db.VarChar(100) @map("request_id")
+  jobId        String?  @map("job_id") @db.Uuid
+  userId       String?  @map("user_id") @db.Uuid
+  inputTokens  Int      @map("input_tokens")
+  outputTokens Int      @map("output_tokens")
+  totalTokens  Int      @map("total_tokens")
+  costPerToken Decimal  @db.Decimal(10, 8) @map("cost_per_token")
+  totalCost    Decimal  @db.Decimal(8, 4) @map("total_cost")
+  responseTime Int      @map("response_time")
+  success      Boolean
+  errorMessage String?  @db.Text @map("error_message")
+  requestData  Json?    @map("request_data")
+  responseData Json?    @map("response_data")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("api_usage_logs")
+}
+
+model ApiQuota {
+  id            String   @id @default(uuid()) @db.Uuid
+  quotaType     String   @db.VarChar(20) @map("quota_type")
+  serviceType   String   @db.VarChar(50) @map("service_type")
+  quotaDate     String   @db.VarChar(10) @map("quota_date")
+  tokensLimit   Int      @map("tokens_limit")
+  requestsLimit Int      @map("requests_limit")
+  costLimit     Decimal  @db.Decimal(10, 2) @map("cost_limit")
+  tokensUsed    Int      @default(0) @map("tokens_used")
+  requestsMade  Int      @default(0) @map("requests_made")
+  costSpent     Decimal  @default(0) @db.Decimal(10, 2) @map("cost_spent")
+  isExceeded    Boolean  @default(false) @map("is_exceeded")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@unique([quotaType, serviceType, quotaDate])
+  @@map("api_quotas")
+}
+
+model User {
+  id                  String     @id @default(uuid()) @db.Uuid
+  email               String     @unique @db.VarChar(255)
+  firstName           String?    @db.VarChar(100) @map("first_name")
+  lastName            String?    @db.VarChar(100) @map("last_name")
+  phone               String?    @db.VarChar(20)
+  company             String?    @db.VarChar(200)
+  country             String?    @db.VarChar(100)
+  preferredLanguage   String     @default("en") @db.VarChar(5) @map("preferred_language")
+  timezone            String?    @db.VarChar(50)
+  newsletter          Boolean    @default(true)
+  marketingOptIn      Boolean    @default(false) @map("marketing_opt_in")
+  registrationSource  String?    @db.VarChar(100) @map("registration_source")
+  utmData             Json?      @map("utm_data")
+  behaviorData        Json?      @map("behavior_data")
+  status              UserStatus @default(ACTIVE)
+  lastLoginAt         DateTime?  @map("last_login_at")
+  createdAt           DateTime   @default(now()) @map("created_at")
+  updatedAt           DateTime   @updatedAt @map("updated_at")
+  
+  // Relations
+  orders              Order[]
+  enquiries           Enquiry[]
+  reviews             ReportReview[]
+
+  @@map("users")
+}
+
+model Admin {
+  id          String        @id @default(uuid()) @db.Uuid
+  email       String        @unique @db.VarChar(255)
+  username    String        @unique @db.VarChar(100)
+  firstName   String?       @db.VarChar(100) @map("first_name")
+  lastName    String?       @db.VarChar(100) @map("last_name")
+  password    String        @db.VarChar(255)
+  role        AdminRole
+  permissions Json?
+  status      ContentStatus @default(ACTIVE)
+  lastLoginAt DateTime?     @map("last_login_at")
+  loginCount  Int           @default(0) @map("login_count")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
+model Order {
+  id              String        @id @default(uuid()) @db.Uuid
+  userId          String?       @map("user_id") @db.Uuid
+  orderNumber     String        @unique @db.VarChar(50) @map("order_number")
+  customerEmail   String        @db.VarChar(255) @map("customer_email")
+  customerName    String        @db.VarChar(200) @map("customer_name")
+  customerPhone   String?       @db.VarChar(20) @map("customer_phone")
+  company         String?       @db.VarChar(200)
+  country         String?       @db.VarChar(100)
+  subtotal        Decimal       @db.Decimal(12, 2)
+  discount        Decimal       @default(0) @db.Decimal(12, 2)
+  tax             Decimal       @default(0) @db.Decimal(12, 2)
+  total           Decimal       @db.Decimal(12, 2)
+  currency        String        @default("USD") @db.VarChar(3)
+  paymentMethod   String?       @db.VarChar(50) @map("payment_method")
+  paymentStatus   PaymentStatus @default(PENDING) @map("payment_status")
+  paymentProvider String?       @db.VarChar(50) @map("payment_provider")
+  transactionId   String?       @db.VarChar(100) @map("transaction_id")
+  paymentDate     DateTime?     @map("payment_date")
+  ipAddress       String?       @db.VarChar(45) @map("ip_address")
+  userAgent       String?       @db.Text @map("user_agent")
+  referrer        String?       @db.VarChar(500)
+  utmData         Json?         @map("utm_data")
+  status          OrderStatus   @default(PENDING)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  
+  // Relations
+  user            User?         @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id            String      @id @default(uuid()) @db.Uuid
+  orderId       String      @map("order_id") @db.Uuid
+  reportId      String      @map("report_id") @db.Uuid
+  licenseType   LicenseType @map("license_type")
+  price         Decimal     @db.Decimal(10, 2)
+  quantity      Int         @default(1)
+  accessGranted Boolean     @default(false) @map("access_granted")
+  accessExpiry  DateTime?   @map("access_expiry")
+  downloadCount Int         @default(0) @map("download_count")
+  downloadLimit Int?        @map("download_limit")
+  
+  // Relations
+  order         Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  report        Report      @relation(fields: [reportId], references: [id])
+
+  @@map("order_items")
+}
+
+model Enquiry {
+  id             String        @id @default(uuid()) @db.Uuid
+  reportId       String?       @map("report_id") @db.Uuid
+  userId         String?       @map("user_id") @db.Uuid
+  firstName      String        @db.VarChar(100) @map("first_name")
+  lastName       String?       @db.VarChar(100) @map("last_name")
+  email          String        @db.VarChar(255)
+  phone          String?       @db.VarChar(20)
+  company        String?       @db.VarChar(200)
+  jobTitle       String?       @db.VarChar(100) @map("job_title")
+  country        String?       @db.VarChar(100)
+  subject        String?       @db.VarChar(300)
+  message        String?       @db.Text
+  enquiryType    String?       @db.VarChar(50) @map("enquiry_type")
+  urgency        String?       @db.VarChar(20)
+  budgetRange    String?       @db.VarChar(50) @map("budget_range")
+  decisionMaker  Boolean       @default(false) @map("decision_maker")
+  timeline       String?       @db.VarChar(100)
+  companySize    String?       @db.VarChar(50) @map("company_size")
+  industry       String?       @db.VarChar(100)
+  status         EnquiryStatus @default(NEW)
+  assignedTo     String?       @map("assigned_to") @db.Uuid
+  responseText   String?       @db.Text @map("response_text")
+  responseDate   DateTime?     @map("response_date")
+  followUpDate   DateTime?     @map("follow_up_date")
+  source         String?       @db.VarChar(100)
+  utmData        Json?         @map("utm_data")
+  ipAddress      String?       @db.VarChar(45) @map("ip_address")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  
+  // Relations
+  report         Report?       @relation(fields: [reportId], references: [id])
+  user           User?         @relation(fields: [userId], references: [id])
+
+  @@map("enquiries")
+}
+
+model ReportReview {
+  id                   String        @id @default(uuid()) @db.Uuid
+  reportId             String        @map("report_id") @db.Uuid
+  userId               String?       @map("user_id") @db.Uuid
+  rating               Int
+  title                String?       @db.VarChar(200)
+  content              String?       @db.Text
+  accuracyRating       Int?          @map("accuracy_rating")
+  usefulnessRating     Int?          @map("usefulness_rating")
+  presentationRating   Int?          @map("presentation_rating")
+  reviewerName         String?       @db.VarChar(100) @map("reviewer_name")
+  reviewerCompany      String?       @db.VarChar(200) @map("reviewer_company")
+  reviewerJobTitle     String?       @db.VarChar(100) @map("reviewer_job_title")
+  status               ContentStatus @default(PUBLISHED)
+  verified             Boolean       @default(false)
+  helpful              Int           @default(0)
+  reported             Int           @default(0)
+  moderatorNote        String?       @db.Text @map("moderator_note")
+  isPurchased          Boolean       @default(false) @map("is_purchased")
+  purchaseOrderId      String?       @map("purchase_order_id") @db.Uuid
+  verifiedPurchase     Boolean       @default(false) @map("verified_purchase")
+  createdAt            DateTime      @default(now()) @map("created_at")
+  updatedAt            DateTime      @updatedAt @map("updated_at")
+  
+  // Relations
+  report               Report        @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  user                 User?         @relation(fields: [userId], references: [id])
+
+  @@map("report_reviews")
+}
+
+model Blog {
+  id             String        @id @default(uuid()) @db.Uuid
+  categoryId     String?       @map("category_id") @db.Uuid
+  title          String        @db.VarChar(300)
+  slug           String        @unique @db.VarChar(150)
+  excerpt        String?       @db.VarChar(500)
+  content        String        @db.Text
+  tags           String[]      @default([])
+  industries     String[]      @default([])
+  regions        String[]      @default([])
+  keywords       String[]      @default([])
+  semanticKeywords String[]    @default([]) @map("semantic_keywords")
+  metaTitle      String?       @db.VarChar(300) @map("meta_title")
+  metaDescription String?      @db.VarChar(500) @map("meta_description")
+  status         ContentStatus @default(DRAFT)
+  featured       Boolean       @default(false)
+  publishedAt    DateTime?     @map("published_at")
+  viewCount      BigInt        @default(0) @map("view_count")
+  shareCount     BigInt        @default(0) @map("share_count")
+  readTime       Int?          @map("read_time")
+  aiGenerated    Boolean       @default(false) @map("ai_generated")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  
+  // Relations
+  category       Category?     @relation(fields: [categoryId], references: [id])
+  translations   BlogTranslation[]
+
+  @@map("blogs")
+}
+
+model BlogTranslation {
+  id                    String            @id @default(uuid()) @db.Uuid
+  blogId                String            @map("blog_id") @db.Uuid
+  locale                String            @db.VarChar(5)
+  title                 String            @db.VarChar(300)
+  slug                  String            @db.VarChar(150)
+  excerpt               String?           @db.VarChar(500)
+  content               String            @db.Text
+  tags                  String[]          @default([])
+  localizedKeywords     String[]          @default([]) @map("localized_keywords")
+  metaTitle             String?           @db.VarChar(300) @map("meta_title")
+  metaDescription       String?           @db.VarChar(500) @map("meta_description")
+  translationJobId      String?           @map("translation_job_id") @db.Uuid
+  aiGenerated           Boolean           @default(false) @map("ai_generated")
+  humanReviewed         Boolean           @default(false) @map("human_reviewed")
+  translationQuality    Decimal?          @db.Decimal(3, 2) @map("translation_quality")
+  status                TranslationStatus @default(DRAFT)
+  createdAt             DateTime          @default(now()) @map("created_at")
+  updatedAt             DateTime          @updatedAt @map("updated_at")
+  
+  // Relations
+  blog                  Blog              @relation(fields: [blogId], references: [id], onDelete: Cascade)
+
+  @@unique([blogId, locale])
+  @@map("blog_translations")
+}
+
+model SeoAnalytic {
+  id          String   @id @default(uuid()) @db.Uuid
+  contentType String   @db.VarChar(50) @map("content_type")
+  contentId   String   @map("content_id") @db.Uuid
+  locale      String   @db.VarChar(5)
+  searchEngine String  @db.VarChar(20) @map("search_engine")
+  keyword     String   @db.VarChar(255)
+  position    Int?
+  impressions BigInt   @default(0)
+  clicks      BigInt   @default(0)
+  ctr         Decimal  @default(0) @db.Decimal(5, 4)
+  date        DateTime @db.Date
+  country     String?  @db.VarChar(3)
+  device      String?  @db.VarChar(20)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@unique([contentType, contentId, locale, searchEngine, keyword, date, country, device])
+  @@map("seo_analytics")
+}
