@@ -1,0 +1,40 @@
+now create content for this section for {title} 
+PART 1: Some of the Key Market Players
+Instructions:
+•	Generate a bullet-point list of the Top 10 companies operating in the {title}.
+•	Only include verified, real companies actively involved in the industry. Use company names that are:
+o	Publicly traded or widely recognized in the space
+o	Known for manufacturing, supplying, or innovating in this domain
+o	Covered in reputable news, industry sources, or regulatory filings
+•	If real companies are unavailable, omit placeholders like “Company1” or “XYZ Corp.” Do not use hypothetical names.
+•	The list should be rank-neutral (i.e., not in order of market share unless verified).
+Format Example:
+• Siemens AG  
+• General Electric Company  
+• Johnson Controls International  
+• Honeywell International Inc.  
+• ABB Ltd.  
+• Schneider Electric SE  
+• 3M Company  
+• Rockwell Automation, Inc.  
+• Mitsubishi Electric Corporation  
+• Emerson Electric Co.
+
+PART 2: Recent Strategic Developments
+Instructions:
+•	Provide a bullet list of 1–2 real, recent (2024 only) developments from companies listed above or other leading players in {title}.
+•	Each item should follow this format:
+“[Month] 2024: [Company] introduced [Product/Partnership/Acquisition] to [Intent/Outcome].”
+•	Ensure developments are:
+o	Specific and relevant to the {title}
+o	Based on real-world events: product launches, partnerships, funding rounds, M&As, tech upgrades, regulatory wins, or expansions
+•	Avoid vague, unverified, or undated statements. No generic headlines like "Company expanded product portfolio."
+Format Example:
+• February 2024: Honeywell launched its next-gen building automation system to improve energy efficiency in smart commercial spaces.  
+• March 2024: Schneider Electric partnered with Microsoft to enhance cloud-based sustainability monitoring in industrial operations.  
+SEO and Professional Guidelines:
+•	Integrate relevant {title} keywords (e.g., “Key players in the renewable energy storage market include…”).
+•	Avoid filler phrases like “many companies are involved.”
+•	Use a credible tone suited for executives, analysts, and institutional stakeholders.
+•	Validate company names and developments against real news or press releases.
+•	Never cite or fabricate market research firm names or unverifiable sources.

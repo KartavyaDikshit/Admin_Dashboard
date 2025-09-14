@@ -1,0 +1,14 @@
+Generate an authoritative and insightful market research summary on the {title} with a strong focus on data-driven storytelling and strategic relevance. The content should be structured to meet the needs of C-level decision-makers, investors, and analysts, while being optimized for search engines. Make sure the word count remains under 300 words. Follow the structure below and remember to provide the content in paragraph format only, do not provide bullet point lists
+1.	Compelling Market Opening:
+	Begin with: “The {title} was valued at USD XX Billion in 2025…”
+	Clearly mention the market size in 2025, forecasted market size for 2034, and CAGR during the 2025–2034 period.
+	Ensure all values are precise and use up-to-date calculations or estimates from reliable data sources, avoid using numbers from market research companies.
+2.	Market Definition and Overview:
+	Provide a concise, SEO-optimized definition of the {title}.
+3.	Current Market Momentum & Relevance:
+	Explain why this market is attracting attention now. 
+4.	SEO and Writing Guidelines:
+	Use clear, concise, and informative language tailored for a professional audience.
+	Avoid filler phrases like “in conclusion,” “in summary,” or generic clichés.
+	Do not cite unnamed research firms. Only use sources with public credibility or institutional authority.
+	Ensure content includes primary and secondary keywords naturally to boost SEO.

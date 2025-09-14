@@ -1,0 +1,41 @@
+now create content for this section for {title} 
+Objective: Generate a compelling "Market Dynamics" section for the {title} report, clearly segmented into Market Drivers, Market Restraints, and Market Opportunities. The tone must be analytical, data-backed, and tailored for a strategic audience (executives, investors, policymakers), while ensuring SEO-rich content that ranks on SERPs. Follow the structure below and remember to provide the content in paragraph format only, do not provide bullet point lists
+📌 Prompt Structure and Instructions:
+________________________________________
+🔹 A. Market Drivers
+•	List 2–4 key growth drivers that are accelerating the market’s expansion.
+•	Support each driver with quantitative data, market behavior, or recent industry developments (e.g., “As per WHO, digital health tool adoption grew by 68% from 2021 to 2024 globally.”).
+•	Focus on relevant factors like:
+o	Technological innovations
+o	Regulatory tailwinds
+o	Rising end-user demand
+o	ESG/sustainability initiatives
+o	Enterprise digitization/OEM adoption
+•	Emphasize why these drivers matter now and how they align with larger macroeconomic or industry-specific transformations.
+________________________________________
+🔹 B. Market Restraints
+•	Identify 1–3 significant market restraints or barriers to growth.
+•	Use specific, data-driven examples (e.g., “Limited data interoperability in AI systems has caused delays in clinical deployment in 42% of U.S. hospitals.”).
+•	Focus on challenges like:
+o	Regulatory uncertainties
+o	High upfront costs
+o	Technical or infrastructure limitations
+o	Skilled labor shortages
+o	Market fragmentation or compliance complexities
+________________________________________
+🔹 C. Market Opportunities
+•	Highlight emerging opportunities that could unlock future growth.
+•	Provide insights on:
+o	Untapped regions or demographics
+o	Evolving customer behavior
+o	Adjacent industry convergence (e.g., AI + cybersecurity)
+o	Public or private funding incentives
+o	Innovation pipelines or new business models
+•	Where possible, use forward-looking insights and cite government initiatives, venture capital trends, or innovation ecosystems.
+________________________________________
+SEO and Style Guidelines:
+•	Maintain a professional yet accessible tone suitable for business leaders and analysts.
+•	Integrate target and secondary keywords naturally within content.
+•	Avoid vague language or unverified predictions.
+•	Do not cite generic market research firms or use placeholder phrases like “expected to grow exponentially.”
+•	Keep paragraphs concise and logically connected for enhanced readability and SEO.

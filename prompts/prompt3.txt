@@ -1,0 +1,81 @@
+now create content for this section for {title} 
+Objective: Generate an in-depth “Regional Insights” section for the {title} report, Select the one with largest market share out of these 3 regions (North America, Asia-Pacific, and Europe). The regional subsection must open with current and forecasted market size, CAGR, and key growth factors that are relevant to the region and {title}. The language should appeal to executives and analysts, while supporting SEO goals with keyword-rich, authoritative content.
+
+________________________________________
+📌 Prompt Structure and Instructions:
+🔷 Region Name
+•	Start with market sizing:
+“The Region name ({title}) market was valued at USD XX Billion in 2024 and is forecasted to reach USD XX Billion by 2034, registering a CAGR of XX.X% during the forecast period.”
+•	Follow with region-specific drivers such as:
+o	Government regulations or funding (e.g., FDA approvals, Infrastructure Bill)
+o	High technology adoption rate
+o	Consumer behavior or industry maturity
+o	Strong presence of leading manufacturers or startups
+o	Investment in R&D or digital transformation
+•	Mention one leading country from the selected region (e.g., U.S., Canada) and their roles, when relevant.
+•	Include validated data points from sources like U.S. Department of Commerce, NIH, FDA, StatCan, etc.
+✅ SEO and Style Guidelines:
+•	Use region + {title} in headings and body copy (e.g., “North America Electric Vehicle Market”).
+•	Maintain a formal, analytical tone suitable for senior decision-makers.
+•	Ensure each region’s narrative is unique and avoids repetition across sections.
+•	Integrate primary and secondary keywords naturally.
+•	Avoid vague phrases and unverified projections; use credible data points only.
+•	No citation of generic market research firms.
+
+PART2
+AI Prompt for “Market Segmentation” Section
+Copy from Here:
+now create content for this section for {title} 
+Objective: Generate the complete segmentation structure for the {title} report, followed by detailed insights into each major segment. The output must be structured, exhaustive, and tailored to appeal to decision-makers while remaining optimized for SEO.
+________________________________________
+🔷 PART 1: Segmentation Structure (List Format Only)
+Instructions:
+Generate a clean, bullet-point list of all major segments and sub-segments relevant to {title}. Use the following structure:
+•	Start each primary segment category with:
+• By [Segment Category]
+•	List all relevant sub-segments below as indented bullets.
+•	Ensure the segmentation reflects the real structure and dynamics of the {title}, including factors like product type, application, deployment, end user, distribution channel, technology, or geography—whichever apply.
+•	Do not include explanations, analysis, or market size data here.
+•	Keep the list exhaustive but concise—no fluff, just structured classification.
+•	Make sure segments are customized to {title}—not generic.
+Example Format to Follow (for AI to replicate):
+• By Product Type  
+  • Sub-segment 1  
+  • Sub-segment 2  
+  • Sub-segment 3  
+• By Application  
+  • Sub-segment 1  
+  • Sub-segment 2  
+• By End User  
+  • Sub-segment 1  
+  • Sub-segment 2  
+  • Sub-segment 3
+PART 2: Segment-Level Analysis (With Data)
+Based on the segmentation section generated, I would like you to create me the report title:
+Format: {title} Market Size By Primary Category 1(sub-segment list in comma separated format), By Primary Category 1(sub-segment list in comma separated format), Regions, Global Industry Analysis, Share, Growth, Trends, and Forecast 2025 to 2034
+Only generate for first 2 Primary Category skip others
+Example: Quantum Encryption Market Size by Component (Quantum Key Distribution (QKD) Systems, Quantum Random Number Generators, Others), Application (Government & Defence, Banking & Financial Services, Healthcare, Others), Regions, Global Industry Analysis, Share, Growth, Trends, and Forecast 2025 to 2034
+
+PART 3: Segment-Level Analysis (With Data)
+Instructions:
+For maximum of 3 and minimum of 2 primary segment category defined above (e.g., By Product Type, By Application), do not provide content on Regional section, generate a structured analysis using the format below:
+1. Introduction Format (repeat for each major segment):
+•	Begin with the line:
+“By [Segment Category], the {title} market was segmented into…”
+•	List the sub-segments in a short sentence form.
+2. Highlight the Key Segments:
+•	Identify:
+o	The largest sub-segment (by 2024 market share)
+•	Begin with the line:
+“The [largest sub-segment], dominated the {title} market , with a market share of around xx% in 2024.”
+4. Explain the Growth Drivers (qualitative + data):
+•	Write in paragraph format.
+•	Provide key drivers that are fueling demand or adoption of the largest sub-segment.
+•	Include quantitative evidence or industry validation (e.g., “Rising demand from SMEs led to a 42% increase in deployment of cloud-based solutions in 2023”).
+•	Focus on technology adoption, regulations, user trends, cost dynamics, performance, and ease of implementation, depending on segment type.
+________________________________________
+✅ SEO and Writing Guidelines:
+•	Include primary and long-tail keywords naturally (e.g., “[cloud-based HR software], [industrial robotics in automotive sector], [digital payment in retail]”).
+•	Maintain a professional, structured tone aimed at analysts, executives, and investors.
+•	Avoid repetitive language or vague claims.
+•	Do not use generic summaries or cite unnamed research firms.

@@ -312,11 +312,12 @@ model ReportTranslation {
 
 model ContentGenerationWorkflow {
   id                    String                   @id @default(uuid()) @db.Uuid
-  industry              String                   @db.VarChar(255)
+  reportTitle           String                   @db.VarChar(500) @map("report_title")
+  industry              String?                  @db.VarChar(255)
   marketSize            String?                  @db.VarChar(255) @map("market_size")
-  geographicScope       String                   @db.VarChar(255) @map("geographic_scope")
-  timeframe             String                   @db.VarChar(50)
-  reportType            String                   @db.VarChar(50) @map("report_type")
+  geographicScope       String?                  @db.VarChar(255) @map("geographic_scope")
+  timeframe             String?                  @db.VarChar(50)
+  reportType            String?                  @db.VarChar(50) @map("report_type")
   customRequirements    String?                  @db.Text @map("custom_requirements")
   phase1JobId           String?                  @map("phase1_job_id") @db.Uuid
   phase2JobId           String?                  @map("phase2_job_id") @db.Uuid
@@ -363,6 +364,7 @@ model ContentGenerationJob {
   maxTokens           Int                  @default(4000) @map("max_tokens")
   inputPrompt         String               @db.Text @map("input_prompt")
   outputText          String?              @db.Text @map("output_text")
+  imageUrl            String?              @db.VarChar(500) @map("image_url")
   qualityScore        Decimal?             @db.Decimal(3, 2) @map("quality_score")
   relevanceScore      Decimal?             @db.Decimal(3, 2) @map("relevance_score")
   innovationScore     Decimal?             @db.Decimal(3, 2) @map("innovation_score")
@@ -730,4 +732,36 @@ model SeoAnalytic {
 
   @@unique([contentType, contentId, locale, searchEngine, keyword, date, country, device])
   @@map("seo_analytics")
+}
+
+model AiReportSession {
+  id                String        @id @default(uuid()) @db.Uuid
+  reportTitle       String        @db.VarChar(500)
+  totalInputTokens  Int
+  totalOutputTokens Int
+  totalCost         Decimal       @db.Decimal(10, 4)
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+
+  promptResults     AiPromptResult[]
+
+  @@map("ai_report_sessions")
+}
+
+model AiPromptResult {
+  id                String        @id @default(uuid()) @db.Uuid
+  sessionId         String        @map("session_id") @db.Uuid
+  promptId          String        @db.VarChar(50)
+  title             String        @db.VarChar(255)
+  content           String        @db.Text
+  inputTokens       Int
+  outputTokens      Int
+  totalTokens       Int
+  cost              Decimal       @db.Decimal(10, 4)
+  executionTime     Int
+  createdAt         DateTime      @default(now()) @map("created_at")
+
+  session           AiReportSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("ai_prompt_results")
 }
