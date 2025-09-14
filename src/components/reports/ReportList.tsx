@@ -1,3 +1,5 @@
+'use client'
+
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
@@ -46,8 +48,20 @@ export default function ReportList({ searchParams }: ReportListProps) {
   const fetchReports = async () => {
     setLoading(true)
     try {
-      const params = new URLSearchParams(searchParams as Record<string, string>)
-      const response = await fetch(`/api/reports?${params}`)
+      const validStatuses = ['DRAFT', 'PUBLISHED', 'ARCHIVED', 'ACTIVE']
+      const filteredSearchParams = new URLSearchParams()
+
+      for (const [key, value] of Object.entries(searchParams)) {
+        if (key === 'status' && typeof value === 'string' && !validStatuses.includes(value)) {
+          // Skip invalid status
+          continue
+        }
+        if (value !== undefined && value !== null) {
+          filteredSearchParams.append(key, String(value))
+        }
+      }
+
+      const response = await fetch(`/api/reports?${filteredSearchParams.toString()}`)
       const data = await response.json()
       
       if (response.ok) {
