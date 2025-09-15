@@ -39,7 +39,7 @@ export default function Sidebar({ open, setOpen, userRole }: SidebarProps) {
   }});
 
   const { data: requestsCount } = useQuery<number>({ queryKey: ['requestsCount'], queryFn: async () => {
-    const response = await axios.get('/api/enquiries?countOnly=true'); // Assuming requests map to enquiries
+    const response = await axios.get('/api/requests?countOnly=true'); // Corrected endpoint
     return response.data.count;
   }});
 
