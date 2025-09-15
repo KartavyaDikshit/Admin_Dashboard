@@ -11,6 +11,13 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
+    const countOnly = searchParams.get('countOnly')
+
+    if (countOnly === 'true') {
+      const count = await prisma.order.count();
+      return NextResponse.json({ count });
+    }
+
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '25')
     const status = searchParams.get('status')

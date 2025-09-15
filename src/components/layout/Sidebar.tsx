@@ -16,6 +16,8 @@ import {
   GlobeAltIcon,
   CpuChipIcon
 } from '@heroicons/react/24/outline'
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 
 interface SidebarProps {
   open: boolean
@@ -23,21 +25,42 @@ interface SidebarProps {
   userRole?: string
 }
 
-const navigation = [
-  { name: 'Dashboard', href: '/admin', icon: HomeIcon, current: false },
-  { name: 'AI Generation', href: '/admin/ai-generation', icon: CpuChipIcon, current: false },
-  { name: 'Reports', href: '/admin/reports', icon: DocumentTextIcon, current: false, badge: '2,338' },
-  { name: 'Categories', href: '/admin/categories', icon: FolderIcon, current: false, badge: '10' },
-  { name: 'Orders', href: '/admin/orders', icon: ShoppingCartIcon, current: false, badge: '17' },
-  { name: 'Requests', href: '/admin/requests', icon: ChatBubbleLeftRightIcon, current: false, badge: '655' },
-  { name: 'Translations', href: '/admin/translations', icon: GlobeAltIcon, current: false },
-  { name: 'Users', href: '/admin/users', icon: UserGroupIcon, current: false },
-  { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon, current: false },
-  { name: 'Settings', href: '/admin/settings', icon: CogIcon, current: false }
-]
-
 export default function Sidebar({ open, setOpen, userRole }: SidebarProps) {
   const pathname = usePathname()
+
+  const { data: reportsCount } = useQuery<number>({ queryKey: ['reportsCount'], queryFn: async () => {
+    const response = await axios.get('/api/reports?countOnly=true'); // Assuming an endpoint for count
+    return response.data.count;
+  }});
+
+  const { data: ordersCount } = useQuery<number>({ queryKey: ['ordersCount'], queryFn: async () => {
+    const response = await axios.get('/api/orders?countOnly=true'); // Assuming an endpoint for count
+    return response.data.count;
+  }});
+
+  const { data: requestsCount } = useQuery<number>({ queryKey: ['requestsCount'], queryFn: async () => {
+    const response = await axios.get('/api/enquiries?countOnly=true'); // Assuming requests map to enquiries
+    return response.data.count;
+  }});
+
+  const { data: categoriesCount } = useQuery<number>({ queryKey: ['categoriesCount'], queryFn: async () => {
+    const response = await axios.get('/api/categories?countOnly=true'); // Assuming an endpoint for count
+    return response.data.count;
+  }});
+
+  const navigation = [
+    { name: 'Dashboard', href: '/admin', icon: HomeIcon, current: false },
+    { name: 'AI Generation', href: '/admin/ai-generation', icon: CpuChipIcon, current: false },
+    { name: 'Reports', href: '/admin/reports', icon: DocumentTextIcon, current: false, badge: reportsCount !== undefined ? reportsCount.toLocaleString() : undefined },
+    { name: 'Testimonials', href: '/admin/testimonials', icon: ChatBubbleLeftRightIcon, current: false },
+    { name: 'Categories', href: '/admin/categories', icon: FolderIcon, current: false, badge: categoriesCount !== undefined ? categoriesCount.toLocaleString() : undefined },
+    { name: 'Orders', href: '/admin/orders', icon: ShoppingCartIcon, current: false, badge: ordersCount !== undefined ? ordersCount.toLocaleString() : undefined },
+    { name: 'Requests', href: '/admin/requests', icon: ChatBubbleLeftRightIcon, current: false, badge: requestsCount !== undefined ? requestsCount.toLocaleString() : undefined },
+    { name: 'Translations', href: '/admin/translations', icon: GlobeAltIcon, current: false },
+    { name: 'Users', href: '/admin/users', icon: UserGroupIcon, current: false },
+    { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon, current: false },
+    { name: 'Settings', href: '/admin/settings', icon: CogIcon, current: false }
+  ]
 
   const filteredNavigation = navigation.filter(item => {
     // Add role-based filtering logic here

@@ -34,6 +34,13 @@ const reportSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
+    const countOnly = searchParams.get('countOnly')
+
+    if (countOnly === 'true') {
+      const count = await prisma.report.count();
+      return NextResponse.json({ count });
+    }
+
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '25')
     const search = searchParams.get('search') || ''
@@ -78,9 +85,6 @@ export async function GET(request: NextRequest) {
               title: true,
               status: true
             }
-          },
-          _count: {
-            select: { reviews: true, orderItems: true }
           }
         },
         orderBy: [

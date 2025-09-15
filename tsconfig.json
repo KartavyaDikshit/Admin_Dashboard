@@ -21,6 +21,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/components/ai/*": ["./src/components/ai/*"],
+      "@/lib/*": ["./src/lib/*"],
       "@/lib/ai/*": ["./src/lib/ai/*"],
       "@/types/ai/*": ["./src/types/ai/*"],
       "@/prompts/*": ["./src/prompts/*"]
