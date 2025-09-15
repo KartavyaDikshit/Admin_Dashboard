@@ -15,7 +15,9 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
+        console.log('Attempting login for username:', credentials?.username);
         if (!credentials?.username || !credentials?.password) {
+          console.log('Missing username or password');
           return null
         }
 
@@ -29,7 +31,10 @@ export const authOptions: NextAuthOptions = {
           }
         })
 
+        console.log('Admin found:', admin);
+
         if (!admin) {
+          console.log('Admin not found or not active');
           return null
         }
 
@@ -38,7 +43,10 @@ export const authOptions: NextAuthOptions = {
           admin.password
         )
 
+        console.log('Password match:', passwordMatch);
+
         if (!passwordMatch) {
+          console.log('Password does not match');
           return null
         }
 

@@ -1,5 +1,35 @@
 import { openai, estimateTokenCount, calculateCost } from '@/lib/openai'
 import { prisma } from '@/lib/prisma'
+import { generateSlug } from '@/lib/utils'
+
+// Helper function to convert Prisma Decimal objects to numbers
+function convertDecimalsToNumbers(obj: any): any {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+
+  if (obj instanceof Date) {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(item => convertDecimalsToNumbers(item));
+  }
+
+  const newObj: { [key: string]: any } = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const value = obj[key];
+      // Check if it's a Prisma Decimal object (duck typing)
+      if (value && typeof value === 'object' && typeof value.toNumber === 'function') {
+        newObj[key] = value.toNumber();
+      } else {
+        newObj[key] = convertDecimalsToNumbers(value);
+      }
+    }
+  }
+  return newObj;
+}
 
 export interface GenerationRequest {
   reportTitle: string
@@ -601,14 +631,17 @@ export class AIContentService {
         totalCost: workflow.totalCost ? workflow.totalCost.toNumber() : 0,
       };
 
+      // Convert all Decimal fields in the workflow object to numbers
+      const processedWorkflow = convertDecimalsToNumbers(workflow);
+
       return {
-        ...workflow,
+        ...processedWorkflow,
         jobs: jobsWithNumbers,
         totalTokenUsage: {
-          inputTokens: workflow.totalInputTokensUsed || 0,
-          outputTokens: workflow.totalOutputTokensUsed || 0,
-          totalTokens: workflow.totalTokensUsed || 0,
-          cost: workflow.totalCost ? workflow.totalCost.toNumber() : 0,
+          inputTokens: processedWorkflow.totalInputTokensUsed || 0,
+          outputTokens: processedWorkflow.totalOutputTokensUsed || 0,
+          totalTokens: processedWorkflow.totalTokensUsed || 0,
+          cost: processedWorkflow.totalCost,
         }
       };
     }
@@ -645,6 +678,57 @@ export class AIContentService {
       where: { id: jobId },
       data: { outputText, status: 'COMPLETED' }
     })
+  }
+
+  async approveWorkflow(workflowId: string, userId: string) {
+    console.log(`Approving workflow ${workflowId} by user ${userId}`);
+    const updatedWorkflow = await prisma.contentGenerationWorkflow.update({
+      where: { id: workflowId },
+      data: {
+        workflowStatus: 'APPROVED',
+        approvedAt: new Date(),
+        approvedBy: userId,
+      }
+    });
+    console.log('Workflow status updated to APPROVED');
+
+    const workflowWithJobs = await prisma.contentGenerationWorkflow.findUnique({
+        where: { id: workflowId },
+        include: { jobs: { where: { status: 'COMPLETED' }, orderBy: { phase: 'asc' } } }
+    });
+
+    if (!workflowWithJobs) {
+        console.error("Could not find the approved workflow after update.");
+        throw new Error("Could not find the approved workflow.");
+    }
+    console.log('Found workflow with jobs');
+
+    const reportTitle = workflowWithJobs.reportTitle;
+    const slug = generateSlug(reportTitle);
+    const description = workflowWithJobs.jobs
+        .map(job => job.outputText || '')
+        .join('\n\n');
+    const summary = workflowWithJobs.jobs[0]?.outputText || '';
+
+    console.log(`Creating report with title: ${reportTitle}`);
+    const newReport = await prisma.report.create({
+        data: {
+            title: reportTitle,
+            slug: slug,
+            description: description,
+            summary: summary,
+            publishedDate: new Date(),
+            metaTitle: reportTitle,
+            metaDescription: description.substring(0, 300),
+            status: 'DRAFT',
+            aiGenerated: true,
+            humanApproved: true,
+            contentGenerationWorkflowId: workflowId,
+        }
+    });
+    console.log(`Report created with id: ${newReport.id}`);
+
+    return { updatedWorkflow, report: newReport };
   }
 }
 

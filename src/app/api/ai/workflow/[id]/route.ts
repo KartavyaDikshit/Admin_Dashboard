@@ -50,6 +50,11 @@ export async function POST(
       return NextResponse.json({ success: true })
     }
 
+    if (action === 'approve') {
+      await aiContentService.approveWorkflow(params.id, session.user.id)
+      return NextResponse.json({ success: true })
+    }
+
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
 
   } catch (error) {

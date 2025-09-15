@@ -14,7 +14,7 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "db:seed": "tsx prisma/seed.ts",
+    "seed": "tsx prisma/seed.ts",
     "build:analyze": "cross-env ANALYZE=true next build",
     "type-check": "tsc --noEmit"
   },

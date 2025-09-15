@@ -154,6 +154,29 @@ export default function AiGenerationPage() {
     // No need to store selectedImage in state globally anymore
   };
 
+  const handleApproveReport = async (workflowId: string) => {
+    try {
+            const response = await fetch(`/api/ai/workflow/${workflowId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'approve' }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        toast.success('Report approved successfully!');
+        setWorkflows(prevWorkflows =>
+          prevWorkflows.map(wf =>
+            wf.id === workflowId ? { ...wf, workflowStatus: 'COMPLETED' } : wf
+          )
+        );
+      } else {
+        toast.error(data.error || 'Failed to approve report.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while approving the report.');
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-8">
@@ -246,6 +269,17 @@ export default function AiGenerationPage() {
                     ))}
                   </div>
                 </div>
+
+                {workflow.workflowStatus === 'PENDING_REVIEW' && (
+                  <div className="mt-4">
+                    <button
+                      onClick={() => handleApproveReport(workflow.id)}
+                      className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                    >
+                      Approve Report
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
