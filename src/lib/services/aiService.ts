@@ -337,6 +337,31 @@ export class AIContentService {
         }
       })
 
+      // Update parent workflow's total tokens and cost
+      await prisma.contentGenerationWorkflow.update({
+        where: { id: job.workflowId! },
+        data: {
+          totalInputTokensUsed: {
+            increment: inputTokens
+          },
+          totalOutputTokensUsed: {
+            increment: outputTokens
+          },
+          totalTokensUsed: {
+            increment: totalTokens
+          },
+          totalCost: {
+            increment: cost
+          }
+        }
+      })
+
+      const updatedWorkflow = await prisma.contentGenerationWorkflow.findUnique({
+        where: { id: job.workflowId! },
+        select: { totalTokensUsed: true, totalCost: true }
+      });
+      console.log('Updated Workflow Totals:', updatedWorkflow);
+
       // Log API usage
       await prisma.apiUsageLog.create({
         data: {
@@ -395,6 +420,35 @@ export class AIContentService {
     const updateData: any = {
       updatedAt: new Date()
     }
+
+    // Recalculate total tokens and cost from all completed jobs for this workflow
+    const workflowWithJobs = await prisma.contentGenerationWorkflow.findUnique({
+      where: { id: workflowId },
+      include: {
+        jobs: {
+          where: { status: 'COMPLETED' },
+          select: {
+            inputTokens: true,
+            outputTokens: true,
+            totalTokens: true,
+            cost: true
+          }
+        }
+      }
+    });
+
+    let recalculatedTotalTokensUsed = 0;
+    let recalculatedTotalCost = 0;
+
+    if (workflowWithJobs && workflowWithJobs.jobs) {
+      workflowWithJobs.jobs.forEach(job => {
+        recalculatedTotalTokensUsed += (job.totalTokens || 0);
+        recalculatedTotalCost += (job.cost ? job.cost.toNumber() : 0);
+      });
+    }
+
+    updateData.totalTokensUsed = recalculatedTotalTokensUsed;
+    updateData.totalCost = recalculatedTotalCost;
 
     // Store content in appropriate field
     // The fields marketAnalysis, competitiveAnalysis, trendsAnalysis, finalSynthesis
@@ -502,7 +556,16 @@ export class AIContentService {
   async getWorkflowStatus(workflowId: string) {
     const workflow = await prisma.contentGenerationWorkflow.findUnique({
       where: { id: workflowId },
-      include: {
+      select: {
+        id: true,
+        reportTitle: true,
+        workflowStatus: true,
+        currentPhase: true,
+        createdAt: true,
+        totalInputTokensUsed: true,
+        totalOutputTokensUsed: true,
+        totalTokensUsed: true,
+        totalCost: true,
         jobs: {
           orderBy: { phase: 'asc' },
           select: {
@@ -528,22 +591,26 @@ export class AIContentService {
         ...job,
         qualityScore: job.qualityScore ? job.qualityScore.toNumber() : null,
         cost: job.cost ? job.cost.toNumber() : null,
-        inputTokens: job.inputTokens ? job.inputTokens.toNumber() : 0,
-        outputTokens: job.outputTokens ? job.outputTokens.toNumber() : 0,
-        totalTokens: job.totalTokens ? job.totalTokens.toNumber() : 0,
+        inputTokens: job.inputTokens || 0,
+        outputTokens: job.outputTokens || 0,
+        totalTokens: job.totalTokens || 0,
       }));
-      // Calculate total token usage for the workflow
-      const totalTokenUsage = jobsWithNumbers.reduce(
-        (total, job) => ({
-          inputTokens: total.inputTokens + (job.inputTokens || 0),
-          outputTokens: total.outputTokens + (job.outputTokens || 0),
-          totalTokens: total.totalTokens + (job.inputTokens || 0) + (job.outputTokens || 0),
-          cost: total.cost + (job.cost || 0)
-        }),
-        { inputTokens: 0, outputTokens: 0, totalTokens: 0, cost: 0 }
-      );
+      // Convert totalCost to number before returning to frontend
+      const convertedWorkflow = {
+        ...workflow,
+        totalCost: workflow.totalCost ? workflow.totalCost.toNumber() : 0,
+      };
 
-      return { ...workflow, jobs: jobsWithNumbers, totalTokenUsage };
+      return {
+        ...workflow,
+        jobs: jobsWithNumbers,
+        totalTokenUsage: {
+          inputTokens: workflow.totalInputTokensUsed || 0,
+          outputTokens: workflow.totalOutputTokensUsed || 0,
+          totalTokens: workflow.totalTokensUsed || 0,
+          cost: workflow.totalCost ? workflow.totalCost.toNumber() : 0,
+        }
+      };
     }
     return null;
   }

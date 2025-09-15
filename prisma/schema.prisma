@@ -339,8 +339,10 @@ model ContentGenerationWorkflow {
   revisionRequests      String[]                 @default([]) @map("revision_requests")
   approvedBy            String?                  @map("approved_by") @db.Uuid
   approvedAt            DateTime?                @map("approved_at")
-  totalTokensUsed       Int                      @default(0) @map("total_tokens_used")
-  totalCost             Decimal                  @default(0) @db.Decimal(8, 4) @map("total_cost")
+  totalInputTokensUsed  Int?                     @default(0) @map("total_input_tokens_used")
+  totalOutputTokensUsed Int?                     @default(0) @map("total_output_tokens_used")
+  totalTokensUsed       Int?                     @default(0) @map("total_tokens_used")
+  totalCost             Decimal?                 @default(0) @db.Decimal(8, 4) @map("total_cost")
   processingTime        Int?                     @map("processing_time")
   createdAt             DateTime                 @default(now()) @map("created_at")
   updatedAt             DateTime                 @updatedAt @map("updated_at")

@@ -19,7 +19,13 @@ export async function GET(
       return NextResponse.json({ error: 'Workflow not found' }, { status: 404 })
     }
 
-    return NextResponse.json({ workflow })
+    // Explicitly convert Decimal types to strings before sending response
+    const responseWorkflow = {
+      ...workflow,
+      totalCost: workflow.totalCost ? workflow.totalCost.toString() : '0.0000', // Convert to string
+    };
+
+    return NextResponse.json({ success: true, workflow: responseWorkflow });
 
   } catch (error) {
     console.error('Get workflow error:', error)

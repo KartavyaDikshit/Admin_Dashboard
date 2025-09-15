@@ -46,9 +46,15 @@ export default function AiGenerationPage() {
       const response = await fetch(`/api/ai/workflow/${workflowId}`)
       const data = await response.json()
       if (response.ok) {
-        setWorkflows(prevWorkflows =>
-          prevWorkflows.map(wf => (wf.id === workflowId ? data.workflow : wf))
-        )
+        setWorkflows(prevWorkflows => {
+          const updatedWorkflows = prevWorkflows.map(wf => {
+            if (wf.id === workflowId) {
+              return { ...wf, ...data.workflow };
+            }
+            return wf;
+          });
+          return updatedWorkflows;
+        });
         if (data.workflow.workflowStatus !== 'GENERATING') {
           toast.success(`Workflow ${data.workflow.workflowStatus.replace('_', ' ').toLowerCase()}!`) 
           setActiveWorkflowId(null) // Stop polling for this workflow
@@ -171,15 +177,11 @@ export default function AiGenerationPage() {
                   <p><strong>Status:</strong> {workflow.workflowStatus.replace('_', ' ')}</p>
                   <p><strong>Current Phase:</strong> {workflow.currentPhase} / 4</p>
                   <p><strong>Created At:</strong> {formatDateTime(new Date(workflow.createdAt))}</p>
+                  <p><strong>Total Tokens Used:</strong> {workflow.totalTokensUsed || 0}</p>
+                  <p><strong>Total Cost:</strong> ${parseFloat(workflow.totalCost || '0').toFixed(4)}</p>
 
                   {/* New section for Total Token Usage */}
-                  <div className="border-t border-gray-200 pt-4 mt-4">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-3">Overall Token Metrics</h4>
-                    <p><strong>Total Input Tokens:</strong> {workflow.totalTokenUsage?.inputTokens || 0}</p>
-                    <p><strong>Total Output Tokens:</strong> {workflow.totalTokenUsage?.outputTokens || 0}</p>
-                    <p><strong>Total Tokens:</strong> {workflow.totalTokenUsage?.totalTokens || 0}</p>
-                    <p><strong>Total Cost:</strong> ${workflow.totalTokenUsage?.cost?.toFixed(4) || '0.0000'}</p>
-                  </div>
+                  
 
                   <h4 className="text-lg font-semibold text-gray-800 mt-6 mb-3">Phases Progress</h4>
                   <div className="space-y-3">
