@@ -25,7 +25,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id: categoryId, locale } = params
+    const { id: categoryId, locale } = await params
     const body = await request.json()
     const validatedData = translatedCategorySchema.parse(body)
 
@@ -70,7 +70,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id: categoryId, locale } = params
+    const { id: categoryId, locale } = await params
 
     const translation = await prisma.categoryTranslation.findUnique({
       where: {

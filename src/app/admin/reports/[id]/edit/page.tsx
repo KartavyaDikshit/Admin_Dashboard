@@ -103,7 +103,7 @@ export default function EditReportPage({ params }: { params: { id: string } }) {
             <select
               value={targetLocale}
               onChange={(e) => setTargetLocale(e.target.value)}
-              className="block w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="block w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
               disabled={isTranslating}
             >
               <option value="">Select Locale</option>
@@ -120,7 +120,7 @@ export default function EditReportPage({ params }: { params: { id: string } }) {
               {isTranslating ? 'Translating...' : 'Translate'}
             </button>
           </div>
-          {isTranslating && <p className="mt-2 text-sm text-black">Translation in progress. This may take a moment.</p>}}
+          {isTranslating && <p className="mt-2 text-sm text-black">Translation in progress. This may take a moment.</p>}
         </div>
 
         {initialData && (

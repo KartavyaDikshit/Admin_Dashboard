@@ -29,7 +29,7 @@ export async function GET(
     }
 
     const category = await prisma.category.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
       include: {
         translations: {
           select: {
@@ -70,7 +70,7 @@ export async function PUT(
     const validatedData = categorySchema.parse(body)
 
     const existingCategory = await prisma.category.findUnique({
-      where: { id: params.id },
+      where: { id: (await params).id },
       select: { title: true }
     })
 
@@ -83,7 +83,7 @@ export async function PUT(
       : undefined
 
     const updatedCategory = await prisma.category.update({
-      where: { id: params.id },
+      where: { id: (await params).id },
       data: {
         ...validatedData,
         slug,

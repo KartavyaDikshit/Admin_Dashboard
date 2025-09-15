@@ -143,7 +143,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
                 type="text"
                 {...register('title')}
                 className={cn(
-                  'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500',
+                  'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black',
                   errors.title && 'border-red-500'
                 )}
                 placeholder="Global Market Research Report Title"
@@ -179,7 +179,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
               <input
                 type="date"
                 {...register('publishedDate')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
               />
             </div>
           </div>
@@ -193,7 +193,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
               {...register('description')}
               rows={6}
               className={cn(
-                'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500',
+                'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black',
                 errors.description && 'border-red-500'
               )}
               placeholder="Comprehensive description of the market research report..."
@@ -211,7 +211,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
             <textarea
               {...register('summary')}
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
               placeholder="Executive summary of key findings..."
             />
           </div>
@@ -225,7 +225,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
               <input
                 type="number"
                 {...register('pages')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
                 placeholder="285"
               />
             </div>
@@ -237,7 +237,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
               <input
                 type="number"
                 {...register('baseYear')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
                 placeholder="2024"
               />
             </div>
@@ -249,7 +249,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
               <input
                 type="text"
                 {...register('forecastPeriod')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
                 placeholder="2025-2030"
               />
             </div>
@@ -265,7 +265,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
                 type="number"
                 step="0.01"
                 {...register('singlePrice')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
                 placeholder="4500"
               />
             </div>
@@ -278,7 +278,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
                 type="number"
                 step="0.01"
                 {...register('multiPrice')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
                 placeholder="6750"
               />
             </div>
@@ -291,7 +291,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
                 type="number"
                 step="0.01"
                 {...register('corporatePrice')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
                 placeholder="9000"
               />
             </div>
@@ -304,7 +304,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
                 type="number"
                 step="0.01"
                 {...register('enterprisePrice')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
                 placeholder="12000"
               />
             </div>
@@ -320,7 +320,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
                 type="text"
                 {...register('metaTitle')}
                 className={cn(
-                  'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500',
+                  'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black',
                   errors.metaTitle && 'border-red-500'
                 )}
                 placeholder="SEO-optimized meta title..."
@@ -338,7 +338,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
                 {...register('metaDescription')}
                 rows={3}
                 className={cn(
-                  'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500',
+                  'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black',
                   errors.metaDescription && 'border-red-500'
                 )}
                 placeholder="SEO-optimized meta description..."
@@ -357,7 +357,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
               </label>
               <select
                 {...register('status')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
               >
                 <option value="DRAFT">Draft</option>
                 <option value="PUBLISHED">Published</option>
@@ -373,7 +373,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
               <input
                 type="number"
                 {...register('priority')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
                 placeholder="0"
               />
             </div>
