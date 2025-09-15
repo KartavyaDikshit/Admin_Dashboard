@@ -4,9 +4,10 @@ import { authOptions } from '../auth/[...nextauth]/route'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { generateSlug } from '@/lib/utils'
+import '@/lib/json-bigint'
 
 const reportSchema = z.object({
-  categoryId: z.string().optional(),
+  categoryIds: z.array(z.string()).optional(),
   title: z.string().min(3, 'Title must be at least 3 characters'),
   description: z.string().min(20, 'Description must be at least 20 characters'),
   summary: z.string().optional(),
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
       ]
     }
 
-    if (categoryId) where.categoryId = categoryId
+    if (categoryId) where.categories = { some: { id: categoryId } }
     if (status) where.status = status
     if (featured !== null) where.featured = featured === 'true'
     if (aiGenerated !== null) where.aiGenerated = aiGenerated === 'true'
@@ -63,7 +64,7 @@ export async function GET(request: NextRequest) {
         skip,
         take: limit,
         include: {
-          category: {
+          categories: {
             select: {
               id: true,
               title: true,
@@ -115,15 +116,18 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const validatedData = reportSchema.parse(body)
+    const { categoryIds, ...rest } = reportSchema.parse(body)
 
-    const slug = generateSlug(validatedData.title)
+    const slug = generateSlug(rest.title)
 
     const report = await prisma.report.create({
       data: {
-        ...validatedData,
+        ...rest,
         slug,
-        publishedDate: new Date(validatedData.publishedDate) // Convert string to Date
+        publishedDate: new Date(rest.publishedDate), // Convert string to Date
+        categories: {
+          connect: categoryIds?.map(id => ({ id }))
+        }
       }
     })
 

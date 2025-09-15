@@ -680,7 +680,7 @@ export class AIContentService {
     })
   }
 
-  async approveWorkflow(workflowId: string, userId: string) {
+  async approveWorkflow(workflowId: string, userId: string, categoryIds: string[]) {
     console.log(`Approving workflow ${workflowId} by user ${userId}`);
     const updatedWorkflow = await prisma.contentGenerationWorkflow.update({
       where: { id: workflowId },
@@ -710,25 +710,50 @@ export class AIContentService {
         .join('\n\n');
     const summary = workflowWithJobs.jobs[0]?.outputText || '';
 
-    console.log(`Creating report with title: ${reportTitle}`);
-    const newReport = await prisma.report.create({
-        data: {
-            title: reportTitle,
-            slug: slug,
-            description: description,
-            summary: summary,
-            publishedDate: new Date(),
-            metaTitle: reportTitle,
-            metaDescription: description.substring(0, 300),
-            status: 'DRAFT',
-            aiGenerated: true,
-            humanApproved: true,
-            contentGenerationWorkflowId: workflowId,
-        }
-    });
-    console.log(`Report created with id: ${newReport.id}`);
+    const reportData = {
+        title: reportTitle,
+        description: description,
+        summary: summary,
+        publishedDate: new Date(),
+        metaTitle: reportTitle,
+        metaDescription: description.substring(0, 300),
+        status: 'DRAFT' as const,
+        aiGenerated: true,
+        humanApproved: true,
+        contentGenerationWorkflowId: workflowId,
+    };
 
-    return { updatedWorkflow, report: newReport };
+    const existingReport = await prisma.report.findUnique({
+        where: { slug },
+    });
+
+    if (existingReport) {
+        console.log(`Updating existing report with slug: ${slug}`);
+        const updatedReport = await prisma.report.update({
+            where: { slug },
+            data: {
+                ...reportData,
+                categories: {
+                    set: categoryIds.map(id => ({ id }))
+                }
+            },
+        });
+        console.log(`Report updated with id: ${updatedReport.id}`);
+        return { updatedWorkflow, report: updatedReport };
+    } else {
+        console.log(`Creating new report with slug: ${slug}`);
+        const newReport = await prisma.report.create({
+            data: {
+                ...reportData,
+                slug: slug,
+                categories: {
+                    connect: categoryIds.map(id => ({ id }))
+                }
+            },
+        });
+        console.log(`Report created with id: ${newReport.id}`);
+        return { updatedWorkflow, report: newReport };
+    }
   }
 }
 

@@ -11,7 +11,7 @@ import { toast } from 'react-hot-toast'
 import { cn } from '@/lib/utils'
 
 const reportSchema = z.object({
-  categoryId: z.string().optional(),
+  categoryIds: z.array(z.string()).optional(),
   title: z.string().min(3, 'Title must be at least 3 characters'),
   description: z.string().min(20, 'Description must be at least 20 characters'),
   summary: z.string().optional(),
@@ -60,7 +60,8 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
       featured: false,
       priority: 0,
       publishedDate: new Date().toISOString().split('T')[0],
-      ...initialData
+      ...initialData,
+      categoryIds: initialData?.categories?.map((cat: any) => cat.id) || [],
     }
   })
 
@@ -154,19 +155,21 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Category
+                Categories
               </label>
-              <select
-                {...register('categoryId')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              >
-                <option value="">Select Category</option>
+              <div className="flex flex-wrap gap-2">
                 {categories.map(category => (
-                  <option key={category.id} value={category.id}>
-                    {category.title}
-                  </option>
+                  <label key={category.id} className="flex items-center space-x-1 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      value={category.id}
+                      {...register('categoryIds')}
+                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                    />
+                    <span>{category.title}</span>
+                  </label>
                 ))}
-              </select>
+              </div>
             </div>
 
             <div>

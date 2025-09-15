@@ -16,7 +16,7 @@ interface Report {
   featured: boolean
   aiGenerated: boolean
   singlePrice: number | null
-  category: { id: string; title: string; shortcode: string } | null
+  categories: { id: string; title: string; shortcode: string }[]
   translations: any[]
   _count: { reviews: number; orderItems: number }
   createdAt: string
@@ -255,7 +255,7 @@ export default function ReportList({ searchParams }: ReportListProps) {
                         </Link>
                         <div className="mt-1 flex items-center space-x-4 text-xs text-gray-500">
                           <span>SKU: {report.sku}</span>
-                          <span>Category: {report.category?.title || 'None'}</span>
+                          <span>Categories: {report.categories.map(cat => cat.title).join(', ') || 'None'}</span>
                           <span>{report._count.orderItems} orders</span>
                           <span>{report._count.reviews} reviews</span>
                         </div>

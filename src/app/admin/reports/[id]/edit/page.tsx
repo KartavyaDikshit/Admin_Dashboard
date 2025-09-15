@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AdminLayout from '@/components/layout/AdminLayout'
 import ReportForm from '@/components/reports/ReportForm'
 import { toast } from 'react-hot-toast'
 
 export default function EditReportPage({ params }: { params: { id: string } }) {
-  const { id } = params
+  const { id } = React.use(params)
   const [initialData, setInitialData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 

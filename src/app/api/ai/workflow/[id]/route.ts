@@ -43,7 +43,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { action, phase } = await request.json()
+    const { action, phase, categoryIds } = await request.json()
 
     if (action === 'regenerate' && typeof phase === 'number') {
       await aiContentService.regeneratePhase(params.id, phase)
@@ -51,7 +51,10 @@ export async function POST(
     }
 
     if (action === 'approve') {
-      await aiContentService.approveWorkflow(params.id, session.user.id)
+      if (!categoryIds || !Array.isArray(categoryIds) || categoryIds.length === 0) {
+        return NextResponse.json({ error: 'categoryIds are required' }, { status: 400 })
+      }
+      await aiContentService.approveWorkflow(params.id, session.user.id, categoryIds)
       return NextResponse.json({ success: true })
     }
 

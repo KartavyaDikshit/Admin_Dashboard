@@ -8,6 +8,8 @@ import { formatDateTime } from '@/lib/utils'
 
 export default function AiGenerationPage() {
   const [workflows, setWorkflows] = useState<any[]>([])
+  const [categories, setCategories] = useState<any[]>([])
+  const [selectedCategories, setSelectedCategories] = useState<Record<string, string[]>>({})
   const [loadingWorkflows, setLoadingWorkflows] = useState(true)
   const [activeWorkflowId, setActiveWorkflowId] = useState<string | null>(null)
 
@@ -15,7 +17,7 @@ export default function AiGenerationPage() {
     const fetchAllWorkflows = async () => {
       setLoadingWorkflows(true)
       try {
-        const response = await fetch('/api/ai/workflow/all') // New API endpoint
+        const response = await fetch('/api/ai/workflow/all')
         const data = await response.json()
         if (response.ok) {
           setWorkflows(data.workflows)
@@ -29,12 +31,26 @@ export default function AiGenerationPage() {
       }
     }
 
-    fetchAllWorkflows()
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        const data = await response.json();
+        if (response.ok) {
+          setCategories(data.categories);
+        } else {
+          toast.error(data.error || 'Failed to fetch categories');
+        }
+      } catch (error) {
+        toast.error('An error occurred while fetching categories.');
+      }
+    };
 
-    // Set up polling for active workflow status
+    fetchAllWorkflows()
+    fetchCategories()
+
     let interval: NodeJS.Timeout | null = null
     if (activeWorkflowId) {
-      interval = setInterval(() => fetchWorkflowStatus(activeWorkflowId), 5000) // Poll every 5 seconds
+      interval = setInterval(() => fetchWorkflowStatus(activeWorkflowId), 5000)
     }
     return () => {
       if (interval) clearInterval(interval)
@@ -56,31 +72,30 @@ export default function AiGenerationPage() {
           return updatedWorkflows;
         });
         if (data.workflow.workflowStatus !== 'GENERATING') {
-          toast.success(`Workflow ${data.workflow.workflowStatus.replace('_', ' ').toLowerCase()}!`) 
-          setActiveWorkflowId(null) // Stop polling for this workflow
+          toast.success(`Workflow ${data.workflow.workflowStatus.replace('_', ' ').toLowerCase()}!`)
+          setActiveWorkflowId(null)
         }
       } else {
         toast.error(data.error || 'Failed to fetch workflow status')
-        setActiveWorkflowId(null) // Stop polling on error
+        setActiveWorkflowId(null)
       }
     } catch (error) {
       toast.error('An error occurred while fetching workflow status.')
-      setActiveWorkflowId(null) // Stop polling on error
+      setActiveWorkflowId(null)
     }
   }
 
   const handleStartGeneration = (workflowId: string, reportTitle: string) => {
     setActiveWorkflowId(workflowId)
-    // Add the new workflow to the list immediately for better UX
     setWorkflows(prevWorkflows => [
       ...prevWorkflows,
-      { id: workflowId, reportTitle, workflowStatus: 'GENERATING', currentPhase: 0, createdAt: new Date().toISOString(), jobs: [] } // Initial state
+      { id: workflowId, reportTitle, workflowStatus: 'GENERATING', currentPhase: 0, createdAt: new Date().toISOString(), jobs: [] }
     ])
-    fetchWorkflowStatus(workflowId) // Fetch status immediately
+    fetchWorkflowStatus(workflowId)
   }
 
   const handleRegeneratePhase = async (workflowId: string, phase: number) => {
-    setLoadingWorkflows(true) // Use general loading for now
+    setLoadingWorkflows(true)
     try {
       const response = await fetch(`/api/ai/workflow/${workflowId}`, {
         method: 'POST',
@@ -89,8 +104,8 @@ export default function AiGenerationPage() {
       })
       const data = await response.json()
       if (response.ok) {
-        toast.success(`Phase ${phase} regeneration started!`) 
-        fetchWorkflowStatus(workflowId) // Refresh status
+        toast.success(`Phase ${phase} regeneration started!`)
+        fetchWorkflowStatus(workflowId)
       } else {
         toast.error(data.error || 'Failed to regenerate phase')
       }
@@ -102,7 +117,7 @@ export default function AiGenerationPage() {
   }
 
   const handleSavePhaseOutput = async (workflowId: string, jobId: string, newOutput: string, imageFile?: File) => {
-    setLoadingWorkflows(true) // Use general loading for now
+    setLoadingWorkflows(true)
     let imageUrl: string | undefined;
 
     if (imageFile) {
@@ -120,12 +135,12 @@ export default function AiGenerationPage() {
         } else {
           toast.error(uploadData.error || 'Failed to upload image.');
           setLoadingWorkflows(false);
-          return; // Stop if image upload fails
+          return;
         }
       } catch (uploadError) {
         toast.error('An error occurred during image upload.');
         setLoadingWorkflows(false);
-        return; // Stop if image upload fails
+        return;
       }
     }
 
@@ -137,8 +152,8 @@ export default function AiGenerationPage() {
       })
       const data = await response.json()
       if (response.ok) {
-        toast.success(`Phase output saved successfully!`) 
-        fetchWorkflowStatus(workflowId) // Refresh status
+        toast.success(`Phase output saved successfully!`)
+        fetchWorkflowStatus(workflowId)
       } else {
         toast.error(data.error || 'Failed to save phase output')
       }
@@ -151,15 +166,20 @@ export default function AiGenerationPage() {
 
   const handleImageChange = (jobId: string, file: File | null) => {
     // This function is now handled within handleSavePhaseOutput
-    // No need to store selectedImage in state globally anymore
   };
 
   const handleApproveReport = async (workflowId: string) => {
+    const categoryIds = selectedCategories[workflowId] || [];
+    if (categoryIds.length === 0) {
+      toast.error('Please select at least one category.');
+      return;
+    }
+
     try {
-            const response = await fetch(`/api/ai/workflow/${workflowId}`, {
+      const response = await fetch(`/api/ai/workflow/${workflowId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'approve' }),
+        body: JSON.stringify({ action: 'approve', categoryIds }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -193,7 +213,6 @@ export default function AiGenerationPage() {
           <div className="space-y-6">
             {workflows.map((workflow: any) => (
               <div key={workflow.id} className="bg-white shadow-lg rounded-lg p-6 text-black">
-                {console.log('Workflow Object:', workflow)}
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Workflow: {workflow.reportTitle}</h3>
                 <div className="space-y-4">
                   <p><strong>Workflow ID:</strong> {workflow.id}</p>
@@ -203,9 +222,6 @@ export default function AiGenerationPage() {
                   <p><strong>Total Tokens Used:</strong> {workflow.totalTokensUsed || 0}</p>
                   <p><strong>Total Cost:</strong> ${parseFloat(workflow.totalCost || '0').toFixed(4)}</p>
 
-                  {/* New section for Total Token Usage */}
-                  
-
                   <h4 className="text-lg font-semibold text-gray-800 mt-6 mb-3">Phases Progress</h4>
                   <div className="space-y-3">
                     {workflow.jobs.map((job: any) => (
@@ -213,7 +229,6 @@ export default function AiGenerationPage() {
                         <p><strong>Phase {job.phase}:</strong> {job.status}</p>
                         {job.status === 'COMPLETED' && (
                           <div className="mt-2 text-sm text-gray-700">
-                            {console.log('Completed Job:', job)} 
                             <p>Tokens Used: {job.totalTokens}</p>
                             <p>Cost: ${job.cost?.toFixed(4)}</p>
                             <details className="mt-2">
@@ -221,20 +236,15 @@ export default function AiGenerationPage() {
                               <textarea
                                 className="mt-2 p-2 bg-gray-100 rounded-md text-xs overflow-auto w-full h-48"
                                 defaultValue={job.outputText}
-                                onBlur={(e) => handleSavePhaseOutput(workflow.id, job.id, e.target.value, null)} // Pass workflow.id
+                                onBlur={(e) => handleSavePhaseOutput(workflow.id, job.id, e.target.value, null)}
                               ></textarea>
                               <div className="mt-2">
                                 <label htmlFor={`image-upload-${job.id}`} className="block text-sm font-medium text-gray-700">Upload Image (Optional)</label>
                                 <input
                                   type="file"
                                   id={`image-upload-${job.id}`}
-                                  className="mt-1 block w-full text-sm text-gray-500
-                                    file:mr-4 file:py-2 file:px-4
-                                    file:rounded-md file:border-0
-                                    file:text-sm file:font-semibold
-                                    file:bg-indigo-50 file:text-indigo-700
-                                    hover:file:bg-indigo-100"
-                                  onChange={(e) => handleSavePhaseOutput(workflow.id, job.id, job.outputText, e.target.files?.[0])} // Pass image file directly
+                                  className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                                  onChange={(e) => handleSavePhaseOutput(workflow.id, job.id, job.outputText, e.target.files?.[0])}
                                 />
                                 {job.imageUrl && (
                                   <div className="mt-2">
@@ -246,7 +256,7 @@ export default function AiGenerationPage() {
                             </details>
                             <div className="flex space-x-2 mt-2">
                               <button
-                                onClick={() => handleRegeneratePhase(workflow.id, job.phase)} // Pass workflow.id
+                                onClick={() => handleRegeneratePhase(workflow.id, job.phase)}
                                 className="px-3 py-1 bg-blue-500 text-white rounded-md text-sm hover:bg-blue-600"
                               >
                                 Regenerate Phase {job.phase}
@@ -258,7 +268,7 @@ export default function AiGenerationPage() {
                           <div className="mt-2 text-sm text-red-600">
                             <p>Error: {job.errorMessage}</p>
                             <button
-                              onClick={() => handleRegeneratePhase(workflow.id, job.phase)} // Pass workflow.id
+                              onClick={() => handleRegeneratePhase(workflow.id, job.phase)}
                               className="mt-2 px-3 py-1 bg-red-500 text-white rounded-md text-sm hover:bg-red-600"
                             >
                               Retry Phase {job.phase}
@@ -272,9 +282,32 @@ export default function AiGenerationPage() {
 
                 {workflow.workflowStatus === 'PENDING_REVIEW' && (
                   <div className="mt-4">
+                    <h4 className="text-lg font-semibold text-gray-800 mb-2">Assign Categories</h4>
+                    <div className="flex flex-wrap gap-4">
+                      {categories.map(category => (
+                        <label key={category.id} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            checked={selectedCategories[workflow.id]?.includes(category.id) || false}
+                            onChange={(e) => {
+                              const { checked } = e.target;
+                              setSelectedCategories(prev => {
+                                const currentSelection = prev[workflow.id] || [];
+                                if (checked) {
+                                  return { ...prev, [workflow.id]: [...currentSelection, category.id] };
+                                } else {
+                                  return { ...prev, [workflow.id]: currentSelection.filter(id => id !== category.id) };
+                                }
+                              });
+                            }}
+                          />
+                          <span>{category.title}</span>
+                        </label>
+                      ))}
+                    </div>
                     <button
                       onClick={() => handleApproveReport(workflow.id)}
-                      className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                      className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
                     >
                       Approve Report
                     </button>

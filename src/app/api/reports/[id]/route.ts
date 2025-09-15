@@ -43,7 +43,7 @@ export async function GET(
     const report = await prisma.report.findUnique({
       where: { id: params.id },
       include: {
-        category: {
+        categories: {
           select: {
             id: true,
             title: true,
