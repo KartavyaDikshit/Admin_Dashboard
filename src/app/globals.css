@@ -63,7 +63,7 @@ body {
   }
   
   .form-label {
-    @apply block text-sm font-medium text-gray-700;
+    @apply block text-sm font-medium text-black; /* Changed from gray-900 to black for pure black */
   }
   
   /* Progress Components */

@@ -423,7 +423,33 @@ model TranslationJob {
   updatedAt         DateTime              @updatedAt @map("updated_at")
   createdBy         String?               @map("created_by") @db.Uuid
 
+  // New fields for batching
+  batchId           String?                @map("batch_id") @db.Uuid
+  batch             TranslationBatch?      @relation(fields: [batchId], references: [id])
+
   @@map("translation_jobs")
+}
+
+model TranslationBatch {
+  id                String                 @id @default(uuid()) @db.Uuid
+  name              String                 @db.VarChar(255)
+  status            TranslationJobStatus   @default(PENDING) // PENDING, PROCESSING, COMPLETED, FAILED, CANCELLED
+  contentType       String                 @db.VarChar(50) // 'REPORT' or 'CATEGORY'
+  targetLocales     String[]               // e.g., ['de', 'fr', 'es']
+  totalJobs         Int                    @default(0)
+  completedJobs     Int                    @default(0)
+  failedJobs        Int                    @default(0)
+  progress          Decimal                @default(0) @db.Decimal(5, 2) // Percentage
+  startedAt         DateTime?
+  completedAt       DateTime?
+  errorMessage      String?                @db.Text
+  createdBy         String?                @map("created_by") @db.Uuid
+  createdAt         DateTime               @default(now()) @map("created_at")
+  updatedAt         DateTime               @updatedAt @map("updated_at")
+
+  jobs              TranslationJob[]
+
+  @@map("translation_batches")
 }
 
 model AiPromptTemplate {
