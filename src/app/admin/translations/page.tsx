@@ -64,7 +64,7 @@ export default function TranslationsPage() {
   }, [])
 
   const handleRetryTranslation = async (jobId: string) => {
-    toast.info(`Retrying job ${jobId} is not yet implemented.`)
+    toast(`Retrying job ${jobId} is not yet implemented.`)
   }
 
   const handleTranslateAll = async (contentType: 'REPORT' | 'CATEGORY') => {

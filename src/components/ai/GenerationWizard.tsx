@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { toast } from 'react-hot-toast'
+import { useQueryClient } from '@tanstack/react-query'
 
 const formSchema = z.object({
   reportTitle: z.string().min(2, {
@@ -18,6 +19,7 @@ interface GenerationWizardProps {
 
 export default function GenerationWizard({ onStart }: GenerationWizardProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const queryClient = useQueryClient()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,6 +45,7 @@ export default function GenerationWizard({ onStart }: GenerationWizardProps) {
         toast.success('AI generation workflow started!')
         onStart(data.workflowId, values.reportTitle)
         form.reset()
+        queryClient.invalidateQueries({ queryKey: ['translationBatches'] })
       } else {
         toast.error(data.error || 'Failed to start AI generation.')
       }

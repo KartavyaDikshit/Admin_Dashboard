@@ -142,7 +142,7 @@ ${originalTextInput}`
               content: userMessageContent,
             },
           ],
-          max_tokens: 2000, // Adjust as needed
+          max_tokens: 4000, // Increased from 2000
           temperature: 0.3,
           response_format: { type: "json_object" },
         })
