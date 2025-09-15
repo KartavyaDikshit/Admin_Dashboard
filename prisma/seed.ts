@@ -3,6 +3,16 @@ import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
+function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/ & /g, ' and ')
+    .replace(/[^a-z0-9 -]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim()
+}
+
 async function main() {
   console.log('🌱 Seeding database...')
 
@@ -32,43 +42,46 @@ async function main() {
 
   console.log('👤 Created admin user:', admin.email)
 
+  await prisma.category.deleteMany({});
+  console.log('🔥 Deleted all existing categories');
+
   // Create sample categories
-  const categories = await Promise.all([
-    prisma.category.upsert({
-      where: { shortcode: 'tech' },
-      update: {},
+  const newCategories = [
+    'Healthcare',
+    'Information Technology & Semiconductors',
+    'Machinery & Equipment',
+    'Aerospace & Defence',
+    'Chemicals & Materials',
+    'Food & Beverages',
+    'Agriculture',
+    'Energy & Power',
+    'Consumer Goods',
+    'Automotive & Transportation',
+  ];
+
+  const categoryUpserts = newCategories.map((title, index) => {
+    const slug = generateSlug(title);
+    const shortcode = title.toLowerCase().replace(/ & /g, '-').replace(/[^a-z]/g, '').substring(0, 10);
+    return prisma.category.upsert({
+      where: { shortcode },
+      update: { title: `${title} Market Research`, slug },
       create: {
-        shortcode: 'tech',
-        slug: 'technology',
-        title: 'Technology Market Research',
-        description: 'Comprehensive technology and IT market research reports covering AI, software, hardware, and digital transformation trends.',
-        icon: '💻',
+        shortcode,
+        slug,
+        title: `${title} Market Research`,
+        description: `Comprehensive ${title} market research reports covering key trends, market size, and growth opportunities.`,
+        icon: '📁',
         featured: true,
-        sortOrder: 1,
-        seoKeywords: ['technology market research', 'IT industry analysis', 'digital transformation'],
-        metaTitle: 'Technology Market Research Reports | TheBrainyInsights',
-        metaDescription: 'Leading technology market research reports covering AI, software, hardware with comprehensive global market analysis.',
-        status: 'PUBLISHED'
-      }
-    }),
-    prisma.category.upsert({
-      where: { shortcode: 'health' },
-      update: {},
-      create: {
-        shortcode: 'health',
-        slug: 'healthcare',
-        title: 'Healthcare Market Research',
-        description: 'In-depth healthcare and pharmaceutical market research covering medical devices, digital health, and biotechnology.',
-        icon: '🏥',
-        featured: true,
-        sortOrder: 2,
-        seoKeywords: ['healthcare market research', 'pharmaceutical industry', 'medical devices'],
-        metaTitle: 'Healthcare Market Research Reports | TheBrainyInsights',
-        metaDescription: 'Comprehensive healthcare market research covering pharmaceuticals, medical devices, and biotechnology.',
-        status: 'PUBLISHED'
-      }
-    })
-  ])
+        sortOrder: index + 1,
+        seoKeywords: [`${title.toLowerCase()} market research`, `${title.toLowerCase()} industry analysis`],
+        metaTitle: `${title} Market Research Reports | TheBrainyInsights`,
+        metaDescription: `Leading ${title} market research reports with comprehensive global market analysis.`,
+        status: 'PUBLISHED',
+      },
+    });
+  });
+
+  const categories = await Promise.all(categoryUpserts);
 
   console.log('📁 Created categories:', categories.length)
 

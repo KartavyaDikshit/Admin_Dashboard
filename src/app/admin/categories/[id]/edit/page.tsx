@@ -1,12 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import AdminLayout from '@/components/layout/AdminLayout'
 import CategoryForm from '@/components/categories/CategoryForm'
 import { toast } from 'react-hot-toast'
 
-export default function EditCategoryPage({ params }: { params: { id: string } }) {
-  const { id } = params
+export default function EditCategoryPage() {
+  const params = useParams()
+  const id = params.id as string
   const [initialData, setInitialData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 

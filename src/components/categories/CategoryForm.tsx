@@ -37,7 +37,8 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
     handleSubmit,
     formState: { errors },
     reset,
-    watch
+    watch,
+    setValue
   } = useForm<FormData>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
@@ -92,7 +93,7 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
     if (watchedTitle && !initialData?.metaTitle) {
       // Simple auto-generation, can be more sophisticated
       // For now, just use the title as meta title
-      // setValue('metaTitle', `${watchedTitle} | Categories | TheBrainyInsights`)
+      setValue('metaTitle', `${watchedTitle} | Categories | TheBrainyInsights`)
     }
   }, [watchedTitle, initialData, setValue])
 
@@ -100,23 +101,23 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
     <div className="max-w-4xl mx-auto">
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">
+          <h2 className="text-lg font-medium text-black">
             {categoryId ? 'Edit Category' : 'Create New Category'}
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6 text-black">
           {/* Basic Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-black mb-1">
                 Title *
               </label>
               <input
                 type="text"
                 {...register('title')}
                 className={cn(
-                  'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500',
+                  'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black',
                   errors.title && 'border-red-500'
                 )}
                 placeholder="e.g., Artificial Intelligence Market Research"
@@ -127,14 +128,14 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-black mb-1">
                 Shortcode *
               </label>
               <input
                 type="text"
                 {...register('shortcode')}
                 className={cn(
-                  'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500',
+                  'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black',
                   errors.shortcode && 'border-red-500'
                 )}
                 placeholder="e.g., AI, HEALTH"
@@ -147,13 +148,13 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               Description
             </label>
             <textarea
               {...register('description')}
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
               placeholder="A brief description of the category..."
             />
           </div>
@@ -161,24 +162,24 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
           {/* Icon & Sort Order */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-black mb-1">
                 Icon (e.g., Emoji or URL)
               </label>
               <input
                 type="text"
                 {...register('icon')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
                 placeholder="💻 or https://example.com/icon.png"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-black mb-1">
                 Sort Order
               </label>
               <input
                 type="number"
                 {...register('sortOrder')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
                 placeholder="0"
               />
             </div>
@@ -186,13 +187,13 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
 
           {/* SEO Keywords */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-black mb-1">
               SEO Keywords (comma-separated)
             </label>
             <input
               type="text"
               {...register('seoKeywords')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
               placeholder="keyword1, keyword2, keyword3"
             />
           </div>
@@ -200,24 +201,24 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
           {/* Meta Title & Description */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-black mb-1">
                 Meta Title
               </label>
               <input
                 type="text"
                 {...register('metaTitle')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
                 placeholder="SEO-optimized meta title..."
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-black mb-1">
                 Meta Description
               </label>
               <textarea
                 {...register('metaDescription')}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
                 placeholder="SEO-optimized meta description..."
               />
             </div>
@@ -226,12 +227,12 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
           {/* Status & Featured */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-black mb-1">
                 Status
               </label>
               <select
                 {...register('status')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
               >
                 <option value="PUBLISHED">Published</option>
                 <option value="DRAFT">Draft</option>
@@ -245,7 +246,7 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
                 {...register('featured')}
                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
               />
-              <label className="ml-2 block text-sm text-gray-700">
+              <label className="ml-2 block text-sm text-black">
                 Featured Category
               </label>
             </div>
@@ -256,7 +257,7 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
             <button
               type="button"
               onClick={() => router.back()}
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-black bg-white hover:bg-gray-50"
             >
               Cancel
             </button>
