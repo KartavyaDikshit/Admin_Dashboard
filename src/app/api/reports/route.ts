@@ -85,6 +85,9 @@ export async function GET(request: NextRequest) {
               title: true,
               status: true
             }
+          },
+          _count: {
+            select: { reviews: true, orderItems: true }
           }
         },
         orderBy: [
