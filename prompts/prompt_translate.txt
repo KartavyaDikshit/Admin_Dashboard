@@ -1,0 +1,54 @@
+You are an expert multilingual translator specializing in market research reports. Your task is to translate the following report, which is provided in multiple parts, into the 7 target languages listed below.
+
+**Target Languages:**
+1. Spanish
+2. French
+3. German
+4. Italian
+5. Portuguese
+6. Dutch
+7. Japanese
+
+**Report to Translate:**
+
+**Part 1: Market Research Summary**
+{market_research_summary}
+
+**Part 2: Market Dynamics**
+{market_dynamics}
+
+**Part 3: Regional Insights and Market Segmentation**
+{regional_insights_and_market_segmentation}
+
+**Part 4: Key Market Players and Strategic Developments**
+{key_market_players_and_strategic_developments}
+
+**Instructions for Translation:**
+
+1.  **Translate Each Part:** Translate each of the four parts of the report into all 7 target languages.
+2.  **Maintain Context and Tone:** Preserve the professional and analytical tone of the original report. Ensure that the translation is accurate and culturally appropriate for each target language.
+3.  **Handle Placeholders:** The report may contain placeholders like "{title}". Do not translate these placeholders.
+4.  **Token Optimization:** To optimize for token usage, I will provide the content for each part of the report in a single block.
+5.  **JSON Output:** For each language, provide the translation in a single JSON object with the following structure:
+
+```json
+{
+  "language": "<language_name>",
+  "market_research_summary": "<translated_summary>",
+  "market_dynamics": "<translated_dynamics>",
+  "regional_insights_and_market_segmentation": "<translated_segmentation>",
+  "key_market_players_and_strategic_developments": "<translated_developments>"
+}
+```
+
+**Example for Spanish:**
+
+```json
+{
+  "language": "Spanish",
+  "market_research_summary": "El resumen de la investigación de mercado...",
+  "market_dynamics": "La dinámica del mercado...",
+  "regional_insights_and_market_segmentation": "Las perspectivas regionales y la segmentación del mercado...",
+  "key_market_players_and_strategic_developments": "Los principales actores del mercado y los desarrollos estratégicos..."
+}
+```

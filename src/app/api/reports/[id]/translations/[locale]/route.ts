@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { prisma } from '@/lib/prisma'
@@ -46,7 +47,15 @@ export async function PUT(
         humanReviewed: true, // Mark as human-reviewed upon manual edit
         updatedAt: new Date(),
       },
-    })
+    });
+
+    // Also update the parent Report's updatedAt to trigger revalidation
+    await prisma.report.update({
+      where: { id: reportId },
+      data: { updatedAt: new Date() },
+    });
+
+    revalidatePath('/admin/translations'); // Revalidate the translations page
 
     return NextResponse.json({ success: true, translation: updatedTranslation })
   } catch (error: any) {

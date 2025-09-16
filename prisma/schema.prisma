@@ -262,6 +262,12 @@ model ReportTranslation {
   title                       String            @db.VarChar(500)
   description                 String            @db.Text
   summary                     String?           @db.Text
+  marketAnalysis              String?           @db.Text @map("market_analysis")
+  competitiveAnalysis         String?           @db.Text @map("competitive_analysis")
+  trendsAnalysis              String?           @db.Text @map("trends_analysis")
+  finalSynthesis              String?           @db.Text @map("final_synthesis")
+  keyPlayers                  String[]          @default([]) @map("key_players")
+  strategicDevelopments       String?           @db.Text @map("strategic_developments")
   slug                        String            @db.VarChar(200)
   tableOfContents             String?           @db.Text @map("table_of_contents")
   listOfFigures               String?           @db.Text @map("list_of_figures")
@@ -312,16 +318,20 @@ model ReportTranslation {
 model ContentGenerationWorkflow {
   id                    String                   @id @default(uuid()) @db.Uuid
   reportTitle           String                   @db.VarChar(500) @map("report_title")
+  language              String                   @default("en") @db.VarChar(10)
+  parentWorkflowId      String?                  @map("parent_workflow_id") @db.Uuid
   industry              String?                  @db.VarChar(255)
   marketSize            String?                  @db.VarChar(255) @map("market_size")
   geographicScope       String?                  @db.VarChar(255) @map("geographic_scope")
   timeframe             String?                  @db.VarChar(50)
   reportType            String?                  @db.VarChar(50) @map("report_type")
   customRequirements    String?                  @db.Text @map("custom_requirements")
+  targetLanguages       String[]                 @default([]) @map("target_languages")
   phase1JobId           String?                  @map("phase1_job_id") @db.Uuid
   phase2JobId           String?                  @map("phase2_job_id") @db.Uuid
   phase3JobId           String?                  @map("phase3_job_id") @db.Uuid
   phase4JobId           String?                  @map("phase4_job_id") @db.Uuid
+  phase5JobId           String?                  @map("phase5_job_id") @db.Uuid
   marketAnalysis        String?                  @db.Text @map("market_analysis")
   competitiveAnalysis   String?                  @db.Text @map("competitive_analysis")
   trendsAnalysis        String?                  @db.Text @map("trends_analysis")
@@ -350,6 +360,8 @@ model ContentGenerationWorkflow {
   // Relations
   jobs                  ContentGenerationJob[]
   reports               Report[]
+  parentWorkflow        ContentGenerationWorkflow? @relation("WorkflowParent", fields: [parentWorkflowId], references: [id])
+  childWorkflows        ContentGenerationWorkflow[] @relation("WorkflowParent")
 
   @@map("content_generation_workflows")
 }

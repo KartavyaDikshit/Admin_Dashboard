@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import AdminLayout from '@/components/layout/AdminLayout'
 import GenerationWizard from '@/components/ai/GenerationWizard'
+import WorkflowDetailsModal from '@/components/ai/WorkflowDetailsModal'
 import { toast } from 'react-hot-toast'
 import { formatDateTime } from '@/lib/utils'
 
@@ -12,6 +13,10 @@ export default function AiGenerationPage() {
   const [selectedCategories, setSelectedCategories] = useState<Record<string, string[]>>({})
   const [loadingWorkflows, setLoadingWorkflows] = useState(true)
   const [activeWorkflowId, setActiveWorkflowId] = useState<string | null>(null)
+  const [selectedWorkflow, setSelectedWorkflow] = useState<any | null>(null)
+  const [isApproving, setIsApproving] = useState(false);
+  const [isApprovingAllChildWorkflows, setIsApprovingAllChildWorkflows] = useState(false);
+  const [selectedWorkflowIds, setSelectedWorkflowIds] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchAllWorkflows = async () => {
@@ -20,7 +25,16 @@ export default function AiGenerationPage() {
         const response = await fetch('/api/ai/workflow/all')
         const data = await response.json()
         if (response.ok) {
-          setWorkflows(data.workflows)
+          const workflows = data.workflows;
+          const parentWorkflows = workflows.filter(wf => !wf.parentWorkflowId);
+          const childWorkflows = workflows.filter(wf => wf.parentWorkflowId);
+
+          const groupedWorkflows = parentWorkflows.map(parent => ({
+            ...parent,
+            childWorkflows: childWorkflows.filter(child => child.parentWorkflowId === parent.id)
+          }));
+
+          setWorkflows(groupedWorkflows)
         } else {
           toast.error(data.error || 'Failed to fetch workflows')
         }
@@ -169,31 +183,200 @@ export default function AiGenerationPage() {
   };
 
   const handleApproveReport = async (workflowId: string) => {
-    const categoryIds = selectedCategories[workflowId] || [];
-    if (categoryIds.length === 0) {
-      toast.error('Please select at least one category.');
-      return;
+    setIsApproving(true);
+    toast.loading('Approving report...');
+
+    const workflow = workflows.find(wf => wf.id === workflowId) || 
+                     workflows.flatMap(wf => wf.childWorkflows).find(cwf => cwf.id === workflowId);
+
+    let categoryIds: string[] = [];
+    if (workflow && !workflow.parentWorkflowId) {
+        categoryIds = selectedCategories[workflowId] || [];
+        if (categoryIds.length === 0) {
+            toast.error('Please select at least one category.');
+            setIsApproving(false);
+            return;
+        }
     }
 
     try {
-      const response = await fetch(`/api/ai/workflow/${workflowId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'approve', categoryIds }),
-      });
+      const response = await fetch(`/api/ai/workflow/${workflowId}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'approve', categoryIds }),
+        });
+
       const data = await response.json();
+      toast.dismiss();
       if (response.ok) {
         toast.success('Report approved successfully!');
-        setWorkflows(prevWorkflows =>
-          prevWorkflows.map(wf =>
-            wf.id === workflowId ? { ...wf, workflowStatus: 'COMPLETED' } : wf
-          )
-        );
+        // Refresh workflows
+        const fetchAllWorkflows = async () => {
+          setLoadingWorkflows(true)
+          try {
+            const response = await fetch('/api/ai/workflow/all')
+            const data = await response.json()
+            if (response.ok) {
+              const workflows = data.workflows;
+              const parentWorkflows = workflows.filter(wf => !wf.parentWorkflowId);
+              const childWorkflows = workflows.filter(wf => wf.parentWorkflowId);
+
+              const groupedWorkflows = parentWorkflows.map(parent => ({
+                ...parent,
+                childWorkflows: childWorkflows.filter(child => child.parentWorkflowId === parent.id)
+              }));
+
+              setWorkflows(groupedWorkflows)
+            } else {
+              toast.error(data.error || 'Failed to fetch workflows')
+            }
+          } catch (error) {
+            toast.error('An error occurred while fetching workflows.')
+          } finally {
+            setLoadingWorkflows(false)
+          }
+        }
+        fetchAllWorkflows();
+        setSelectedWorkflow(null);
       } else {
         toast.error(data.error || 'Failed to approve report.');
       }
     } catch (error) {
       toast.error('An error occurred while approving the report.');
+    } finally {
+      setIsApproving(false);
+    }
+  };
+
+  const handleApproveAllChildWorkflows = async (parentWorkflowId: string) => {
+    if (!confirm(`Are you sure you want to approve all pending language workflows for this report? This action cannot be undone.`)) {
+      return;
+    }
+
+    setIsApprovingAllChildWorkflows(true);
+    toast.loading('Approving all language workflows...');
+
+    try {
+      const response = await fetch(`/api/ai/workflow/${parentWorkflowId}/approve-children`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      const data = await response.json();
+      toast.dismiss();
+
+      if (response.ok) {
+        toast.success(`${data.approvedCount} language workflows approved successfully!`);
+        fetchWorkflowStatus(parentWorkflowId); // Refresh the parent workflow
+      } else {
+        toast.error(data.error || 'Failed to approve all language workflows.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while approving all language workflows.');
+    } finally {
+      setIsApprovingAllChildWorkflows(false);
+    }
+  };
+
+  const handleDeleteWorkflows = async () => {
+    if (selectedWorkflowIds.length === 0) {
+      toast.error('Please select at least one workflow to delete.');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete ${selectedWorkflowIds.length} selected workflow(s)? This action cannot be undone.`)) {
+      return;
+    }
+
+    setIsApproving(true); // Use isApproving as a general loading indicator
+    toast.loading('Deleting workflows...');
+
+    try {
+      const response = await fetch('/api/ai/workflow/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ workflowIds: selectedWorkflowIds }),
+      });
+
+      const data = await response.json();
+      toast.dismiss();
+
+      if (response.ok) {
+        toast.success(`${data.deletedCount} workflow(s) deleted successfully!`);
+        setSelectedWorkflowIds([]); // Clear selection
+        // Refresh workflows
+        const fetchAllWorkflows = async () => {
+          setLoadingWorkflows(true)
+          try {
+            const response = await fetch('/api/ai/workflow/all')
+            const data = await response.json()
+            if (response.ok) {
+              const workflows = data.workflows;
+              const parentWorkflows = workflows.filter(wf => !wf.parentWorkflowId);
+              const childWorkflows = workflows.filter(wf => wf.parentWorkflowId);
+
+              const groupedWorkflows = parentWorkflows.map(parent => ({
+                ...parent,
+                childWorkflows: childWorkflows.filter(child => child.parentWorkflowId === parent.id)
+              }));
+
+              setWorkflows(groupedWorkflows)
+            } else {
+              toast.error(data.error || 'Failed to fetch workflows')
+            }
+          } catch (error) {
+            toast.error('An error occurred while fetching workflows.')
+          } finally {
+            setLoadingWorkflows(false)
+          }
+        }
+        fetchAllWorkflows();
+      } else {
+        toast.error(data.error || 'Failed to delete workflows.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while deleting workflows.');
+    } finally {
+      setIsApproving(false);
+    }
+  };
+
+  const handleDeleteAllWorkflows = async () => {
+    if (workflows.length === 0) {
+      toast.error('No workflows to delete.');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete ALL workflows? This action cannot be undone.`)) {
+      return;
+    }
+
+    setIsApproving(true);
+    toast.loading('Deleting all workflows...');
+
+    try {
+      const allWorkflowIds = workflows.flatMap(wf => [wf.id, ...wf.childWorkflows.map((child: any) => child.id)]);
+      const response = await fetch('/api/ai/workflow/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ workflowIds: allWorkflowIds }),
+      });
+
+      const data = await response.json();
+      toast.dismiss();
+
+      if (response.ok) {
+        toast.success(`${data.deletedCount} workflow(s) deleted successfully!`);
+        setSelectedWorkflowIds([]);
+        setWorkflows([]); // Clear all workflows from state
+      } else {
+        toast.error(data.error || 'Failed to delete all workflows.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while deleting all workflows.');
+    } finally {
+      setIsApproving(false);
     }
   };
 
@@ -201,6 +384,25 @@ export default function AiGenerationPage() {
     <AdminLayout>
       <div className="space-y-8">
         <GenerationWizard onStart={handleStartGeneration} />
+
+        {workflows.length > 0 && (
+          <div className="mt-4 flex space-x-4">
+            <button
+              onClick={handleDeleteWorkflows}
+              disabled={selectedWorkflowIds.length === 0 || isApproving}
+              className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 disabled:bg-gray-400"
+            >
+              Delete Selected Workflows
+            </button>
+            <button
+              onClick={handleDeleteAllWorkflows}
+              disabled={workflows.length === 0 || isApproving}
+              className="px-4 py-2 bg-red-700 text-white rounded-md hover:bg-red-800 disabled:bg-gray-400"
+            >
+              Delete All Workflows
+            </button>
+          </div>
+        )}
 
         {loadingWorkflows ? (
           <div className="text-center py-8">
@@ -213,7 +415,21 @@ export default function AiGenerationPage() {
           <div className="space-y-6">
             {workflows.map((workflow: any) => (
               <div key={workflow.id} className="bg-white shadow-lg rounded-lg p-6 text-black">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Workflow: {workflow.reportTitle}</h3>
+                <div className="flex items-center mb-4">
+                  <input
+                    type="checkbox"
+                    checked={selectedWorkflowIds.includes(workflow.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedWorkflowIds(prev => [...prev, workflow.id]);
+                      } else {
+                        setSelectedWorkflowIds(prev => prev.filter(id => id !== workflow.id));
+                      }
+                    }}
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  />
+                  <h3 className="text-xl font-bold text-gray-900 ml-2">Workflow: {workflow.reportTitle}</h3>
+                </div>
                 <div className="space-y-4">
                   <p><strong>Workflow ID:</strong> {workflow.id}</p>
                   <p><strong>Status:</strong> {workflow.workflowStatus.replace('_', ' ')}</p>
@@ -221,6 +437,36 @@ export default function AiGenerationPage() {
                   <p><strong>Created At:</strong> {formatDateTime(new Date(workflow.createdAt))}</p>
                   <p><strong>Total Tokens Used:</strong> {workflow.totalTokensUsed || 0}</p>
                   <p><strong>Total Cost:</strong> ${parseFloat(workflow.totalCost || '0').toFixed(4)}</p>
+
+                  {workflow.childWorkflows && workflow.childWorkflows.length > 0 && (
+                    <div className="mt-6">
+                      <h4 className="text-lg font-semibold text-gray-800 mb-3">Language Workflows</h4>
+                      <button
+                        onClick={() => handleApproveAllChildWorkflows(workflow.id)}
+                        disabled={isApprovingAllChildWorkflows}
+                        className="ml-4 px-3 py-1 bg-blue-500 text-white rounded-md text-sm hover:bg-blue-600 disabled:bg-gray-400"
+                      >
+                        {isApprovingAllChildWorkflows ? 'Approving...' : 'Approve All Language Workflows'}
+                      </button>
+                      <div className="space-y-3">
+                        {workflow.childWorkflows.map((child: any) => (
+                          <div key={child.id} className="border p-4 rounded-md">
+                            <p><strong>Language:</strong> {child.language.toUpperCase()}</p>
+                            <p><strong>Status:</strong> {child.workflowStatus.replace('_', ' ')}</p>
+                            <p><strong>Current Phase:</strong> {child.currentPhase} / 4</p>
+                            <p><strong>Total Tokens Used:</strong> {child.totalTokensUsed || 0}</p>
+                            <p><strong>Total Cost:</strong> ${parseFloat(child.totalCost || '0').toFixed(4)}</p>
+                            <button
+                              onClick={() => setSelectedWorkflow(child)}
+                              className="mt-2 px-3 py-1 bg-indigo-500 text-white rounded-md text-sm hover:bg-indigo-600"
+                            >
+                              View
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   <h4 className="text-lg font-semibold text-gray-800 mt-6 mb-3">Phases Progress</h4>
                   <div className="space-y-3">
@@ -230,7 +476,7 @@ export default function AiGenerationPage() {
                         {job.status === 'COMPLETED' && (
                           <div className="mt-2 text-sm text-gray-700">
                             <p>Tokens Used: {job.totalTokens}</p>
-                            <p>Cost: ${job.cost?.toFixed(4)}</p>
+                            <p>Cost: ${parseFloat(job.cost || '0').toFixed(4)}</p>
                             <details className="mt-2">
                               <summary className="cursor-pointer text-indigo-600">View/Edit Output</summary>
                               <textarea
@@ -307,15 +553,25 @@ export default function AiGenerationPage() {
                     </div>
                     <button
                       onClick={() => handleApproveReport(workflow.id)}
-                      className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                      disabled={isApproving}
+                      className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:bg-gray-400"
                     >
-                      Approve Report
+                      {isApproving ? 'Approving...' : 'Approve Report'}
                     </button>
                   </div>
                 )}
               </div>
             ))}
           </div>
+        )}
+
+        {selectedWorkflow && (
+          <WorkflowDetailsModal
+            workflow={selectedWorkflow}
+            onClose={() => setSelectedWorkflow(null)}
+            onApprove={handleApproveReport}
+            isApproving={isApproving}
+          />
         )}
       </div>
     </AdminLayout>

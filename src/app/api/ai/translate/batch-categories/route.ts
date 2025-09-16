@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { aiBatchTranslationService } from '@/lib/services/aiBatchTranslationService'
@@ -22,5 +23,6 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error('Batch translate categories API error:', error)
     return NextResponse.json({ error: 'Internal server error', message: error.message }, { status: 500 })
+  } finally {
+    revalidatePath('/admin/translations') // Revalidate the translations page
   }
-}

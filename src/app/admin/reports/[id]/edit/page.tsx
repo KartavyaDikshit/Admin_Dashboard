@@ -122,10 +122,15 @@ export default function EditReportPage({ params }: { params: { id: string } }) {
         body: JSON.stringify({
           title: translatedData.title,
           description: translatedData.description,
-          summary: translatedData.summary, // Include summary for reports
+          summary: translatedData.summary,
+          marketAnalysis: translatedData.marketAnalysis,
+          competitiveAnalysis: translatedData.competitiveAnalysis,
+          trendsAnalysis: translatedData.trendsAnalysis,
+          keyPlayers: translatedData.keyPlayers,
+          strategicDevelopments: translatedData.strategicDevelopments,
           metaTitle: translatedData.metaTitle,
           metaDescription: translatedData.metaDescription,
-          status: translatedData.status, // Allow status to be updated
+          status: translatedData.status,
         }),
       });
 
@@ -251,6 +256,61 @@ export default function EditReportPage({ params }: { params: { id: string } }) {
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
                   value={translatedData?.summary || ''}
                   onChange={(e) => setTranslatedData(prev => prev ? { ...prev, summary: e.target.value } : null)}
+                  disabled={isSavingTranslatedData}
+                ></textarea>
+              </div>
+              <div>
+                <label htmlFor="translatedMarketAnalysis" className="block text-sm font-medium text-black">Market Analysis ({viewLocale.toUpperCase()})</label>
+                <textarea
+                  id="translatedMarketAnalysis"
+                  rows={5}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
+                  value={translatedData?.marketAnalysis || ''}
+                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, marketAnalysis: e.target.value } : null)}
+                  disabled={isSavingTranslatedData}
+                ></textarea>
+              </div>
+              <div>
+                <label htmlFor="translatedCompetitiveAnalysis" className="block text-sm font-medium text-black">Competitive Analysis ({viewLocale.toUpperCase()})</label>
+                <textarea
+                  id="translatedCompetitiveAnalysis"
+                  rows={5}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
+                  value={translatedData?.competitiveAnalysis || ''}
+                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, competitiveAnalysis: e.target.value } : null)}
+                  disabled={isSavingTranslatedData}
+                ></textarea>
+              </div>
+              <div>
+                <label htmlFor="translatedTrendsAnalysis" className="block text-sm font-medium text-black">Trends Analysis ({viewLocale.toUpperCase()})</label>
+                <textarea
+                  id="translatedTrendsAnalysis"
+                  rows={5}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
+                  value={translatedData?.trendsAnalysis || ''}
+                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, trendsAnalysis: e.target.value } : null)}
+                  disabled={isSavingTranslatedData}
+                ></textarea>
+              </div>
+              <div>
+                <label htmlFor="translatedKeyPlayers" className="block text-sm font-medium text-black">Key Players ({viewLocale.toUpperCase()})</label>
+                <textarea
+                  id="translatedKeyPlayers"
+                  rows={5}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
+                  value={translatedData?.keyPlayers?.join('\n') || ''}
+                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, keyPlayers: e.target.value.split('\n') } : null)}
+                  disabled={isSavingTranslatedData}
+                ></textarea>
+              </div>
+              <div>
+                <label htmlFor="translatedStrategicDevelopments" className="block text-sm font-medium text-black">Strategic Developments ({viewLocale.toUpperCase()})</label>
+                <textarea
+                  id="translatedStrategicDevelopments"
+                  rows={5}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
+                  value={translatedData?.strategicDevelopments || ''}
+                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, strategicDevelopments: e.target.value } : null)}
                   disabled={isSavingTranslatedData}
                 ></textarea>
               </div>

@@ -17,6 +17,11 @@ export default function TranslationsPage() {
   const [errorBatches, setErrorBatches] = useState<string | null>(null)
   const [isTranslatingAllReports, setIsTranslatingAllReports] = useState(false)
   const [isTranslatingAllCategories, setIsTranslatingAllCategories] = useState(false)
+  const [selectedBatchIds, setSelectedBatchIds] = useState<string[]>([])
+  const [selectedJobIds, setSelectedJobIds] = useState<string[]>([])
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isApprovingAllReports, setIsApprovingAllReports] = useState(false)
+  const [isApprovingAllWorkflows, setIsApprovingAllWorkflows] = useState(false)
 
   const fetchTranslationJobs = async () => {
     setLoadingJobs(true)
@@ -101,6 +106,218 @@ export default function TranslationsPage() {
     }
   }
 
+  const handleDeleteSelectedBatches = async () => {
+    if (selectedBatchIds.length === 0) {
+      toast.error('Please select at least one batch to delete.');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete ${selectedBatchIds.length} selected batch(es)? This action cannot be undone.`)) {
+      return;
+    }
+
+    setIsDeleting(true);
+    toast.loading('Deleting batches...');
+
+    try {
+      const response = await fetch('/api/translations/batches/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ batchIds: selectedBatchIds }),
+      });
+
+      const data = await response.json();
+      toast.dismiss();
+
+      if (response.ok) {
+        toast.success(`${data.deletedCount} batch(es) deleted successfully!`);
+        setSelectedBatchIds([]);
+        fetchTranslationBatches();
+      } else {
+        toast.error(data.error || 'Failed to delete batches.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while deleting batches.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteAllBatches = async () => {
+    if (translationBatches.length === 0) {
+      toast.error('No batches to delete.');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete ALL batches? This action cannot be undone.`)) {
+      return;
+    }
+
+    setIsDeleting(true);
+    toast.loading('Deleting all batches...');
+
+    try {
+      const allBatchIds = translationBatches.map(batch => batch.id);
+      const response = await fetch('/api/translations/batches/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ batchIds: allBatchIds }),
+      });
+
+      const data = await response.json();
+      toast.dismiss();
+
+      if (response.ok) {
+        toast.success(`${data.deletedCount} batch(es) deleted successfully!`);
+        setSelectedBatchIds([]);
+        fetchTranslationBatches();
+      } else {
+        toast.error(data.error || 'Failed to delete all batches.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while deleting all batches.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteSelectedJobs = async () => {
+    if (selectedJobIds.length === 0) {
+      toast.error('Please select at least one job to delete.');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete ${selectedJobIds.length} selected job(s)? This action cannot be undone.`)) {
+      return;
+    }
+
+    setIsDeleting(true);
+    toast.loading('Deleting jobs...');
+
+    try {
+      const response = await fetch('/api/translations/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobIds: selectedJobIds }),
+      });
+
+      const data = await response.json();
+      toast.dismiss();
+
+      if (response.ok) {
+        toast.success(`${data.deletedCount} job(s) deleted successfully!`);
+        setSelectedJobIds([]);
+        fetchTranslationJobs();
+      } else {
+        toast.error(data.error || 'Failed to delete jobs.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while deleting jobs.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteAllJobs = async () => {
+    if (translationJobs.length === 0) {
+      toast.error('No jobs to delete.');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete ALL jobs? This action cannot be undone.`)) {
+      return;
+    }
+
+    setIsDeleting(true);
+    toast.loading('Deleting all jobs...');
+
+    try {
+      const allJobIds = translationJobs.map(job => job.id);
+      const response = await fetch('/api/translations/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobIds: allJobIds }),
+      });
+
+      const data = await response.json();
+      toast.dismiss();
+
+      if (response.ok) {
+        toast.success(`${data.deletedCount} job(s) deleted successfully!`);
+        setSelectedJobIds([]);
+        fetchTranslationJobs();
+      } else {
+        toast.error(data.error || 'Failed to delete all jobs.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while deleting all jobs.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleApproveAllReports = async () => {
+    if (!confirm(`Are you sure you want to approve all pending reports? This action cannot be undone.`)) {
+      return;
+    }
+
+    setIsApprovingAllReports(true);
+    toast.loading('Approving all reports...');
+
+    try {
+      const response = await fetch('/api/translations/approve-all-reports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      const data = await response.json();
+      toast.dismiss();
+
+      if (response.ok) {
+        toast.success(`${data.approvedCount} reports approved successfully!`);
+        fetchTranslationJobs();
+        fetchTranslationBatches();
+      } else {
+        toast.error(data.error || 'Failed to approve all reports.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while approving all reports.');
+    } finally {
+      setIsApprovingAllReports(false);
+    }
+  };
+
+  const handleApproveAllWorkflows = async () => {
+    if (!confirm(`Are you sure you want to approve all pending language workflows? This action cannot be undone.`)) {
+      return;
+    }
+
+    setIsApprovingAllWorkflows(true);
+    toast.loading('Approving all language workflows...');
+
+    try {
+      const response = await fetch('/api/ai/workflow/approve-all', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      const data = await response.json();
+      toast.dismiss();
+
+      if (response.ok) {
+        toast.success(`${data.approvedCount} language workflows approved successfully!`);
+        fetchTranslationJobs();
+        fetchTranslationBatches();
+      } else {
+        toast.error(data.error || 'Failed to approve all language workflows.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while approving all language workflows.');
+    } finally {
+      setIsApprovingAllWorkflows(false);
+    }
+  };
+
   if (loadingJobs || loadingBatches) {
     return (
       <AdminLayout>
@@ -154,10 +371,56 @@ export default function TranslationsPage() {
 
         {/* Translation Batches List */}
         <h2 className="text-xl font-bold mb-3 text-black">Translation Batches</h2>
+        {translationBatches.length > 0 && (
+          <div className="mb-4 flex space-x-4">
+            <button
+              onClick={handleDeleteSelectedBatches}
+              disabled={selectedBatchIds.length === 0 || isDeleting}
+              className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 disabled:bg-gray-400"
+            >
+              Delete Selected Batches
+            </button>
+            <button
+              onClick={handleDeleteAllBatches}
+              disabled={translationBatches.length === 0 || isDeleting}
+              className="px-4 py-2 bg-red-700 text-white rounded-md hover:bg-red-800 disabled:bg-gray-400"
+            >
+              Delete All Batches
+            </button>
+            <button
+              onClick={handleApproveAllReports}
+              disabled={isApprovingAllReports}
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:bg-gray-400"
+            >
+              {isApprovingAllReports ? 'Approving...' : 'Approve All Reports'}
+            </button>
+            <button
+              onClick={handleApproveAllWorkflows}
+              disabled={isApprovingAllWorkflows}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400"
+            >
+              {isApprovingAllWorkflows ? 'Approving...' : 'Approve All Language Workflows'}
+            </button>
+          </div>
+        )}
         <div className="overflow-x-auto bg-white shadow-sm rounded-lg mb-8">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
+                <th scope="col" className="relative px-6 py-3">
+                  <input
+                    type="checkbox"
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedBatchIds(translationBatches.map(batch => batch.id));
+                      } else {
+                        setSelectedBatchIds([]);
+                      }
+                    }}
+                    checked={selectedBatchIds.length === translationBatches.length && translationBatches.length > 0}
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  />
+                </th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                   Name
                 </th>
@@ -192,6 +455,20 @@ export default function TranslationsPage() {
                 translationBatches.map((batch) => (
                   <tr key={batch.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                      <input
+                        type="checkbox"
+                        checked={selectedBatchIds.includes(batch.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedBatchIds(prev => [...prev, batch.id]);
+                          } else {
+                            setSelectedBatchIds(prev => prev.filter(id => id !== batch.id));
+                          }
+                        }}
+                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                      />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
                       {batch.name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
@@ -218,7 +495,7 @@ export default function TranslationsPage() {
                       {new Date(batch.createdAt).toLocaleString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      {/* Actions for batch, e.g., view details, cancel */}
+                      {/* Actions for batch, e.e., view details, cancel */}
                     </td>
                   </tr>
                 ))
@@ -229,30 +506,44 @@ export default function TranslationsPage() {
 
         {/* Individual Translation Jobs List (existing content) */}
         <h2 className="text-xl font-bold mb-3">Individual Translation Jobs</h2>
+        {translationJobs.length > 0 && (
+          <div className="mb-4 flex space-x-4">
+            <button
+              onClick={handleDeleteSelectedJobs}
+              disabled={selectedJobIds.length === 0 || isDeleting}
+              className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 disabled:bg-gray-400"
+            >
+              Delete Selected Jobs
+            </button>
+            <button
+              onClick={handleDeleteAllJobs}
+              disabled={translationJobs.length === 0 || isDeleting}
+              className="px-4 py-2 bg-red-700 text-white rounded-md hover:bg-red-800 disabled:bg-gray-400"
+            >
+              Delete All Jobs
+            </button>
+          </div>
+        )}
         <div className="overflow-x-auto bg-white shadow-sm rounded-lg">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
+                <th scope="col" className="relative px-6 py-3">
+                  <input
+                    type="checkbox"
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedJobIds(translationJobs.map(job => job.id));
+                      } else {
+                        setSelectedJobIds([]);
+                      }
+                    }}
+                    checked={selectedJobIds.length === translationJobs.length && translationJobs.length > 0}
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  />
+                </th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                   Content Type
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
-                  Content ID
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
-                  Target Locale
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
-                  Status
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
-                  Error Message
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
-                  Created At
-                </th>
-                <th scope="col" className="relative px-6 py-3">
-                  <span className="sr-only">Actions</span>
                 </th>
               </tr>
             </thead>
@@ -266,6 +557,20 @@ export default function TranslationsPage() {
               ) : (
                 translationJobs.map((job) => (
                   <tr key={job.id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                      <input
+                        type="checkbox"
+                        checked={selectedJobIds.includes(job.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedJobIds(prev => [...prev, job.id]);
+                          } else {
+                            setSelectedJobIds(prev => prev.filter(id => id !== job.id));
+                          }
+                        }}
+                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                      />
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
                       {job.contentType}
                     </td>

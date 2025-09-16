@@ -263,19 +263,29 @@ export class AIContentService {
   }
 
   async processNextPhase(workflowId: string) {
+    console.log(`[${new Date().toISOString()}] Processing next phase for workflow ${workflowId}`);
     const workflow = await prisma.contentGenerationWorkflow.findUnique({
       where: { id: workflowId },
       include: { jobs: { orderBy: { phase: 'asc' } } }
     })
 
-    if (!workflow || workflow.currentPhase > PHASE_CONFIGS.length) {
+    if (!workflow) {
+      console.log(`[${new Date().toISOString()}] Workflow ${workflowId} not found.`);
+      return;
+    }
+
+    if (workflow.currentPhase > PHASE_CONFIGS.length) {
+      console.log(`[${new Date().toISOString()}] Workflow ${workflowId} has already completed all phases.`);
       return
     }
+
+    console.log(`[${new Date().toISOString()}] Current phase for workflow ${workflowId} is ${workflow.currentPhase}`);
 
     const phaseConfig = PHASE_CONFIGS[workflow.currentPhase - 1]
     const previousContent = this.buildContextFromPreviousPhases(workflow.jobs)
 
     // Create job for current phase
+    console.log(`[${new Date().toISOString()}] Creating job for phase ${workflow.currentPhase} of workflow ${workflowId}`);
     const job = await prisma.contentGenerationJob.create({
       data: {
         workflowId: workflow.id,
@@ -291,14 +301,16 @@ export class AIContentService {
         inputPrompt: this.buildPrompt(phaseConfig.promptTemplate, {
           title: workflow.reportTitle,
           previous_content: previousContent
-        }),
+        }, workflow.language),
         status: 'PROCESSING'
       }
     })
+    console.log(`[${new Date().toISOString()}] Created job ${job.id} for phase ${workflow.currentPhase} of workflow ${workflowId}`);
 
     try {
       await this.executeJob(job.id)
     } catch (error: any) {
+      console.error(`[${new Date().toISOString()}] Error executing job ${job.id} for workflow ${workflowId}:`, error);
       await prisma.contentGenerationJob.update({
         where: { id: job.id },
         data: {
@@ -310,11 +322,17 @@ export class AIContentService {
   }
 
   private async executeJob(jobId: string) {
+    console.log(`[${new Date().toISOString()}] Executing job ${jobId}`);
     const job = await prisma.contentGenerationJob.findUnique({
       where: { id: jobId }
     })
 
-    if (!job) return
+    if (!job) {
+      console.log(`[${new Date().toISOString()}] Job ${jobId} not found.`);
+      return;
+    }
+
+    console.log(`[${new Date().toISOString()}] Found job ${jobId} for phase ${job.phase} of workflow ${job.workflowId}`);
 
     const startTime = Date.now()
     let processingTime = 0;
@@ -324,6 +342,7 @@ export class AIContentService {
     let cost = 0;
 
     try {
+      console.log(`[${new Date().toISOString()}] Calling OpenAI for job ${jobId}`);
       const completion = await openai.chat.completions.create({
         model: job.aiModel,
         messages: [
@@ -339,6 +358,7 @@ export class AIContentService {
         max_tokens: job.maxTokens,
         temperature: job.temperature.toNumber()
       })
+      console.log(`[${new Date().toISOString()}] OpenAI call completed for job ${jobId}`);
 
       const outputText = completion.choices[0]?.message?.content || ''
 
@@ -352,6 +372,7 @@ export class AIContentService {
       console.log('Calculated Tokens:', { inputTokens, outputTokens, totalTokens, cost });
 
       // Update job with results
+      console.log(`[${new Date().toISOString()}] Updating job ${jobId} with results`);
       await prisma.contentGenerationJob.update({
         where: { id: jobId },
         data: {
@@ -366,8 +387,10 @@ export class AIContentService {
           completenessScore: await this.assessCompleteness(outputText, job.phase)
         }
       })
+      console.log(`[${new Date().toISOString()}] Updated job ${jobId} with results`);
 
       // Update parent workflow's total tokens and cost
+      console.log(`[${new Date().toISOString()}] Updating workflow ${job.workflowId} with total tokens and cost`);
       await prisma.contentGenerationWorkflow.update({
         where: { id: job.workflowId! },
         data: {
@@ -385,6 +408,7 @@ export class AIContentService {
           }
         }
       })
+      console.log(`[${new Date().toISOString()}] Updated workflow ${job.workflowId} with total tokens and cost`);
 
       const updatedWorkflow = await prisma.contentGenerationWorkflow.findUnique({
         where: { id: job.workflowId! },
@@ -393,6 +417,7 @@ export class AIContentService {
       console.log('Updated Workflow Totals:', updatedWorkflow);
 
       // Log API usage
+      console.log(`[${new Date().toISOString()}] Logging API usage for job ${jobId}`);
       await prisma.apiUsageLog.create({
         data: {
           serviceType: 'content_generation',
@@ -409,11 +434,15 @@ export class AIContentService {
           responseData: { content: outputText }
         }
       })
+      console.log(`[${new Date().toISOString()}] Logged API usage for job ${jobId}`);
 
       // Update workflow and continue to next phase
+      console.log(`[${new Date().toISOString()}] Updating workflow after job ${jobId}`);
       await this.updateWorkflowAfterJob(job.workflowId!, job.phase, outputText)
+      console.log(`[${new Date().toISOString()}] Updated workflow after job ${jobId}`);
 
     } catch (error: any) {
+      console.error(`[${new Date().toISOString()}] Error in executeJob for job ${jobId}:`, error);
       await prisma.contentGenerationJob.update({
         where: { id: jobId },
         data: {
@@ -496,7 +525,7 @@ export class AIContentService {
       })
 
       // Process next phase
-      setTimeout(() => this.processNextPhase(workflowId), 1000)
+      this.processNextPhase(workflowId)
     } else {
       // Workflow complete
       updateData.workflowStatus = 'PENDING_REVIEW'
@@ -509,13 +538,26 @@ export class AIContentService {
     }
   }
 
-  private buildPrompt(template: string, variables: Record<string, any>): string {
+  private buildPrompt(template: string, variables: Record<string, any>, language: string = 'en'): string {
     let prompt = template
     
     Object.entries(variables).forEach(([key, value]) => {
       const placeholder = `{${key}}`
       prompt = prompt.replace(new RegExp(placeholder, 'g'), value || '')
     })
+
+    if (language !== 'en') {
+      const languageMap: { [key: string]: string } = {
+        de: 'German',
+        fr: 'French',
+        it: 'Italian',
+        ja: 'Japanese',
+        ko: 'Korean',
+        es: 'Spanish',
+      };
+      const fullLanguage = languageMap[language] || language;
+      prompt = `Please generate the content in ${fullLanguage}. The entire response should be in ${fullLanguage}.\n\n` + prompt;
+    }
     
     return prompt
   }
@@ -586,63 +628,51 @@ export class AIContentService {
   async getWorkflowStatus(workflowId: string) {
     const workflow = await prisma.contentGenerationWorkflow.findUnique({
       where: { id: workflowId },
-      select: {
-        id: true,
-        reportTitle: true,
-        workflowStatus: true,
-        currentPhase: true,
-        createdAt: true,
-        totalInputTokensUsed: true,
-        totalOutputTokensUsed: true,
-        totalTokensUsed: true,
-        totalCost: true,
+      include: {
         jobs: {
           orderBy: { phase: 'asc' },
-          select: {
-            id: true,
-            phase: true,
-            status: true,
-            outputText: true,
-            qualityScore: true,
-            inputTokens: true,
-            outputTokens: true,
-            cost: true,
-            processingTime: true,
-            errorMessage: true,
-            totalTokens: true
-          }
-        }
-      }
-    })
+        },
+        childWorkflows: {
+          include: {
+            jobs: {
+              orderBy: { phase: 'asc' },
+            },
+          },
+        },
+      },
+    });
 
     if (workflow) {
-      // Map over jobs to convert Decimal types to numbers for client-side consumption
-      const jobsWithNumbers = workflow.jobs.map(job => ({
-        ...job,
-        qualityScore: job.qualityScore ? job.qualityScore.toNumber() : null,
-        cost: job.cost ? job.cost.toNumber() : null,
-        inputTokens: job.inputTokens || 0,
-        outputTokens: job.outputTokens || 0,
-        totalTokens: job.totalTokens || 0,
-      }));
-      // Convert totalCost to number before returning to frontend
-      const convertedWorkflow = {
-        ...workflow,
-        totalCost: workflow.totalCost ? workflow.totalCost.toNumber() : 0,
+      const processWorkflow = (wf: any) => {
+        const jobsWithNumbers = wf.jobs.map((job: any) => ({
+          ...job,
+          qualityScore: job.qualityScore ? job.qualityScore.toNumber() : null,
+          cost: job.cost ? job.cost.toNumber() : null,
+          inputTokens: job.inputTokens || 0,
+          outputTokens: job.outputTokens || 0,
+          totalTokens: job.totalTokens || 0,
+        }));
+
+        const processedWorkflow = convertDecimalsToNumbers(wf);
+
+        return {
+          ...processedWorkflow,
+          jobs: jobsWithNumbers,
+          totalTokenUsage: {
+            inputTokens: processedWorkflow.totalInputTokensUsed || 0,
+            outputTokens: processedWorkflow.totalOutputTokensUsed || 0,
+            totalTokens: processedWorkflow.totalTokensUsed || 0,
+            cost: processedWorkflow.totalCost,
+          },
+        };
       };
 
-      // Convert all Decimal fields in the workflow object to numbers
-      const processedWorkflow = convertDecimalsToNumbers(workflow);
+      const processedParent = processWorkflow(workflow);
+      const processedChildren = workflow.childWorkflows.map(processWorkflow);
 
       return {
-        ...processedWorkflow,
-        jobs: jobsWithNumbers,
-        totalTokenUsage: {
-          inputTokens: processedWorkflow.totalInputTokensUsed || 0,
-          outputTokens: processedWorkflow.totalOutputTokensUsed || 0,
-          totalTokens: processedWorkflow.totalTokensUsed || 0,
-          cost: processedWorkflow.totalCost,
-        }
+        ...processedParent,
+        childWorkflows: processedChildren,
       };
     }
     return null;
@@ -680,7 +710,7 @@ export class AIContentService {
     })
   }
 
-  async approveWorkflow(workflowId: string, userId: string, categoryIds: string[]) {
+  async approveWorkflow(workflowId: string, userId: string, categoryIds?: string[]) {
     console.log(`Approving workflow ${workflowId} by user ${userId}`);
     const updatedWorkflow = await prisma.contentGenerationWorkflow.update({
       where: { id: workflowId },
@@ -706,53 +736,128 @@ export class AIContentService {
     const reportTitle = workflowWithJobs.reportTitle;
     const slug = generateSlug(reportTitle);
     const description = workflowWithJobs.jobs
+        .filter(job => job.phase === 1)
         .map(job => job.outputText || '')
         .join('\n\n');
-    const summary = workflowWithJobs.jobs[0]?.outputText || '';
+    const summary = workflowWithJobs.jobs.find(job => job.phase === 1)?.outputText || '';
 
-    const reportData = {
-        title: reportTitle,
-        description: description,
-        summary: summary,
-        publishedDate: new Date(),
-        metaTitle: reportTitle,
-        metaDescription: description.substring(0, 300),
-        status: 'DRAFT' as const,
-        aiGenerated: true,
-        humanApproved: true,
-        contentGenerationWorkflowId: workflowId,
-    };
+    if (workflowWithJobs.parentWorkflowId) {
+      // This is a child workflow, so we create a ReportTranslation
+      const parentWorkflow = await prisma.contentGenerationWorkflow.findUnique({
+        where: { id: workflowWithJobs.parentWorkflowId },
+        include: { reports: { include: { categories: true } } }
+      });
 
-    const existingReport = await prisma.report.findUnique({
-        where: { slug },
-    });
+      if (!parentWorkflow || !parentWorkflow.reports.length) {
+        throw new Error('Parent workflow or report not found');
+      }
 
-    if (existingReport) {
-        console.log(`Updating existing report with slug: ${slug}`);
-        const updatedReport = await prisma.report.update({
-            where: { slug },
-            data: {
-                ...reportData,
-                categories: {
-                    set: categoryIds.map(id => ({ id }))
-                }
-            },
-        });
-        console.log(`Report updated with id: ${updatedReport.id}`);
-        return { updatedWorkflow, report: updatedReport };
+      const reportId = parentWorkflow.reports[0].id;
+
+      const marketAnalysis = workflowWithJobs.jobs.find(job => job.phase === 1)?.outputText || '';
+      const competitiveAnalysis = workflowWithJobs.jobs.find(job => job.phase === 2)?.outputText || '';
+      const trendsAnalysis = workflowWithJobs.jobs.find(job => job.phase === 3)?.outputText || '';
+      const keyPlayersContent = workflowWithJobs.jobs.find(job => job.phase === 4)?.outputText || '';
+      const keyPlayers = keyPlayersContent.split('\n').filter(line => line.startsWith('•')).map(line => line.replace(/^•\s*/, ''));
+      const strategicDevelopments = keyPlayersContent.split('PART 2:')[1]?.trim() || '';
+
+      await prisma.reportTranslation.create({
+        data: {
+          reportId: reportId,
+          locale: workflowWithJobs.language,
+          title: reportTitle,
+          description: description,
+          summary: summary,
+          slug: slug,
+          metaTitle: reportTitle,
+          metaDescription: description.substring(0, 300),
+          aiGenerated: true,
+          humanReviewed: true,
+          status: 'PUBLISHED',
+          marketAnalysis: marketAnalysis,
+          competitiveAnalysis: competitiveAnalysis,
+          trendsAnalysis: trendsAnalysis,
+          keyPlayers: keyPlayers,
+          strategicDevelopments: strategicDevelopments,
+        }
+      });
+
+      return { updatedWorkflow };
+
     } else {
-        console.log(`Creating new report with slug: ${slug}`);
-        const newReport = await prisma.report.create({
-            data: {
-                ...reportData,
-                slug: slug,
-                categories: {
-                    connect: categoryIds.map(id => ({ id }))
-                }
-            },
-        });
-        console.log(`Report created with id: ${newReport.id}`);
-        return { updatedWorkflow, report: newReport };
+      // This is a parent workflow, so we create a Report
+      if (!categoryIds || categoryIds.length === 0) {
+        throw new Error('Category IDs are required for parent workflow approval.');
+      }
+      const reportData = {
+          title: reportTitle,
+          description: description,
+          summary: summary,
+          publishedDate: new Date(),
+          metaTitle: reportTitle,
+          metaDescription: description.substring(0, 300),
+          status: 'DRAFT' as const,
+          aiGenerated: true,
+          humanApproved: true,
+          contentGenerationWorkflowId: workflowId,
+      };
+
+      const existingReport = await prisma.report.findUnique({
+          where: { slug },
+      });
+
+      let savedReport;
+
+      if (existingReport) {
+          console.log(`Updating existing report with slug: ${slug}`);
+          savedReport = await prisma.report.update({
+              where: { slug },
+              data: {
+                  ...reportData,
+                  categories: {
+                      set: categoryIds.map(id => ({ id }))
+                  }
+              },
+          });
+          console.log(`Report updated with id: ${savedReport.id}`);
+      } else {
+          console.log(`Creating new report with slug: ${slug}`);
+          savedReport = await prisma.report.create({
+              data: {
+                  ...reportData,
+                  slug: slug,
+                  categories: {
+                      connect: categoryIds.map(id => ({ id }))
+                  }
+              },
+          });
+          console.log(`Report created with id: ${savedReport.id}`);
+      }
+
+      // Create child workflows for other languages
+      if (workflowWithJobs.language === 'en') {
+          const targetLanguages = ['de', 'fr', 'it', 'ja', 'ko', 'es'];
+          for (const lang of targetLanguages) {
+              const childWorkflow = await prisma.contentGenerationWorkflow.create({
+                  data: {
+                      reportTitle: workflowWithJobs.reportTitle,
+                      language: lang,
+                      parentWorkflowId: workflowId,
+                      createdBy: userId,
+                      workflowStatus: 'GENERATING',
+                      currentPhase: 1,
+                      industry: workflowWithJobs.industry,
+                      geographicScope: workflowWithJobs.geographicScope,
+                      timeframe: workflowWithJobs.timeframe,
+                      reportType: workflowWithJobs.reportType,
+                  }
+              });
+              await new Promise(resolve => setTimeout(resolve, 5000));
+              await this.processNextPhase(childWorkflow.id);
+          }
+      }
+
+      return { updatedWorkflow, report: savedReport };
     }
   }
 }

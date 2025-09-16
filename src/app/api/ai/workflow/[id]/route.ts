@@ -20,10 +20,21 @@ export async function GET(
     }
 
     // Explicitly convert Decimal types to strings before sending response
-    const responseWorkflow = {
-      ...workflow,
-      totalCost: workflow.totalCost ? workflow.totalCost.toString() : '0.0000', // Convert to string
+    const processWorkflowForResponse = (wf: any) => {
+      return {
+        ...wf,
+        totalCost: wf.totalCost ? wf.totalCost.toString() : '0.0000',
+        jobs: wf.jobs.map((job: any) => ({
+          ...job,
+          cost: job.cost ? job.cost.toString() : '0.0000',
+        })),
+      };
     };
+
+    const responseWorkflow = processWorkflowForResponse(workflow);
+    if (workflow.childWorkflows) {
+      responseWorkflow.childWorkflows = workflow.childWorkflows.map(processWorkflowForResponse);
+    }
 
     return NextResponse.json({ success: true, workflow: responseWorkflow });
 
@@ -51,11 +62,24 @@ export async function POST(
     }
 
     if (action === 'approve') {
-      if (!categoryIds || !Array.isArray(categoryIds) || categoryIds.length === 0) {
-        return NextResponse.json({ error: 'categoryIds are required' }, { status: 400 })
+      const workflow = await aiContentService.getWorkflowStatus(params.id);
+
+      if (!workflow) {
+        return NextResponse.json({ error: 'Workflow not found' }, { status: 404 });
       }
-      await aiContentService.approveWorkflow(params.id, session.user.id, categoryIds)
-      return NextResponse.json({ success: true })
+
+      let categoryIdsToPass: string[] | undefined = categoryIds;
+
+      if (!workflow.parentWorkflowId) { // This is a parent workflow
+        if (!categoryIds || !Array.isArray(categoryIds) || categoryIds.length === 0) {
+          return NextResponse.json({ error: 'categoryIds are required for parent workflow approval' }, { status: 400 });
+        }
+      } else { // This is a child workflow (translation)
+        categoryIdsToPass = undefined; // categoryIds are not needed for child workflow approval
+      }
+
+      await aiContentService.approveWorkflow(params.id, session.user.id, categoryIdsToPass);
+      return NextResponse.json({ success: true });
     }
 
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
