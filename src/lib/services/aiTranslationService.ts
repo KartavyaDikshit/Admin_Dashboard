@@ -1,7 +1,8 @@
-import { openai, estimateTokenCount, calculateCost, MODEL_NAME } from '@/lib/openai'
-import { prisma } from '@/lib/prisma'
-import { TranslationJobStatus, ContentStatus, TranslationStatus } from '@prisma/client'
-import { generateSlug } from '@/lib/utils'
+import { openai, estimateTokenCount, calculateCost, MODEL_NAME } from '@/lib/openai';
+import { prisma } from '@/lib/prisma';
+import { TranslationJobStatus, ContentStatus, TranslationStatus } from '@prisma/client';
+import { generateSlug } from '@/lib/utils';
+import { getCostPerToken } from '@/lib/services/apiUsageLogService';
 
 export class AITranslationService {
   async translateContent(
@@ -182,20 +183,37 @@ ${originalTextInput}`
       const totalTokens = completion.usage?.total_tokens || inputTokens + outputTokens
       const cost = calculateCost(inputTokens, outputTokens)
       const processingTime = Date.now() - startTime
+      const costPerToken = await getCostPerToken(MODEL_NAME);
 
-      // 7. Update TranslationJob
-      await prisma.translationJob.update({
-        where: { id: translationJob.id },
-        data: {
-          translatedText: translatedOutputText,
-          inputTokens,
-          outputTokens,
-          totalTokens,
-          actualCost: cost,
-          processingTime,
-          status: TranslationJobStatus.COMPLETED,
-        },
-      })
+      // 7. Update TranslationJob and Log API Usage
+      await prisma.$transaction([
+        prisma.translationJob.update({
+          where: { id: translationJob.id },
+          data: {
+            translatedText: translatedOutputText,
+            inputTokens,
+            outputTokens,
+            totalTokens,
+            actualCost: cost,
+            processingTime,
+            status: TranslationJobStatus.COMPLETED,
+          },
+        }),
+        prisma.apiUsageLog.create({
+          data: {
+            serviceType: 'TRANSLATION',
+            model: MODEL_NAME,
+            jobId: translationJob.id,
+            inputTokens: inputTokens,
+            outputTokens: outputTokens,
+            totalTokens: totalTokens,
+            costPerToken: costPerToken, 
+            totalCost: cost,
+            responseTime: processingTime,
+            success: true,
+          },
+        }),
+      ]);
 
       // 8. Create/Update *Translation Entry
       if (contentType === 'REPORT') {

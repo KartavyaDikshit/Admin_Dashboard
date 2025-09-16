@@ -11,6 +11,12 @@ import {
   UserGroupIcon
 } from '@heroicons/react/24/outline'
 
+interface AiUsageData {
+  totalTokens: number;
+  totalCost: number;
+  totalRequests: number;
+}
+
 interface AnalyticsData {
   overview: {
     totalReports: number
@@ -20,11 +26,8 @@ interface AnalyticsData {
   }
   recentOrders: any[]
   topReports: any[]
-  aiUsage: {
-    totalTokens: number
-    totalCost: number
-    totalRequests: number
-  }
+  aiUsage: AiUsageData;
+  translationUsage: AiUsageData;
 }
 
 export default function AnalyticsOverview() {
@@ -38,11 +41,22 @@ export default function AnalyticsOverview() {
 
   const fetchAnalytics = async () => {
     try {
-      const response = await fetch(`/api/analytics/overview?period=${period}`)
-      const result = await response.json()
-      
-      if (response.ok) {
-        setData(result)
+      const [overviewRes, translationUsageRes] = await Promise.all([
+        fetch(`/api/analytics/overview?period=${period}`),
+        fetch(`/api/analytics/translation-usage?period=${period}`),
+      ]);
+
+      const [overviewData, translationUsageData] = await Promise.all([
+        overviewRes.json(),
+        translationUsageRes.json(),
+      ]);
+
+      if (overviewRes.ok) {
+        setData(prevData => ({
+          ...prevData,
+          ...overviewData,
+          translationUsage: translationUsageData,
+        }));
       }
     } catch (error) {
       console.error('Failed to fetch analytics:', error)
@@ -175,6 +189,33 @@ export default function AnalyticsOverview() {
           </div>
         </div>
       </div>
+
+      {/* Translation Usage Stats */}
+      {data.translationUsage && (
+        <div className="bg-white shadow rounded-lg p-6">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Translation API Usage</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-indigo-600">
+                {formatNumber(data.translationUsage.totalTokens)}
+              </div>
+              <div className="text-sm text-gray-500">Total Tokens Used</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">
+                {formatCurrency(data.translationUsage.totalCost)}
+              </div>
+              <div className="text-sm text-gray-500">Total API Cost</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">
+                {formatNumber(data.translationUsage.totalRequests)}
+              </div>
+              <div className="text-sm text-gray-500">API Requests</div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Recent Orders */}
       <div className="bg-white shadow rounded-lg">
