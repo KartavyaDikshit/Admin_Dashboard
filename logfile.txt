@@ -1,0 +1,1187 @@
+PS C:\Users\User\Admin_Dashboard\tbi-admin-dashboard> pnpm dev
+
+> tbi-admin-dashboard@0.1.0 dev C:\Users\User\Admin_Dashboard\tbi-admin-dashboard
+> next dev
+
+   ▲ Next.js 15.5.3
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.6:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 3.9s
+ ✓ Compiled /middleware in 467ms (114 modules)
+ ○ Compiling /[lang]/simple-dashboard ...
+ ✓ Compiled /[lang]/simple-dashboard in 2.9s (949 modules)
+ GET /en/simple-dashboard 200 in 5665ms
+ ○ Compiling /api/reports ...
+ ✓ Compiled /api/reports in 2.8s (1278 modules)
+prisma:query SELECT "public"."reports"."id", "public"."reports"."sku", "public"."reports"."slug", "public"."reports"."title", "public"."reports"."description", "public"."reports"."summary", "public"."reports"."pages", "public"."reports"."published_date", "public"."reports"."base_year", "public"."reports"."forecast_period", "public"."reports"."table_of_contents", "public"."reports"."list_of_figures", "public"."reports"."methodology", "public"."reports"."key_findings", "public"."reports"."executive_summary", "public"."reports"."market_data", "public"."reports"."competitive_landscape", "public"."reports"."market_segmentation", "public"."reports"."regional_analysis", "public"."reports"."swot_analysis", "public"."reports"."key_players", "public"."reports"."regions", "public"."reports"."industry_tags", "public"."reports"."report_type", "public"."reports"."research_method", "public"."reports"."keywords", "public"."reports"."semantic_keywords", "public"."reports"."regional_keywords", "public"."reports"."competitor_keywords", "public"."reports"."trending_keywords", "public"."reports"."long_tail_keywords", "public"."reports"."meta_title", "public"."reports"."meta_description", "public"."reports"."canonical_url", "public"."reports"."og_title", "public"."reports"."og_description", "public"."reports"."og_image", "public"."reports"."twitter_title", "public"."reports"."twitter_description", "public"."reports"."schema_markup", "public"."reports"."breadcrumb_data", "public"."reports"."faq_data", "public"."reports"."single_price", "public"."reports"."multi_price", "public"."reports"."corporate_price", "public"."reports"."enterprise_price", "public"."reports"."currency", "public"."reports"."ai_generated", "public"."reports"."content_generation_workflow_id", "public"."reports"."human_approved", "public"."reports"."content_quality_score", "public"."reports"."ai_confidence_score", "public"."reports"."status"::text, "public"."reports"."featured", "public"."reports"."priority", "public"."reports"."view_count", "public"."reports"."download_count", "public"."reports"."share_count", "public"."reports"."enquiry_count", "public"."reports"."search_rankings", "public"."reports"."click_through_rate", "public"."reports"."average_position", "public"."reports"."impressions", "public"."reports"."clicks", "public"."reports"."bounce_rate", "public"."reports"."time_on_page", "public"."reports"."avg_rating", "public"."reports"."review_count", "public"."reports"."total_rating_points", "public"."reports"."created_at", "public"."reports"."updated_at", COALESCE("aggr_selection_0_ReportReview"."_aggr_count_reviews", 0) AS "_aggr_count_reviews", COALESCE("aggr_selection_1_OrderItem"."_aggr_count_orderItems", 0) AS "_aggr_count_orderItems" FROM "public"."reports" LEFT JOIN (SELECT "public"."report_reviews"."report_id", COUNT(*) AS "_aggr_count_reviews" FROM "public"."report_reviews" WHERE 1=1 GROUP BY "public"."report_reviews"."report_id") AS "aggr_selection_0_ReportReview" ON ("public"."reports"."id" = "aggr_selection_0_ReportReview"."report_id") LEFT JOIN (SELECT "public"."order_items"."report_id", COUNT(*) AS "_aggr_count_orderItems" FROM "public"."order_items" WHERE 1=1 GROUP BY "public"."order_items"."report_id") AS "aggr_selection_1_OrderItem" ON ("public"."reports"."id" = "aggr_selection_1_OrderItem"."report_id") WHERE 1=1 ORDER BY "public"."reports"."featured" DESC, "public"."reports"."priority" DESC, "public"."reports"."created_at" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."_CategoryToReport"."B", "public"."_CategoryToReport"."A" FROM "public"."_CategoryToReport" WHERE "public"."_CategoryToReport"."B" IN ($1)
+prisma:query SELECT "public"."categories"."id", "public"."categories"."title", "public"."categories"."shortcode" FROM "public"."categories" WHERE "public"."categories"."id" IN ($1,$2,$3) OFFSET $4
+prisma:query SELECT "public"."report_translations"."id", "public"."report_translations"."locale", "public"."report_translations"."title", "public"."report_translations"."description", "public"."report_translations"."summary", "public"."report_translations"."slug", "public"."report_translations"."table_of_contents", "public"."report_translations"."list_of_figures", "public"."report_translations"."methodology", "public"."report_translations"."key_findings", "public"."report_translations"."executive_summary", "public"."report_translations"."keywords", "public"."report_translations"."semantic_keywords", "public"."report_translations"."localized_keywords", "public"."report_translations"."cultural_keywords", "public"."report_translations"."long_tail_keywords", "public"."report_translations"."local_competitor_keywords", "public"."report_translations"."meta_title", "public"."report_translations"."meta_description", "public"."report_translations"."canonical_url", "public"."report_translations"."og_title", "public"."report_translations"."og_description", "public"."report_translations"."og_image", "public"."report_translations"."twitter_title", "public"."report_translations"."twitter_description", "public"."report_translations"."schema_markup", "public"."report_translations"."breadcrumb_data", "public"."report_translations"."faq_data", "public"."report_translations"."local_business_schema", "public"."report_translations"."status"::text, "public"."report_translations"."report_id" FROM "public"."report_translations" WHERE "public"."report_translations"."report_id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."categories"."id", "public"."categories"."shortcode", "public"."categories"."slug", "public"."categories"."title", "public"."categories"."description", "public"."categories"."icon", "public"."categories"."featured", "public"."categories"."sort_order", "public"."categories"."seo_keywords", "public"."categories"."regional_keywords", "public"."categories"."search_volume", "public"."categories"."ranking_factors", "public"."categories"."meta_title", "public"."categories"."meta_description", "public"."categories"."canonical_url", "public"."categories"."og_title", "public"."categories"."og_description", "public"."categories"."og_image", "public"."categories"."hreflang_alts", "public"."categories"."status"::text, "public"."categories"."view_count", "public"."categories"."click_count", "public"."categories"."conversion_rate", "public"."categories"."created_at", "public"."categories"."updated_at", COALESCE("aggr_selection_0_Report"."_aggr_count_reports", 0) AS "_aggr_count_reports" FROM "public"."categories" LEFT JOIN (SELECT "public"."_CategoryToReport"."A", COUNT("public"."_CategoryToReport"."A") AS "_aggr_count_reports" FROM "public"."reports" LEFT JOIN "public"."_CategoryToReport" ON ("public"."reports"."id" = "public"."_CategoryToReport"."B") WHERE 1=1 GROUP BY "public"."_CategoryToReport"."A") AS "aggr_selection_0_Report" ON ("public"."categories"."id" = "aggr_selection_0_Report"."A") WHERE 1=1 ORDER BY "public"."categories"."featured" DESC, "public"."categories"."sort_order" ASC, "public"."categories"."title" ASC LIMIT $1 OFFSET $2
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."categories"."id" FROM "public"."categories" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT "public"."category_translations"."id", "public"."category_translations"."locale", "public"."category_translations"."title", "public"."category_translations"."description", "public"."category_translations"."slug", "public"."category_translations"."seo_keywords", "public"."category_translations"."meta_title", "public"."category_translations"."meta_description", "public"."category_translations"."og_title", "public"."category_translations"."og_description", "public"."category_translations"."status"::text, "public"."category_translations"."category_id" FROM "public"."category_translations" WHERE "public"."category_translations"."category_id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) OFFSET $11
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."reports"."id" FROM "public"."reports" WHERE 1=1 OFFSET $1) AS "sub"
+Category ID: 60371719-4a95-430c-a6fc-10020cd57586 Locale: en Translations: []
+Category ID: cfc66dec-086a-4f9a-804a-8b3675cd2ab8 Locale: en Translations: []
+Category ID: cc3eb485-d1dc-4ef8-a16a-c0bf35125f87 Locale: en Translations: []
+Category ID: ac043882-db99-4dcd-b184-221f7f03947f Locale: en Translations: []
+Category ID: d68413e3-615d-4949-bce0-1da53079ea93 Locale: en Translations: []
+Category ID: ecb1d497-0f42-4e45-99cf-3e352abf6a53 Locale: en Translations: []
+Category ID: 427a766d-f9c8-447f-b5f8-f747f02beb4e Locale: en Translations: []
+Category ID: 51c25a64-180f-40e7-afab-4c603baac09e Locale: en Translations: []
+Category ID: 542ef6e8-0e73-429f-b9cf-c0c9af2c0238 Locale: en Translations: []
+Category ID: 087d579d-69dd-4b33-83ae-47a9bb665640 Locale: en Translations: []
+ GET /api/categories?locale=en 200 in 3549ms
+Report ID: fad2bc5a-a4cf-4909-828e-ef8285eb7afd Locale: en Translations: [
+  {
+    id: 'c2565bf5-d6be-4ff3-a359-f061996737e7',
+    locale: 'de',
+    title: 'Bio-Based Chemicals',
+    description: 'Der Markt für biobasierte Chemikalien wurde im Jahr 2025 auf 40 Milliarden USD geschätzt und wird bis 2034 voraussichtlich auf 100 Milliarden USD anwachsen, was einer jährlichen Wachstumsrate (CAGR) von 10 % im Zeitraum von 2025 bis 2034 entspricht. Diese Zahlen basieren auf aktuellen Marktanalysen und den wachsenden Anforderungen an nachhaltige und umweltfreundliche Produkte.\n' +
+      '\n' +
+      'Biobasierte Chemikalien sind chemische Produkte, die aus erneuerbaren Rohstoffen wie Pflanzen, Algen oder Mikroben hergestellt werden. Sie bieten eine nachhaltige Alternative zu petrochemischen Produkten und spielen eine entscheidende Rolle in der Reduzierung der Kohlenstoffemissionen sowie in der Förderung einer Kreislaufwirtschaft. Dieser Markt umfasst eine Vielzahl von Anwendungen, darunter Biokraftstoffe, Biopolymere und biobasierte Lösungsmittel, die in verschiedenen Industrien wie der Automobil-, Bau- und Lebensmittelindustrie eingesetzt werden.\n' +
+      '\n' +
+      'Der Markt für biobasierte Chemikalien zieht derzeit verstärkt Aufmerksamkeit auf sich, da Unternehmen und Regierungen weltweit ihre Nachhaltigkeitsziele vorantreiben. Die zunehmende Regulierung und der Druck von Verbrauchern, die umweltfreundliche Produkte verlangen, treiben die Nachfrage nach biobasierten Lösungen voran. Laut einer Studie der Internationalen Energieagentur wird erwartet, dass der Anteil biobasierter Chemikalien am Gesamtchemikalienmarkt bis 2030 signifikant steigen wird, was die strategische Relevanz dieses Sektors unterstreicht. Investoren und Entscheidungsträger sollten die Chancen in diesem dynamischen Markt erkennen, da Innovationen und technologische Fortschritte neue Geschäftsmöglichkeiten schaffen.\n' +
+      '\n' +
+      'Insgesamt stellt der Markt für biobasierte Chemikalien eine vielversprechende Wachstumschance dar, die nicht nur ökonomische Vorteile bietet, sondern auch zur globalen Nachhaltigkeitsagenda beiträgt.',
+    summary: 'Der Markt für biobasierte Chemikalien wurde im Jahr 2025 auf 40 Milliarden USD geschätzt und wird bis 2034 voraussichtlich auf 100 Milliarden USD anwachsen, was einer jährlichen Wachstumsrate (CAGR) von 10 % im Zeitraum von 2025 bis 2034 entspricht. Diese Zahlen basieren auf aktuellen Marktanalysen und den wachsenden Anforderungen an nachhaltige und umweltfreundliche Produkte.\n' +
+      '\n' +
+      'Biobasierte Chemikalien sind chemische Produkte, die aus erneuerbaren Rohstoffen wie Pflanzen, Algen oder Mikroben hergestellt werden. Sie bieten eine nachhaltige Alternative zu petrochemischen Produkten und spielen eine entscheidende Rolle in der Reduzierung der Kohlenstoffemissionen sowie in der Förderung einer Kreislaufwirtschaft. Dieser Markt umfasst eine Vielzahl von Anwendungen, darunter Biokraftstoffe, Biopolymere und biobasierte Lösungsmittel, die in verschiedenen Industrien wie der Automobil-, Bau- und Lebensmittelindustrie eingesetzt werden.\n' +
+      '\n' +
+      'Der Markt für biobasierte Chemikalien zieht derzeit verstärkt Aufmerksamkeit auf sich, da Unternehmen und Regierungen weltweit ihre Nachhaltigkeitsziele vorantreiben. Die zunehmende Regulierung und der Druck von Verbrauchern, die umweltfreundliche Produkte verlangen, treiben die Nachfrage nach biobasierten Lösungen voran. Laut einer Studie der Internationalen Energieagentur wird erwartet, dass der Anteil biobasierter Chemikalien am Gesamtchemikalienmarkt bis 2030 signifikant steigen wird, was die strategische Relevanz dieses Sektors unterstreicht. Investoren und Entscheidungsträger sollten die Chancen in diesem dynamischen Markt erkennen, da Innovationen und technologische Fortschritte neue Geschäftsmöglichkeiten schaffen.\n' +
+      '\n' +
+      'Insgesamt stellt der Markt für biobasierte Chemikalien eine vielversprechende Wachstumschance dar, die nicht nur ökonomische Vorteile bietet, sondern auch zur globalen Nachhaltigkeitsagenda beiträgt.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'Der Markt für biobasierte Chemikalien wurde im Jahr 2025 auf 40 Milliarden USD geschätzt und wird bis 2034 voraussichtlich auf 100 Milliarden USD anwachsen, was einer jährlichen Wachstumsrate (CAGR) von 10 % im Zeitraum von 2025 bis 2034 entspricht. Diese Zahlen basieren auf aktuellen Marktanalysen ',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'f7632e69-8c0e-4316-9764-b332cfcf5222',
+    locale: 'es',
+    title: 'Bio-Based Chemicals',
+    description: 'El mercado de los productos químicos bio-basados fue valorado en 21.8 mil millones de USD en 2025 y se prevé que alcance los 45.3 mil millones de USD para 2034, con una tasa de crecimiento anual compuesta (CAGR) del 8.6% durante el período de 2025 a 2034. Esta expansión se debe a la creciente demanda de soluciones sostenibles y la presión regulatoria para reducir las emisiones de carbono, lo que impulsa la transición hacia productos químicos derivados de fuentes renovables.\n' +
+      '\n' +
+      'Los productos químicos bio-basados son compuestos químicos que se producen a partir de materias primas renovables, como biomasa, en lugar de fuentes fósiles. Estos productos abarcan una amplia gama de aplicaciones, incluyendo plásticos, solventes, y aditivos, y son esenciales para la industria química moderna que busca alternativas más sostenibles y menos contaminantes.\n' +
+      '\n' +
+      'El interés en el mercado de los productos químicos bio-basados está en aumento debido a la creciente conciencia sobre el cambio climático y la necesidad de adoptar prácticas más sostenibles. Las empresas están invirtiendo en investigación y desarrollo para innovar en este sector, impulsadas por políticas gubernamentales que fomentan el uso de recursos renovables. Además, la demanda de consumidores por productos ecológicos está cambiando la dinámica del mercado, lo que lleva a un aumento en la producción y el uso de químicos bio-basados en diversas industrias, desde la automotriz hasta la alimentaria.\n' +
+      '\n' +
+      'Con un entorno regulatorio favorable y un cambio en las preferencias del consumidor, el mercado de productos químicos bio-basados se posiciona como una oportunidad estratégica para los inversores y las empresas que buscan liderar en sostenibilidad y responsabilidad ambiental.',
+    summary: 'El mercado de los productos químicos bio-basados fue valorado en 21.8 mil millones de USD en 2025 y se prevé que alcance los 45.3 mil millones de USD para 2034, con una tasa de crecimiento anual compuesta (CAGR) del 8.6% durante el período de 2025 a 2034. Esta expansión se debe a la creciente demanda de soluciones sostenibles y la presión regulatoria para reducir las emisiones de carbono, lo que impulsa la transición hacia productos químicos derivados de fuentes renovables.\n' +
+      '\n' +
+      'Los productos químicos bio-basados son compuestos químicos que se producen a partir de materias primas renovables, como biomasa, en lugar de fuentes fósiles. Estos productos abarcan una amplia gama de aplicaciones, incluyendo plásticos, solventes, y aditivos, y son esenciales para la industria química moderna que busca alternativas más sostenibles y menos contaminantes.\n' +
+      '\n' +
+      'El interés en el mercado de los productos químicos bio-basados está en aumento debido a la creciente conciencia sobre el cambio climático y la necesidad de adoptar prácticas más sostenibles. Las empresas están invirtiendo en investigación y desarrollo para innovar en este sector, impulsadas por políticas gubernamentales que fomentan el uso de recursos renovables. Además, la demanda de consumidores por productos ecológicos está cambiando la dinámica del mercado, lo que lleva a un aumento en la producción y el uso de químicos bio-basados en diversas industrias, desde la automotriz hasta la alimentaria.\n' +
+      '\n' +
+      'Con un entorno regulatorio favorable y un cambio en las preferencias del consumidor, el mercado de productos químicos bio-basados se posiciona como una oportunidad estratégica para los inversores y las empresas que buscan liderar en sostenibilidad y responsabilidad ambiental.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'El mercado de los productos químicos bio-basados fue valorado en 21.8 mil millones de USD en 2025 y se prevé que alcance los 45.3 mil millones de USD para 2034, con una tasa de crecimiento anual compuesta (CAGR) del 8.6% durante el período de 2025 a 2034. Esta expansión se debe a la creciente demand',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: '519e9d8c-6e4b-4a69-b98f-383841f176f0',
+    locale: 'fr',
+    title: 'Bio-Based Chemicals',
+    description: "Le marché des produits chimiques biosourcés était évalué à 36,5 milliards USD en 2025 et devrait atteindre 82,4 milliards USD d'ici 2034, affichant un taux de croissance annuel composé (CAGR) de 9,5 % pendant la période 2025-2034. Cette croissance est alimentée par une demande croissante pour des alternatives durables aux produits chimiques dérivés du pétrole, en réponse aux préoccupations environnementales et aux réglementations de plus en plus strictes sur les émissions de carbone.\n" +
+      '\n' +
+      "Les produits chimiques biosourcés sont définis comme des substances chimiques dérivées de matières premières renouvelables, telles que les plantes, les algues et les déchets organiques, qui remplacent les produits chimiques conventionnels basés sur le pétrole. Ces produits jouent un rôle crucial dans divers secteurs, notamment la chimie, l'agriculture, et les biocarburants, contribuant à une économie circulaire et durable.\n" +
+      '\n' +
+      "Actuellement, le marché des produits chimiques biosourcés attire une attention considérable en raison de l'augmentation des initiatives gouvernementales et des investissements privés visant à réduire l'empreinte carbone. Les entreprises adoptent des stratégies de développement durable pour répondre aux attentes des consommateurs et des investisseurs, qui privilégient de plus en plus les pratiques respectueuses de l'environnement. De plus, la montée des technologies de bioprocédés et l'innovation dans les matières premières renouvelables renforcent la position de ce marché en tant que solution viable face aux défis environnementaux contemporains.\n" +
+      '\n' +
+      'Avec une sensibilisation croissante aux enjeux écologiques et une pression accrue pour adopter des pratiques durables, le secteur des produits chimiques biosourcés est bien positionné pour jouer un rôle clé dans la transition vers une économie plus verte. Les décideurs, investisseurs et analystes doivent donc considérer ce marché comme une opportunité stratégique pour un avenir durable.',
+    summary: "Le marché des produits chimiques biosourcés était évalué à 36,5 milliards USD en 2025 et devrait atteindre 82,4 milliards USD d'ici 2034, affichant un taux de croissance annuel composé (CAGR) de 9,5 % pendant la période 2025-2034. Cette croissance est alimentée par une demande croissante pour des alternatives durables aux produits chimiques dérivés du pétrole, en réponse aux préoccupations environnementales et aux réglementations de plus en plus strictes sur les émissions de carbone.\n" +
+      '\n' +
+      "Les produits chimiques biosourcés sont définis comme des substances chimiques dérivées de matières premières renouvelables, telles que les plantes, les algues et les déchets organiques, qui remplacent les produits chimiques conventionnels basés sur le pétrole. Ces produits jouent un rôle crucial dans divers secteurs, notamment la chimie, l'agriculture, et les biocarburants, contribuant à une économie circulaire et durable.\n" +
+      '\n' +
+      "Actuellement, le marché des produits chimiques biosourcés attire une attention considérable en raison de l'augmentation des initiatives gouvernementales et des investissements privés visant à réduire l'empreinte carbone. Les entreprises adoptent des stratégies de développement durable pour répondre aux attentes des consommateurs et des investisseurs, qui privilégient de plus en plus les pratiques respectueuses de l'environnement. De plus, la montée des technologies de bioprocédés et l'innovation dans les matières premières renouvelables renforcent la position de ce marché en tant que solution viable face aux défis environnementaux contemporains.\n" +
+      '\n' +
+      'Avec une sensibilisation croissante aux enjeux écologiques et une pression accrue pour adopter des pratiques durables, le secteur des produits chimiques biosourcés est bien positionné pour jouer un rôle clé dans la transition vers une économie plus verte. Les décideurs, investisseurs et analystes doivent donc considérer ce marché comme une opportunité stratégique pour un avenir durable.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: "Le marché des produits chimiques biosourcés était évalué à 36,5 milliards USD en 2025 et devrait atteindre 82,4 milliards USD d'ici 2034, affichant un taux de croissance annuel composé (CAGR) de 9,5 % pendant la période 2025-2034. Cette croissance est alimentée par une demande croissante pour des al",
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'de80e22b-aac3-47a0-a9f7-111f46f5b5bc',
+    locale: 'it',
+    title: 'Bio-Based Chemicals',
+    description: "Il mercato dei chimici bio-based è stato valutato a 32 miliardi di dollari nel 2025 e si prevede che raggiunga i 70 miliardi di dollari entro il 2034, con un tasso di crescita annuale composto (CAGR) del 9,5% durante il periodo 2025-2034. Questi dati evidenziano un crescente interesse verso soluzioni sostenibili nel settore chimico, spinto dalla crescente domanda di prodotti ecologici e dalla necessità di ridurre l'impatto ambientale delle attività industriali.\n" +
+      '\n' +
+      "I chimici bio-based sono definiti come sostanze chimiche derivate da fonti rinnovabili, come piante e biomassa, utilizzate in vari settori, tra cui quello alimentare, cosmetico e farmaceutico. Questi materiali offrono un'alternativa sostenibile ai chimici tradizionali, contribuendo a una transizione verso un'economia circolare e a basse emissioni di carbonio.\n" +
+      '\n' +
+      "Attualmente, il mercato dei chimici bio-based sta attirando l'attenzione per diversi motivi. La crescente consapevolezza ambientale tra i consumatori e le aziende, insieme a normative sempre più severe riguardo all'uso di sostanze chimiche tossiche, spinge le imprese a investire in soluzioni sostenibili. Inoltre, l'innovazione tecnologica nel settore della biochimica ha reso possibile lo sviluppo di nuovi prodotti e applicazioni, aumentando ulteriormente la competitività del mercato. Le aziende stanno anche cercando di diversificare le loro fonti di approvvigionamento e ridurre la dipendenza dai combustibili fossili, rendendo i chimici bio-based una scelta strategica.\n" +
+      '\n' +
+      "In un contesto globale in rapida evoluzione, il mercato dei chimici bio-based rappresenta un'opportunità significativa per investitori e decision-maker, posizionandosi come un settore chiave per il futuro sostenibile dell'industria chimica.",
+    summary: "Il mercato dei chimici bio-based è stato valutato a 32 miliardi di dollari nel 2025 e si prevede che raggiunga i 70 miliardi di dollari entro il 2034, con un tasso di crescita annuale composto (CAGR) del 9,5% durante il periodo 2025-2034. Questi dati evidenziano un crescente interesse verso soluzioni sostenibili nel settore chimico, spinto dalla crescente domanda di prodotti ecologici e dalla necessità di ridurre l'impatto ambientale delle attività industriali.\n" +
+      '\n' +
+      "I chimici bio-based sono definiti come sostanze chimiche derivate da fonti rinnovabili, come piante e biomassa, utilizzate in vari settori, tra cui quello alimentare, cosmetico e farmaceutico. Questi materiali offrono un'alternativa sostenibile ai chimici tradizionali, contribuendo a una transizione verso un'economia circolare e a basse emissioni di carbonio.\n" +
+      '\n' +
+      "Attualmente, il mercato dei chimici bio-based sta attirando l'attenzione per diversi motivi. La crescente consapevolezza ambientale tra i consumatori e le aziende, insieme a normative sempre più severe riguardo all'uso di sostanze chimiche tossiche, spinge le imprese a investire in soluzioni sostenibili. Inoltre, l'innovazione tecnologica nel settore della biochimica ha reso possibile lo sviluppo di nuovi prodotti e applicazioni, aumentando ulteriormente la competitività del mercato. Le aziende stanno anche cercando di diversificare le loro fonti di approvvigionamento e ridurre la dipendenza dai combustibili fossili, rendendo i chimici bio-based una scelta strategica.\n" +
+      '\n' +
+      "In un contesto globale in rapida evoluzione, il mercato dei chimici bio-based rappresenta un'opportunità significativa per investitori e decision-maker, posizionandosi come un settore chiave per il futuro sostenibile dell'industria chimica.",
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'Il mercato dei chimici bio-based è stato valutato a 32 miliardi di dollari nel 2025 e si prevede che raggiunga i 70 miliardi di dollari entro il 2034, con un tasso di crescita annuale composto (CAGR) del 9,5% durante il periodo 2025-2034. Questi dati evidenziano un crescente interesse verso soluzion',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'e1a211e2-162f-41e5-ad8d-4c45742edd2c',
+    locale: 'ja',
+    title: 'Bio-Based Chemicals',
+    description: 'バイオベース化学品市場は、2025年に約1,200億米ドルと評価され、2034年には約2,500億米ドルに達すると予測されており、2025年から2034年の間に年平均成長率（CAGR）は約8.5%に達する見込みです。この成長は、持続可能な製品への需要の高まりや、環境への配慮から生まれる新たな規制に起因しています。\n' +
+      '\n' +
+      'バイオベース化学品とは、再生可能な資源から生産される化学物質を指し、石油由来の化学品に代わる持続可能な選択肢として注目されています。これには、バイオプラスチック、バイオ燃料、そしてバイオベースの溶剤などが含まれ、これらは環境負荷を軽減するための重要な役割を果たします。\n' +
+      '\n' +
+      '現在、この市場が注目を集めている理由は、企業や消費者が環境に優しい選択を求める傾向が強まっているためです。特に、プラスチック廃棄物問題や温暖化対策が喫緊の課題となっている中、バイオベース化学品は持続可能なソリューションとしての地位を確立しています。また、政府の政策や投資家の関心も高まっており、これにより市場の成長が加速しています。\n' +
+      '\n' +
+      'この分野への投資は、将来的な収益を見込む上で戦略的に重要であり、企業が競争力を維持するためには、バイオベース化学品の利用を検討することが不可欠です。持続可能な未来を築くための鍵となるこの市場において、早期の参入が競争優位性をもたらすでしょう。',
+    summary: 'バイオベース化学品市場は、2025年に約1,200億米ドルと評価され、2034年には約2,500億米ドルに達すると予測されており、2025年から2034年の間に年平均成長率（CAGR）は約8.5%に達する見込みです。この成長は、持続可能な製品への需要の高まりや、環境への配慮から生まれる新たな規制に起因しています。\n' +
+      '\n' +
+      'バイオベース化学品とは、再生可能な資源から生産される化学物質を指し、石油由来の化学品に代わる持続可能な選択肢として注目されています。これには、バイオプラスチック、バイオ燃料、そしてバイオベースの溶剤などが含まれ、これらは環境負荷を軽減するための重要な役割を果たします。\n' +
+      '\n' +
+      '現在、この市場が注目を集めている理由は、企業や消費者が環境に優しい選択を求める傾向が強まっているためです。特に、プラスチック廃棄物問題や温暖化対策が喫緊の課題となっている中、バイオベース化学品は持続可能なソリューションとしての地位を確立しています。また、政府の政策や投資家の関心も高まっており、これにより市場の成長が加速しています。\n' +
+      '\n' +
+      'この分野への投資は、将来的な収益を見込む上で戦略的に重要であり、企業が競争力を維持するためには、バイオベース化学品の利用を検討することが不可欠です。持続可能な未来を築くための鍵となるこの市場において、早期の参入が競争優位性をもたらすでしょう。',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'バイオベース化学品市場は、2025年に約1,200億米ドルと評価され、2034年には約2,500億米ドルに達すると予測されており、2025年から2034年の間に年平均成長率（CAGR）は約8.5%に達する見込みです。この成長は、持続可能な製品への需要の高まりや、環境への配慮から生まれる新たな規制に起因しています。\n' +
+      '\n' +
+      'バイオベース化学品とは、再生可能な資源から生産される化学物質を指し、石油由来の化学品に代わる持続可能な選択肢として注目されています。これには、バイオプラスチック、バイオ燃料、そしてバイオベースの溶剤などが含まれ、これらは環境負荷を軽減するための重要な役割を果たします。\n' +
+      '\n' +
+      '現在、この',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'd11535f9-82fd-419f-a955-4852133fab10',
+    locale: 'ko',
+    title: 'Bio-Based Chemicals',
+    description: '바이오 기반 화학물질(Bio-Based Chemicals) 시장은 2025년에 1,200억 달러로 평가되었으며, 2034년에는 2,500억 달러에 이를 것으로 예상되며, 2025년부터 2034년까지 연평균 성장률(CAGR)은 8.5%에 달할 것으로 보입니다. 이러한 성장은 지속 가능한 원료에 대한 수요 증가와 환경 규제 강화에 기인하고 있습니다.\n' +
+      '\n' +
+      '바이오 기반 화학물질은 생물학적 원료에서 유래한 화학물질로, 전통적인 석유 기반 화학물질의 대체재로 각광받고 있습니다. 이들은 주로 농업, 식품, 의약품 및 에너지 분야에서 활용되며, 지속 가능한 개발 목표(SDGs)에 부합하는 제품으로 인식되고 있습니다.\n' +
+      '\n' +
+      '현재 바이오 기반 화학물질 시장은 기후 변화와 환경 문제에 대한 인식이 높아짐에 따라 주목받고 있습니다. 많은 기업들이 탄소 발자국을 줄이기 위해 지속 가능한 솔루션을 찾고 있으며, 이는 바이오 기반 화학물질의 수요를 더욱 촉진하고 있습니다. 예를 들어, 유럽연합은 2030년까지 온실가스 배출량을 55% 줄이겠다는 목표를 세우고 있으며, 이는 바이오 기반 화학물질의 채택을 가속화하는 데 기여할 것입니다.\n' +
+      '\n' +
+      '이러한 시장의 성장 가능성은 투자자들에게 매력적인 기회를 제공하며, 기업들은 혁신적인 기술과 지속 가능한 공급망을 통해 경쟁력을 강화할 수 있습니다. 바이오 기반 화학물질 시장은 환경 친화적인 대안으로서의 가치뿐만 아니라, 경제적 이익을 창출할 수 있는 중요한 분야로 자리잡고 있습니다.',
+    summary: '바이오 기반 화학물질(Bio-Based Chemicals) 시장은 2025년에 1,200억 달러로 평가되었으며, 2034년에는 2,500억 달러에 이를 것으로 예상되며, 2025년부터 2034년까지 연평균 성장률(CAGR)은 8.5%에 달할 것으로 보입니다. 이러한 성장은 지속 가능한 원료에 대한 수요 증가와 환경 규제 강화에 기인하고 있습니다.\n' +
+      '\n' +
+      '바이오 기반 화학물질은 생물학적 원료에서 유래한 화학물질로, 전통적인 석유 기반 화학물질의 대체재로 각광받고 있습니다. 이들은 주로 농업, 식품, 의약품 및 에너지 분야에서 활용되며, 지속 가능한 개발 목표(SDGs)에 부합하는 제품으로 인식되고 있습니다.\n' +
+      '\n' +
+      '현재 바이오 기반 화학물질 시장은 기후 변화와 환경 문제에 대한 인식이 높아짐에 따라 주목받고 있습니다. 많은 기업들이 탄소 발자국을 줄이기 위해 지속 가능한 솔루션을 찾고 있으며, 이는 바이오 기반 화학물질의 수요를 더욱 촉진하고 있습니다. 예를 들어, 유럽연합은 2030년까지 온실가스 배출량을 55% 줄이겠다는 목표를 세우고 있으며, 이는 바이오 기반 화학물질의 채택을 가속화하는 데 기여할 것입니다.\n' +
+      '\n' +
+      '이러한 시장의 성장 가능성은 투자자들에게 매력적인 기회를 제공하며, 기업들은 혁신적인 기술과 지속 가능한 공급망을 통해 경쟁력을 강화할 수 있습니다. 바이오 기반 화학물질 시장은 환경 친화적인 대안으로서의 가치뿐만 아니라, 경제적 이익을 창출할 수 있는 중요한 분야로 자리잡고 있습니다.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: '바이오 기반 화학물질(Bio-Based Chemicals) 시장은 2025년에 1,200억 달러로 평가되었으며, 2034년에는 2,500억 달러에 이를 것으로 예상되며, 2025년부터 2034년까지 연평균 성장률(CAGR)은 8.5%에 달할 것으로 보입니다. 이러한 성장은 지속 가능한 원료에 대한 수요 증가와 환경 규제 강화에 기인하고 있습니다.\n' +
+      '\n' +
+      '바이오 기반 화학물질은 생물학적 원료에서 유래한 화학물질로, 전통적인 석유 기반 화학물질의 대체재로 각광받고 있습니다. 이들은 주로 농업, 식품, 의약품 및 에너지 분야에서 활용되며, 지',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  }
+]
+ GET /api/reports?locale=en 200 in 3541ms
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."reports"."id" FROM "public"."reports" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT "public"."reports"."id", "public"."reports"."sku", "public"."reports"."slug", "public"."reports"."title", "public"."reports"."description", "public"."reports"."summary", "public"."reports"."pages", "public"."reports"."published_date", "public"."reports"."base_year", "public"."reports"."forecast_period", "public"."reports"."table_of_contents", "public"."reports"."list_of_figures", "public"."reports"."methodology", "public"."reports"."key_findings", "public"."reports"."executive_summary", "public"."reports"."market_data", "public"."reports"."competitive_landscape", "public"."reports"."market_segmentation", "public"."reports"."regional_analysis", "public"."reports"."swot_analysis", "public"."reports"."key_players", "public"."reports"."regions", "public"."reports"."industry_tags", "public"."reports"."report_type", "public"."reports"."research_method", "public"."reports"."keywords", "public"."reports"."semantic_keywords", "public"."reports"."regional_keywords", "public"."reports"."competitor_keywords", "public"."reports"."trending_keywords", "public"."reports"."long_tail_keywords", "public"."reports"."meta_title", "public"."reports"."meta_description", "public"."reports"."canonical_url", "public"."reports"."og_title", "public"."reports"."og_description", "public"."reports"."og_image", "public"."reports"."twitter_title", "public"."reports"."twitter_description", "public"."reports"."schema_markup", "public"."reports"."breadcrumb_data", "public"."reports"."faq_data", "public"."reports"."single_price", "public"."reports"."multi_price", "public"."reports"."corporate_price", "public"."reports"."enterprise_price", "public"."reports"."currency", "public"."reports"."ai_generated", "public"."reports"."content_generation_workflow_id", "public"."reports"."human_approved", "public"."reports"."content_quality_score", "public"."reports"."ai_confidence_score", "public"."reports"."status"::text, "public"."reports"."featured", "public"."reports"."priority", "public"."reports"."view_count", "public"."reports"."download_count", "public"."reports"."share_count", "public"."reports"."enquiry_count", "public"."reports"."search_rankings", "public"."reports"."click_through_rate", "public"."reports"."average_position", "public"."reports"."impressions", "public"."reports"."clicks", "public"."reports"."bounce_rate", "public"."reports"."time_on_page", "public"."reports"."avg_rating", "public"."reports"."review_count", "public"."reports"."total_rating_points", "public"."reports"."created_at", "public"."reports"."updated_at", COALESCE("aggr_selection_0_ReportReview"."_aggr_count_reviews", 0) AS "_aggr_count_reviews", COALESCE("aggr_selection_1_OrderItem"."_aggr_count_orderItems", 0) AS "_aggr_count_orderItems" FROM "public"."reports" LEFT JOIN (SELECT "public"."report_reviews"."report_id", COUNT(*) AS "_aggr_count_reviews" FROM "public"."report_reviews" WHERE 1=1 GROUP BY "public"."report_reviews"."report_id") AS "aggr_selection_0_ReportReview" ON ("public"."reports"."id" = "aggr_selection_0_ReportReview"."report_id") LEFT JOIN (SELECT "public"."order_items"."report_id", COUNT(*) AS "_aggr_count_orderItems" FROM "public"."order_items" WHERE 1=1 GROUP BY "public"."order_items"."report_id") AS "aggr_selection_1_OrderItem" ON ("public"."reports"."id" = "aggr_selection_1_OrderItem"."report_id") WHERE 1=1 ORDER BY "public"."reports"."featured" DESC, "public"."reports"."priority" DESC, "public"."reports"."created_at" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."_CategoryToReport"."B", "public"."_CategoryToReport"."A" FROM "public"."_CategoryToReport" WHERE "public"."_CategoryToReport"."B" IN ($1)
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."categories"."id" FROM "public"."categories" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT "public"."categories"."id", "public"."categories"."title", "public"."categories"."shortcode" FROM "public"."categories" WHERE "public"."categories"."id" IN ($1,$2,$3) OFFSET $4
+prisma:query SELECT "public"."categories"."id", "public"."categories"."shortcode", "public"."categories"."slug", "public"."categories"."title", "public"."categories"."description", "public"."categories"."icon", "public"."categories"."featured", "public"."categories"."sort_order", "public"."categories"."seo_keywords", "public"."categories"."regional_keywords", "public"."categories"."search_volume", "public"."categories"."ranking_factors", "public"."categories"."meta_title", "public"."categories"."meta_description", "public"."categories"."canonical_url", "public"."categories"."og_title", "public"."categories"."og_description", "public"."categories"."og_image", "public"."categories"."hreflang_alts", "public"."categories"."status"::text, "public"."categories"."view_count", "public"."categories"."click_count", "public"."categories"."conversion_rate", "public"."categories"."created_at", "public"."categories"."updated_at", COALESCE("aggr_selection_0_Report"."_aggr_count_reports", 0) AS "_aggr_count_reports" FROM "public"."categories" LEFT JOIN (SELECT "public"."_CategoryToReport"."A", COUNT("public"."_CategoryToReport"."A") AS "_aggr_count_reports" FROM "public"."reports" LEFT JOIN "public"."_CategoryToReport" ON ("public"."reports"."id" = "public"."_CategoryToReport"."B") WHERE 1=1 GROUP BY "public"."_CategoryToReport"."A") AS "aggr_selection_0_Report" ON ("public"."categories"."id" = "aggr_selection_0_Report"."A") WHERE 1=1 ORDER BY "public"."categories"."featured" DESC, "public"."categories"."sort_order" ASC, "public"."categories"."title" ASC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."category_translations"."id", "public"."category_translations"."locale", "public"."category_translations"."title", "public"."category_translations"."description", "public"."category_translations"."slug", "public"."category_translations"."seo_keywords", "public"."category_translations"."meta_title", "public"."category_translations"."meta_description", "public"."category_translations"."og_title", "public"."category_translations"."og_description", "public"."category_translations"."status"::text, "public"."category_translations"."category_id" FROM "public"."category_translations" WHERE "public"."category_translations"."category_id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) OFFSET $11
+Category ID: 60371719-4a95-430c-a6fc-10020cd57586 Locale: en Translations: []
+Category ID: cfc66dec-086a-4f9a-804a-8b3675cd2ab8 Locale: en Translations: []
+Category ID: cc3eb485-d1dc-4ef8-a16a-c0bf35125f87 Locale: en Translations: []
+Category ID: ac043882-db99-4dcd-b184-221f7f03947f Locale: en Translations: []
+Category ID: d68413e3-615d-4949-bce0-1da53079ea93 Locale: en Translations: []
+Category ID: ecb1d497-0f42-4e45-99cf-3e352abf6a53 Locale: en Translations: []
+Category ID: 427a766d-f9c8-447f-b5f8-f747f02beb4e Locale: en Translations: []
+Category ID: 51c25a64-180f-40e7-afab-4c603baac09e Locale: en Translations: []
+Category ID: 542ef6e8-0e73-429f-b9cf-c0c9af2c0238 Locale: en Translations: []
+Category ID: 087d579d-69dd-4b33-83ae-47a9bb665640 Locale: en Translations: []
+ GET /api/categories?locale=en 200 in 90ms
+prisma:query SELECT "public"."report_translations"."id", "public"."report_translations"."locale", "public"."report_translations"."title", "public"."report_translations"."description", "public"."report_translations"."summary", "public"."report_translations"."slug", "public"."report_translations"."table_of_contents", "public"."report_translations"."list_of_figures", "public"."report_translations"."methodology", "public"."report_translations"."key_findings", "public"."report_translations"."executive_summary", "public"."report_translations"."keywords", "public"."report_translations"."semantic_keywords", "public"."report_translations"."localized_keywords", "public"."report_translations"."cultural_keywords", "public"."report_translations"."long_tail_keywords", "public"."report_translations"."local_competitor_keywords", "public"."report_translations"."meta_title", "public"."report_translations"."meta_description", "public"."report_translations"."canonical_url", "public"."report_translations"."og_title", "public"."report_translations"."og_description", "public"."report_translations"."og_image", "public"."report_translations"."twitter_title", "public"."report_translations"."twitter_description", "public"."report_translations"."schema_markup", "public"."report_translations"."breadcrumb_data", "public"."report_translations"."faq_data", "public"."report_translations"."local_business_schema", "public"."report_translations"."status"::text, "public"."report_translations"."report_id" FROM "public"."report_translations" WHERE "public"."report_translations"."report_id" IN ($1) OFFSET $2
+Report ID: fad2bc5a-a4cf-4909-828e-ef8285eb7afd Locale: en Translations: [
+  {
+    id: 'c2565bf5-d6be-4ff3-a359-f061996737e7',
+    locale: 'de',
+    title: 'Bio-Based Chemicals',
+    description: 'Der Markt für biobasierte Chemikalien wurde im Jahr 2025 auf 40 Milliarden USD geschätzt und wird bis 2034 voraussichtlich auf 100 Milliarden USD anwachsen, was einer jährlichen Wachstumsrate (CAGR) von 10 % im Zeitraum von 2025 bis 2034 entspricht. Diese Zahlen basieren auf aktuellen Marktanalysen und den wachsenden Anforderungen an nachhaltige und umweltfreundliche Produkte.\n' +
+      '\n' +
+      'Biobasierte Chemikalien sind chemische Produkte, die aus erneuerbaren Rohstoffen wie Pflanzen, Algen oder Mikroben hergestellt werden. Sie bieten eine nachhaltige Alternative zu petrochemischen Produkten und spielen eine entscheidende Rolle in der Reduzierung der Kohlenstoffemissionen sowie in der Förderung einer Kreislaufwirtschaft. Dieser Markt umfasst eine Vielzahl von Anwendungen, darunter Biokraftstoffe, Biopolymere und biobasierte Lösungsmittel, die in verschiedenen Industrien wie der Automobil-, Bau- und Lebensmittelindustrie eingesetzt werden.\n' +
+      '\n' +
+      'Der Markt für biobasierte Chemikalien zieht derzeit verstärkt Aufmerksamkeit auf sich, da Unternehmen und Regierungen weltweit ihre Nachhaltigkeitsziele vorantreiben. Die zunehmende Regulierung und der Druck von Verbrauchern, die umweltfreundliche Produkte verlangen, treiben die Nachfrage nach biobasierten Lösungen voran. Laut einer Studie der Internationalen Energieagentur wird erwartet, dass der Anteil biobasierter Chemikalien am Gesamtchemikalienmarkt bis 2030 signifikant steigen wird, was die strategische Relevanz dieses Sektors unterstreicht. Investoren und Entscheidungsträger sollten die Chancen in diesem dynamischen Markt erkennen, da Innovationen und technologische Fortschritte neue Geschäftsmöglichkeiten schaffen.\n' +
+      '\n' +
+      'Insgesamt stellt der Markt für biobasierte Chemikalien eine vielversprechende Wachstumschance dar, die nicht nur ökonomische Vorteile bietet, sondern auch zur globalen Nachhaltigkeitsagenda beiträgt.',
+    summary: 'Der Markt für biobasierte Chemikalien wurde im Jahr 2025 auf 40 Milliarden USD geschätzt und wird bis 2034 voraussichtlich auf 100 Milliarden USD anwachsen, was einer jährlichen Wachstumsrate (CAGR) von 10 % im Zeitraum von 2025 bis 2034 entspricht. Diese Zahlen basieren auf aktuellen Marktanalysen und den wachsenden Anforderungen an nachhaltige und umweltfreundliche Produkte.\n' +
+      '\n' +
+      'Biobasierte Chemikalien sind chemische Produkte, die aus erneuerbaren Rohstoffen wie Pflanzen, Algen oder Mikroben hergestellt werden. Sie bieten eine nachhaltige Alternative zu petrochemischen Produkten und spielen eine entscheidende Rolle in der Reduzierung der Kohlenstoffemissionen sowie in der Förderung einer Kreislaufwirtschaft. Dieser Markt umfasst eine Vielzahl von Anwendungen, darunter Biokraftstoffe, Biopolymere und biobasierte Lösungsmittel, die in verschiedenen Industrien wie der Automobil-, Bau- und Lebensmittelindustrie eingesetzt werden.\n' +
+      '\n' +
+      'Der Markt für biobasierte Chemikalien zieht derzeit verstärkt Aufmerksamkeit auf sich, da Unternehmen und Regierungen weltweit ihre Nachhaltigkeitsziele vorantreiben. Die zunehmende Regulierung und der Druck von Verbrauchern, die umweltfreundliche Produkte verlangen, treiben die Nachfrage nach biobasierten Lösungen voran. Laut einer Studie der Internationalen Energieagentur wird erwartet, dass der Anteil biobasierter Chemikalien am Gesamtchemikalienmarkt bis 2030 signifikant steigen wird, was die strategische Relevanz dieses Sektors unterstreicht. Investoren und Entscheidungsträger sollten die Chancen in diesem dynamischen Markt erkennen, da Innovationen und technologische Fortschritte neue Geschäftsmöglichkeiten schaffen.\n' +
+      '\n' +
+      'Insgesamt stellt der Markt für biobasierte Chemikalien eine vielversprechende Wachstumschance dar, die nicht nur ökonomische Vorteile bietet, sondern auch zur globalen Nachhaltigkeitsagenda beiträgt.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'Der Markt für biobasierte Chemikalien wurde im Jahr 2025 auf 40 Milliarden USD geschätzt und wird bis 2034 voraussichtlich auf 100 Milliarden USD anwachsen, was einer jährlichen Wachstumsrate (CAGR) von 10 % im Zeitraum von 2025 bis 2034 entspricht. Diese Zahlen basieren auf aktuellen Marktanalysen ',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'f7632e69-8c0e-4316-9764-b332cfcf5222',
+    locale: 'es',
+    title: 'Bio-Based Chemicals',
+    description: 'El mercado de los productos químicos bio-basados fue valorado en 21.8 mil millones de USD en 2025 y se prevé que alcance los 45.3 mil millones de USD para 2034, con una tasa de crecimiento anual compuesta (CAGR) del 8.6% durante el período de 2025 a 2034. Esta expansión se debe a la creciente demanda de soluciones sostenibles y la presión regulatoria para reducir las emisiones de carbono, lo que impulsa la transición hacia productos químicos derivados de fuentes renovables.\n' +
+      '\n' +
+      'Los productos químicos bio-basados son compuestos químicos que se producen a partir de materias primas renovables, como biomasa, en lugar de fuentes fósiles. Estos productos abarcan una amplia gama de aplicaciones, incluyendo plásticos, solventes, y aditivos, y son esenciales para la industria química moderna que busca alternativas más sostenibles y menos contaminantes.\n' +
+      '\n' +
+      'El interés en el mercado de los productos químicos bio-basados está en aumento debido a la creciente conciencia sobre el cambio climático y la necesidad de adoptar prácticas más sostenibles. Las empresas están invirtiendo en investigación y desarrollo para innovar en este sector, impulsadas por políticas gubernamentales que fomentan el uso de recursos renovables. Además, la demanda de consumidores por productos ecológicos está cambiando la dinámica del mercado, lo que lleva a un aumento en la producción y el uso de químicos bio-basados en diversas industrias, desde la automotriz hasta la alimentaria.\n' +
+      '\n' +
+      'Con un entorno regulatorio favorable y un cambio en las preferencias del consumidor, el mercado de productos químicos bio-basados se posiciona como una oportunidad estratégica para los inversores y las empresas que buscan liderar en sostenibilidad y responsabilidad ambiental.',
+    summary: 'El mercado de los productos químicos bio-basados fue valorado en 21.8 mil millones de USD en 2025 y se prevé que alcance los 45.3 mil millones de USD para 2034, con una tasa de crecimiento anual compuesta (CAGR) del 8.6% durante el período de 2025 a 2034. Esta expansión se debe a la creciente demanda de soluciones sostenibles y la presión regulatoria para reducir las emisiones de carbono, lo que impulsa la transición hacia productos químicos derivados de fuentes renovables.\n' +
+      '\n' +
+      'Los productos químicos bio-basados son compuestos químicos que se producen a partir de materias primas renovables, como biomasa, en lugar de fuentes fósiles. Estos productos abarcan una amplia gama de aplicaciones, incluyendo plásticos, solventes, y aditivos, y son esenciales para la industria química moderna que busca alternativas más sostenibles y menos contaminantes.\n' +
+      '\n' +
+      'El interés en el mercado de los productos químicos bio-basados está en aumento debido a la creciente conciencia sobre el cambio climático y la necesidad de adoptar prácticas más sostenibles. Las empresas están invirtiendo en investigación y desarrollo para innovar en este sector, impulsadas por políticas gubernamentales que fomentan el uso de recursos renovables. Además, la demanda de consumidores por productos ecológicos está cambiando la dinámica del mercado, lo que lleva a un aumento en la producción y el uso de químicos bio-basados en diversas industrias, desde la automotriz hasta la alimentaria.\n' +
+      '\n' +
+      'Con un entorno regulatorio favorable y un cambio en las preferencias del consumidor, el mercado de productos químicos bio-basados se posiciona como una oportunidad estratégica para los inversores y las empresas que buscan liderar en sostenibilidad y responsabilidad ambiental.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'El mercado de los productos químicos bio-basados fue valorado en 21.8 mil millones de USD en 2025 y se prevé que alcance los 45.3 mil millones de USD para 2034, con una tasa de crecimiento anual compuesta (CAGR) del 8.6% durante el período de 2025 a 2034. Esta expansión se debe a la creciente demand',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: '519e9d8c-6e4b-4a69-b98f-383841f176f0',
+    locale: 'fr',
+    title: 'Bio-Based Chemicals',
+    description: "Le marché des produits chimiques biosourcés était évalué à 36,5 milliards USD en 2025 et devrait atteindre 82,4 milliards USD d'ici 2034, affichant un taux de croissance annuel composé (CAGR) de 9,5 % pendant la période 2025-2034. Cette croissance est alimentée par une demande croissante pour des alternatives durables aux produits chimiques dérivés du pétrole, en réponse aux préoccupations environnementales et aux réglementations de plus en plus strictes sur les émissions de carbone.\n" +
+      '\n' +
+      "Les produits chimiques biosourcés sont définis comme des substances chimiques dérivées de matières premières renouvelables, telles que les plantes, les algues et les déchets organiques, qui remplacent les produits chimiques conventionnels basés sur le pétrole. Ces produits jouent un rôle crucial dans divers secteurs, notamment la chimie, l'agriculture, et les biocarburants, contribuant à une économie circulaire et durable.\n" +
+      '\n' +
+      "Actuellement, le marché des produits chimiques biosourcés attire une attention considérable en raison de l'augmentation des initiatives gouvernementales et des investissements privés visant à réduire l'empreinte carbone. Les entreprises adoptent des stratégies de développement durable pour répondre aux attentes des consommateurs et des investisseurs, qui privilégient de plus en plus les pratiques respectueuses de l'environnement. De plus, la montée des technologies de bioprocédés et l'innovation dans les matières premières renouvelables renforcent la position de ce marché en tant que solution viable face aux défis environnementaux contemporains.\n" +
+      '\n' +
+      'Avec une sensibilisation croissante aux enjeux écologiques et une pression accrue pour adopter des pratiques durables, le secteur des produits chimiques biosourcés est bien positionné pour jouer un rôle clé dans la transition vers une économie plus verte. Les décideurs, investisseurs et analystes doivent donc considérer ce marché comme une opportunité stratégique pour un avenir durable.',
+    summary: "Le marché des produits chimiques biosourcés était évalué à 36,5 milliards USD en 2025 et devrait atteindre 82,4 milliards USD d'ici 2034, affichant un taux de croissance annuel composé (CAGR) de 9,5 % pendant la période 2025-2034. Cette croissance est alimentée par une demande croissante pour des alternatives durables aux produits chimiques dérivés du pétrole, en réponse aux préoccupations environnementales et aux réglementations de plus en plus strictes sur les émissions de carbone.\n" +
+      '\n' +
+      "Les produits chimiques biosourcés sont définis comme des substances chimiques dérivées de matières premières renouvelables, telles que les plantes, les algues et les déchets organiques, qui remplacent les produits chimiques conventionnels basés sur le pétrole. Ces produits jouent un rôle crucial dans divers secteurs, notamment la chimie, l'agriculture, et les biocarburants, contribuant à une économie circulaire et durable.\n" +
+      '\n' +
+      "Actuellement, le marché des produits chimiques biosourcés attire une attention considérable en raison de l'augmentation des initiatives gouvernementales et des investissements privés visant à réduire l'empreinte carbone. Les entreprises adoptent des stratégies de développement durable pour répondre aux attentes des consommateurs et des investisseurs, qui privilégient de plus en plus les pratiques respectueuses de l'environnement. De plus, la montée des technologies de bioprocédés et l'innovation dans les matières premières renouvelables renforcent la position de ce marché en tant que solution viable face aux défis environnementaux contemporains.\n" +
+      '\n' +
+      'Avec une sensibilisation croissante aux enjeux écologiques et une pression accrue pour adopter des pratiques durables, le secteur des produits chimiques biosourcés est bien positionné pour jouer un rôle clé dans la transition vers une économie plus verte. Les décideurs, investisseurs et analystes doivent donc considérer ce marché comme une opportunité stratégique pour un avenir durable.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: "Le marché des produits chimiques biosourcés était évalué à 36,5 milliards USD en 2025 et devrait atteindre 82,4 milliards USD d'ici 2034, affichant un taux de croissance annuel composé (CAGR) de 9,5 % pendant la période 2025-2034. Cette croissance est alimentée par une demande croissante pour des al",
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'de80e22b-aac3-47a0-a9f7-111f46f5b5bc',
+    locale: 'it',
+    title: 'Bio-Based Chemicals',
+    description: "Il mercato dei chimici bio-based è stato valutato a 32 miliardi di dollari nel 2025 e si prevede che raggiunga i 70 miliardi di dollari entro il 2034, con un tasso di crescita annuale composto (CAGR) del 9,5% durante il periodo 2025-2034. Questi dati evidenziano un crescente interesse verso soluzioni sostenibili nel settore chimico, spinto dalla crescente domanda di prodotti ecologici e dalla necessità di ridurre l'impatto ambientale delle attività industriali.\n" +
+      '\n' +
+      "I chimici bio-based sono definiti come sostanze chimiche derivate da fonti rinnovabili, come piante e biomassa, utilizzate in vari settori, tra cui quello alimentare, cosmetico e farmaceutico. Questi materiali offrono un'alternativa sostenibile ai chimici tradizionali, contribuendo a una transizione verso un'economia circolare e a basse emissioni di carbonio.\n" +
+      '\n' +
+      "Attualmente, il mercato dei chimici bio-based sta attirando l'attenzione per diversi motivi. La crescente consapevolezza ambientale tra i consumatori e le aziende, insieme a normative sempre più severe riguardo all'uso di sostanze chimiche tossiche, spinge le imprese a investire in soluzioni sostenibili. Inoltre, l'innovazione tecnologica nel settore della biochimica ha reso possibile lo sviluppo di nuovi prodotti e applicazioni, aumentando ulteriormente la competitività del mercato. Le aziende stanno anche cercando di diversificare le loro fonti di approvvigionamento e ridurre la dipendenza dai combustibili fossili, rendendo i chimici bio-based una scelta strategica.\n" +
+      '\n' +
+      "In un contesto globale in rapida evoluzione, il mercato dei chimici bio-based rappresenta un'opportunità significativa per investitori e decision-maker, posizionandosi come un settore chiave per il futuro sostenibile dell'industria chimica.",
+    summary: "Il mercato dei chimici bio-based è stato valutato a 32 miliardi di dollari nel 2025 e si prevede che raggiunga i 70 miliardi di dollari entro il 2034, con un tasso di crescita annuale composto (CAGR) del 9,5% durante il periodo 2025-2034. Questi dati evidenziano un crescente interesse verso soluzioni sostenibili nel settore chimico, spinto dalla crescente domanda di prodotti ecologici e dalla necessità di ridurre l'impatto ambientale delle attività industriali.\n" +
+      '\n' +
+      "I chimici bio-based sono definiti come sostanze chimiche derivate da fonti rinnovabili, come piante e biomassa, utilizzate in vari settori, tra cui quello alimentare, cosmetico e farmaceutico. Questi materiali offrono un'alternativa sostenibile ai chimici tradizionali, contribuendo a una transizione verso un'economia circolare e a basse emissioni di carbonio.\n" +
+      '\n' +
+      "Attualmente, il mercato dei chimici bio-based sta attirando l'attenzione per diversi motivi. La crescente consapevolezza ambientale tra i consumatori e le aziende, insieme a normative sempre più severe riguardo all'uso di sostanze chimiche tossiche, spinge le imprese a investire in soluzioni sostenibili. Inoltre, l'innovazione tecnologica nel settore della biochimica ha reso possibile lo sviluppo di nuovi prodotti e applicazioni, aumentando ulteriormente la competitività del mercato. Le aziende stanno anche cercando di diversificare le loro fonti di approvvigionamento e ridurre la dipendenza dai combustibili fossili, rendendo i chimici bio-based una scelta strategica.\n" +
+      '\n' +
+      "In un contesto globale in rapida evoluzione, il mercato dei chimici bio-based rappresenta un'opportunità significativa per investitori e decision-maker, posizionandosi come un settore chiave per il futuro sostenibile dell'industria chimica.",
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'Il mercato dei chimici bio-based è stato valutato a 32 miliardi di dollari nel 2025 e si prevede che raggiunga i 70 miliardi di dollari entro il 2034, con un tasso di crescita annuale composto (CAGR) del 9,5% durante il periodo 2025-2034. Questi dati evidenziano un crescente interesse verso soluzion',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'e1a211e2-162f-41e5-ad8d-4c45742edd2c',
+    locale: 'ja',
+    title: 'Bio-Based Chemicals',
+    description: 'バイオベース化学品市場は、2025年に約1,200億米ドルと評価され、2034年には約2,500億米ドルに達すると予測されており、2025年から2034年の間に年平均成長率（CAGR）は約8.5%に達する見込みです。この成長は、持続可能な製品への需要の高まりや、環境への配慮から生まれる新たな規制に起因しています。\n' +
+      '\n' +
+      'バイオベース化学品とは、再生可能な資源から生産される化学物質を指し、石油由来の化学品に代わる持続可能な選択肢として注目されています。これには、バイオプラスチック、バイオ燃料、そしてバイオベースの溶剤などが含まれ、これらは環境負荷を軽減するための重要な役割を果たします。\n' +
+      '\n' +
+      '現在、この市場が注目を集めている理由は、企業や消費者が環境に優しい選択を求める傾向が強まっているためです。特に、プラスチック廃棄物問題や温暖化対策が喫緊の課題となっている中、バイオベース化学品は持続可能なソリューションとしての地位を確立しています。また、政府の政策や投資家の関心も高まっており、これにより市場の成長が加速しています。\n' +
+      '\n' +
+      'この分野への投資は、将来的な収益を見込む上で戦略的に重要であり、企業が競争力を維持するためには、バイオベース化学品の利用を検討することが不可欠です。持続可能な未来を築くための鍵となるこの市場において、早期の参入が競争優位性をもたらすでしょう。',
+    summary: 'バイオベース化学品市場は、2025年に約1,200億米ドルと評価され、2034年には約2,500億米ドルに達すると予測されており、2025年から2034年の間に年平均成長率（CAGR）は約8.5%に達する見込みです。この成長は、持続可能な製品への需要の高まりや、環境への配慮から生まれる新たな規制に起因しています。\n' +
+      '\n' +
+      'バイオベース化学品とは、再生可能な資源から生産される化学物質を指し、石油由来の化学品に代わる持続可能な選択肢として注目されています。これには、バイオプラスチック、バイオ燃料、そしてバイオベースの溶剤などが含まれ、これらは環境負荷を軽減するための重要な役割を果たします。\n' +
+      '\n' +
+      '現在、この市場が注目を集めている理由は、企業や消費者が環境に優しい選択を求める傾向が強まっているためです。特に、プラスチック廃棄物問題や温暖化対策が喫緊の課題となっている中、バイオベース化学品は持続可能なソリューションとしての地位を確立しています。また、政府の政策や投資家の関心も高まっており、これにより市場の成長が加速しています。\n' +
+      '\n' +
+      'この分野への投資は、将来的な収益を見込む上で戦略的に重要であり、企業が競争力を維持するためには、バイオベース化学品の利用を検討することが不可欠です。持続可能な未来を築くための鍵となるこの市場において、早期の参入が競争優位性をもたらすでしょう。',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'バイオベース化学品市場は、2025年に約1,200億米ドルと評価され、2034年には約2,500億米ドルに達すると予測されており、2025年から2034年の間に年平均成長率（CAGR）は約8.5%に達する見込みです。この成長は、持続可能な製品への需要の高まりや、環境への配慮から生まれる新たな規制に起因しています。\n' +
+      '\n' +
+      'バイオベース化学品とは、再生可能な資源から生産される化学物質を指し、石油由来の化学品に代わる持続可能な選択肢として注目されています。これには、バイオプラスチック、バイオ燃料、そしてバイオベースの溶剤などが含まれ、これらは環境負荷を軽減するための重要な役割を果たします。\n' +
+      '\n' +
+      '現在、この',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'd11535f9-82fd-419f-a955-4852133fab10',
+    locale: 'ko',
+    title: 'Bio-Based Chemicals',
+    description: '바이오 기반 화학물질(Bio-Based Chemicals) 시장은 2025년에 1,200억 달러로 평가되었으며, 2034년에는 2,500억 달러에 이를 것으로 예상되며, 2025년부터 2034년까지 연평균 성장률(CAGR)은 8.5%에 달할 것으로 보입니다. 이러한 성장은 지속 가능한 원료에 대한 수요 증가와 환경 규제 강화에 기인하고 있습니다.\n' +
+      '\n' +
+      '바이오 기반 화학물질은 생물학적 원료에서 유래한 화학물질로, 전통적인 석유 기반 화학물질의 대체재로 각광받고 있습니다. 이들은 주로 농업, 식품, 의약품 및 에너지 분야에서 활용되며, 지속 가능한 개발 목표(SDGs)에 부합하는 제품으로 인식되고 있습니다.\n' +
+      '\n' +
+      '현재 바이오 기반 화학물질 시장은 기후 변화와 환경 문제에 대한 인식이 높아짐에 따라 주목받고 있습니다. 많은 기업들이 탄소 발자국을 줄이기 위해 지속 가능한 솔루션을 찾고 있으며, 이는 바이오 기반 화학물질의 수요를 더욱 촉진하고 있습니다. 예를 들어, 유럽연합은 2030년까지 온실가스 배출량을 55% 줄이겠다는 목표를 세우고 있으며, 이는 바이오 기반 화학물질의 채택을 가속화하는 데 기여할 것입니다.\n' +
+      '\n' +
+      '이러한 시장의 성장 가능성은 투자자들에게 매력적인 기회를 제공하며, 기업들은 혁신적인 기술과 지속 가능한 공급망을 통해 경쟁력을 강화할 수 있습니다. 바이오 기반 화학물질 시장은 환경 친화적인 대안으로서의 가치뿐만 아니라, 경제적 이익을 창출할 수 있는 중요한 분야로 자리잡고 있습니다.',
+    summary: '바이오 기반 화학물질(Bio-Based Chemicals) 시장은 2025년에 1,200억 달러로 평가되었으며, 2034년에는 2,500억 달러에 이를 것으로 예상되며, 2025년부터 2034년까지 연평균 성장률(CAGR)은 8.5%에 달할 것으로 보입니다. 이러한 성장은 지속 가능한 원료에 대한 수요 증가와 환경 규제 강화에 기인하고 있습니다.\n' +
+      '\n' +
+      '바이오 기반 화학물질은 생물학적 원료에서 유래한 화학물질로, 전통적인 석유 기반 화학물질의 대체재로 각광받고 있습니다. 이들은 주로 농업, 식품, 의약품 및 에너지 분야에서 활용되며, 지속 가능한 개발 목표(SDGs)에 부합하는 제품으로 인식되고 있습니다.\n' +
+      '\n' +
+      '현재 바이오 기반 화학물질 시장은 기후 변화와 환경 문제에 대한 인식이 높아짐에 따라 주목받고 있습니다. 많은 기업들이 탄소 발자국을 줄이기 위해 지속 가능한 솔루션을 찾고 있으며, 이는 바이오 기반 화학물질의 수요를 더욱 촉진하고 있습니다. 예를 들어, 유럽연합은 2030년까지 온실가스 배출량을 55% 줄이겠다는 목표를 세우고 있으며, 이는 바이오 기반 화학물질의 채택을 가속화하는 데 기여할 것입니다.\n' +
+      '\n' +
+      '이러한 시장의 성장 가능성은 투자자들에게 매력적인 기회를 제공하며, 기업들은 혁신적인 기술과 지속 가능한 공급망을 통해 경쟁력을 강화할 수 있습니다. 바이오 기반 화학물질 시장은 환경 친화적인 대안으로서의 가치뿐만 아니라, 경제적 이익을 창출할 수 있는 중요한 분야로 자리잡고 있습니다.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: '바이오 기반 화학물질(Bio-Based Chemicals) 시장은 2025년에 1,200억 달러로 평가되었으며, 2034년에는 2,500억 달러에 이를 것으로 예상되며, 2025년부터 2034년까지 연평균 성장률(CAGR)은 8.5%에 달할 것으로 보입니다. 이러한 성장은 지속 가능한 원료에 대한 수요 증가와 환경 규제 강화에 기인하고 있습니다.\n' +
+      '\n' +
+      '바이오 기반 화학물질은 생물학적 원료에서 유래한 화학물질로, 전통적인 석유 기반 화학물질의 대체재로 각광받고 있습니다. 이들은 주로 농업, 식품, 의약품 및 에너지 분야에서 활용되며, 지',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  }
+]
+ GET /api/reports?locale=en 200 in 107ms
+ GET /de/simple-dashboard 200 in 294ms
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."categories"."id" FROM "public"."categories" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT "public"."categories"."id", "public"."categories"."shortcode", "public"."categories"."slug", "public"."categories"."title", "public"."categories"."description", "public"."categories"."icon", "public"."categories"."featured", "public"."categories"."sort_order", "public"."categories"."seo_keywords", "public"."categories"."regional_keywords", "public"."categories"."search_volume", "public"."categories"."ranking_factors", "public"."categories"."meta_title", "public"."categories"."meta_description", "public"."categories"."canonical_url", "public"."categories"."og_title", "public"."categories"."og_description", "public"."categories"."og_image", "public"."categories"."hreflang_alts", "public"."categories"."status"::text, "public"."categories"."view_count", "public"."categories"."click_count", "public"."categories"."conversion_rate", "public"."categories"."created_at", "public"."categories"."updated_at", COALESCE("aggr_selection_0_Report"."_aggr_count_reports", 0) AS "_aggr_count_reports" FROM "public"."categories" LEFT JOIN (SELECT "public"."_CategoryToReport"."A", COUNT("public"."_CategoryToReport"."A") AS "_aggr_count_reports" FROM "public"."reports" LEFT JOIN "public"."_CategoryToReport" ON ("public"."reports"."id" = "public"."_CategoryToReport"."B") WHERE 1=1 GROUP BY "public"."_CategoryToReport"."A") AS "aggr_selection_0_Report" ON ("public"."categories"."id" = "aggr_selection_0_Report"."A") WHERE 1=1 ORDER BY "public"."categories"."featured" DESC, "public"."categories"."sort_order" ASC, "public"."categories"."title" ASC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."category_translations"."id", "public"."category_translations"."locale", "public"."category_translations"."title", "public"."category_translations"."description", "public"."category_translations"."slug", "public"."category_translations"."seo_keywords", "public"."category_translations"."meta_title", "public"."category_translations"."meta_description", "public"."category_translations"."og_title", "public"."category_translations"."og_description", "public"."category_translations"."status"::text, "public"."category_translations"."category_id" FROM "public"."category_translations" WHERE "public"."category_translations"."category_id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) OFFSET $11
+Category ID: 60371719-4a95-430c-a6fc-10020cd57586 Locale: de Translations: []
+Category ID: cfc66dec-086a-4f9a-804a-8b3675cd2ab8 Locale: de Translations: []
+Category ID: cc3eb485-d1dc-4ef8-a16a-c0bf35125f87 Locale: de Translations: []
+Category ID: ac043882-db99-4dcd-b184-221f7f03947f Locale: de Translations: []
+Category ID: d68413e3-615d-4949-bce0-1da53079ea93 Locale: de Translations: []
+Category ID: ecb1d497-0f42-4e45-99cf-3e352abf6a53 Locale: de Translations: []
+Category ID: 427a766d-f9c8-447f-b5f8-f747f02beb4e Locale: de Translations: []
+Category ID: 51c25a64-180f-40e7-afab-4c603baac09e Locale: de Translations: []
+Category ID: 542ef6e8-0e73-429f-b9cf-c0c9af2c0238 Locale: de Translations: []
+Category ID: 087d579d-69dd-4b33-83ae-47a9bb665640 Locale: de Translations: []
+ GET /api/categories?locale=de 200 in 167ms
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."reports"."id" FROM "public"."reports" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT "public"."reports"."id", "public"."reports"."sku", "public"."reports"."slug", "public"."reports"."title", "public"."reports"."description", "public"."reports"."summary", "public"."reports"."pages", "public"."reports"."published_date", "public"."reports"."base_year", "public"."reports"."forecast_period", "public"."reports"."table_of_contents", "public"."reports"."list_of_figures", "public"."reports"."methodology", "public"."reports"."key_findings", "public"."reports"."executive_summary", "public"."reports"."market_data", "public"."reports"."competitive_landscape", "public"."reports"."market_segmentation", "public"."reports"."regional_analysis", "public"."reports"."swot_analysis", "public"."reports"."key_players", "public"."reports"."regions", "public"."reports"."industry_tags", "public"."reports"."report_type", "public"."reports"."research_method", "public"."reports"."keywords", "public"."reports"."semantic_keywords", "public"."reports"."regional_keywords", "public"."reports"."competitor_keywords", "public"."reports"."trending_keywords", "public"."reports"."long_tail_keywords", "public"."reports"."meta_title", "public"."reports"."meta_description", "public"."reports"."canonical_url", "public"."reports"."og_title", "public"."reports"."og_description", "public"."reports"."og_image", "public"."reports"."twitter_title", "public"."reports"."twitter_description", "public"."reports"."schema_markup", "public"."reports"."breadcrumb_data", "public"."reports"."faq_data", "public"."reports"."single_price", "public"."reports"."multi_price", "public"."reports"."corporate_price", "public"."reports"."enterprise_price", "public"."reports"."currency", "public"."reports"."ai_generated", "public"."reports"."content_generation_workflow_id", "public"."reports"."human_approved", "public"."reports"."content_quality_score", "public"."reports"."ai_confidence_score", "public"."reports"."status"::text, "public"."reports"."featured", "public"."reports"."priority", "public"."reports"."view_count", "public"."reports"."download_count", "public"."reports"."share_count", "public"."reports"."enquiry_count", "public"."reports"."search_rankings", "public"."reports"."click_through_rate", "public"."reports"."average_position", "public"."reports"."impressions", "public"."reports"."clicks", "public"."reports"."bounce_rate", "public"."reports"."time_on_page", "public"."reports"."avg_rating", "public"."reports"."review_count", "public"."reports"."total_rating_points", "public"."reports"."created_at", "public"."reports"."updated_at", COALESCE("aggr_selection_0_ReportReview"."_aggr_count_reviews", 0) AS "_aggr_count_reviews", COALESCE("aggr_selection_1_OrderItem"."_aggr_count_orderItems", 0) AS "_aggr_count_orderItems" FROM "public"."reports" LEFT JOIN (SELECT "public"."report_reviews"."report_id", COUNT(*) AS "_aggr_count_reviews" FROM "public"."report_reviews" WHERE 1=1 GROUP BY "public"."report_reviews"."report_id") AS "aggr_selection_0_ReportReview" ON ("public"."reports"."id" = "aggr_selection_0_ReportReview"."report_id") LEFT JOIN (SELECT "public"."order_items"."report_id", COUNT(*) AS "_aggr_count_orderItems" FROM "public"."order_items" WHERE 1=1 GROUP BY "public"."order_items"."report_id") AS "aggr_selection_1_OrderItem" ON ("public"."reports"."id" = "aggr_selection_1_OrderItem"."report_id") WHERE 1=1 ORDER BY "public"."reports"."featured" DESC, "public"."reports"."priority" DESC, "public"."reports"."created_at" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."_CategoryToReport"."B", "public"."_CategoryToReport"."A" FROM "public"."_CategoryToReport" WHERE "public"."_CategoryToReport"."B" IN ($1)
+prisma:query SELECT "public"."categories"."id", "public"."categories"."title", "public"."categories"."shortcode" FROM "public"."categories" WHERE "public"."categories"."id" IN ($1,$2,$3) OFFSET $4
+prisma:query SELECT "public"."report_translations"."id", "public"."report_translations"."locale", "public"."report_translations"."title", "public"."report_translations"."description", "public"."report_translations"."summary", "public"."report_translations"."slug", "public"."report_translations"."table_of_contents", "public"."report_translations"."list_of_figures", "public"."report_translations"."methodology", "public"."report_translations"."key_findings", "public"."report_translations"."executive_summary", "public"."report_translations"."keywords", "public"."report_translations"."semantic_keywords", "public"."report_translations"."localized_keywords", "public"."report_translations"."cultural_keywords", "public"."report_translations"."long_tail_keywords", "public"."report_translations"."local_competitor_keywords", "public"."report_translations"."meta_title", "public"."report_translations"."meta_description", "public"."report_translations"."canonical_url", "public"."report_translations"."og_title", "public"."report_translations"."og_description", "public"."report_translations"."og_image", "public"."report_translations"."twitter_title", "public"."report_translations"."twitter_description", "public"."report_translations"."schema_markup", "public"."report_translations"."breadcrumb_data", "public"."report_translations"."faq_data", "public"."report_translations"."local_business_schema", "public"."report_translations"."status"::text, "public"."report_translations"."report_id" FROM "public"."report_translations" WHERE "public"."report_translations"."report_id" IN ($1) OFFSET $2
+Report ID: fad2bc5a-a4cf-4909-828e-ef8285eb7afd Locale: de Translations: [
+  {
+    id: 'c2565bf5-d6be-4ff3-a359-f061996737e7',
+    locale: 'de',
+    title: 'Bio-Based Chemicals',
+    description: 'Der Markt für biobasierte Chemikalien wurde im Jahr 2025 auf 40 Milliarden USD geschätzt und wird bis 2034 voraussichtlich auf 100 Milliarden USD anwachsen, was einer jährlichen Wachstumsrate (CAGR) von 10 % im Zeitraum von 2025 bis 2034 entspricht. Diese Zahlen basieren auf aktuellen Marktanalysen und den wachsenden Anforderungen an nachhaltige und umweltfreundliche Produkte.\n' +
+      '\n' +
+      'Biobasierte Chemikalien sind chemische Produkte, die aus erneuerbaren Rohstoffen wie Pflanzen, Algen oder Mikroben hergestellt werden. Sie bieten eine nachhaltige Alternative zu petrochemischen Produkten und spielen eine entscheidende Rolle in der Reduzierung der Kohlenstoffemissionen sowie in der Förderung einer Kreislaufwirtschaft. Dieser Markt umfasst eine Vielzahl von Anwendungen, darunter Biokraftstoffe, Biopolymere und biobasierte Lösungsmittel, die in verschiedenen Industrien wie der Automobil-, Bau- und Lebensmittelindustrie eingesetzt werden.\n' +
+      '\n' +
+      'Der Markt für biobasierte Chemikalien zieht derzeit verstärkt Aufmerksamkeit auf sich, da Unternehmen und Regierungen weltweit ihre Nachhaltigkeitsziele vorantreiben. Die zunehmende Regulierung und der Druck von Verbrauchern, die umweltfreundliche Produkte verlangen, treiben die Nachfrage nach biobasierten Lösungen voran. Laut einer Studie der Internationalen Energieagentur wird erwartet, dass der Anteil biobasierter Chemikalien am Gesamtchemikalienmarkt bis 2030 signifikant steigen wird, was die strategische Relevanz dieses Sektors unterstreicht. Investoren und Entscheidungsträger sollten die Chancen in diesem dynamischen Markt erkennen, da Innovationen und technologische Fortschritte neue Geschäftsmöglichkeiten schaffen.\n' +
+      '\n' +
+      'Insgesamt stellt der Markt für biobasierte Chemikalien eine vielversprechende Wachstumschance dar, die nicht nur ökonomische Vorteile bietet, sondern auch zur globalen Nachhaltigkeitsagenda beiträgt.',
+    summary: 'Der Markt für biobasierte Chemikalien wurde im Jahr 2025 auf 40 Milliarden USD geschätzt und wird bis 2034 voraussichtlich auf 100 Milliarden USD anwachsen, was einer jährlichen Wachstumsrate (CAGR) von 10 % im Zeitraum von 2025 bis 2034 entspricht. Diese Zahlen basieren auf aktuellen Marktanalysen und den wachsenden Anforderungen an nachhaltige und umweltfreundliche Produkte.\n' +
+      '\n' +
+      'Biobasierte Chemikalien sind chemische Produkte, die aus erneuerbaren Rohstoffen wie Pflanzen, Algen oder Mikroben hergestellt werden. Sie bieten eine nachhaltige Alternative zu petrochemischen Produkten und spielen eine entscheidende Rolle in der Reduzierung der Kohlenstoffemissionen sowie in der Förderung einer Kreislaufwirtschaft. Dieser Markt umfasst eine Vielzahl von Anwendungen, darunter Biokraftstoffe, Biopolymere und biobasierte Lösungsmittel, die in verschiedenen Industrien wie der Automobil-, Bau- und Lebensmittelindustrie eingesetzt werden.\n' +
+      '\n' +
+      'Der Markt für biobasierte Chemikalien zieht derzeit verstärkt Aufmerksamkeit auf sich, da Unternehmen und Regierungen weltweit ihre Nachhaltigkeitsziele vorantreiben. Die zunehmende Regulierung und der Druck von Verbrauchern, die umweltfreundliche Produkte verlangen, treiben die Nachfrage nach biobasierten Lösungen voran. Laut einer Studie der Internationalen Energieagentur wird erwartet, dass der Anteil biobasierter Chemikalien am Gesamtchemikalienmarkt bis 2030 signifikant steigen wird, was die strategische Relevanz dieses Sektors unterstreicht. Investoren und Entscheidungsträger sollten die Chancen in diesem dynamischen Markt erkennen, da Innovationen und technologische Fortschritte neue Geschäftsmöglichkeiten schaffen.\n' +
+      '\n' +
+      'Insgesamt stellt der Markt für biobasierte Chemikalien eine vielversprechende Wachstumschance dar, die nicht nur ökonomische Vorteile bietet, sondern auch zur globalen Nachhaltigkeitsagenda beiträgt.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'Der Markt für biobasierte Chemikalien wurde im Jahr 2025 auf 40 Milliarden USD geschätzt und wird bis 2034 voraussichtlich auf 100 Milliarden USD anwachsen, was einer jährlichen Wachstumsrate (CAGR) von 10 % im Zeitraum von 2025 bis 2034 entspricht. Diese Zahlen basieren auf aktuellen Marktanalysen ',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'f7632e69-8c0e-4316-9764-b332cfcf5222',
+    locale: 'es',
+    title: 'Bio-Based Chemicals',
+    description: 'El mercado de los productos químicos bio-basados fue valorado en 21.8 mil millones de USD en 2025 y se prevé que alcance los 45.3 mil millones de USD para 2034, con una tasa de crecimiento anual compuesta (CAGR) del 8.6% durante el período de 2025 a 2034. Esta expansión se debe a la creciente demanda de soluciones sostenibles y la presión regulatoria para reducir las emisiones de carbono, lo que impulsa la transición hacia productos químicos derivados de fuentes renovables.\n' +
+      '\n' +
+      'Los productos químicos bio-basados son compuestos químicos que se producen a partir de materias primas renovables, como biomasa, en lugar de fuentes fósiles. Estos productos abarcan una amplia gama de aplicaciones, incluyendo plásticos, solventes, y aditivos, y son esenciales para la industria química moderna que busca alternativas más sostenibles y menos contaminantes.\n' +
+      '\n' +
+      'El interés en el mercado de los productos químicos bio-basados está en aumento debido a la creciente conciencia sobre el cambio climático y la necesidad de adoptar prácticas más sostenibles. Las empresas están invirtiendo en investigación y desarrollo para innovar en este sector, impulsadas por políticas gubernamentales que fomentan el uso de recursos renovables. Además, la demanda de consumidores por productos ecológicos está cambiando la dinámica del mercado, lo que lleva a un aumento en la producción y el uso de químicos bio-basados en diversas industrias, desde la automotriz hasta la alimentaria.\n' +
+      '\n' +
+      'Con un entorno regulatorio favorable y un cambio en las preferencias del consumidor, el mercado de productos químicos bio-basados se posiciona como una oportunidad estratégica para los inversores y las empresas que buscan liderar en sostenibilidad y responsabilidad ambiental.',
+    summary: 'El mercado de los productos químicos bio-basados fue valorado en 21.8 mil millones de USD en 2025 y se prevé que alcance los 45.3 mil millones de USD para 2034, con una tasa de crecimiento anual compuesta (CAGR) del 8.6% durante el período de 2025 a 2034. Esta expansión se debe a la creciente demanda de soluciones sostenibles y la presión regulatoria para reducir las emisiones de carbono, lo que impulsa la transición hacia productos químicos derivados de fuentes renovables.\n' +
+      '\n' +
+      'Los productos químicos bio-basados son compuestos químicos que se producen a partir de materias primas renovables, como biomasa, en lugar de fuentes fósiles. Estos productos abarcan una amplia gama de aplicaciones, incluyendo plásticos, solventes, y aditivos, y son esenciales para la industria química moderna que busca alternativas más sostenibles y menos contaminantes.\n' +
+      '\n' +
+      'El interés en el mercado de los productos químicos bio-basados está en aumento debido a la creciente conciencia sobre el cambio climático y la necesidad de adoptar prácticas más sostenibles. Las empresas están invirtiendo en investigación y desarrollo para innovar en este sector, impulsadas por políticas gubernamentales que fomentan el uso de recursos renovables. Además, la demanda de consumidores por productos ecológicos está cambiando la dinámica del mercado, lo que lleva a un aumento en la producción y el uso de químicos bio-basados en diversas industrias, desde la automotriz hasta la alimentaria.\n' +
+      '\n' +
+      'Con un entorno regulatorio favorable y un cambio en las preferencias del consumidor, el mercado de productos químicos bio-basados se posiciona como una oportunidad estratégica para los inversores y las empresas que buscan liderar en sostenibilidad y responsabilidad ambiental.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'El mercado de los productos químicos bio-basados fue valorado en 21.8 mil millones de USD en 2025 y se prevé que alcance los 45.3 mil millones de USD para 2034, con una tasa de crecimiento anual compuesta (CAGR) del 8.6% durante el período de 2025 a 2034. Esta expansión se debe a la creciente demand',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: '519e9d8c-6e4b-4a69-b98f-383841f176f0',
+    locale: 'fr',
+    title: 'Bio-Based Chemicals',
+    description: "Le marché des produits chimiques biosourcés était évalué à 36,5 milliards USD en 2025 et devrait atteindre 82,4 milliards USD d'ici 2034, affichant un taux de croissance annuel composé (CAGR) de 9,5 % pendant la période 2025-2034. Cette croissance est alimentée par une demande croissante pour des alternatives durables aux produits chimiques dérivés du pétrole, en réponse aux préoccupations environnementales et aux réglementations de plus en plus strictes sur les émissions de carbone.\n" +
+      '\n' +
+      "Les produits chimiques biosourcés sont définis comme des substances chimiques dérivées de matières premières renouvelables, telles que les plantes, les algues et les déchets organiques, qui remplacent les produits chimiques conventionnels basés sur le pétrole. Ces produits jouent un rôle crucial dans divers secteurs, notamment la chimie, l'agriculture, et les biocarburants, contribuant à une économie circulaire et durable.\n" +
+      '\n' +
+      "Actuellement, le marché des produits chimiques biosourcés attire une attention considérable en raison de l'augmentation des initiatives gouvernementales et des investissements privés visant à réduire l'empreinte carbone. Les entreprises adoptent des stratégies de développement durable pour répondre aux attentes des consommateurs et des investisseurs, qui privilégient de plus en plus les pratiques respectueuses de l'environnement. De plus, la montée des technologies de bioprocédés et l'innovation dans les matières premières renouvelables renforcent la position de ce marché en tant que solution viable face aux défis environnementaux contemporains.\n" +
+      '\n' +
+      'Avec une sensibilisation croissante aux enjeux écologiques et une pression accrue pour adopter des pratiques durables, le secteur des produits chimiques biosourcés est bien positionné pour jouer un rôle clé dans la transition vers une économie plus verte. Les décideurs, investisseurs et analystes doivent donc considérer ce marché comme une opportunité stratégique pour un avenir durable.',
+    summary: "Le marché des produits chimiques biosourcés était évalué à 36,5 milliards USD en 2025 et devrait atteindre 82,4 milliards USD d'ici 2034, affichant un taux de croissance annuel composé (CAGR) de 9,5 % pendant la période 2025-2034. Cette croissance est alimentée par une demande croissante pour des alternatives durables aux produits chimiques dérivés du pétrole, en réponse aux préoccupations environnementales et aux réglementations de plus en plus strictes sur les émissions de carbone.\n" +
+      '\n' +
+      "Les produits chimiques biosourcés sont définis comme des substances chimiques dérivées de matières premières renouvelables, telles que les plantes, les algues et les déchets organiques, qui remplacent les produits chimiques conventionnels basés sur le pétrole. Ces produits jouent un rôle crucial dans divers secteurs, notamment la chimie, l'agriculture, et les biocarburants, contribuant à une économie circulaire et durable.\n" +
+      '\n' +
+      "Actuellement, le marché des produits chimiques biosourcés attire une attention considérable en raison de l'augmentation des initiatives gouvernementales et des investissements privés visant à réduire l'empreinte carbone. Les entreprises adoptent des stratégies de développement durable pour répondre aux attentes des consommateurs et des investisseurs, qui privilégient de plus en plus les pratiques respectueuses de l'environnement. De plus, la montée des technologies de bioprocédés et l'innovation dans les matières premières renouvelables renforcent la position de ce marché en tant que solution viable face aux défis environnementaux contemporains.\n" +
+      '\n' +
+      'Avec une sensibilisation croissante aux enjeux écologiques et une pression accrue pour adopter des pratiques durables, le secteur des produits chimiques biosourcés est bien positionné pour jouer un rôle clé dans la transition vers une économie plus verte. Les décideurs, investisseurs et analystes doivent donc considérer ce marché comme une opportunité stratégique pour un avenir durable.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: "Le marché des produits chimiques biosourcés était évalué à 36,5 milliards USD en 2025 et devrait atteindre 82,4 milliards USD d'ici 2034, affichant un taux de croissance annuel composé (CAGR) de 9,5 % pendant la période 2025-2034. Cette croissance est alimentée par une demande croissante pour des al",
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'de80e22b-aac3-47a0-a9f7-111f46f5b5bc',
+    locale: 'it',
+    title: 'Bio-Based Chemicals',
+    description: "Il mercato dei chimici bio-based è stato valutato a 32 miliardi di dollari nel 2025 e si prevede che raggiunga i 70 miliardi di dollari entro il 2034, con un tasso di crescita annuale composto (CAGR) del 9,5% durante il periodo 2025-2034. Questi dati evidenziano un crescente interesse verso soluzioni sostenibili nel settore chimico, spinto dalla crescente domanda di prodotti ecologici e dalla necessità di ridurre l'impatto ambientale delle attività industriali.\n" +
+      '\n' +
+      "I chimici bio-based sono definiti come sostanze chimiche derivate da fonti rinnovabili, come piante e biomassa, utilizzate in vari settori, tra cui quello alimentare, cosmetico e farmaceutico. Questi materiali offrono un'alternativa sostenibile ai chimici tradizionali, contribuendo a una transizione verso un'economia circolare e a basse emissioni di carbonio.\n" +
+      '\n' +
+      "Attualmente, il mercato dei chimici bio-based sta attirando l'attenzione per diversi motivi. La crescente consapevolezza ambientale tra i consumatori e le aziende, insieme a normative sempre più severe riguardo all'uso di sostanze chimiche tossiche, spinge le imprese a investire in soluzioni sostenibili. Inoltre, l'innovazione tecnologica nel settore della biochimica ha reso possibile lo sviluppo di nuovi prodotti e applicazioni, aumentando ulteriormente la competitività del mercato. Le aziende stanno anche cercando di diversificare le loro fonti di approvvigionamento e ridurre la dipendenza dai combustibili fossili, rendendo i chimici bio-based una scelta strategica.\n" +
+      '\n' +
+      "In un contesto globale in rapida evoluzione, il mercato dei chimici bio-based rappresenta un'opportunità significativa per investitori e decision-maker, posizionandosi come un settore chiave per il futuro sostenibile dell'industria chimica.",
+    summary: "Il mercato dei chimici bio-based è stato valutato a 32 miliardi di dollari nel 2025 e si prevede che raggiunga i 70 miliardi di dollari entro il 2034, con un tasso di crescita annuale composto (CAGR) del 9,5% durante il periodo 2025-2034. Questi dati evidenziano un crescente interesse verso soluzioni sostenibili nel settore chimico, spinto dalla crescente domanda di prodotti ecologici e dalla necessità di ridurre l'impatto ambientale delle attività industriali.\n" +
+      '\n' +
+      "I chimici bio-based sono definiti come sostanze chimiche derivate da fonti rinnovabili, come piante e biomassa, utilizzate in vari settori, tra cui quello alimentare, cosmetico e farmaceutico. Questi materiali offrono un'alternativa sostenibile ai chimici tradizionali, contribuendo a una transizione verso un'economia circolare e a basse emissioni di carbonio.\n" +
+      '\n' +
+      "Attualmente, il mercato dei chimici bio-based sta attirando l'attenzione per diversi motivi. La crescente consapevolezza ambientale tra i consumatori e le aziende, insieme a normative sempre più severe riguardo all'uso di sostanze chimiche tossiche, spinge le imprese a investire in soluzioni sostenibili. Inoltre, l'innovazione tecnologica nel settore della biochimica ha reso possibile lo sviluppo di nuovi prodotti e applicazioni, aumentando ulteriormente la competitività del mercato. Le aziende stanno anche cercando di diversificare le loro fonti di approvvigionamento e ridurre la dipendenza dai combustibili fossili, rendendo i chimici bio-based una scelta strategica.\n" +
+      '\n' +
+      "In un contesto globale in rapida evoluzione, il mercato dei chimici bio-based rappresenta un'opportunità significativa per investitori e decision-maker, posizionandosi come un settore chiave per il futuro sostenibile dell'industria chimica.",
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'Il mercato dei chimici bio-based è stato valutato a 32 miliardi di dollari nel 2025 e si prevede che raggiunga i 70 miliardi di dollari entro il 2034, con un tasso di crescita annuale composto (CAGR) del 9,5% durante il periodo 2025-2034. Questi dati evidenziano un crescente interesse verso soluzion',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'e1a211e2-162f-41e5-ad8d-4c45742edd2c',
+    locale: 'ja',
+    title: 'Bio-Based Chemicals',
+    description: 'バイオベース化学品市場は、2025年に約1,200億米ドルと評価され、2034年には約2,500億米ドルに達すると予測されており、2025年から2034年の間に年平均成長率（CAGR）は約8.5%に達する見込みです。この成長は、持続可能な製品への需要の高まりや、環境への配慮から生まれる新たな規制に起因しています。\n' +
+      '\n' +
+      'バイオベース化学品とは、再生可能な資源から生産される化学物質を指し、石油由来の化学品に代わる持続可能な選択肢として注目されています。これには、バイオプラスチック、バイオ燃料、そしてバイオベースの溶剤などが含まれ、これらは環境負荷を軽減するための重要な役割を果たします。\n' +
+      '\n' +
+      '現在、この市場が注目を集めている理由は、企業や消費者が環境に優しい選択を求める傾向が強まっているためです。特に、プラスチック廃棄物問題や温暖化対策が喫緊の課題となっている中、バイオベース化学品は持続可能なソリューションとしての地位を確立しています。また、政府の政策や投資家の関心も高まっており、これにより市場の成長が加速しています。\n' +
+      '\n' +
+      'この分野への投資は、将来的な収益を見込む上で戦略的に重要であり、企業が競争力を維持するためには、バイオベース化学品の利用を検討することが不可欠です。持続可能な未来を築くための鍵となるこの市場において、早期の参入が競争優位性をもたらすでしょう。',
+    summary: 'バイオベース化学品市場は、2025年に約1,200億米ドルと評価され、2034年には約2,500億米ドルに達すると予測されており、2025年から2034年の間に年平均成長率（CAGR）は約8.5%に達する見込みです。この成長は、持続可能な製品への需要の高まりや、環境への配慮から生まれる新たな規制に起因しています。\n' +
+      '\n' +
+      'バイオベース化学品とは、再生可能な資源から生産される化学物質を指し、石油由来の化学品に代わる持続可能な選択肢として注目されています。これには、バイオプラスチック、バイオ燃料、そしてバイオベースの溶剤などが含まれ、これらは環境負荷を軽減するための重要な役割を果たします。\n' +
+      '\n' +
+      '現在、この市場が注目を集めている理由は、企業や消費者が環境に優しい選択を求める傾向が強まっているためです。特に、プラスチック廃棄物問題や温暖化対策が喫緊の課題となっている中、バイオベース化学品は持続可能なソリューションとしての地位を確立しています。また、政府の政策や投資家の関心も高まっており、これにより市場の成長が加速しています。\n' +
+      '\n' +
+      'この分野への投資は、将来的な収益を見込む上で戦略的に重要であり、企業が競争力を維持するためには、バイオベース化学品の利用を検討することが不可欠です。持続可能な未来を築くための鍵となるこの市場において、早期の参入が競争優位性をもたらすでしょう。',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'バイオベース化学品市場は、2025年に約1,200億米ドルと評価され、2034年には約2,500億米ドルに達すると予測されており、2025年から2034年の間に年平均成長率（CAGR）は約8.5%に達する見込みです。この成長は、持続可能な製品への需要の高まりや、環境への配慮から生まれる新たな規制に起因しています。\n' +
+      '\n' +
+      'バイオベース化学品とは、再生可能な資源から生産される化学物質を指し、石油由来の化学品に代わる持続可能な選択肢として注目されています。これには、バイオプラスチック、バイオ燃料、そしてバイオベースの溶剤などが含まれ、これらは環境負荷を軽減するための重要な役割を果たします。\n' +
+      '\n' +
+      '現在、この',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'd11535f9-82fd-419f-a955-4852133fab10',
+    locale: 'ko',
+    title: 'Bio-Based Chemicals',
+    description: '바이오 기반 화학물질(Bio-Based Chemicals) 시장은 2025년에 1,200억 달러로 평가되었으며, 2034년에는 2,500억 달러에 이를 것으로 예상되며, 2025년부터 2034년까지 연평균 성장률(CAGR)은 8.5%에 달할 것으로 보입니다. 이러한 성장은 지속 가능한 원료에 대한 수요 증가와 환경 규제 강화에 기인하고 있습니다.\n' +
+      '\n' +
+      '바이오 기반 화학물질은 생물학적 원료에서 유래한 화학물질로, 전통적인 석유 기반 화학물질의 대체재로 각광받고 있습니다. 이들은 주로 농업, 식품, 의약품 및 에너지 분야에서 활용되며, 지속 가능한 개발 목표(SDGs)에 부합하는 제품으로 인식되고 있습니다.\n' +
+      '\n' +
+      '현재 바이오 기반 화학물질 시장은 기후 변화와 환경 문제에 대한 인식이 높아짐에 따라 주목받고 있습니다. 많은 기업들이 탄소 발자국을 줄이기 위해 지속 가능한 솔루션을 찾고 있으며, 이는 바이오 기반 화학물질의 수요를 더욱 촉진하고 있습니다. 예를 들어, 유럽연합은 2030년까지 온실가스 배출량을 55% 줄이겠다는 목표를 세우고 있으며, 이는 바이오 기반 화학물질의 채택을 가속화하는 데 기여할 것입니다.\n' +
+      '\n' +
+      '이러한 시장의 성장 가능성은 투자자들에게 매력적인 기회를 제공하며, 기업들은 혁신적인 기술과 지속 가능한 공급망을 통해 경쟁력을 강화할 수 있습니다. 바이오 기반 화학물질 시장은 환경 친화적인 대안으로서의 가치뿐만 아니라, 경제적 이익을 창출할 수 있는 중요한 분야로 자리잡고 있습니다.',
+    summary: '바이오 기반 화학물질(Bio-Based Chemicals) 시장은 2025년에 1,200억 달러로 평가되었으며, 2034년에는 2,500억 달러에 이를 것으로 예상되며, 2025년부터 2034년까지 연평균 성장률(CAGR)은 8.5%에 달할 것으로 보입니다. 이러한 성장은 지속 가능한 원료에 대한 수요 증가와 환경 규제 강화에 기인하고 있습니다.\n' +
+      '\n' +
+      '바이오 기반 화학물질은 생물학적 원료에서 유래한 화학물질로, 전통적인 석유 기반 화학물질의 대체재로 각광받고 있습니다. 이들은 주로 농업, 식품, 의약품 및 에너지 분야에서 활용되며, 지속 가능한 개발 목표(SDGs)에 부합하는 제품으로 인식되고 있습니다.\n' +
+      '\n' +
+      '현재 바이오 기반 화학물질 시장은 기후 변화와 환경 문제에 대한 인식이 높아짐에 따라 주목받고 있습니다. 많은 기업들이 탄소 발자국을 줄이기 위해 지속 가능한 솔루션을 찾고 있으며, 이는 바이오 기반 화학물질의 수요를 더욱 촉진하고 있습니다. 예를 들어, 유럽연합은 2030년까지 온실가스 배출량을 55% 줄이겠다는 목표를 세우고 있으며, 이는 바이오 기반 화학물질의 채택을 가속화하는 데 기여할 것입니다.\n' +
+      '\n' +
+      '이러한 시장의 성장 가능성은 투자자들에게 매력적인 기회를 제공하며, 기업들은 혁신적인 기술과 지속 가능한 공급망을 통해 경쟁력을 강화할 수 있습니다. 바이오 기반 화학물질 시장은 환경 친화적인 대안으로서의 가치뿐만 아니라, 경제적 이익을 창출할 수 있는 중요한 분야로 자리잡고 있습니다.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: '바이오 기반 화학물질(Bio-Based Chemicals) 시장은 2025년에 1,200억 달러로 평가되었으며, 2034년에는 2,500억 달러에 이를 것으로 예상되며, 2025년부터 2034년까지 연평균 성장률(CAGR)은 8.5%에 달할 것으로 보입니다. 이러한 성장은 지속 가능한 원료에 대한 수요 증가와 환경 규제 강화에 기인하고 있습니다.\n' +
+      '\n' +
+      '바이오 기반 화학물질은 생물학적 원료에서 유래한 화학물질로, 전통적인 석유 기반 화학물질의 대체재로 각광받고 있습니다. 이들은 주로 농업, 식품, 의약품 및 에너지 분야에서 활용되며, 지',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  }
+]
+ GET /api/reports?locale=de 200 in 200ms
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."categories"."id" FROM "public"."categories" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT "public"."categories"."id", "public"."categories"."shortcode", "public"."categories"."slug", "public"."categories"."title", "public"."categories"."description", "public"."categories"."icon", "public"."categories"."featured", "public"."categories"."sort_order", "public"."categories"."seo_keywords", "public"."categories"."regional_keywords", "public"."categories"."search_volume", "public"."categories"."ranking_factors", "public"."categories"."meta_title", "public"."categories"."meta_description", "public"."categories"."canonical_url", "public"."categories"."og_title", "public"."categories"."og_description", "public"."categories"."og_image", "public"."categories"."hreflang_alts", "public"."categories"."status"::text, "public"."categories"."view_count", "public"."categories"."click_count", "public"."categories"."conversion_rate", "public"."categories"."created_at", "public"."categories"."updated_at", COALESCE("aggr_selection_0_Report"."_aggr_count_reports", 0) AS "_aggr_count_reports" FROM "public"."categories" LEFT JOIN (SELECT "public"."_CategoryToReport"."A", COUNT("public"."_CategoryToReport"."A") AS "_aggr_count_reports" FROM "public"."reports" LEFT JOIN "public"."_CategoryToReport" ON ("public"."reports"."id" = "public"."_CategoryToReport"."B") WHERE 1=1 GROUP BY "public"."_CategoryToReport"."A") AS "aggr_selection_0_Report" ON ("public"."categories"."id" = "aggr_selection_0_Report"."A") WHERE 1=1 ORDER BY "public"."categories"."featured" DESC, "public"."categories"."sort_order" ASC, "public"."categories"."title" ASC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."category_translations"."id", "public"."category_translations"."locale", "public"."category_translations"."title", "public"."category_translations"."description", "public"."category_translations"."slug", "public"."category_translations"."seo_keywords", "public"."category_translations"."meta_title", "public"."category_translations"."meta_description", "public"."category_translations"."og_title", "public"."category_translations"."og_description", "public"."category_translations"."status"::text, "public"."category_translations"."category_id" FROM "public"."category_translations" WHERE "public"."category_translations"."category_id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) OFFSET $11
+Category ID: 60371719-4a95-430c-a6fc-10020cd57586 Locale: de Translations: []
+Category ID: cfc66dec-086a-4f9a-804a-8b3675cd2ab8 Locale: de Translations: []
+Category ID: cc3eb485-d1dc-4ef8-a16a-c0bf35125f87 Locale: de Translations: []
+Category ID: ac043882-db99-4dcd-b184-221f7f03947f Locale: de Translations: []
+Category ID: d68413e3-615d-4949-bce0-1da53079ea93 Locale: de Translations: []
+Category ID: ecb1d497-0f42-4e45-99cf-3e352abf6a53 Locale: de Translations: []
+Category ID: 427a766d-f9c8-447f-b5f8-f747f02beb4e Locale: de Translations: []
+Category ID: 51c25a64-180f-40e7-afab-4c603baac09e Locale: de Translations: []
+Category ID: 542ef6e8-0e73-429f-b9cf-c0c9af2c0238 Locale: de Translations: []
+Category ID: 087d579d-69dd-4b33-83ae-47a9bb665640 Locale: de Translations: []
+ GET /api/categories?locale=de 200 in 105ms
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."reports"."id" FROM "public"."reports" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT "public"."reports"."id", "public"."reports"."sku", "public"."reports"."slug", "public"."reports"."title", "public"."reports"."description", "public"."reports"."summary", "public"."reports"."pages", "public"."reports"."published_date", "public"."reports"."base_year", "public"."reports"."forecast_period", "public"."reports"."table_of_contents", "public"."reports"."list_of_figures", "public"."reports"."methodology", "public"."reports"."key_findings", "public"."reports"."executive_summary", "public"."reports"."market_data", "public"."reports"."competitive_landscape", "public"."reports"."market_segmentation", "public"."reports"."regional_analysis", "public"."reports"."swot_analysis", "public"."reports"."key_players", "public"."reports"."regions", "public"."reports"."industry_tags", "public"."reports"."report_type", "public"."reports"."research_method", "public"."reports"."keywords", "public"."reports"."semantic_keywords", "public"."reports"."regional_keywords", "public"."reports"."competitor_keywords", "public"."reports"."trending_keywords", "public"."reports"."long_tail_keywords", "public"."reports"."meta_title", "public"."reports"."meta_description", "public"."reports"."canonical_url", "public"."reports"."og_title", "public"."reports"."og_description", "public"."reports"."og_image", "public"."reports"."twitter_title", "public"."reports"."twitter_description", "public"."reports"."schema_markup", "public"."reports"."breadcrumb_data", "public"."reports"."faq_data", "public"."reports"."single_price", "public"."reports"."multi_price", "public"."reports"."corporate_price", "public"."reports"."enterprise_price", "public"."reports"."currency", "public"."reports"."ai_generated", "public"."reports"."content_generation_workflow_id", "public"."reports"."human_approved", "public"."reports"."content_quality_score", "public"."reports"."ai_confidence_score", "public"."reports"."status"::text, "public"."reports"."featured", "public"."reports"."priority", "public"."reports"."view_count", "public"."reports"."download_count", "public"."reports"."share_count", "public"."reports"."enquiry_count", "public"."reports"."search_rankings", "public"."reports"."click_through_rate", "public"."reports"."average_position", "public"."reports"."impressions", "public"."reports"."clicks", "public"."reports"."bounce_rate", "public"."reports"."time_on_page", "public"."reports"."avg_rating", "public"."reports"."review_count", "public"."reports"."total_rating_points", "public"."reports"."created_at", "public"."reports"."updated_at", COALESCE("aggr_selection_0_ReportReview"."_aggr_count_reviews", 0) AS "_aggr_count_reviews", COALESCE("aggr_selection_1_OrderItem"."_aggr_count_orderItems", 0) AS "_aggr_count_orderItems" FROM "public"."reports" LEFT JOIN (SELECT "public"."report_reviews"."report_id", COUNT(*) AS "_aggr_count_reviews" FROM "public"."report_reviews" WHERE 1=1 GROUP BY "public"."report_reviews"."report_id") AS "aggr_selection_0_ReportReview" ON ("public"."reports"."id" = "aggr_selection_0_ReportReview"."report_id") LEFT JOIN (SELECT "public"."order_items"."report_id", COUNT(*) AS "_aggr_count_orderItems" FROM "public"."order_items" WHERE 1=1 GROUP BY "public"."order_items"."report_id") AS "aggr_selection_1_OrderItem" ON ("public"."reports"."id" = "aggr_selection_1_OrderItem"."report_id") WHERE 1=1 ORDER BY "public"."reports"."featured" DESC, "public"."reports"."priority" DESC, "public"."reports"."created_at" DESC LIMIT $1 OFFSET $2
+prisma:query SELECT "public"."_CategoryToReport"."B", "public"."_CategoryToReport"."A" FROM "public"."_CategoryToReport" WHERE "public"."_CategoryToReport"."B" IN ($1)
+prisma:query SELECT "public"."categories"."id", "public"."categories"."title", "public"."categories"."shortcode" FROM "public"."categories" WHERE "public"."categories"."id" IN ($1,$2,$3) OFFSET $4
+prisma:query SELECT "public"."report_translations"."id", "public"."report_translations"."locale", "public"."report_translations"."title", "public"."report_translations"."description", "public"."report_translations"."summary", "public"."report_translations"."slug", "public"."report_translations"."table_of_contents", "public"."report_translations"."list_of_figures", "public"."report_translations"."methodology", "public"."report_translations"."key_findings", "public"."report_translations"."executive_summary", "public"."report_translations"."keywords", "public"."report_translations"."semantic_keywords", "public"."report_translations"."localized_keywords", "public"."report_translations"."cultural_keywords", "public"."report_translations"."long_tail_keywords", "public"."report_translations"."local_competitor_keywords", "public"."report_translations"."meta_title", "public"."report_translations"."meta_description", "public"."report_translations"."canonical_url", "public"."report_translations"."og_title", "public"."report_translations"."og_description", "public"."report_translations"."og_image", "public"."report_translations"."twitter_title", "public"."report_translations"."twitter_description", "public"."report_translations"."schema_markup", "public"."report_translations"."breadcrumb_data", "public"."report_translations"."faq_data", "public"."report_translations"."local_business_schema", "public"."report_translations"."status"::text, "public"."report_translations"."report_id" FROM "public"."report_translations" WHERE "public"."report_translations"."report_id" IN ($1) OFFSET $2
+Report ID: fad2bc5a-a4cf-4909-828e-ef8285eb7afd Locale: de Translations: [
+  {
+    id: 'c2565bf5-d6be-4ff3-a359-f061996737e7',
+    locale: 'de',
+    title: 'Bio-Based Chemicals',
+    description: 'Der Markt für biobasierte Chemikalien wurde im Jahr 2025 auf 40 Milliarden USD geschätzt und wird bis 2034 voraussichtlich auf 100 Milliarden USD anwachsen, was einer jährlichen Wachstumsrate (CAGR) von 10 % im Zeitraum von 2025 bis 2034 entspricht. Diese Zahlen basieren auf aktuellen Marktanalysen und den wachsenden Anforderungen an nachhaltige und umweltfreundliche Produkte.\n' +
+      '\n' +
+      'Biobasierte Chemikalien sind chemische Produkte, die aus erneuerbaren Rohstoffen wie Pflanzen, Algen oder Mikroben hergestellt werden. Sie bieten eine nachhaltige Alternative zu petrochemischen Produkten und spielen eine entscheidende Rolle in der Reduzierung der Kohlenstoffemissionen sowie in der Förderung einer Kreislaufwirtschaft. Dieser Markt umfasst eine Vielzahl von Anwendungen, darunter Biokraftstoffe, Biopolymere und biobasierte Lösungsmittel, die in verschiedenen Industrien wie der Automobil-, Bau- und Lebensmittelindustrie eingesetzt werden.\n' +
+      '\n' +
+      'Der Markt für biobasierte Chemikalien zieht derzeit verstärkt Aufmerksamkeit auf sich, da Unternehmen und Regierungen weltweit ihre Nachhaltigkeitsziele vorantreiben. Die zunehmende Regulierung und der Druck von Verbrauchern, die umweltfreundliche Produkte verlangen, treiben die Nachfrage nach biobasierten Lösungen voran. Laut einer Studie der Internationalen Energieagentur wird erwartet, dass der Anteil biobasierter Chemikalien am Gesamtchemikalienmarkt bis 2030 signifikant steigen wird, was die strategische Relevanz dieses Sektors unterstreicht. Investoren und Entscheidungsträger sollten die Chancen in diesem dynamischen Markt erkennen, da Innovationen und technologische Fortschritte neue Geschäftsmöglichkeiten schaffen.\n' +
+      '\n' +
+      'Insgesamt stellt der Markt für biobasierte Chemikalien eine vielversprechende Wachstumschance dar, die nicht nur ökonomische Vorteile bietet, sondern auch zur globalen Nachhaltigkeitsagenda beiträgt.',
+    summary: 'Der Markt für biobasierte Chemikalien wurde im Jahr 2025 auf 40 Milliarden USD geschätzt und wird bis 2034 voraussichtlich auf 100 Milliarden USD anwachsen, was einer jährlichen Wachstumsrate (CAGR) von 10 % im Zeitraum von 2025 bis 2034 entspricht. Diese Zahlen basieren auf aktuellen Marktanalysen und den wachsenden Anforderungen an nachhaltige und umweltfreundliche Produkte.\n' +
+      '\n' +
+      'Biobasierte Chemikalien sind chemische Produkte, die aus erneuerbaren Rohstoffen wie Pflanzen, Algen oder Mikroben hergestellt werden. Sie bieten eine nachhaltige Alternative zu petrochemischen Produkten und spielen eine entscheidende Rolle in der Reduzierung der Kohlenstoffemissionen sowie in der Förderung einer Kreislaufwirtschaft. Dieser Markt umfasst eine Vielzahl von Anwendungen, darunter Biokraftstoffe, Biopolymere und biobasierte Lösungsmittel, die in verschiedenen Industrien wie der Automobil-, Bau- und Lebensmittelindustrie eingesetzt werden.\n' +
+      '\n' +
+      'Der Markt für biobasierte Chemikalien zieht derzeit verstärkt Aufmerksamkeit auf sich, da Unternehmen und Regierungen weltweit ihre Nachhaltigkeitsziele vorantreiben. Die zunehmende Regulierung und der Druck von Verbrauchern, die umweltfreundliche Produkte verlangen, treiben die Nachfrage nach biobasierten Lösungen voran. Laut einer Studie der Internationalen Energieagentur wird erwartet, dass der Anteil biobasierter Chemikalien am Gesamtchemikalienmarkt bis 2030 signifikant steigen wird, was die strategische Relevanz dieses Sektors unterstreicht. Investoren und Entscheidungsträger sollten die Chancen in diesem dynamischen Markt erkennen, da Innovationen und technologische Fortschritte neue Geschäftsmöglichkeiten schaffen.\n' +
+      '\n' +
+      'Insgesamt stellt der Markt für biobasierte Chemikalien eine vielversprechende Wachstumschance dar, die nicht nur ökonomische Vorteile bietet, sondern auch zur globalen Nachhaltigkeitsagenda beiträgt.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'Der Markt für biobasierte Chemikalien wurde im Jahr 2025 auf 40 Milliarden USD geschätzt und wird bis 2034 voraussichtlich auf 100 Milliarden USD anwachsen, was einer jährlichen Wachstumsrate (CAGR) von 10 % im Zeitraum von 2025 bis 2034 entspricht. Diese Zahlen basieren auf aktuellen Marktanalysen ',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'f7632e69-8c0e-4316-9764-b332cfcf5222',
+    locale: 'es',
+    title: 'Bio-Based Chemicals',
+    description: 'El mercado de los productos químicos bio-basados fue valorado en 21.8 mil millones de USD en 2025 y se prevé que alcance los 45.3 mil millones de USD para 2034, con una tasa de crecimiento anual compuesta (CAGR) del 8.6% durante el período de 2025 a 2034. Esta expansión se debe a la creciente demanda de soluciones sostenibles y la presión regulatoria para reducir las emisiones de carbono, lo que impulsa la transición hacia productos químicos derivados de fuentes renovables.\n' +
+      '\n' +
+      'Los productos químicos bio-basados son compuestos químicos que se producen a partir de materias primas renovables, como biomasa, en lugar de fuentes fósiles. Estos productos abarcan una amplia gama de aplicaciones, incluyendo plásticos, solventes, y aditivos, y son esenciales para la industria química moderna que busca alternativas más sostenibles y menos contaminantes.\n' +
+      '\n' +
+      'El interés en el mercado de los productos químicos bio-basados está en aumento debido a la creciente conciencia sobre el cambio climático y la necesidad de adoptar prácticas más sostenibles. Las empresas están invirtiendo en investigación y desarrollo para innovar en este sector, impulsadas por políticas gubernamentales que fomentan el uso de recursos renovables. Además, la demanda de consumidores por productos ecológicos está cambiando la dinámica del mercado, lo que lleva a un aumento en la producción y el uso de químicos bio-basados en diversas industrias, desde la automotriz hasta la alimentaria.\n' +
+      '\n' +
+      'Con un entorno regulatorio favorable y un cambio en las preferencias del consumidor, el mercado de productos químicos bio-basados se posiciona como una oportunidad estratégica para los inversores y las empresas que buscan liderar en sostenibilidad y responsabilidad ambiental.',
+    summary: 'El mercado de los productos químicos bio-basados fue valorado en 21.8 mil millones de USD en 2025 y se prevé que alcance los 45.3 mil millones de USD para 2034, con una tasa de crecimiento anual compuesta (CAGR) del 8.6% durante el período de 2025 a 2034. Esta expansión se debe a la creciente demanda de soluciones sostenibles y la presión regulatoria para reducir las emisiones de carbono, lo que impulsa la transición hacia productos químicos derivados de fuentes renovables.\n' +
+      '\n' +
+      'Los productos químicos bio-basados son compuestos químicos que se producen a partir de materias primas renovables, como biomasa, en lugar de fuentes fósiles. Estos productos abarcan una amplia gama de aplicaciones, incluyendo plásticos, solventes, y aditivos, y son esenciales para la industria química moderna que busca alternativas más sostenibles y menos contaminantes.\n' +
+      '\n' +
+      'El interés en el mercado de los productos químicos bio-basados está en aumento debido a la creciente conciencia sobre el cambio climático y la necesidad de adoptar prácticas más sostenibles. Las empresas están invirtiendo en investigación y desarrollo para innovar en este sector, impulsadas por políticas gubernamentales que fomentan el uso de recursos renovables. Además, la demanda de consumidores por productos ecológicos está cambiando la dinámica del mercado, lo que lleva a un aumento en la producción y el uso de químicos bio-basados en diversas industrias, desde la automotriz hasta la alimentaria.\n' +
+      '\n' +
+      'Con un entorno regulatorio favorable y un cambio en las preferencias del consumidor, el mercado de productos químicos bio-basados se posiciona como una oportunidad estratégica para los inversores y las empresas que buscan liderar en sostenibilidad y responsabilidad ambiental.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'El mercado de los productos químicos bio-basados fue valorado en 21.8 mil millones de USD en 2025 y se prevé que alcance los 45.3 mil millones de USD para 2034, con una tasa de crecimiento anual compuesta (CAGR) del 8.6% durante el período de 2025 a 2034. Esta expansión se debe a la creciente demand',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: '519e9d8c-6e4b-4a69-b98f-383841f176f0',
+    locale: 'fr',
+    title: 'Bio-Based Chemicals',
+    description: "Le marché des produits chimiques biosourcés était évalué à 36,5 milliards USD en 2025 et devrait atteindre 82,4 milliards USD d'ici 2034, affichant un taux de croissance annuel composé (CAGR) de 9,5 % pendant la période 2025-2034. Cette croissance est alimentée par une demande croissante pour des alternatives durables aux produits chimiques dérivés du pétrole, en réponse aux préoccupations environnementales et aux réglementations de plus en plus strictes sur les émissions de carbone.\n" +
+      '\n' +
+      "Les produits chimiques biosourcés sont définis comme des substances chimiques dérivées de matières premières renouvelables, telles que les plantes, les algues et les déchets organiques, qui remplacent les produits chimiques conventionnels basés sur le pétrole. Ces produits jouent un rôle crucial dans divers secteurs, notamment la chimie, l'agriculture, et les biocarburants, contribuant à une économie circulaire et durable.\n" +
+      '\n' +
+      "Actuellement, le marché des produits chimiques biosourcés attire une attention considérable en raison de l'augmentation des initiatives gouvernementales et des investissements privés visant à réduire l'empreinte carbone. Les entreprises adoptent des stratégies de développement durable pour répondre aux attentes des consommateurs et des investisseurs, qui privilégient de plus en plus les pratiques respectueuses de l'environnement. De plus, la montée des technologies de bioprocédés et l'innovation dans les matières premières renouvelables renforcent la position de ce marché en tant que solution viable face aux défis environnementaux contemporains.\n" +
+      '\n' +
+      'Avec une sensibilisation croissante aux enjeux écologiques et une pression accrue pour adopter des pratiques durables, le secteur des produits chimiques biosourcés est bien positionné pour jouer un rôle clé dans la transition vers une économie plus verte. Les décideurs, investisseurs et analystes doivent donc considérer ce marché comme une opportunité stratégique pour un avenir durable.',
+    summary: "Le marché des produits chimiques biosourcés était évalué à 36,5 milliards USD en 2025 et devrait atteindre 82,4 milliards USD d'ici 2034, affichant un taux de croissance annuel composé (CAGR) de 9,5 % pendant la période 2025-2034. Cette croissance est alimentée par une demande croissante pour des alternatives durables aux produits chimiques dérivés du pétrole, en réponse aux préoccupations environnementales et aux réglementations de plus en plus strictes sur les émissions de carbone.\n" +
+      '\n' +
+      "Les produits chimiques biosourcés sont définis comme des substances chimiques dérivées de matières premières renouvelables, telles que les plantes, les algues et les déchets organiques, qui remplacent les produits chimiques conventionnels basés sur le pétrole. Ces produits jouent un rôle crucial dans divers secteurs, notamment la chimie, l'agriculture, et les biocarburants, contribuant à une économie circulaire et durable.\n" +
+      '\n' +
+      "Actuellement, le marché des produits chimiques biosourcés attire une attention considérable en raison de l'augmentation des initiatives gouvernementales et des investissements privés visant à réduire l'empreinte carbone. Les entreprises adoptent des stratégies de développement durable pour répondre aux attentes des consommateurs et des investisseurs, qui privilégient de plus en plus les pratiques respectueuses de l'environnement. De plus, la montée des technologies de bioprocédés et l'innovation dans les matières premières renouvelables renforcent la position de ce marché en tant que solution viable face aux défis environnementaux contemporains.\n" +
+      '\n' +
+      'Avec une sensibilisation croissante aux enjeux écologiques et une pression accrue pour adopter des pratiques durables, le secteur des produits chimiques biosourcés est bien positionné pour jouer un rôle clé dans la transition vers une économie plus verte. Les décideurs, investisseurs et analystes doivent donc considérer ce marché comme une opportunité stratégique pour un avenir durable.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: "Le marché des produits chimiques biosourcés était évalué à 36,5 milliards USD en 2025 et devrait atteindre 82,4 milliards USD d'ici 2034, affichant un taux de croissance annuel composé (CAGR) de 9,5 % pendant la période 2025-2034. Cette croissance est alimentée par une demande croissante pour des al",
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'de80e22b-aac3-47a0-a9f7-111f46f5b5bc',
+    locale: 'it',
+    title: 'Bio-Based Chemicals',
+    description: "Il mercato dei chimici bio-based è stato valutato a 32 miliardi di dollari nel 2025 e si prevede che raggiunga i 70 miliardi di dollari entro il 2034, con un tasso di crescita annuale composto (CAGR) del 9,5% durante il periodo 2025-2034. Questi dati evidenziano un crescente interesse verso soluzioni sostenibili nel settore chimico, spinto dalla crescente domanda di prodotti ecologici e dalla necessità di ridurre l'impatto ambientale delle attività industriali.\n" +
+      '\n' +
+      "I chimici bio-based sono definiti come sostanze chimiche derivate da fonti rinnovabili, come piante e biomassa, utilizzate in vari settori, tra cui quello alimentare, cosmetico e farmaceutico. Questi materiali offrono un'alternativa sostenibile ai chimici tradizionali, contribuendo a una transizione verso un'economia circolare e a basse emissioni di carbonio.\n" +
+      '\n' +
+      "Attualmente, il mercato dei chimici bio-based sta attirando l'attenzione per diversi motivi. La crescente consapevolezza ambientale tra i consumatori e le aziende, insieme a normative sempre più severe riguardo all'uso di sostanze chimiche tossiche, spinge le imprese a investire in soluzioni sostenibili. Inoltre, l'innovazione tecnologica nel settore della biochimica ha reso possibile lo sviluppo di nuovi prodotti e applicazioni, aumentando ulteriormente la competitività del mercato. Le aziende stanno anche cercando di diversificare le loro fonti di approvvigionamento e ridurre la dipendenza dai combustibili fossili, rendendo i chimici bio-based una scelta strategica.\n" +
+      '\n' +
+      "In un contesto globale in rapida evoluzione, il mercato dei chimici bio-based rappresenta un'opportunità significativa per investitori e decision-maker, posizionandosi come un settore chiave per il futuro sostenibile dell'industria chimica.",
+    summary: "Il mercato dei chimici bio-based è stato valutato a 32 miliardi di dollari nel 2025 e si prevede che raggiunga i 70 miliardi di dollari entro il 2034, con un tasso di crescita annuale composto (CAGR) del 9,5% durante il periodo 2025-2034. Questi dati evidenziano un crescente interesse verso soluzioni sostenibili nel settore chimico, spinto dalla crescente domanda di prodotti ecologici e dalla necessità di ridurre l'impatto ambientale delle attività industriali.\n" +
+      '\n' +
+      "I chimici bio-based sono definiti come sostanze chimiche derivate da fonti rinnovabili, come piante e biomassa, utilizzate in vari settori, tra cui quello alimentare, cosmetico e farmaceutico. Questi materiali offrono un'alternativa sostenibile ai chimici tradizionali, contribuendo a una transizione verso un'economia circolare e a basse emissioni di carbonio.\n" +
+      '\n' +
+      "Attualmente, il mercato dei chimici bio-based sta attirando l'attenzione per diversi motivi. La crescente consapevolezza ambientale tra i consumatori e le aziende, insieme a normative sempre più severe riguardo all'uso di sostanze chimiche tossiche, spinge le imprese a investire in soluzioni sostenibili. Inoltre, l'innovazione tecnologica nel settore della biochimica ha reso possibile lo sviluppo di nuovi prodotti e applicazioni, aumentando ulteriormente la competitività del mercato. Le aziende stanno anche cercando di diversificare le loro fonti di approvvigionamento e ridurre la dipendenza dai combustibili fossili, rendendo i chimici bio-based una scelta strategica.\n" +
+      '\n' +
+      "In un contesto globale in rapida evoluzione, il mercato dei chimici bio-based rappresenta un'opportunità significativa per investitori e decision-maker, posizionandosi come un settore chiave per il futuro sostenibile dell'industria chimica.",
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'Il mercato dei chimici bio-based è stato valutato a 32 miliardi di dollari nel 2025 e si prevede che raggiunga i 70 miliardi di dollari entro il 2034, con un tasso di crescita annuale composto (CAGR) del 9,5% durante il periodo 2025-2034. Questi dati evidenziano un crescente interesse verso soluzion',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'e1a211e2-162f-41e5-ad8d-4c45742edd2c',
+    locale: 'ja',
+    title: 'Bio-Based Chemicals',
+    description: 'バイオベース化学品市場は、2025年に約1,200億米ドルと評価され、2034年には約2,500億米ドルに達すると予測されており、2025年から2034年の間に年平均成長率（CAGR）は約8.5%に達する見込みです。この成長は、持続可能な製品への需要の高まりや、環境への配慮から生まれる新たな規制に起因しています。\n' +
+      '\n' +
+      'バイオベース化学品とは、再生可能な資源から生産される化学物質を指し、石油由来の化学品に代わる持続可能な選択肢として注目されています。これには、バイオプラスチック、バイオ燃料、そしてバイオベースの溶剤などが含まれ、これらは環境負荷を軽減するための重要な役割を果たします。\n' +
+      '\n' +
+      '現在、この市場が注目を集めている理由は、企業や消費者が環境に優しい選択を求める傾向が強まっているためです。特に、プラスチック廃棄物問題や温暖化対策が喫緊の課題となっている中、バイオベース化学品は持続可能なソリューションとしての地位を確立しています。また、政府の政策や投資家の関心も高まっており、これにより市場の成長が加速しています。\n' +
+      '\n' +
+      'この分野への投資は、将来的な収益を見込む上で戦略的に重要であり、企業が競争力を維持するためには、バイオベース化学品の利用を検討することが不可欠です。持続可能な未来を築くための鍵となるこの市場において、早期の参入が競争優位性をもたらすでしょう。',
+    summary: 'バイオベース化学品市場は、2025年に約1,200億米ドルと評価され、2034年には約2,500億米ドルに達すると予測されており、2025年から2034年の間に年平均成長率（CAGR）は約8.5%に達する見込みです。この成長は、持続可能な製品への需要の高まりや、環境への配慮から生まれる新たな規制に起因しています。\n' +
+      '\n' +
+      'バイオベース化学品とは、再生可能な資源から生産される化学物質を指し、石油由来の化学品に代わる持続可能な選択肢として注目されています。これには、バイオプラスチック、バイオ燃料、そしてバイオベースの溶剤などが含まれ、これらは環境負荷を軽減するための重要な役割を果たします。\n' +
+      '\n' +
+      '現在、この市場が注目を集めている理由は、企業や消費者が環境に優しい選択を求める傾向が強まっているためです。特に、プラスチック廃棄物問題や温暖化対策が喫緊の課題となっている中、バイオベース化学品は持続可能なソリューションとしての地位を確立しています。また、政府の政策や投資家の関心も高まっており、これにより市場の成長が加速しています。\n' +
+      '\n' +
+      'この分野への投資は、将来的な収益を見込む上で戦略的に重要であり、企業が競争力を維持するためには、バイオベース化学品の利用を検討することが不可欠です。持続可能な未来を築くための鍵となるこの市場において、早期の参入が競争優位性をもたらすでしょう。',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: 'バイオベース化学品市場は、2025年に約1,200億米ドルと評価され、2034年には約2,500億米ドルに達すると予測されており、2025年から2034年の間に年平均成長率（CAGR）は約8.5%に達する見込みです。この成長は、持続可能な製品への需要の高まりや、環境への配慮から生まれる新たな規制に起因しています。\n' +
+      '\n' +
+      'バイオベース化学品とは、再生可能な資源から生産される化学物質を指し、石油由来の化学品に代わる持続可能な選択肢として注目されています。これには、バイオプラスチック、バイオ燃料、そしてバイオベースの溶剤などが含まれ、これらは環境負荷を軽減するための重要な役割を果たします。\n' +
+      '\n' +
+      '現在、この',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  },
+  {
+    id: 'd11535f9-82fd-419f-a955-4852133fab10',
+    locale: 'ko',
+    title: 'Bio-Based Chemicals',
+    description: '바이오 기반 화학물질(Bio-Based Chemicals) 시장은 2025년에 1,200억 달러로 평가되었으며, 2034년에는 2,500억 달러에 이를 것으로 예상되며, 2025년부터 2034년까지 연평균 성장률(CAGR)은 8.5%에 달할 것으로 보입니다. 이러한 성장은 지속 가능한 원료에 대한 수요 증가와 환경 규제 강화에 기인하고 있습니다.\n' +
+      '\n' +
+      '바이오 기반 화학물질은 생물학적 원료에서 유래한 화학물질로, 전통적인 석유 기반 화학물질의 대체재로 각광받고 있습니다. 이들은 주로 농업, 식품, 의약품 및 에너지 분야에서 활용되며, 지속 가능한 개발 목표(SDGs)에 부합하는 제품으로 인식되고 있습니다.\n' +
+      '\n' +
+      '현재 바이오 기반 화학물질 시장은 기후 변화와 환경 문제에 대한 인식이 높아짐에 따라 주목받고 있습니다. 많은 기업들이 탄소 발자국을 줄이기 위해 지속 가능한 솔루션을 찾고 있으며, 이는 바이오 기반 화학물질의 수요를 더욱 촉진하고 있습니다. 예를 들어, 유럽연합은 2030년까지 온실가스 배출량을 55% 줄이겠다는 목표를 세우고 있으며, 이는 바이오 기반 화학물질의 채택을 가속화하는 데 기여할 것입니다.\n' +
+      '\n' +
+      '이러한 시장의 성장 가능성은 투자자들에게 매력적인 기회를 제공하며, 기업들은 혁신적인 기술과 지속 가능한 공급망을 통해 경쟁력을 강화할 수 있습니다. 바이오 기반 화학물질 시장은 환경 친화적인 대안으로서의 가치뿐만 아니라, 경제적 이익을 창출할 수 있는 중요한 분야로 자리잡고 있습니다.',
+    summary: '바이오 기반 화학물질(Bio-Based Chemicals) 시장은 2025년에 1,200억 달러로 평가되었으며, 2034년에는 2,500억 달러에 이를 것으로 예상되며, 2025년부터 2034년까지 연평균 성장률(CAGR)은 8.5%에 달할 것으로 보입니다. 이러한 성장은 지속 가능한 원료에 대한 수요 증가와 환경 규제 강화에 기인하고 있습니다.\n' +
+      '\n' +
+      '바이오 기반 화학물질은 생물학적 원료에서 유래한 화학물질로, 전통적인 석유 기반 화학물질의 대체재로 각광받고 있습니다. 이들은 주로 농업, 식품, 의약품 및 에너지 분야에서 활용되며, 지속 가능한 개발 목표(SDGs)에 부합하는 제품으로 인식되고 있습니다.\n' +
+      '\n' +
+      '현재 바이오 기반 화학물질 시장은 기후 변화와 환경 문제에 대한 인식이 높아짐에 따라 주목받고 있습니다. 많은 기업들이 탄소 발자국을 줄이기 위해 지속 가능한 솔루션을 찾고 있으며, 이는 바이오 기반 화학물질의 수요를 더욱 촉진하고 있습니다. 예를 들어, 유럽연합은 2030년까지 온실가스 배출량을 55% 줄이겠다는 목표를 세우고 있으며, 이는 바이오 기반 화학물질의 채택을 가속화하는 데 기여할 것입니다.\n' +
+      '\n' +
+      '이러한 시장의 성장 가능성은 투자자들에게 매력적인 기회를 제공하며, 기업들은 혁신적인 기술과 지속 가능한 공급망을 통해 경쟁력을 강화할 수 있습니다. 바이오 기반 화학물질 시장은 환경 친화적인 대안으로서의 가치뿐만 아니라, 경제적 이익을 창출할 수 있는 중요한 분야로 자리잡고 있습니다.',
+    slug: 'bio-based-chemicals',
+    tableOfContents: null,
+    listOfFigures: null,
+    methodology: null,
+    keyFindings: [],
+    executiveSummary: null,
+    keywords: [],
+    semanticKeywords: [],
+    localizedKeywords: [],
+    culturalKeywords: [],
+    longTailKeywords: [],
+    localCompetitorKeywords: [],
+    metaTitle: 'Bio-Based Chemicals',
+    metaDescription: '바이오 기반 화학물질(Bio-Based Chemicals) 시장은 2025년에 1,200억 달러로 평가되었으며, 2034년에는 2,500억 달러에 이를 것으로 예상되며, 2025년부터 2034년까지 연평균 성장률(CAGR)은 8.5%에 달할 것으로 보입니다. 이러한 성장은 지속 가능한 원료에 대한 수요 증가와 환경 규제 강화에 기인하고 있습니다.\n' +
+      '\n' +
+      '바이오 기반 화학물질은 생물학적 원료에서 유래한 화학물질로, 전통적인 석유 기반 화학물질의 대체재로 각광받고 있습니다. 이들은 주로 농업, 식품, 의약품 및 에너지 분야에서 활용되며, 지',
+    canonicalUrl: null,
+    ogTitle: null,
+    ogDescription: null,
+    ogImage: null,
+    twitterTitle: null,
+    twitterDescription: null,
+    schemaMarkup: null,
+    breadcrumbData: null,
+    faqData: null,
+    localBusinessSchema: null,
+    status: 'PUBLISHED'
+  }
+]
+ GET /api/reports?locale=de 200 in 88ms

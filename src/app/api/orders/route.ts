@@ -25,7 +25,17 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search') || ''
 
     const skip = (page - 1) * limit
-    const where: any = {}
+    
+    interface OrderWhereClause {
+      OR?: Array<{
+        orderNumber?: { contains: string; mode: 'insensitive' };
+        customerName?: { contains: string; mode: 'insensitive' };
+        customerEmail?: { contains: string; mode: 'insensitive' };
+      }>;
+      status?: string;
+      paymentStatus?: string;
+    }
+    const where: OrderWhereClause = {}
 
     if (search) {
       where.OR = [

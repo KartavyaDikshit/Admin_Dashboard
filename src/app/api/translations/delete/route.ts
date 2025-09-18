@@ -25,10 +25,12 @@ export async function POST(request: NextRequest) {
             },
         });
 
-        return NextResponse.json({ success: true, deletedCount }, { status: 200 })
-  } catch (error: any) {
-    console.error('Delete translation jobs error:', error)
-    return NextResponse.json({ error: 'Internal server error', message: error.message }, { status: 500 })
-  } finally {
-    revalidatePath('/admin/translations') // Revalidate the translations page
-  }
+        return NextResponse.json({ success: true, deletedCount: deleteResult.count }, { status: 200 });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An unknown error occurred';
+        console.error('Delete translation jobs error:', error);
+        return NextResponse.json({ error: 'Internal server error', message: message }, { status: 500 });
+    } finally {
+        revalidatePath('/admin/translations'); // Revalidate the translations page
+    }
+}

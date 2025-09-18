@@ -50,9 +50,9 @@ export interface OptimizationStrategy {
   enabled: boolean;
 }
 
-export interface APIResponse {
+export interface APIResponse<T = unknown> {
   success: boolean;
-  data?: any;
+  data?: T;
   error?: string;
   tokenUsage?: TokenUsage;
 }

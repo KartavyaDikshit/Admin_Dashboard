@@ -20,9 +20,11 @@ export async function POST(request: NextRequest) {
     )
 
     return NextResponse.json({ success: true, batch }, { status: 200 })
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
     console.error('Batch translate categories API error:', error)
-    return NextResponse.json({ error: 'Internal server error', message: error.message }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error', message: message }, { status: 500 })
   } finally {
     revalidatePath('/admin/translations') // Revalidate the translations page
   }
+}

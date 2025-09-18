@@ -63,7 +63,7 @@ export class TokenOptimizer {
   }
 
   // Strategy 3: Optimize JSON structure
-  static optimizeJsonStructure(data: any): string {
+  static optimizeJsonStructure(data: unknown): string {
     return JSON.stringify(data, null, 0); // No indentation
   }
 

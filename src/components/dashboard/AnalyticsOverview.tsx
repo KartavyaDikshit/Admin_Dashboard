@@ -17,6 +17,37 @@ interface AiUsageData {
   totalRequests: number;
 }
 
+interface Order {
+  id: string;
+  orderNumber: string;
+  customerName: string;
+  items: unknown[]; // This will need to be fixed later
+  total: number;
+  createdAt: string;
+}
+
+interface OverviewData {
+  overview: {
+    totalReports: number
+    totalOrders: number
+    totalUsers: number
+    totalRevenue: number
+  }
+  recentOrders: Order[]
+  topReports: Report[]
+  aiUsage: AiUsageData;
+}
+
+interface TranslationUsageData {
+  translationUsage: AiUsageData;
+}
+
+interface Report {
+  id: string;
+  title: string;
+  // Add other properties if they are used in the component
+}
+
 interface AnalyticsData {
   overview: {
     totalReports: number
@@ -24,8 +55,8 @@ interface AnalyticsData {
     totalUsers: number
     totalRevenue: number
   }
-  recentOrders: any[]
-  topReports: any[]
+  recentOrders: Order[]
+  topReports: Report[]
   aiUsage: AiUsageData;
   translationUsage: AiUsageData;
 }
@@ -46,7 +77,7 @@ export default function AnalyticsOverview() {
         fetch(`/api/analytics/translation-usage?period=${period}`),
       ]);
 
-      const [overviewData, translationUsageData] = await Promise.all([
+      const [overviewData, translationUsageData]: [OverviewData, TranslationUsageData] = await Promise.all([
         overviewRes.json(),
         translationUsageRes.json(),
       ]);

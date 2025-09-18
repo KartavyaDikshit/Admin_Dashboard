@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '../../../auth/[...nextauth]/route'
 import { aiContentService } from '@/lib/services/aiService'
+import { ContentGenerationWorkflow, ContentGenerationJob } from '@prisma/client'; // Added import
 
 export async function GET(
   request: NextRequest,
@@ -20,11 +21,11 @@ export async function GET(
     }
 
     // Explicitly convert Decimal types to strings before sending response
-    const processWorkflowForResponse = (wf: any) => {
+    const processWorkflowForResponse = (wf: ContentGenerationWorkflow & { jobs: ContentGenerationJob[]; childWorkflows: ContentGenerationWorkflow[] }) => {
       return {
         ...wf,
         totalCost: wf.totalCost ? wf.totalCost.toString() : '0.0000',
-        jobs: wf.jobs.map((job: any) => ({
+        jobs: wf.jobs.map((job: ContentGenerationJob) => ({
           ...job,
           cost: job.cost ? job.cost.toString() : '0.0000',
         })),

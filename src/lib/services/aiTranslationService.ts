@@ -1,6 +1,6 @@
 import { openai, estimateTokenCount, calculateCost, MODEL_NAME } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
-import { TranslationJobStatus, ContentStatus, TranslationStatus } from '@prisma/client';
+import { TranslationJobStatus, TranslationStatus, Report, Category, TranslationJob } from '@prisma/client';
 import { generateSlug } from '@/lib/utils';
 import { getCostPerToken } from '@/lib/services/apiUsageLogService';
 
@@ -14,9 +14,9 @@ export class AITranslationService {
   ) {
     try {
       // 1. Fetch Source Content
-      let originalContent: any
+      let originalContent: Report | Category
       let fieldsToTranslate: { key: string; value: string }[] = []
-      let baseModel: any
+      let baseModel: Report | Category
 
       if (contentType === 'REPORT') {
         baseModel = await prisma.report.findUnique({
@@ -30,7 +30,7 @@ export class AITranslationService {
             metaDescription: true,
             slug: true,
           },
-        })
+        }) as Report;
         if (!baseModel) throw new Error('Report not found')
         originalContent = baseModel
 
@@ -52,7 +52,7 @@ export class AITranslationService {
             metaDescription: true,
             slug: true,
           },
-        })
+        }) as Category;
         if (!baseModel) throw new Error('Category not found')
         originalContent = baseModel
 
@@ -72,7 +72,7 @@ export class AITranslationService {
       console.log('Original Text Input for Translation:', originalTextInput); // Debug log
 
       // 2. Check for Existing Translation
-      let existingTranslationJob = await prisma.translationJob.findFirst({
+      const existingTranslationJob = await prisma.translationJob.findFirst({
         where: {
           contentId,
           contentType,
@@ -102,7 +102,7 @@ export class AITranslationService {
         batchId, // Store batchId
       }
 
-      let translationJob: any
+      let translationJob: TranslationJob
       if (existingTranslationJob) {
         translationJob = await prisma.translationJob.update({
           where: { id: existingTranslationJob.id },
@@ -148,23 +148,25 @@ ${originalTextInput}`
           response_format: { type: "json_object" },
         })
         console.log('Raw OpenAI Completion Response:', JSON.stringify(completion, null, 2)); // Debug log
-      } catch (openaiError: any) {
+      } catch (openaiError: unknown) {
+        const message = openaiError instanceof Error ? openaiError.message : String(openaiError);
         console.error('OpenAI API Call Error:', openaiError); // Debug log
-        throw new Error(`OpenAI API call failed: ${openaiError.message || openaiError}`);
+        throw new Error(`OpenAI API call failed: ${message}`);
       }
 
 
       const translatedOutputText = completion.choices[0]?.message?.content || ''
       console.log('Translated Output Text (raw from OpenAI):', translatedOutputText); // Debug log
-      let translatedFields: any
+      let translatedFields: Record<string, string>;
 
       try {
         translatedFields = JSON.parse(translatedOutputText)
         console.log('Parsed Translated Fields:', translatedFields); // Debug log
-      } catch (parseError: any) {
+      } catch (parseError: unknown) {
+        const message = parseError instanceof Error ? parseError.message : 'An unknown error occurred';
         console.error('Failed to parse OpenAI response as JSON:', parseError)
         console.error('Problematic OpenAI response:', translatedOutputText); // Log the problematic response
-        throw new Error(`AI response was not valid JSON. Error: ${parseError.message}. Response: ${translatedOutputText.substring(0, 200)}...`)
+        throw new Error(`AI response was not valid JSON. Error: ${message}. Response: ${translatedOutputText.substring(0, 200)}...`)
       }
 
       // Generate SEO-friendly slug from translated title - REFINED
@@ -279,18 +281,22 @@ ${originalTextInput}`
       }
 
       return translationJob
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(`Error translating ${contentType} ${contentId} to ${targetLocale}:`, error)
+      
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      const translationJobId = error && typeof error === 'object' && 'translationJobId' in error ? String((error as { translationJobId: unknown }).translationJobId) : undefined;
+
       // Update job status to FAILED if an ID exists
-      if (error.translationJobId) { // This error.translationJobId might not be set correctly
+      if (translationJobId) {
         await prisma.translationJob.update({
-          where: { id: error.translationJobId },
+          where: { id: translationJobId },
           data: {
             status: TranslationJobStatus.FAILED,
-            errorMessage: error.message,
+            errorMessage: errorMessage,
           },
         })
-      } else if (error.message && error.message.includes('AI response was not valid JSON')) {
+      } else if (errorMessage.includes('AI response was not valid JSON')) {
          // If it's a JSON parsing error, we might not have the job ID in the error object
          // Try to find the job by contentId, contentType, targetLocale and update it
          const jobToUpdate = await prisma.translationJob.findFirst({
@@ -306,7 +312,7 @@ ${originalTextInput}`
                 where: { id: jobToUpdate.id },
                 data: {
                     status: TranslationJobStatus.FAILED,
-                    errorMessage: error.message,
+                    errorMessage: errorMessage,
                 },
             });
          }

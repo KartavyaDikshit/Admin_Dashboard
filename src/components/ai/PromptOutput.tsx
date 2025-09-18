@@ -1,32 +1,60 @@
 'use client';
 
-import { useState } => {
-    return new Intl.DateTimeFormat('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    }).format(new Date(date));
-  };
+import { useState } from 'react';
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 4,
-      maximumFractionDigits: 6
-    }).format(amount);
-  };
+// Helper functions can be defined outside the component
+// if they don't rely on props or state.
+const formatTimestamp = (date: string | number) => {
+  return new Intl.DateTimeFormat('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  }).format(new Date(date));
+};
 
-  const getWordCount = (text: string) => {
-    return text.trim().split(/\s+/).length;
-  };
+const formatCurrency = (amount: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 4,
+    maximumFractionDigits: 6
+  }).format(amount);
+};
 
-  const getReadingTime = (text: string) => {
-    const wordsPerMinute = 200;
-    const words = getWordCount(text);
-    return Math.ceil(words / wordsPerMinute);
+const getWordCount = (text: string) => {
+  if (!text) return 0;
+  return text.trim().split(/\s+/).length;
+};
+
+const getReadingTime = (text: string) => {
+  if (!text) return 0;
+  const wordsPerMinute = 200;
+  const words = getWordCount(text);
+  return Math.ceil(words / wordsPerMinute);
+};
+
+// Define the props type for the component
+interface PromptOutputProps {
+  index: number;
+  result: {
+    title: string;
+    timestamp: string | number;
+    tokenUsage: {
+      totalTokens: number;
+      inputTokens: number;
+      outputTokens: number;
+      cost: number;
+    };
+    executionTime: number;
+    content: string;
+    promptId: string;
   };
+}
+
+export default function PromptOutput({ index, result }: PromptOutputProps) {
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [showMetrics, setShowMetrics] = useState(true);
 
   return (
     <div className="card">
@@ -161,4 +189,4 @@ import { useState } => {
       )}
     </div>
   );
-};
+}

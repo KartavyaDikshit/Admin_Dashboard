@@ -1,6 +1,7 @@
 import { createMocks } from 'node-mocks-http'
 import { GET, POST } from '@/app/api/reports/route'
 import { prisma } from '@/lib/prisma'
+import { NextRequest } from 'next/server'
 
 // Mock prisma
 jest.mock('@/lib/prisma', () => ({
@@ -40,7 +41,7 @@ describe('/api/reports', () => {
         url: '/api/reports?page=1&limit=25'
       })
 
-      const response = await GET(req as any)
+      const response = await GET(req as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -62,7 +63,7 @@ describe('/api/reports', () => {
         url: '/api/reports?search=artificial+intelligence'
       })
 
-      await GET(req as any)
+      await GET(req as NextRequest)
 
       expect(prisma.report.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -97,7 +98,7 @@ describe('/api/reports', () => {
         }
       })
 
-      const response = await POST(req as any)
+      const response = await POST(req as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -114,7 +115,7 @@ describe('/api/reports', () => {
         }
       })
 
-      const response = await POST(req as any)
+      const response = await POST(req as NextRequest)
       const data = await response.json()
 
       expect(response.status).toBe(400)

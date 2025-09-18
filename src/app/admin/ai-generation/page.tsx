@@ -1,49 +1,80 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import AdminLayout from '@/components/layout/AdminLayout'
-import GenerationWizard from '@/components/ai/GenerationWizard'
-import WorkflowDetailsModal from '@/components/ai/WorkflowDetailsModal'
-import { toast } from 'react-hot-toast'
-import { formatDateTime } from '@/lib/utils'
+import { useState, useEffect } from 'react';
+import AdminLayout from '@/components/layout/AdminLayout';
+import GenerationWizard from '@/components/ai/GenerationWizard';
+import WorkflowDetailsModal from '@/components/ai/WorkflowDetailsModal';
+import { toast } from 'react-hot-toast';
+import { formatDateTime } from '@/lib/utils';
+
+// Define specific types to replace 'any'
+interface Job {
+  id: string;
+  phase: number;
+  status: string;
+  totalTokens: number;
+  cost: string | null;
+  outputText: string;
+  imageUrl?: string | null;
+  errorMessage?: string | null;
+}
+
+interface Workflow {
+  id: string;
+  reportTitle: string;
+  workflowStatus: string;
+  currentPhase: number;
+  createdAt: string;
+  totalTokensUsed: number;
+  totalCost: string | null;
+  jobs: Job[];
+  childWorkflows: Workflow[];
+  parentWorkflowId?: string | null;
+  language: string;
+}
+
+interface Category {
+  id: string;
+  title: string;
+}
 
 export default function AiGenerationPage() {
-  const [workflows, setWorkflows] = useState<any[]>([])
-  const [categories, setCategories] = useState<any[]>([])
-  const [selectedCategories, setSelectedCategories] = useState<Record<string, string[]>>({})
-  const [loadingWorkflows, setLoadingWorkflows] = useState(true)
-  const [activeWorkflowId, setActiveWorkflowId] = useState<string | null>(null)
-  const [selectedWorkflow, setSelectedWorkflow] = useState<any | null>(null)
+  const [workflows, setWorkflows] = useState<Workflow[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<Record<string, string[]>>({});
+  const [loadingWorkflows, setLoadingWorkflows] = useState(true);
+  const [activeWorkflowId, setActiveWorkflowId] = useState<string | null>(null);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<Workflow | null>(null);
   const [isApproving, setIsApproving] = useState(false);
   const [isApprovingAllChildWorkflows, setIsApprovingAllChildWorkflows] = useState(false);
   const [selectedWorkflowIds, setSelectedWorkflowIds] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchAllWorkflows = async () => {
-      setLoadingWorkflows(true)
+      setLoadingWorkflows(true);
       try {
-        const response = await fetch('/api/ai/workflow/all')
-        const data = await response.json()
+        const response = await fetch('/api/ai/workflow/all');
+        const data = await response.json();
         if (response.ok) {
           const workflows = data.workflows;
-          const parentWorkflows = workflows.filter(wf => !wf.parentWorkflowId);
-          const childWorkflows = workflows.filter(wf => wf.parentWorkflowId);
+          const parentWorkflows = workflows.filter((wf: Workflow) => !wf.parentWorkflowId);
+          const childWorkflows = workflows.filter((wf: Workflow) => wf.parentWorkflowId);
 
-          const groupedWorkflows = parentWorkflows.map(parent => ({
+          const groupedWorkflows = parentWorkflows.map((parent: Workflow) => ({
             ...parent,
-            childWorkflows: childWorkflows.filter(child => child.parentWorkflowId === parent.id)
+            childWorkflows: childWorkflows.filter((child: Workflow) => child.parentWorkflowId === parent.id)
           }));
 
-          setWorkflows(groupedWorkflows)
+          setWorkflows(groupedWorkflows);
         } else {
-          toast.error(data.error || 'Failed to fetch workflows')
+          toast.error(data.error || 'Failed to fetch workflows');
         }
       } catch (error) {
-        toast.error('An error occurred while fetching workflows.')
+        toast.error('An error occurred while fetching workflows.');
       } finally {
-        setLoadingWorkflows(false)
+        setLoadingWorkflows(false);
       }
-    }
+    };
 
     const fetchCategories = async () => {
       try {
@@ -59,22 +90,22 @@ export default function AiGenerationPage() {
       }
     };
 
-    fetchAllWorkflows()
-    fetchCategories()
+    fetchAllWorkflows();
+    fetchCategories();
 
-    let interval: NodeJS.Timeout | null = null
+    let interval: NodeJS.Timeout | null = null;
     if (activeWorkflowId) {
-      interval = setInterval(() => fetchWorkflowStatus(activeWorkflowId), 5000)
+      interval = setInterval(() => fetchWorkflowStatus(activeWorkflowId), 5000);
     }
     return () => {
-      if (interval) clearInterval(interval)
-    }
-  }, [activeWorkflowId])
+      if (interval) clearInterval(interval);
+    };
+  }, [activeWorkflowId]);
 
   const fetchWorkflowStatus = async (workflowId: string) => {
     try {
-      const response = await fetch(`/api/ai/workflow/${workflowId}`)
-      const data = await response.json()
+      const response = await fetch(`/api/ai/workflow/${workflowId}`);
+      const data = await response.json();
       if (response.ok) {
         setWorkflows(prevWorkflows => {
           const updatedWorkflows = prevWorkflows.map(wf => {
@@ -86,52 +117,53 @@ export default function AiGenerationPage() {
           return updatedWorkflows;
         });
         if (data.workflow.workflowStatus !== 'GENERATING') {
-          toast.success(`Workflow ${data.workflow.workflowStatus.replace('_', ' ').toLowerCase()}!`)
-          setActiveWorkflowId(null)
+          toast.success(`Workflow ${data.workflow.workflowStatus.replace('_', ' ').toLowerCase()}!`);
+          setActiveWorkflowId(null);
         }
       } else {
-        toast.error(data.error || 'Failed to fetch workflow status')
-        setActiveWorkflowId(null)
+        toast.error(data.error || 'Failed to fetch workflow status');
+        setActiveWorkflowId(null);
       }
     } catch (error) {
-      toast.error('An error occurred while fetching workflow status.')
-      setActiveWorkflowId(null)
+      toast.error('An error occurred while fetching workflow status.');
+      setActiveWorkflowId(null);
     }
-  }
+  };
 
   const handleStartGeneration = (workflowId: string, reportTitle: string) => {
-    setActiveWorkflowId(workflowId)
+    setActiveWorkflowId(workflowId);
     setWorkflows(prevWorkflows => [
       ...prevWorkflows,
-      { id: workflowId, reportTitle, workflowStatus: 'GENERATING', currentPhase: 0, createdAt: new Date().toISOString(), jobs: [] }
-    ])
-    fetchWorkflowStatus(workflowId)
-  }
+      { id: workflowId, reportTitle, workflowStatus: 'GENERATING', currentPhase: 0, createdAt: new Date().toISOString(), jobs: [], childWorkflows: [], language: 'en', totalTokensUsed: 0, totalCost: '0' }
+    ]);
+    fetchWorkflowStatus(workflowId);
+  };
 
   const handleRegeneratePhase = async (workflowId: string, phase: number) => {
-    setLoadingWorkflows(true)
+    setLoadingWorkflows(true);
     try {
-      const response = await fetch(`/api/ai/workflow/${workflowId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'regenerate', phase })
-      })
-      const data = await response.json()
+      const response = await fetch(`/api/ai/workflow/${workflowId}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'regenerate', phase })
+        });
+      const data = await response.json();
       if (response.ok) {
-        toast.success(`Phase ${phase} regeneration started!`)
-        fetchWorkflowStatus(workflowId)
+        toast.success(`Phase ${phase} regeneration started!`);
+        fetchWorkflowStatus(workflowId);
       } else {
-        toast.error(data.error || 'Failed to regenerate phase')
+        toast.error(data.error || 'Failed to regenerate phase');
       }
     } catch (error) {
-      toast.error('An error occurred during phase regeneration.')
+      toast.error('An error occurred during phase regeneration.');
     } finally {
-      setLoadingWorkflows(false)
+      setLoadingWorkflows(false);
     }
-  }
+  };
 
-  const handleSavePhaseOutput = async (workflowId: string, jobId: string, newOutput: string, imageFile?: File) => {
-    setLoadingWorkflows(true)
+  const handleSavePhaseOutput = async (workflowId: string, jobId: string, newOutput: string, imageFile?: File | null) => {
+    setLoadingWorkflows(true);
     let imageUrl: string | undefined;
 
     if (imageFile) {
@@ -159,27 +191,24 @@ export default function AiGenerationPage() {
     }
 
     try {
-      const response = await fetch(`/api/ai/workflow/${workflowId}/job/${jobId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ outputText: newOutput, imageUrl })
-      })
-      const data = await response.json()
+      const response = await fetch(`/api/ai/workflow/${workflowId}/job/${jobId}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ outputText: newOutput, imageUrl })
+        });
+      const data = await response.json();
       if (response.ok) {
-        toast.success(`Phase output saved successfully!`)
-        fetchWorkflowStatus(workflowId)
+        toast.success(`Phase output saved successfully!`);
+        fetchWorkflowStatus(workflowId);
       } else {
-        toast.error(data.error || 'Failed to save phase output')
+        toast.error(data.error || 'Failed to save phase output');
       }
     } catch (error) {
-      toast.error('An error occurred during saving phase output.')
+      toast.error('An error occurred during saving phase output.');
     } finally {
-      setLoadingWorkflows(false)
+      setLoadingWorkflows(false);
     }
-  }
-
-  const handleImageChange = (jobId: string, file: File | null) => {
-    // This function is now handled within handleSavePhaseOutput
   };
 
   const handleApproveReport = async (workflowId: string) => {
@@ -213,30 +242,30 @@ export default function AiGenerationPage() {
         toast.success('Report approved successfully!');
         // Refresh workflows
         const fetchAllWorkflows = async () => {
-          setLoadingWorkflows(true)
+          setLoadingWorkflows(true);
           try {
-            const response = await fetch('/api/ai/workflow/all')
-            const data = await response.json()
+            const response = await fetch('/api/ai/workflow/all');
+            const data = await response.json();
             if (response.ok) {
               const workflows = data.workflows;
-              const parentWorkflows = workflows.filter(wf => !wf.parentWorkflowId);
-              const childWorkflows = workflows.filter(wf => wf.parentWorkflowId);
+              const parentWorkflows = workflows.filter((wf: Workflow) => !wf.parentWorkflowId);
+              const childWorkflows = workflows.filter((wf: Workflow) => wf.parentWorkflowId);
 
-              const groupedWorkflows = parentWorkflows.map(parent => ({
+              const groupedWorkflows = parentWorkflows.map((parent: Workflow) => ({
                 ...parent,
-                childWorkflows: childWorkflows.filter(child => child.parentWorkflowId === parent.id)
+                childWorkflows: childWorkflows.filter((child: Workflow) => child.parentWorkflowId === parent.id)
               }));
 
-              setWorkflows(groupedWorkflows)
+              setWorkflows(groupedWorkflows);
             } else {
-              toast.error(data.error || 'Failed to fetch workflows')
+              toast.error(data.error || 'Failed to fetch workflows');
             }
           } catch (error) {
-            toast.error('An error occurred while fetching workflows.')
+            toast.error('An error occurred while fetching workflows.');
           } finally {
-            setLoadingWorkflows(false)
+            setLoadingWorkflows(false);
           }
-        }
+        };
         fetchAllWorkflows();
         setSelectedWorkflow(null);
       } else {
@@ -307,30 +336,30 @@ export default function AiGenerationPage() {
         setSelectedWorkflowIds([]); // Clear selection
         // Refresh workflows
         const fetchAllWorkflows = async () => {
-          setLoadingWorkflows(true)
+          setLoadingWorkflows(true);
           try {
-            const response = await fetch('/api/ai/workflow/all')
-            const data = await response.json()
+            const response = await fetch('/api/ai/workflow/all');
+            const data = await response.json();
             if (response.ok) {
               const workflows = data.workflows;
-              const parentWorkflows = workflows.filter(wf => !wf.parentWorkflowId);
-              const childWorkflows = workflows.filter(wf => wf.parentWorkflowId);
+              const parentWorkflows = workflows.filter((wf: Workflow) => !wf.parentWorkflowId);
+              const childWorkflows = workflows.filter((wf: Workflow) => wf.parentWorkflowId);
 
-              const groupedWorkflows = parentWorkflows.map(parent => ({
+              const groupedWorkflows = parentWorkflows.map((parent: Workflow) => ({
                 ...parent,
-                childWorkflows: childWorkflows.filter(child => child.parentWorkflowId === parent.id)
+                childWorkflows: childWorkflows.filter((child: Workflow) => child.parentWorkflowId === parent.id)
               }));
 
-              setWorkflows(groupedWorkflows)
+              setWorkflows(groupedWorkflows);
             } else {
-              toast.error(data.error || 'Failed to fetch workflows')
+              toast.error(data.error || 'Failed to fetch workflows');
             }
           } catch (error) {
-            toast.error('An error occurred while fetching workflows.')
+            toast.error('An error occurred while fetching workflows.');
           } finally {
-            setLoadingWorkflows(false)
+            setLoadingWorkflows(false);
           }
-        }
+        };
         fetchAllWorkflows();
       } else {
         toast.error(data.error || 'Failed to delete workflows.');
@@ -356,7 +385,7 @@ export default function AiGenerationPage() {
     toast.loading('Deleting all workflows...');
 
     try {
-      const allWorkflowIds = workflows.flatMap(wf => [wf.id, ...wf.childWorkflows.map((child: any) => child.id)]);
+      const allWorkflowIds = workflows.flatMap(wf => [wf.id, ...wf.childWorkflows.map((child: Workflow) => child.id)]);
       const response = await fetch('/api/ai/workflow/delete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -413,7 +442,7 @@ export default function AiGenerationPage() {
           <p className="text-gray-600">No workflows found. Start a new generation above.</p>
         ) : (
           <div className="space-y-6">
-            {workflows.map((workflow: any) => (
+            {workflows.map((workflow: Workflow) => (
               <div key={workflow.id} className="bg-white shadow-lg rounded-lg p-6 text-black">
                 <div className="flex items-center mb-4">
                   <input
@@ -449,7 +478,7 @@ export default function AiGenerationPage() {
                         {isApprovingAllChildWorkflows ? 'Approving...' : 'Approve All Language Workflows'}
                       </button>
                       <div className="space-y-3">
-                        {workflow.childWorkflows.map((child: any) => (
+                        {workflow.childWorkflows.map((child: Workflow) => (
                           <div key={child.id} className="border p-4 rounded-md">
                             <p><strong>Language:</strong> {child.language.toUpperCase()}</p>
                             <p><strong>Status:</strong> {child.workflowStatus.replace('_', ' ')}</p>
@@ -470,7 +499,7 @@ export default function AiGenerationPage() {
 
                   <h4 className="text-lg font-semibold text-gray-800 mt-6 mb-3">Phases Progress</h4>
                   <div className="space-y-3">
-                    {workflow.jobs.map((job: any) => (
+                    {workflow.jobs.map((job: Job) => (
                       <div key={job.id} className="border p-4 rounded-md">
                         <p><strong>Phase {job.phase}:</strong> {job.status}</p>
                         {job.status === 'COMPLETED' && (

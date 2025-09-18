@@ -6,7 +6,7 @@ import ReportForm from '@/components/reports/ReportForm'
 import { toast } from 'react-hot-toast'
 import { Report, ReportTranslation, TranslationStatus } from '@prisma/client' // Import Report and ReportTranslation
 
-export default function EditReportPage({ params }: { params: { id: string } }) {
+export default function EditReportPage({ params }) {
   const { id } = React.use(params)
   const [initialData, setInitialData] = useState<Report | null>(null) // Use Report type
   const [loading, setLoading] = useState(true)

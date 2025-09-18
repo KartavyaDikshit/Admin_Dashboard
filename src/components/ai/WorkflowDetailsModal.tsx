@@ -1,8 +1,29 @@
 import { FC } from 'react';
 import { formatDateTime } from '@/lib/utils';
 
+interface JobDetails {
+  id: string;
+  phase: number;
+  status: string;
+  totalTokens: number;
+  cost?: number; // Assuming it's a number after conversion
+  outputText: string;
+}
+
+interface WorkflowDetails {
+  id: string;
+  reportTitle: string;
+  language: string;
+  workflowStatus: string;
+  currentPhase: number;
+  createdAt: string;
+  totalTokensUsed: number;
+  totalCost: string; // It's converted to string in the API
+  jobs: JobDetails[];
+}
+
 interface WorkflowDetailsModalProps {
-  workflow: any;
+  workflow: WorkflowDetails;
   onClose: () => void;
   onApprove: (workflowId: string) => void;
   isApproving: boolean;
@@ -31,7 +52,7 @@ const WorkflowDetailsModal: FC<WorkflowDetailsModalProps> = ({ workflow, onClose
 
           <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-3">Phases</h3>
           <div className="space-y-3">
-            {workflow.jobs.map((job: any) => (
+            {workflow.jobs.map((job: JobDetails) => (
               <div key={job.id} className="border p-4 rounded-md">
                 <p><strong>Phase {job.phase}:</strong> {job.status}</p>
                 {job.status === 'COMPLETED' && (

@@ -10,10 +10,15 @@ import {
   MagnifyingGlassIcon
 } from '@heroicons/react/24/outline'
 
+interface User {
+  name?: string | null;
+  role?: string | null;
+}
+
 interface HeaderProps {
   sidebarOpen: boolean
   setSidebarOpen: (open: boolean) => void
-  user: any
+  user: User
 }
 
 export default function Header({ sidebarOpen, setSidebarOpen, user }: HeaderProps) {

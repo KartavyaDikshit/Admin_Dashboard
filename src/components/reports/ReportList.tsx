@@ -1,25 +1,35 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import Link from 'next/link'
 import { formatCurrency, formatDateTime } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 
+interface ReportTranslation {
+  id: string
+  locale: string
+  title: string
+  description: string
+  slug: string
+  status: string
+}
+
 interface Report {
   id: string
   sku: string | null
   slug: string
   title: string
+  description: string
   status: string
   featured: boolean
   aiGenerated: boolean
   singlePrice: number | null
-  categories: { id: string; title: string; shortcode: string }[]
-  translations: any[]
+  categories: { id: string; title: string; shortcode: string; translations: any[] }[]
   _count: { reviews: number; orderItems: number }
   createdAt: string
+  translations: ReportTranslation[]
 }
 
 interface ReportListProps {
@@ -36,14 +46,17 @@ interface ReportListProps {
 
 export default function ReportList({ searchParams }: ReportListProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const [reports, setReports] = useState<Report[]>([])
   const [loading, setLoading] = useState(true)
   const [pagination, setPagination] = useState({ page: 1, limit: 25, total: 0, totalPages: 0 })
   const [selectedReports, setSelectedReports] = useState<string[]>([])
 
+  const currentLocale = pathname ? pathname.split('/')[1] || 'en' : 'en'
+
   useEffect(() => {
     fetchReports()
-  }, [searchParams])
+  }, [searchParams, currentLocale])
 
   const fetchReports = async () => {
     setLoading(true)
@@ -60,6 +73,7 @@ export default function ReportList({ searchParams }: ReportListProps) {
           filteredSearchParams.append(key, String(value))
         }
       }
+      filteredSearchParams.append('locale', currentLocale)
 
       const response = await fetch(`/api/reports?${filteredSearchParams.toString()}`)
       const data = await response.json()
@@ -314,7 +328,7 @@ export default function ReportList({ searchParams }: ReportListProps) {
                       </div>
                       
                       <div className="text-xs text-gray-500">
-                        Created {formatDateTime(new Date(report.createdAt))}
+                        Created {report.createdAt ? formatDateTime(new Date(report.createdAt)) : 'N/A'}
                       </div>
                     </div>
                   </div>

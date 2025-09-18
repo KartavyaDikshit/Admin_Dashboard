@@ -47,35 +47,101 @@ async function main() {
 
   // Create sample categories
   const newCategories = [
-    'Healthcare',
-    'Information Technology & Semiconductors',
-    'Machinery & Equipment',
-    'Aerospace & Defence',
-    'Chemicals & Materials',
-    'Food & Beverages',
-    'Agriculture',
-    'Energy & Power',
-    'Consumer Goods',
-    'Automotive & Transportation',
+    {
+      title_en: 'Healthcare',
+      shortcode: 'HC',
+      description_en: 'Comprehensive Healthcare market research reports covering key trends, market size, and growth opportunities.',
+      seoKeywords: ['healthcare market research', 'healthcare industry analysis', 'medical device market', 'pharmaceutical market'],
+      metaTitle: 'Healthcare Market Research Reports | TheBrainyInsights',
+      metaDescription: 'Leading Healthcare market research reports with comprehensive global market analysis.',
+    },
+    {
+      title_en: 'Information Technology & Semiconductors',
+      shortcode: 'ITS',
+      description_en: 'In-depth Information Technology & Semiconductors market research reports on software, hardware, and semiconductor trends.',
+      seoKeywords: ['IT market research', 'semiconductor industry analysis', 'software market', 'hardware market'],
+      metaTitle: 'Information Technology & Semiconductors Market Research Reports | TheBrainyInsights',
+      metaDescription: 'Leading Information Technology & Semiconductors market research reports with comprehensive global market analysis.',
+    },
+    {
+      title_en: 'Machinery & Equipment',
+      shortcode: 'ME',
+      description_en: 'Detailed Machinery & Equipment market research reports covering industrial machinery, construction equipment, and manufacturing trends.',
+      seoKeywords: ['machinery market research', 'equipment industry analysis', 'industrial machinery', 'construction equipment'],
+      metaTitle: 'Machinery & Equipment Market Research Reports | TheBrainyInsights',
+      metaDescription: 'Leading Machinery & Equipment market research reports with comprehensive global market analysis.',
+    },
+    {
+      title_en: 'Aerospace & Defence',
+      shortcode: 'AD',
+      description_en: 'Exclusive Aerospace & Defence market research reports on aviation, space, and military technologies.',
+      seoKeywords: ['aerospace market research', 'defence industry analysis', 'aviation market', 'space technology'],
+      metaTitle: 'Aerospace & Defence Market Research Reports | TheBrainyInsights',
+      metaDescription: 'Leading Aerospace & Defence market research reports with comprehensive global market analysis.',
+    },
+    {
+      title_en: 'Chemicals & Materials',
+      shortcode: 'CM',
+      description_en: 'Extensive Chemicals & Materials market research reports covering specialty chemicals, polymers, and advanced materials.',
+      seoKeywords: ['chemicals market research', 'materials industry analysis', 'specialty chemicals', 'polymers'],
+      metaTitle: 'Chemicals & Materials Market Research Reports | TheBrainyInsights',
+      metaDescription: 'Leading Chemicals & Materials market research reports with comprehensive global market analysis.',
+    },
+    {
+      title_en: 'Food & Beverages',
+      shortcode: 'FB',
+      description_en: 'Thorough Food & Beverages market research reports on consumer food, alcoholic beverages, and non-alcoholic beverages.',
+      seoKeywords: ['food market research', 'beverages industry analysis', 'consumer food', 'alcoholic beverages'],
+      metaTitle: 'Food & Beverages Market Research Reports | TheBrainyInsights',
+      metaDescription: 'Leading Food & Beverages market research reports with comprehensive global market analysis.',
+    },
+    {
+      title_en: 'Agriculture',
+      shortcode: 'AG',
+      description_en: 'Comprehensive Agriculture market research reports covering crop production, livestock, and agricultural technology.',
+      seoKeywords: ['agriculture market research', 'farming industry analysis', 'crop production', 'agritech'],
+      metaTitle: 'Agriculture Market Research Reports | TheBrainyInsights',
+      metaDescription: 'Leading Agriculture market research reports with comprehensive global market analysis.',
+    },
+    {
+      title_en: 'Energy & Power',
+      shortcode: 'EP',
+      description_en: 'In-depth Energy & Power market research reports on renewable energy, oil & gas, and power generation.',
+      seoKeywords: ['energy market research', 'power industry analysis', 'renewable energy', 'oil & gas'],
+      metaTitle: 'Energy & Power Market Research Reports | TheBrainyInsights',
+      metaDescription: 'Leading Energy & Power market research reports with comprehensive global market analysis.',
+    },
+    {
+      title_en: 'Consumer Goods',
+      shortcode: 'CG',
+      description_en: 'Detailed Consumer Goods market research reports covering personal care, home care, and consumer electronics.',
+      seoKeywords: ['consumer goods market research', 'retail industry analysis', 'personal care', 'home care'],
+      metaTitle: 'Consumer Goods Market Research Reports | TheBrainyInsights',
+      metaDescription: 'Leading Consumer Goods market research reports with comprehensive global market analysis.',
+    },
+    {
+      title_en: 'Automotive & Transportation',
+      shortcode: 'AT',
+      description_en: 'Exclusive Automotive & Transportation market research reports on electric vehicles, autonomous driving, and logistics.',
+      seoKeywords: ['automotive market research', 'transportation industry analysis', 'electric vehicles', 'autonomous driving'],
+      metaTitle: 'Automotive & Transportation Market Research Reports | TheBrainyInsights',
+      metaDescription: 'Leading Automotive & Transportation market research reports with comprehensive global market analysis.',
+    },
   ];
 
-  const categoryUpserts = newCategories.map((title, index) => {
-    const slug = generateSlug(title);
-    const shortcode = title.toLowerCase().replace(/ & /g, '-').replace(/[^a-z]/g, '').substring(0, 10);
+  const categoryUpserts = newCategories.map((categoryData, index) => {
+    const slug = generateSlug(categoryData.title_en);
     return prisma.category.upsert({
-      where: { shortcode },
-      update: { title: `${title} Market Research`, slug },
-      create: {
-        shortcode,
+      where: { shortcode: categoryData.shortcode },
+      update: {
+        ...categoryData,
         slug,
-        title: `${title} Market Research`,
-        description: `Comprehensive ${title} market research reports covering key trends, market size, and growth opportunities.`,
-        icon: '📁',
+      },
+      create: {
+        ...categoryData,
+        slug,
         featured: true,
         sortOrder: index + 1,
-        seoKeywords: [`${title.toLowerCase()} market research`, `${title.toLowerCase()} industry analysis`],
-        metaTitle: `${title} Market Research Reports | TheBrainyInsights`,
-        metaDescription: `Leading ${title} market research reports with comprehensive global market analysis.`,
         status: 'PUBLISHED',
       },
     });

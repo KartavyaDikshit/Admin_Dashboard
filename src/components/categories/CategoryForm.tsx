@@ -10,8 +10,20 @@ import { cn } from '@/lib/utils'
 
 const categorySchema = z.object({
   shortcode: z.string().min(2, 'Shortcode must be at least 2 characters').max(20, 'Shortcode cannot exceed 20 characters'),
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().optional(),
+  title_en: z.string().min(1, 'Title is required'),
+  description_en: z.string().optional(),
+  title_de: z.string().optional(),
+  description_de: z.string().optional(),
+  title_fr: z.string().optional(),
+  description_fr: z.string().optional(),
+  title_it: z.string().optional(),
+  description_it: z.string().optional(),
+  title_ja: z.string().optional(),
+  description_ja: z.string().optional(),
+  title_ko: z.string().optional(),
+  description_ko: z.string().optional(),
+  title_es: z.string().optional(),
+  description_es: z.string().optional(),
   icon: z.string().optional(),
   featured: z.boolean().default(false),
   sortOrder: z.coerce.number().int().default(0),
@@ -25,7 +37,19 @@ type FormData = z.infer<typeof categorySchema>
 
 interface CategoryFormProps {
   categoryId?: string
-  initialData?: any
+  initialData?: FormData & { translations?: CategoryTranslation[] }
+}
+
+interface CategoryTranslation {
+  id: string;
+  categoryId: string;
+  locale: string;
+  title: string | null;
+  description: string | null;
+  seoKeywords: string[];
+  metaTitle: string | null;
+  metaDescription: string | null;
+  status: string;
 }
 
 export default function CategoryForm({ categoryId, initialData }: CategoryFormProps) {
@@ -45,35 +69,92 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
       featured: false,
       sortOrder: 0,
       status: 'PUBLISHED',
+      title_en: '',
+      description_en: '',
       ...initialData
     }
   })
 
   useEffect(() => {
     if (initialData) {
+      const translatedData: Record<string, any> = {};
+      initialData.translations?.forEach(t => {
+        if (t.title) translatedData[`title_${t.locale}`] = t.title;
+        if (t.description) translatedData[`description_${t.locale}`] = t.description;
+      });
+
       reset({
         ...initialData,
+        ...translatedData,
         seoKeywords: initialData.seoKeywords ? initialData.seoKeywords.join(', ') : '',
-      })
+      });
     }
-  }, [initialData, reset])
+  }, [initialData, reset]);
 
   const onSubmit = async (data: FormData) => {
     setLoading(true)
 
     try {
+      const baseCategoryData = {
+        shortcode: data.shortcode,
+        title_en: data.title_en,
+        description_en: data.description_en,
+        icon: data.icon,
+        featured: data.featured,
+        sortOrder: data.sortOrder,
+        seoKeywords: data.seoKeywords,
+        metaTitle: data.metaTitle,
+        metaDescription: data.metaDescription,
+        status: data.status,
+      };
+
+      const translationData: Record<string, any> = {};
+      const languages = ['de', 'fr', 'it', 'ja', 'ko', 'es'];
+
+      languages.forEach(lang => {
+        const titleKey = `title_${lang}` as keyof FormData;
+        const descriptionKey = `description_${lang}` as keyof FormData;
+
+        if (data[titleKey] || data[descriptionKey]) {
+          translationData[lang] = {
+            title: data[titleKey],
+            description: data[descriptionKey],
+          };
+        }
+      });
+
       const url = categoryId ? `/api/categories/${categoryId}` : '/api/categories'
       const method = categoryId ? 'PUT' : 'POST'
 
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(baseCategoryData)
       })
 
       const result = await response.json()
 
       if (response.ok) {
+        const createdOrUpdatedCategoryId = result.category.id;
+
+        // Handle translations
+        for (const lang of languages) {
+          if (translationData[lang]) {
+            const translationUrl = `/api/category-translations`;
+            const translationMethod = 'POST'; // Always POST for upserting translations
+
+            await fetch(translationUrl, {
+              method: translationMethod,
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                categoryId: createdOrUpdatedCategoryId,
+                locale: lang,
+                ...translationData[lang],
+              }),
+            });
+          }
+        }
+
         toast.success(`Category ${categoryId ? 'updated' : 'created'} successfully`)
         router.push('/admin/categories')
       } else {
@@ -86,7 +167,7 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
     }
   }
 
-  const watchedTitle = watch('title')
+  const watchedTitle = watch('title_en')
 
   // Auto-generate meta title when title changes (if not already set)
   useEffect(() => {
@@ -115,15 +196,15 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
               </label>
               <input
                 type="text"
-                {...register('title')}
+                {...register('title_en')}
                 className={cn(
                   'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black',
-                  errors.title && 'border-red-500'
+                  errors.title_en && 'border-red-500'
                 )}
                 placeholder="e.g., Artificial Intelligence Market Research"
               />
-              {errors.title && (
-                <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+              {errors.title_en && (
+                <p className="mt-1 text-sm text-red-600">{errors.title_en.message}</p>
               )}
             </div>
 
@@ -152,7 +233,7 @@ export default function CategoryForm({ categoryId, initialData }: CategoryFormPr
               Description
             </label>
             <textarea
-              {...register('description')}
+              {...register('description_en')}
               rows={4}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
               placeholder="A brief description of the category..."

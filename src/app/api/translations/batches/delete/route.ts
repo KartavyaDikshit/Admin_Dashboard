@@ -43,3 +43,4 @@ export async function POST(request: NextRequest) {
     } finally {
         revalidatePath('/admin/translations'); // Revalidate the translations page
     }
+}

@@ -37,15 +37,20 @@ const reportSchema = z.object({
 
 type FormData = z.infer<typeof reportSchema>
 
+type Category = {
+  id: string;
+  title: string;
+}
+
 interface ReportFormProps {
   reportId?: string
-  initialData?: any
+  initialData?: FormData
 }
 
 export default function ReportForm({ reportId, initialData }: ReportFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [categories, setCategories] = useState<any[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
 
   const {
     register,
@@ -61,7 +66,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
       priority: 0,
       publishedDate: new Date().toISOString().split('T')[0],
       ...initialData,
-      categoryIds: initialData?.categories?.map((cat: any) => cat.id) || [],
+      categoryIds: initialData?.categories?.map((cat: Category) => cat.id) || [],
     }
   })
 

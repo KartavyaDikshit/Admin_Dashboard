@@ -50,7 +50,21 @@ export async function GET(request: NextRequest) {
     const aiGenerated = searchParams.get('aiGenerated')
 
     const skip = (page - 1) * limit
-    const where: any = {}
+    
+    interface ReportWhereClause {
+      OR?: Array<{
+        title?: { contains: string; mode: 'insensitive' };
+        description?: { contains: string; mode: 'insensitive' };
+        sku?: { contains: string; mode: 'insensitive' };
+      }>;
+      categories?: { some: { id: string } };
+      status?: string;
+      featured?: boolean;
+      aiGenerated?: boolean;
+    }
+    const locale = searchParams.get('locale')
+
+    const where: ReportWhereClause = {}
 
     if (search) {
       where.OR = [
@@ -65,42 +79,141 @@ export async function GET(request: NextRequest) {
     if (featured !== null) where.featured = featured === 'true'
     if (aiGenerated !== null) where.aiGenerated = aiGenerated === 'true'
 
-    const [reports, total] = await Promise.all([
-      prisma.report.findMany({
-        where,
-        skip,
-        take: limit,
-        include: {
-          categories: {
-            select: {
-              id: true,
-              title: true,
-              shortcode: true
-            }
-          },
-          translations: {
-            select: {
-              id: true,
-              locale: true,
-              title: true,
-              status: true
-            }
-          },
-          _count: {
-            select: { reviews: true, orderItems: true }
+    const reports = await prisma.report.findMany({
+      where,
+      skip,
+      take: limit,
+      select: {
+        id: true,
+        sku: true,
+        slug: true,
+        title: true,
+        description: true,
+        summary: true,
+        pages: true,
+        publishedDate: true,
+        baseYear: true,
+        forecastPeriod: true,
+        tableOfContents: true,
+        listOfFigures: true,
+        methodology: true,
+        keyFindings: true,
+        executiveSummary: true,
+        reportType: true,
+        researchMethod: true,
+        metaTitle: true,
+        metaDescription: true,
+        singlePrice: true,
+        multiPrice: true,
+        corporatePrice: true,
+        enterprisePrice: true,
+        status: true,
+        featured: true,
+        priority: true,
+        categories: {
+          select: {
+            id: true,
+            title_en: true,
+            shortcode: true,
+            translations: true,
           }
         },
-        orderBy: [
-          { featured: 'desc' },
-          { priority: 'desc' },
-          { createdAt: 'desc' }
-        ]
-      }),
-      prisma.report.count({ where })
-    ])
+        translations: locale ? {
+          where: { locale: locale },
+          select: {
+            title: true,
+            description: true,
+            summary: true,
+            slug: true,
+            tableOfContents: true,
+            listOfFigures: true,
+            methodology: true,
+            keyFindings: true,
+            executiveSummary: true,
+            keywords: true,
+            semanticKeywords: true,
+            localizedKeywords: true,
+            culturalKeywords: true,
+            longTailKeywords: true,
+            localCompetitorKeywords: true,
+            metaTitle: true,
+            metaDescription: true,
+            canonicalUrl: true,
+            ogTitle: true,
+            ogDescription: true,
+            ogImage: true,
+            twitterTitle: true,
+            twitterDescription: true,
+            schemaMarkup: true,
+            breadcrumbData: true,
+            faqData: true,
+            localBusinessSchema: true,
+          }
+        } : undefined,
+        _count: {
+          select: { reviews: true, orderItems: true }
+        }
+      },
+      orderBy: [
+        { featured: 'desc' },
+        { priority: 'desc' },
+        { createdAt: 'desc' }
+      ]
+    })
+
+    const reportsWithTranslatedFields = reports.map(report => {
+      const translated = report.translations && report.translations.length > 0 ? report.translations[0] : null;
+      const processedReport = {
+        ...report,
+        title: translated?.title || report.title,
+        description: translated?.description || report.description,
+        summary: translated?.summary || report.summary,
+        slug: translated?.slug || report.slug,
+        tableOfContents: translated?.tableOfContents || report.tableOfContents,
+        listOfFigures: translated?.listOfFigures || report.listOfFigures,
+        methodology: translated?.methodology || report.methodology,
+        keyFindings: translated?.keyFindings || report.keyFindings,
+        executiveSummary: translated?.executiveSummary || report.executiveSummary,
+        keywords: translated?.keywords || report.keywords,
+        semanticKeywords: translated?.semanticKeywords || report.semanticKeywords,
+        localizedKeywords: translated?.localizedKeywords || report.localizedKeywords,
+        culturalKeywords: translated?.culturalKeywords || report.culturalKeywords,
+        longTailKeywords: translated?.longTailKeywords || report.longTailKeywords,
+        localCompetitorKeywords: translated?.localCompetitorKeywords || report.localCompetitorKeywords,
+        metaTitle: translated?.metaTitle || report.metaTitle,
+        metaDescription: translated?.metaDescription || report.metaDescription,
+        canonicalUrl: translated?.canonicalUrl || report.canonicalUrl,
+        ogTitle: translated?.ogTitle || report.ogTitle,
+        ogDescription: translated?.ogDescription || report.ogDescription,
+        ogImage: translated?.ogImage || report.ogImage,
+        twitterTitle: translated?.twitterTitle || report.twitterTitle,
+        twitterDescription: translated?.twitterDescription || report.twitterDescription,
+        schemaMarkup: translated?.schemaMarkup || report.schemaMarkup,
+        breadcrumbData: translated?.breadcrumbData || report.breadcrumbData,
+        faqData: translated?.faqData || report.faqData,
+        localBusinessSchema: translated?.localBusinessSchema || report.localBusinessSchema,
+      };
+
+      // Apply category translations
+      processedReport.categories = processedReport.categories.map(category => {
+        const translatedCategory = {
+          ...category,
+          title: category.title_en, // Default to English title
+        };
+        const categoryTranslation = category.translations.find(t => t.locale === locale);
+        if (categoryTranslation && categoryTranslation.title) {
+          translatedCategory.title = categoryTranslation.title;
+        }
+        return translatedCategory;
+      });
+
+      return processedReport;
+    });
+
+    const total = await prisma.report.count({ where })
 
     return NextResponse.json({
-      reports,
+      reports: reportsWithTranslatedFields,
       pagination: {
         page,
         limit,

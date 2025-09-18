@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
       // You might want to add pagination or filtering here in the future
     })
 
-    return NextResponse.json({ translationJobs }, { status: 200 })
+    return NextResponse.json({ jobs: translationJobs }, { status: 200 })
   } catch (error) {
     console.error('Error fetching translation jobs:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

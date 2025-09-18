@@ -1,23 +1,39 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { toast } from 'react-hot-toast'
 import { formatDateTime, cn } from '@/lib/utils'
+
+interface CategoryTranslation {
+  id: string;
+  categoryId: string;
+  locale: string;
+  title: string | null;
+  description: string | null;
+  seoKeywords: string[];
+  metaTitle: string | null;
+  metaDescription: string | null;
+  status: string;
+}
 
 interface Category {
   id: string
   shortcode: string
   slug: string
-  title: string
-  description: string | null
+  title_en: string
+  description_en: string | null
   icon: string | null
   featured: boolean
   sortOrder: number
   status: string
+  seoKeywords: string[];
+  metaTitle: string | null;
+  metaDescription: string | null;
   _count: { reports: number }
   createdAt: string
+  translations: CategoryTranslation[];
 }
 
 interface CategoryListProps {
@@ -32,14 +48,17 @@ interface CategoryListProps {
 
 export default function CategoryList({ searchParams }: CategoryListProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [pagination, setPagination] = useState({ page: 1, limit: 25, total: 0, totalPages: 0 })
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
+  const currentLocale = pathname ? pathname.split('/')[1] || 'en' : 'en'
+
   useEffect(() => {
     fetchCategories()
-  }, [searchParams])
+  }, [searchParams, currentLocale])
 
   const fetchCategories = async () => {
     setLoading(true)
@@ -56,12 +75,16 @@ export default function CategoryList({ searchParams }: CategoryListProps) {
           filteredSearchParams.append(key, String(value))
         }
       }
+      filteredSearchParams.append('locale', currentLocale)
 
       const response = await fetch(`/api/categories?${filteredSearchParams.toString()}`)
       const data = await response.json()
       
       if (response.ok) {
-        setCategories(data.categories)
+        setCategories(data.categories.map((category: Category) => ({
+          ...category,
+          translations: category.translations || []
+        })))
         setPagination(data.pagination)
       } else {
         toast.error(data.error || 'Failed to load categories')
@@ -72,6 +95,27 @@ export default function CategoryList({ searchParams }: CategoryListProps) {
       setLoading(false)
     }
   }
+
+  const handleTranslateAllCategories = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/categories/translate-all', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const result = await response.json();
+      if (response.ok) {
+        toast.success(result.message);
+        fetchCategories(); // Refresh data after translation
+      } else {
+        toast.error(result.error);
+      }
+    } catch (err: any) {
+      toast.error(`Error during translation: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const toggleCategorySelection = (categoryId: string) => {
     setSelectedCategories(prev => 
@@ -164,6 +208,13 @@ export default function CategoryList({ searchParams }: CategoryListProps) {
           >
             Create Category
           </Link>
+          <button
+            onClick={handleTranslateAllCategories}
+            disabled={loading}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            Translate All Categories
+          </button>
         </div>
       </div>
 
@@ -247,7 +298,7 @@ export default function CategoryList({ searchParams }: CategoryListProps) {
                           href={`/admin/categories/${category.id}/edit`}
                           className="text-sm font-medium text-gray-900 hover:text-indigo-600"
                         >
-                          {category.title}
+                          {category.title_en}
                         </Link>
                         <div className="mt-1 flex items-center space-x-4 text-xs text-gray-500">
                           <span>Shortcode: {category.shortcode}</span>
@@ -291,7 +342,7 @@ export default function CategoryList({ searchParams }: CategoryListProps) {
                       </div>
                       
                       <div className="text-xs text-gray-500">
-                        Created {formatDateTime(new Date(category.createdAt))}
+                        Created {category.createdAt ? formatDateTime(new Date(category.createdAt)) : 'N/A'}
                       </div>
                     </div>
                   </div>

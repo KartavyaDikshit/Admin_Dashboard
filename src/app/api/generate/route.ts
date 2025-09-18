@@ -3,14 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { openai, MODEL_NAME, estimateTokenCount, calculateCost } from '@/lib/ai/openai';
 import { TokenOptimizer } from '@/lib/ai/tokenOptimizer';
 import { ContextManager } from '@/lib/ai/contextManager';
-import {
-  PROMPT_CONFIGS,
-  GenerationRequest,
-  GenerationResponse,
-  TokenUsage,
-  PromptResult
-} from '@/types/ai';
-import prisma from '@/lib/prisma'; // Import Prisma Client
+import { AiReportSession, AiPromptResult } from '@prisma/client'; // Added import
 
 // In-memory context manager and session results are removed.
 // Session management will now be handled by Prisma.
@@ -30,7 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     let currentSessionId = sessionId;
-    let currentSession: any; // AiReportSession type from Prisma
+    let currentSession: AiReportSession & { promptResults: AiPromptResult[] } | null; // AiReportSession type from Prisma
 
     // If no sessionId is provided, create a new session
     if (!currentSessionId) {
@@ -61,7 +54,7 @@ export async function POST(request: NextRequest) {
     // Re-initialize ContextManager with previous results from the database
     const contextManager = new ContextManager();
     if (currentSession.promptResults && currentSession.promptResults.length > 0) {
-      currentSession.promptResults.forEach((pr: any) => contextManager.addPromptResult(pr));
+      currentSession.promptResults.forEach((pr: AiPromptResult) => contextManager.addPromptResult(pr));
       contextManager.implementSlidingWindow(2); // Apply sliding window to loaded context
     }
 

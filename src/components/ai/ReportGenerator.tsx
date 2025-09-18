@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { PromptOutput } from '@/components/ai/PromptOutput'; // Modified import path
+import PromptOutput from '@/components/ai/PromptOutput'; // Modified import path
 import { PROMPT_CONFIGS, PromptResult, TokenUsage } from '@/types/ai'; // Modified import path
 
 interface Props {

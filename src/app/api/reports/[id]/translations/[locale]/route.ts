@@ -58,7 +58,7 @@ export async function PUT(
     revalidatePath('/admin/translations'); // Revalidate the translations page
 
     return NextResponse.json({ success: true, translation: updatedTranslation })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Update report translation error:', error)
     if (error instanceof z.ZodError) {
       return NextResponse.json({
@@ -66,7 +66,8 @@ export async function PUT(
         details: error.errors,
       }, { status: 400 })
     }
-    return NextResponse.json({ error: 'Internal server error', message: error.message }, { status: 500 })
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    return NextResponse.json({ error: 'Internal server error', message: message }, { status: 500 })
   }
 }
 
@@ -96,8 +97,9 @@ export async function GET(
     }
 
     return NextResponse.json({ translation })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Get report translation error:', error)
-    return NextResponse.json({ error: 'Internal server error', message: error.message }, { status: 500 })
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    return NextResponse.json({ error: 'Internal server error', message: message }, { status: 500 })
   }
 }

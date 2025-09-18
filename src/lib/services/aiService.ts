@@ -1,9 +1,11 @@
 import { openai, estimateTokenCount, calculateCost } from '@/lib/openai'
 import { prisma } from '@/lib/prisma'
 import { generateSlug } from '@/lib/utils'
+import { ContentGenerationWorkflow, ContentGenerationJob } from '@prisma/client'
+import { Decimal } from '@prisma/client/runtime/library'
 
 // Helper function to convert Prisma Decimal objects to numbers
-function convertDecimalsToNumbers(obj: any): any {
+function convertDecimalsToNumbers(obj: unknown): unknown {
   if (obj === null || typeof obj !== 'object') {
     return obj;
   }
@@ -16,7 +18,7 @@ function convertDecimalsToNumbers(obj: any): any {
     return obj.map(item => convertDecimalsToNumbers(item));
   }
 
-  const newObj: { [key: string]: any } = {};
+  const newObj: { [key: string]: unknown } = {};
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       const value = obj[key];
@@ -41,6 +43,28 @@ export interface PhaseConfig {
   promptTemplate: string
   maxTokens: number
   temperature: number
+}
+
+interface ContentGenerationJobWithDecimal extends ContentGenerationJob {
+  qualityScore: Decimal | null;
+  cost: Decimal | null;
+}
+
+interface ProcessedContentGenerationJob extends ContentGenerationJob {
+  qualityScore: number | null;
+  cost: number | null;
+  inputTokens: number;
+  outputTokens: number;
+  totalTokens: number;
+}
+
+interface ContentGenerationWorkflowWithRelations extends ContentGenerationWorkflow {
+  jobs: ContentGenerationJobWithDecimal[];
+  childWorkflows: ContentGenerationWorkflowWithRelations[];
+  totalInputTokensUsed: Decimal;
+  totalOutputTokensUsed: Decimal;
+  totalTokensUsed: Decimal;
+  totalCost: Decimal;
 }
 
 export const PHASE_CONFIGS: PhaseConfig[] = [
@@ -309,17 +333,17 @@ export class AIContentService {
 
     try {
       await this.executeJob(job.id)
-    } catch (error: any) {
-      console.error(`[${new Date().toISOString()}] Error executing job ${job.id} for workflow ${workflowId}:`, error);
-      await prisma.contentGenerationJob.update({
-        where: { id: job.id },
-        data: {
-          status: 'FAILED',
-          errorMessage: error.message
-        }
-      })
-    }
-  }
+          } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'An unknown error occurred';
+            console.error(`[${new Date().toISOString()}] Error executing job ${job.id} for workflow ${workflowId}:`, error);
+            await prisma.contentGenerationJob.update({
+              where: { id: job.id },
+              data: {
+                status: 'FAILED',
+                errorMessage: message
+              }
+            })
+          }  }
 
   private async executeJob(jobId: string) {
     console.log(`[${new Date().toISOString()}] Executing job ${jobId}`);
@@ -441,14 +465,18 @@ export class AIContentService {
       await this.updateWorkflowAfterJob(job.workflowId!, job.phase, outputText)
       console.log(`[${new Date().toISOString()}] Updated workflow after job ${jobId}`);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(`[${new Date().toISOString()}] Error in executeJob for job ${jobId}:`, error);
+      
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      const errorCode = error && typeof error === 'object' && 'code' in error ? String((error as { code: unknown }).code) : 'UNKNOWN';
+
       await prisma.contentGenerationJob.update({
         where: { id: jobId },
         data: {
           status: 'FAILED',
-          errorMessage: error.message,
-          errorCode: error.code || 'UNKNOWN',
+          errorMessage: errorMessage,
+          errorCode: errorCode,
           processingTime: processingTime
         }
       })
@@ -466,7 +494,7 @@ export class AIContentService {
           totalCost: cost,
           responseTime: processingTime,
           success: false,
-          errorMessage: error.message,
+          errorMessage: errorMessage,
           requestData: { prompt: job.inputPrompt }
         }
       })
@@ -476,7 +504,7 @@ export class AIContentService {
   }
 
   private async updateWorkflowAfterJob(workflowId: string, completedPhase: number, content: string) {
-    const updateData: any = {
+    const updateData: Partial<ContentGenerationWorkflow> = {
       updatedAt: new Date()
     }
 
@@ -538,10 +566,10 @@ export class AIContentService {
     }
   }
 
-  private buildPrompt(template: string, variables: Record<string, any>, language: string = 'en'): string {
+  private buildPrompt(template: string, variables: Record<string, unknown>, language: string = 'en'): string {
     let prompt = template
     
-    Object.entries(variables).forEach(([key, value]) => {
+    Object.entries(variables).forEach(([key, value]: [string, unknown]) => {
       const placeholder = `{${key}}`
       prompt = prompt.replace(new RegExp(placeholder, 'g'), value || '')
     })
@@ -562,7 +590,7 @@ export class AIContentService {
     return prompt
   }
 
-  private buildContextFromPreviousPhases(jobs: any[]): string {
+  private buildContextFromPreviousPhases(jobs: { status: string; outputText: string | null; phase: number }[]): string {
     const completedJobs = jobs
       .filter(job => job.status === 'COMPLETED' && job.outputText)
       .sort((a, b) => a.phase - b.phase)
@@ -584,7 +612,7 @@ export class AIContentService {
     return Math.max(1.0, Math.min(10.0, score))
   }
 
-  private async assessRelevance(content: string, contextData: any): Promise<number> {
+  private async assessRelevance(content: string, contextData: { reportTitle?: string } | null): Promise<number> {
     // Check if content mentions the reportTitle
     const reportTitle = contextData?.reportTitle?.toLowerCase() || ''
     const contentLower = content.toLowerCase()
@@ -643,8 +671,8 @@ export class AIContentService {
     });
 
     if (workflow) {
-      const processWorkflow = (wf: any) => {
-        const jobsWithNumbers = wf.jobs.map((job: any) => ({
+      const processWorkflow = (wf: ContentGenerationWorkflowWithRelations) => {
+        const jobsWithNumbers: ProcessedContentGenerationJob[] = wf.jobs.map((job) => ({
           ...job,
           qualityScore: job.qualityScore ? job.qualityScore.toNumber() : null,
           cost: job.cost ? job.cost.toNumber() : null,
@@ -653,21 +681,21 @@ export class AIContentService {
           totalTokens: job.totalTokens || 0,
         }));
 
-        const processedWorkflow = convertDecimalsToNumbers(wf);
+        const processedWorkflow = convertDecimalsToNumbers(wf) as ContentGenerationWorkflowWithRelations;
 
         return {
           ...processedWorkflow,
           jobs: jobsWithNumbers,
           totalTokenUsage: {
-            inputTokens: processedWorkflow.totalInputTokensUsed || 0,
-            outputTokens: processedWorkflow.totalOutputTokensUsed || 0,
-            totalTokens: processedWorkflow.totalTokensUsed || 0,
-            cost: processedWorkflow.totalCost,
+            inputTokens: processedWorkflow.totalInputTokensUsed ?? 0,
+            outputTokens: processedWorkflow.totalOutputTokensUsed ?? 0,
+            totalTokens: processedWorkflow.totalTokensUsed ?? 0,
+            cost: wf.totalCost?.toNumber() ?? 0,
           },
         };
       };
 
-      const processedParent = processWorkflow(workflow);
+      const processedParent = processWorkflow(workflow as ContentGenerationWorkflowWithRelations);
       const processedChildren = workflow.childWorkflows.map(processWorkflow);
 
       return {
@@ -796,7 +824,7 @@ export class AIContentService {
           publishedDate: new Date(),
           metaTitle: reportTitle,
           metaDescription: description.substring(0, 300),
-          status: 'DRAFT' as const,
+          status: 'PUBLISHED' as const,
           aiGenerated: true,
           humanApproved: true,
           contentGenerationWorkflowId: workflowId,

@@ -31,8 +31,16 @@ export const ProgressTracker: React.FC = () => {
         if (data.success) {
           const results = data.data.results || [];
 
+          interface ApiResult {
+            promptId: string;
+            tokenUsage: {
+              totalTokens: number;
+            };
+            executionTime: number;
+          }
+
           const updatedSteps = steps.map(step => {
-            const result = results.find((r: any) => r.promptId === step.id);
+            const result = results.find((r: ApiResult) => r.promptId === step.id);
             if (result) {
               return {
                 ...step,

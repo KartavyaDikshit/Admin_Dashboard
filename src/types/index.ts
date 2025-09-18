@@ -50,9 +50,9 @@ export interface OptimizationStrategy {
     enabled: boolean; 
 } 
 
-export interface APIResponse { 
+export interface APIResponse<T = unknown> {
     success: boolean; 
-    data?: any; 
+    data?: T; 
     error?: string; 
     tokenUsage?: TokenUsage; 
 } 
@@ -106,7 +106,6 @@ export const PROMPT_CONFIGS: Record<string, PromptConfig> = {
     prompt4: { 
         id: 'prompt4', 
         title: 'Key Market Players & Strategic Developments', 
-.
         description: 'Generate key players list and recent developments', 
         template: 'Create Key Players section for {title}. Context: {context}. Part 1: List top 10 verified companies (publicly traded/recognized). Part 2: Provide 1-2 real 2024 developments with format "[Month] 2024: [Company] [action] to [outcome]". Use credible company names only, no placeholders.', 
         maxTokens: 450, 

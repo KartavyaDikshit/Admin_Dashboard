@@ -46,8 +46,9 @@ export async function GET(
         categories: {
           select: {
             id: true,
-            title: true,
-            shortcode: true
+            title_en: true,
+            shortcode: true,
+            translations: true,
           }
         },
         translations: {
@@ -68,7 +69,24 @@ export async function GET(
       return NextResponse.json({ error: 'Report not found' }, { status: 404 })
     }
 
-    return NextResponse.json({ report })
+    const locale = request.nextUrl.searchParams.get('locale') || 'en';
+
+    const processedReport = {
+      ...report,
+      categories: report.categories.map(category => {
+        const translatedCategory = {
+          ...category,
+          title: category[`title_${locale}` as keyof typeof category] || category.title_en,
+        };
+        const translation = category.translations.find(t => t.locale === locale);
+        if (translation) {
+          translatedCategory.title = translation.title || translatedCategory.title;
+        }
+        return translatedCategory;
+      }),
+    };
+
+    return NextResponse.json({ report: processedReport })
   } catch (error) {
     console.error('Get report error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

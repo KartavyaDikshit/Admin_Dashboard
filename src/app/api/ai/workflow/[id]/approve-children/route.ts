@@ -16,7 +16,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const parentWorkflowId = params.id;
+    const parentWorkflowId = (params as { id: string }).id;
 
     // Find all child ContentGenerationWorkflows for this parent that are PENDING_REVIEW
     const pendingChildWorkflows = await prisma.contentGenerationWorkflow.findMany({

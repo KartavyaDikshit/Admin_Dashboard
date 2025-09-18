@@ -31,11 +31,12 @@ export async function POST(request: NextRequest) {
     )
 
     return NextResponse.json({ success: true, job: translationJob }, { status: 200 })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Translation API error:', error)
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Validation error', details: error.errors }, { status: 400 })
     }
-    return NextResponse.json({ error: 'Internal server error', message: error.message }, { status: 500 })
+    const message = error instanceof Error ? error.message : 'An unknown error occurred';
+    return NextResponse.json({ error: 'Internal server error', message: message }, { status: 500 })
   }
 }
