@@ -22,17 +22,22 @@ export default function EditReportPage({ params }) {
   // Fetch original report data
   useEffect(() => {
     const fetchReport = async () => {
+      console.log('Fetching report...');
       try {
         const response = await fetch(`/api/reports/${id}`)
+        console.log('Report API response:', response);
         const data = await response.json()
+        console.log('Report API data:', data);
         if (response.ok) {
           setInitialData(data.report)
         } else {
           toast.error(data.error || 'Failed to fetch report')
         }
       } catch (error) {
+        console.error('Error during report fetch:', error);
         toast.error('An error occurred while fetching report.')
       } finally {
+        console.log('Finished report fetch. Setting loading to false.');
         setLoading(false)
       }
     }
@@ -126,8 +131,8 @@ export default function EditReportPage({ params }) {
           marketAnalysis: translatedData.marketAnalysis,
           competitiveAnalysis: translatedData.competitiveAnalysis,
           trendsAnalysis: translatedData.trendsAnalysis,
-          keyPlayers: translatedData.keyPlayers,
           strategicDevelopments: translatedData.strategicDevelopments,
+          keyPlayers: translatedData.keyPlayers,
           metaTitle: translatedData.metaTitle,
           metaDescription: translatedData.metaDescription,
           status: translatedData.status,
@@ -151,6 +156,7 @@ export default function EditReportPage({ params }) {
   };
 
 
+  console.log('Current loading state before render:', loading);
   if (loading) {
     return (
       <AdminLayout>
@@ -205,15 +211,15 @@ export default function EditReportPage({ params }) {
           {isTranslating && <p className="mt-2 text-sm text-black">AI translation in progress. This may take a moment.</p>}
         </div>
 
-        {/* View/Edit Translation Section */}
+        {/* View Translations Section */}
         <div className="mb-6 p-4 border rounded-lg shadow-sm bg-white">
-          <h2 className="text-xl font-semibold mb-3 text-black">View/Edit Translations</h2>
+          <h2 className="text-xl font-semibold mb-3 text-black">View Translations</h2>
           <div className="flex items-center space-x-3 mb-4">
             <select
               value={viewLocale}
               onChange={(e) => setViewLocale(e.target.value)}
               className="block w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-              disabled={loadingTranslatedData || isSavingTranslatedData}
+              disabled={loadingTranslatedData}
             >
               <option value="">Select Locale to View</option>
               {availableLocales.map(locale => (
@@ -224,140 +230,37 @@ export default function EditReportPage({ params }) {
           </div>
 
           {viewLocale && !loadingTranslatedData && (translatedData ? (
-            <form onSubmit={handleSaveTranslatedData} className="space-y-4">
+            <div className="space-y-4">
               <div>
-                <label htmlFor="translatedTitle" className="block text-sm font-medium text-black">Title ({viewLocale.toUpperCase()})</label>
-                <input
-                  type="text"
-                  id="translatedTitle"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-                  value={translatedData?.title || ''}
-                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, title: e.target.value } : null)}
-                  required
-                  disabled={isSavingTranslatedData}
-                />
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Market Research Summary</h3>
+                <div className="p-4 border rounded-md bg-gray-50 text-black">{translatedData.summary}</div>
               </div>
               <div>
-                <label htmlFor="translatedDescription" className="block text-sm font-medium text-black">Description ({viewLocale.toUpperCase()})</label>
-                <textarea
-                  id="translatedDescription"
-                  rows={4}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-                  value={translatedData?.description || ''}
-                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, description: e.target.value } : null)}
-                  disabled={isSavingTranslatedData}
-                ></textarea>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Market Dynamics</h3>
+                <div className="p-4 border rounded-md bg-gray-50 text-black">{translatedData.marketAnalysis}</div>
               </div>
               <div>
-                <label htmlFor="translatedSummary" className="block text-sm font-medium text-black">Summary ({viewLocale.toUpperCase()})</label>
-                <textarea
-                  id="translatedSummary"
-                  rows={2}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-                  value={translatedData?.summary || ''}
-                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, summary: e.target.value } : null)}
-                  disabled={isSavingTranslatedData}
-                ></textarea>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Regional Insights</h3>
+                <div className="p-4 border rounded-md bg-gray-50 text-black">{translatedData.trendsAnalysis}</div>
               </div>
               <div>
-                <label htmlFor="translatedMarketAnalysis" className="block text-sm font-medium text-black">Market Analysis ({viewLocale.toUpperCase()})</label>
-                <textarea
-                  id="translatedMarketAnalysis"
-                  rows={5}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-                  value={translatedData?.marketAnalysis || ''}
-                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, marketAnalysis: e.target.value } : null)}
-                  disabled={isSavingTranslatedData}
-                ></textarea>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Key Market Players</h3>
+                <div className="p-4 border rounded-md bg-gray-50 text-black">
+                  {translatedData.keyPlayers && translatedData.keyPlayers.length > 0 ? (
+                    <ul>
+                      {translatedData.keyPlayers.map((player, index) => (
+                        <li key={index}>{player}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No key players found.</p>
+                  )}
+                  {translatedData.strategicDevelopments && (
+                    <p className="mt-2">{translatedData.strategicDevelopments}</p>
+                  )}
+                </div>
               </div>
-              <div>
-                <label htmlFor="translatedCompetitiveAnalysis" className="block text-sm font-medium text-black">Competitive Analysis ({viewLocale.toUpperCase()})</label>
-                <textarea
-                  id="translatedCompetitiveAnalysis"
-                  rows={5}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-                  value={translatedData?.competitiveAnalysis || ''}
-                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, competitiveAnalysis: e.target.value } : null)}
-                  disabled={isSavingTranslatedData}
-                ></textarea>
-              </div>
-              <div>
-                <label htmlFor="translatedTrendsAnalysis" className="block text-sm font-medium text-black">Trends Analysis ({viewLocale.toUpperCase()})</label>
-                <textarea
-                  id="translatedTrendsAnalysis"
-                  rows={5}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-                  value={translatedData?.trendsAnalysis || ''}
-                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, trendsAnalysis: e.target.value } : null)}
-                  disabled={isSavingTranslatedData}
-                ></textarea>
-              </div>
-              <div>
-                <label htmlFor="translatedKeyPlayers" className="block text-sm font-medium text-black">Key Players ({viewLocale.toUpperCase()})</label>
-                <textarea
-                  id="translatedKeyPlayers"
-                  rows={5}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-                  value={translatedData?.keyPlayers?.join('\n') || ''}
-                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, keyPlayers: e.target.value.split('\n') } : null)}
-                  disabled={isSavingTranslatedData}
-                ></textarea>
-              </div>
-              <div>
-                <label htmlFor="translatedStrategicDevelopments" className="block text-sm font-medium text-black">Strategic Developments ({viewLocale.toUpperCase()})</label>
-                <textarea
-                  id="translatedStrategicDevelopments"
-                  rows={5}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-                  value={translatedData?.strategicDevelopments || ''}
-                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, strategicDevelopments: e.target.value } : null)}
-                  disabled={isSavingTranslatedData}
-                ></textarea>
-              </div>
-              <div>
-                <label htmlFor="translatedMetaTitle" className="block text-sm font-medium text-black">Meta Title ({viewLocale.toUpperCase()})</label>
-                <input
-                  type="text"
-                  id="translatedMetaTitle"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-                  value={translatedData?.metaTitle || ''}
-                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, metaTitle: e.target.value } : null)}
-                  disabled={isSavingTranslatedData}
-                />
-              </div>
-              <div>
-                <label htmlFor="translatedMetaDescription" className="block text-sm font-medium text-black">Meta Description ({viewLocale.toUpperCase()})</label>
-                <textarea
-                  id="translatedMetaDescription"
-                  rows={2}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-                  value={translatedData?.metaDescription || ''}
-                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, metaDescription: e.target.value } : null)}
-                  disabled={isSavingTranslatedData}
-                ></textarea>
-              </div>
-              <div>
-                <label htmlFor="translationStatus" className="block text-sm font-medium text-black">Status ({viewLocale.toUpperCase()})</label>
-                <select
-                  id="translationStatus"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-                  value={translatedData?.status || ''}
-                  onChange={(e) => setTranslatedData(prev => prev ? { ...prev, status: e.target.value as TranslationStatus } : null)}
-                  disabled={isSavingTranslatedData}
-                >
-                  {Object.values(TranslationStatus).map(status => (
-                    <option key={status} value={status}>{status.replace(/_/g, ' ')}</option>
-                  ))}
-                </select>
-              </div>
-              <button
-                type="submit"
-                disabled={isSavingTranslatedData || !translatedData?.title}
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSavingTranslatedData ? 'Saving...' : 'Save Translation'}
-              </button>
-            </form>
+            </div>
           ) : (
             <p className="text-sm text-black">No translation found for {viewLocale.toUpperCase()}. Generate one using the section above.</p>
           ))}

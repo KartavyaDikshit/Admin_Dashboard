@@ -12,12 +12,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
   background: var(--background);
@@ -29,7 +23,7 @@ body {
 @layer components {
   /* Card Components */
   .card {
-    @apply bg-white rounded-lg shadow-sm border border-gray-200;
+    @apply bg-white rounded-lg shadow-sm border-black;
   }
   
   .card-header {
@@ -50,11 +44,11 @@ body {
   }
   
   .btn-secondary {
-    @apply bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-black text-white hover:bg-black focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed;
   }
   
   .btn-outline {
-    @apply bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-gray-500 disabled:opacity-50;
+    @apply bg-white text-black border-black focus:ring-gray-500 disabled:opacity-50;
   }
   
   /* Form Components */
@@ -68,7 +62,7 @@ body {
   
   /* Progress Components */
   .progress-bar {
-    @apply w-full bg-gray-200 rounded-full h-2;
+    @apply w-full bg-white rounded-full h-2;
   }
   
   .progress-fill {
@@ -77,12 +71,12 @@ body {
   
   /* Token Metrics */
   .token-metric {
-    @apply flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0;
+    @apply flex justify-between items-center py-2 border-b border-black last:border-b-0;
   }
   
   /* Status Indicators */
   .status-pending {
-    @apply text-gray-500 bg-gray-50 border-gray-200;
+    @apply text-black bg-white border-gray-200;
   }
   
   .status-running {

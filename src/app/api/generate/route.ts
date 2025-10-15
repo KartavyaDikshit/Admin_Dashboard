@@ -11,7 +11,7 @@ import { AiReportSession, AiPromptResult } from '@prisma/client'; // Added impor
 export async function POST(request: NextRequest) {
   try {
     const body: GenerationRequest = await request.json();
-    const { promptId, reportTitle, context, useOptimizations = true, sessionId } = body;
+    const { promptId, reportTitle, context, useOptimizations = true, workflowId } = body;
 
     // Get prompt configuration
     const promptConfig = PROMPT_CONFIGS[promptId];
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    let currentSessionId = sessionId;
+    let currentSessionId = workflowId; // Use workflowId as sessionId
     let currentSession: AiReportSession & { promptResults: AiPromptResult[] } | null; // AiReportSession type from Prisma
 
     // If no sessionId is provided, create a new session
@@ -78,27 +78,52 @@ export async function POST(request: NextRequest) {
     const startTime = Date.now();
 
     // Make OpenAI API call
-    const completion = await openai.chat.completions.create({
+    const messages: ChatCompletionMessageParam[] = [
+      {
+        role: 'system',
+        content: 'You are an expert market research analyst. Provide accurate, data-driven insights with specific numbers and credible sources. Follow the user\'s instructions precisely regarding output format.'
+      },
+      {
+        role: 'user',
+        content: finalPrompt
+      }
+    ];
+
+    const chatCompletionOptions: ChatCompletionCreateParamsNonStreaming = {
       model: MODEL_NAME,
-      messages: [
-        {
-          role: 'system',
-          content: 'You are an expert market research analyst. Provide accurate, data-driven insights with specific numbers and credible sources.'
-        },
-        {
-          role: 'user',
-          content: finalPrompt
-        }
-      ],
+      messages,
       max_tokens: promptConfig.maxTokens,
       temperature: promptConfig.temperature,
-    });
+    };
+
+    // Conditionally set response_format for prompts expecting JSON
+    if (['prompt2', 'prompt3', 'prompt4'].includes(promptId)) {
+      chatCompletionOptions.response_format = { type: "json_object" };
+    }
+
+    const completion = await openai.chat.completions.create(chatCompletionOptions);
 
     const endTime = Date.now();
     const executionTime = endTime - startTime;
 
     // Extract response content
-    const content = completion.choices[0]?.message?.content || '';
+    let content = completion.choices[0]?.message?.content || '';
+    let contentToStore = content; // Default to raw content
+
+    if (['prompt2', 'prompt3', 'prompt4'].includes(promptId)) {
+      try {
+        const parsed = JSON.parse(content);
+        // For keyPlayers, ensure it's an array of strings
+        if (promptId === 'prompt4' && parsed.keyPlayers && !Array.isArray(parsed.keyPlayers)) {
+          parsed.keyPlayers = [parsed.keyPlayers.toString()];
+        }
+        contentToStore = JSON.stringify(parsed); // Store the stringified JSON
+      } catch (parseError) {
+        console.error(`Failed to parse JSON for prompt ${promptId}:`, parseError);
+        // Fallback to raw content if JSON parsing fails
+        contentToStore = content; // Store raw content if parsing fails
+      }
+    }
 
     // Calculate token usage
     const inputTokens = completion.usage?.prompt_tokens || estimateTokenCount(finalPrompt);
@@ -118,7 +143,7 @@ export async function POST(request: NextRequest) {
         sessionId: currentSessionId,
         promptId,
         title: promptConfig.title,
-        content,
+        content: contentToStore, // Store the processed content
         inputTokens: tokenUsage.inputTokens,
         outputTokens: tokenUsage.outputTokens,
         totalTokens: tokenUsage.totalTokens,
@@ -140,7 +165,8 @@ export async function POST(request: NextRequest) {
     const response: GenerationResponse = {
       success: true,
       data: {
-        content,
+        content: contentToStore, // Return the processed content
+        rawAiResponse: content, // Include raw AI response for debugging
         tokenUsage,
         executionTime,
         sessionId: currentSessionId, // Return sessionId for subsequent requests

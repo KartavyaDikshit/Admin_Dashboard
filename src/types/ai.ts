@@ -62,11 +62,13 @@ export interface GenerationRequest {
   reportTitle: string;
   context?: string;
   useOptimizations?: boolean;
+  workflowId?: string; // Add workflowId here
 }
 
 export interface GenerationResponse extends APIResponse {
   data?: {
     content: string;
+    rawAiResponse?: string; // Add rawAiResponse here
     tokenUsage: TokenUsage;
     executionTime: number;
   };
@@ -86,8 +88,8 @@ export const PROMPT_CONFIGS: Record<string, PromptConfig> = {
   prompt2: {
     id: 'prompt2',
     title: 'Market Dynamics',
-    description: 'Generate Market Drivers, Restraints, and Opportunities',
-    template: 'Create Market Dynamics section for {title}. Context: {context}. Structure: A) Market Drivers (2-4 key growth drivers with quantitative data) B) Market Restraints (1-3 barriers with examples) C) Market Opportunities (emerging growth areas). Analytical tone for executives. Paragraph format only, no bullet lists.',
+    description: 'Generate Market Drivers, Restraints, and Opportunities in JSON format',
+    template: 'Create Market Dynamics section for {title}. Context: {context}. Return a JSON object with keys: marketDrivers (string), marketRestraints (string), marketOpportunities (string). Analytical tone for executives. No bullet lists.',
     maxTokens: 500,
     estimatedInputTokens: 200,
     estimatedOutputTokens: 420,
@@ -96,8 +98,8 @@ export const PROMPT_CONFIGS: Record<string, PromptConfig> = {
   prompt3: {
     id: 'prompt3',
     title: 'Regional Insights & Market Segmentation',
-    description: 'Generate regional analysis and market segmentation',
-    template: 'Create Regional Insights and Market Segmentation for {title}. Context: {context}. Part 1: Select largest market share region (North America/Asia-Pacific/Europe) with USD size, CAGR, key drivers. Part 2: Generate segmentation structure as bullet list. Part 3: Analyze top 2 primary segments with market share data and growth drivers.',
+    description: 'Generate regional analysis and market segmentation in JSON format',
+    template: 'Create Regional Insights and Market Segmentation for {title}. Context: {context}. Return a JSON object with keys: regionalInsights (string), marketSegmentation (string). Part 1: Select largest market share region (North America/Asia-Pacific/Europe) with USD size, CAGR, key drivers. Part 2: Generate segmentation structure as bullet list. Part 3: Analyze top 2 primary segments with market share data and growth drivers.',
     maxTokens: 650,
     estimatedInputTokens: 300,
     estimatedOutputTokens: 580,
@@ -106,8 +108,8 @@ export const PROMPT_CONFIGS: Record<string, PromptConfig> = {
   prompt4: {
     id: 'prompt4',
     title: 'Key Market Players & Strategic Developments',
-    description: 'Generate key players list and recent developments',
-    template: 'Create Key Players section for {title}. Context: {context}. Part 1: List top 10 verified companies (publicly traded/recognized). Part 2: Provide 1-2 real 2024 developments with format "[Month] 2024: [Company] [action] to [outcome]". Use credible company names only, no placeholders.',
+    description: 'Generate key players list and recent developments in JSON format',
+    template: 'Create Key Players section for {title}. Context: {context}. Return a JSON object with keys: keyPlayers (array of strings), strategicDevelopments (string). Part 1: List top 10 verified companies (publicly traded/recognized). Part 2: Provide 1-2 real 2024 developments with format "[Month] 2024: [Company] [action] to [outcome]". Use credible company names only, no placeholders.',
     maxTokens: 450,
     estimatedInputTokens: 350,
     estimatedOutputTokens: 350,

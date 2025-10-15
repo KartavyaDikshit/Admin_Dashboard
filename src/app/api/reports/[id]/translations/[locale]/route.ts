@@ -11,6 +11,11 @@ const translatedReportSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters'),
   description: z.string().optional(),
   summary: z.string().optional(),
+  marketAnalysis: z.string().optional(),
+  competitiveAnalysis: z.string().optional(),
+  trendsAnalysis: z.string().optional(),
+  strategicDevelopments: z.string().optional(),
+  keyPlayers: z.array(z.string()).optional(),
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   // slug will be generated from title, not directly editable

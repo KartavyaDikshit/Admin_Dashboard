@@ -48,6 +48,7 @@ interface PromptOutputProps {
     };
     executionTime: number;
     content: string;
+    rawAiResponse?: string; // Add rawAiResponse here
     promptId: string;
   };
 }
@@ -55,6 +56,7 @@ interface PromptOutputProps {
 export default function PromptOutput({ index, result }: PromptOutputProps) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [showMetrics, setShowMetrics] = useState(true);
+  const [showRawAiResponse, setShowRawAiResponse] = useState(false); // New state for raw AI response
 
   return (
     <div className="card">
@@ -149,12 +151,35 @@ export default function PromptOutput({ index, result }: PromptOutputProps) {
       {/* Content */}
       {isExpanded && (
         <div className="card-body">
+          <h4 className="text-md font-semibold mb-2">Processed Content:</h4>
           <div className="prose max-w-none">
             <div className="whitespace-pre-wrap text-gray-800 leading-relaxed">
               {result.content}
             </div>
           </div>
           
+          {/* Raw AI Response for Debugging */}
+          {result.rawAiResponse && (
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-md font-semibold">Raw AI Response (for debugging):</h4>
+                <button
+                  onClick={() => setShowRawAiResponse(!showRawAiResponse)}
+                  className="btn btn-outline text-xs"
+                >
+                  {showRawAiResponse ? 'Hide' : 'Show'}
+                </button>
+              </div>
+              {showRawAiResponse && (
+                <div className="prose max-w-none bg-gray-100 p-3 rounded-md">
+                  <pre className="whitespace-pre-wrap text-gray-800 text-sm">
+                    {result.rawAiResponse}
+                  </pre>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Quick Actions */}
           <div className="mt-6 pt-4 border-t border-gray-200">
             <div className="flex items-center justify-between">

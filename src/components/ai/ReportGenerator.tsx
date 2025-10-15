@@ -20,10 +20,11 @@ export const ReportGenerator: React.FC<Props> = ({ reportTitle, onReportTitleCha
     cost: 0
   });
   const [error, setError] = useState<string>('');
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null); // State to hold the session ID
 
   const promptIds = ['prompt1', 'prompt2', 'prompt3', 'prompt4'];
 
-  const generateSinglePrompt = useCallback(async (promptId: string) => {
+  const generateSinglePrompt = useCallback(async (promptId: string, sessionId: string) => {
     try {
       const response = await fetch('/api/generate', {
         method: 'POST',
@@ -31,7 +32,8 @@ export const ReportGenerator: React.FC<Props> = ({ reportTitle, onReportTitleCha
         body: JSON.stringify({
           promptId,
           reportTitle,
-          useOptimizations: true
+          useOptimizations: true,
+          workflowId: sessionId, // Pass the session ID as workflowId
         }),
       });
 
@@ -67,24 +69,58 @@ export const ReportGenerator: React.FC<Props> = ({ reportTitle, onReportTitleCha
     setResults([]);
     setCurrentPromptIndex(0);
     setTotalTokenUsage({ inputTokens: 0, outputTokens: 0, totalTokens: 0, cost: 0 });
+    setCurrentSessionId(null); // Reset session ID at the start of a new generation
 
     try {
+      let sessionId: string | null = null;
       const newResults: PromptResult[] = [];
       let cumulativeTokenUsage = { inputTokens: 0, outputTokens: 0, totalTokens: 0, cost: 0 };
 
       for (let i = 0; i < promptIds.length; i++) {
         setCurrentPromptIndex(i);
 
-        const result = await generateSinglePrompt(promptIds[i]);
-        newResults.push(result);
+        // For the first prompt, create a new session and get its ID
+        if (i === 0) {
+          const initialResponse = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              promptId: promptIds[i],
+              reportTitle,
+              useOptimizations: true,
+            }),
+          });
+          const initialData = await initialResponse.json();
+          if (!initialData.success) {
+            throw new Error(initialData.error);
+          }
+          sessionId = initialData.data.sessionId; // Get the new session ID
+          setCurrentSessionId(sessionId);
+
+          const result: PromptResult = {
+            promptId: promptIds[i],
+            title: PROMPT_CONFIGS[promptIds[i]].title,
+            content: initialData.data.content,
+            tokenUsage: initialData.data.tokenUsage,
+            timestamp: new Date(),
+            executionTime: initialData.data.executionTime
+          };
+          newResults.push(result);
+        } else {
+          // For subsequent prompts, use the existing session ID
+          if (!sessionId) throw new Error('Session ID not found for subsequent prompts.');
+          const result = await generateSinglePrompt(promptIds[i], sessionId);
+          newResults.push(result);
+        }
+
         setResults([...newResults]);
 
         // Update cumulative token usage
         cumulativeTokenUsage = {
-          inputTokens: cumulativeTokenUsage.inputTokens + result.tokenUsage.inputTokens,
-          outputTokens: cumulativeTokenUsage.outputTokens + result.tokenUsage.outputTokens,
-          totalTokens: cumulativeTokenUsage.totalTokens + result.tokenUsage.totalTokens,
-          cost: cumulativeTokenUsage.cost + result.tokenUsage.cost
+          inputTokens: cumulativeTokenUsage.inputTokens + newResults[i].tokenUsage.inputTokens,
+          outputTokens: cumulativeTokenUsage.outputTokens + newResults[i].tokenUsage.outputTokens,
+          totalTokens: cumulativeTokenUsage.totalTokens + newResults[i].tokenUsage.totalTokens,
+          cost: cumulativeTokenUsage.cost + newResults[i].tokenUsage.cost
         };
         setTotalTokenUsage(cumulativeTokenUsage);
 
@@ -94,7 +130,36 @@ export const ReportGenerator: React.FC<Props> = ({ reportTitle, onReportTitleCha
         }
       }
 
+      // After all prompts are generated, finalize the report
+      console.log('Attempting to finalize report with sessionId:', sessionId, 'and reportTitle:', reportTitle);
+      const finalizeResponse = await fetch('/api/admin-dashboard/reports/finalize-ai-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId: sessionId, // Use the session ID
+          reportTitle: reportTitle,
+        }),
+      });
+
+      console.log('Finalize report API response status:', finalizeResponse.status);
+
+      if (!finalizeResponse.ok) {
+        const errorData = await finalizeResponse.json();
+        console.error('Finalize report API error response:', errorData);
+        throw new Error(errorData.error || `Failed to finalize report: ${finalizeResponse.statusText}`);
+      }
+
+      const finalizeData = await finalizeResponse.json();
+      console.log('Finalize report API success data:', finalizeData);
+
+      if (!finalizeData.success) {
+        throw new Error(finalizeData.error || 'Failed to finalize report.');
+      }
+
+      toast.success('Report finalized and saved successfully!');
+
     } catch (error) {
+      console.error('Error during report finalization:', error);
       setError(error instanceof Error ? error.message : 'An error occurred during generation');
     } finally {
       setIsGenerating(false);
@@ -113,7 +178,7 @@ export const ReportGenerator: React.FC<Props> = ({ reportTitle, onReportTitleCha
       await fetch('/api/generate', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reportTitle }),
+        body: JSON.stringify({ reportTitle, sessionId: currentSessionId }), // Pass currentSessionId
       });
 
       // Start generation process
@@ -121,19 +186,22 @@ export const ReportGenerator: React.FC<Props> = ({ reportTitle, onReportTitleCha
     } catch (error) {
       setError(`Regeneration failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
-  }, [reportTitle, startGeneration]);
+  }, [reportTitle, startGeneration, currentSessionId]);
 
   const resetSession = useCallback(async () => {
     try {
-      await fetch('/api/generate?action=reset');
+      if (currentSessionId) {
+        await fetch(`/api/generate?action=reset&sessionId=${currentSessionId}`);
+      }
       setResults([]);
       setTotalTokenUsage({ inputTokens: 0, outputTokens: 0, totalTokens: 0, cost: 0 });
       setCurrentPromptIndex(0);
       setError('');
+      setCurrentSessionId(null); // Clear session ID on reset
     } catch (error) {
       setError(`Reset failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
-  }, []);
+  }, [currentSessionId]);
 
   const getProgressPercentage = () => {
     if (!isGenerating) return results.length > 0 ? 100 : 0;

@@ -29,6 +29,11 @@ export class AITranslationService {
             metaTitle: true,
             metaDescription: true,
             slug: true,
+            marketAnalysis: true,
+            competitiveAnalysis: true,
+            trendsAnalysis: true,
+            strategicDevelopments: true,
+            keyPlayers: true,
           },
         }) as Report;
         if (!baseModel) throw new Error('Report not found')
@@ -40,6 +45,11 @@ export class AITranslationService {
           { key: 'summary', value: originalContent.summary || '' },
           { key: 'metaTitle', value: originalContent.metaTitle },
           { key: 'metaDescription', value: originalContent.metaDescription },
+          { key: 'marketAnalysis', value: originalContent.marketAnalysis || '' },
+          { key: 'competitiveAnalysis', value: originalContent.competitiveAnalysis || '' },
+          { key: 'trendsAnalysis', value: originalContent.trendsAnalysis || '' },
+          { key: 'strategicDevelopments', value: originalContent.strategicDevelopments || '' },
+          { key: 'keyPlayers', value: JSON.stringify(originalContent.keyPlayers || []) },
         ]
       } else if (contentType === 'CATEGORY') {
         baseModel = await prisma.category.findUnique({
@@ -233,6 +243,11 @@ ${originalTextInput}`
             slug: translatedFields.slug,
             metaTitle: translatedFields.metaTitle,
             metaDescription: translatedFields.metaDescription,
+            marketAnalysis: translatedFields.marketAnalysis,
+            competitiveAnalysis: translatedFields.competitiveAnalysis,
+            trendsAnalysis: translatedFields.trendsAnalysis,
+            strategicDevelopments: translatedFields.strategicDevelopments,
+            keyPlayers: translatedFields.keyPlayers ? JSON.parse(translatedFields.keyPlayers) : [],
             aiGenerated: true,
             status: TranslationStatus.PENDING_REVIEW,
           },
@@ -245,6 +260,11 @@ ${originalTextInput}`
             slug: translatedFields.slug,
             metaTitle: translatedFields.metaTitle,
             metaDescription: translatedFields.metaDescription,
+            marketAnalysis: translatedFields.marketAnalysis,
+            competitiveAnalysis: translatedFields.competitiveAnalysis,
+            trendsAnalysis: translatedFields.trendsAnalysis,
+            strategicDevelopments: translatedFields.strategicDevelopments,
+            keyPlayers: translatedFields.keyPlayers ? JSON.parse(translatedFields.keyPlayers) : [],
             aiGenerated: true,
             status: TranslationStatus.PENDING_REVIEW,
           },

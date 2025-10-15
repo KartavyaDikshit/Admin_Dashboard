@@ -22,6 +22,9 @@ const reportSchema = z.object({
   tableOfContents: z.string().optional(),
   methodology: z.string().optional(),
   executiveSummary: z.string().optional(),
+  marketAnalysis: z.string().optional(),
+  trendsAnalysis: z.string().optional(),
+  keyPlayers: z.string().optional(),
   reportType: z.string().optional(),
   researchMethod: z.string().optional(),
   metaTitle: z.string().min(5, 'Meta title must be at least 5 characters'),
@@ -67,15 +70,27 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
       publishedDate: new Date().toISOString().split('T')[0],
       ...initialData,
       categoryIds: initialData?.categories?.map((cat: Category) => cat.id) || [],
+      keyPlayers: initialData?.keyPlayers?.join('\n') || '', // Ensure keyPlayers is a string for the form
     }
   })
 
   useEffect(() => {
     fetchCategories()
     if (initialData) {
-      Object.keys(initialData).forEach(key => {
-        setValue(key as keyof FormData, initialData[key])
-      })
+      // No need to re-process keyPlayers here if already handled in defaultValues
+      // Object.keys(initialData).forEach(key => {
+      //   setValue(key as keyof FormData, initialData[key])
+      // })
+      // Explicitly set values for fields that might need transformation or are not directly spread
+      setValue('keyPlayers', initialData.keyPlayers?.join('\n') || '');
+      setValue('marketAnalysis', initialData.marketAnalysis || '');
+      setValue('trendsAnalysis', initialData.trendsAnalysis || '');
+      setValue('summary', initialData.summary || '');
+      setValue('description', initialData.description || '');
+      setValue('metaTitle', initialData.metaTitle || '');
+      setValue('metaDescription', initialData.metaDescription || '');
+      setValue('publishedDate', initialData.publishedDate ? new Date(initialData.publishedDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
+      // ... other fields that might need explicit setting
     }
   }, [initialData, setValue])
 
@@ -94,6 +109,11 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
   const onSubmit = async (data: FormData) => {
     setLoading(true)
 
+    const processedData = {
+      ...data,
+      keyPlayers: data.keyPlayers?.split('\n'),
+    };
+
     try {
       const url = reportId ? `/api/reports/${reportId}` : '/api/reports'
       const method = reportId ? 'PUT' : 'POST'
@@ -101,7 +121,7 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(processedData)
       })
 
       const result = await response.json()
@@ -189,36 +209,59 @@ export default function ReportForm({ reportId, initialData }: ReportFormProps) {
             </div>
           </div>
 
-          {/* Description */}
-          <div>
-            <label className="block text-sm font-medium text-black mb-1">
-              Description *
-            </label>
-            <textarea
-              {...register('description')}
-              rows={6}
-              className={cn(
-                'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black',
-                errors.description && 'border-red-500'
-              )}
-              placeholder="Comprehensive description of the market research report..."
-            />
-            {errors.description && (
-              <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
-            )}
-          </div>
 
-          {/* Summary */}
+
+          {/* Market Research Summary */}
           <div>
             <label className="block text-sm font-medium text-black mb-1">
-              Executive Summary
+              Market Research Summary
             </label>
             <textarea
               {...register('summary')}
               rows={4}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
-              placeholder="Executive summary of key findings..."
+              placeholder="Market research summary..."
             />
+          </div>
+
+          {/* Market Dynamics */}
+          <div>
+            <label className="block text-sm font-medium text-black mb-1">
+              Market Dynamics
+            </label>
+            <textarea
+              {...register('marketAnalysis')}
+              rows={6}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
+              placeholder="Market dynamics..."
+            />
+          </div>
+
+          {/* Regional Insights */}
+          <div>
+            <label className="block text-sm font-medium text-black mb-1">
+              Regional Insights
+            </label>
+            <textarea
+              {...register('trendsAnalysis')}
+              rows={6}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
+              placeholder="Regional insights..."
+            />
+          </div>
+
+          {/* Key Market Players */}
+          <div>
+            <label className="block text-sm font-medium text-black mb-1">
+              Key Market Players
+            </label>
+            <textarea
+              {...register('keyPlayers')}
+              rows={4}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
+              placeholder="Key market players..."
+            />
+
           </div>
 
           {/* Report Details */}

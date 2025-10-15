@@ -80,7 +80,7 @@ const WorkflowDetailsModal: FC<WorkflowDetailsModalProps> = ({ workflow, onClose
                 disabled={isApproving}
                 className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:bg-gray-400"
               >
-                {isApproving ? 'Approving...' : 'Approve Report'}
+                {isApproving ? 'Approving...' : 'Approve and Translate Report'}
               </button>
             </div>
           )}

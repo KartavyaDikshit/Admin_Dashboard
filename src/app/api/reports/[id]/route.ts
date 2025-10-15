@@ -40,9 +40,87 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params;
+
     const report = await prisma.report.findUnique({
-      where: { id: params.id },
-      include: {
+      where: { id: id },
+      select: {
+        id: true,
+        sku: true,
+        slug: true,
+        title: true,
+        description: true,
+        summary: true,
+        pages: true,
+        publishedDate: true,
+        baseYear: true,
+        forecastPeriod: true,
+        tableOfContents: true,
+        listOfFigures: true,
+        methodology: true,
+        keyFindings: true,
+        executiveSummary: true,
+        marketAnalysis: true,
+        competitiveAnalysis: true,
+        trendsAnalysis: true,
+        strategicDevelopments: true,
+        finalSynthesis: true,
+        marketData: true,
+        competitiveLandscape: true,
+        marketSegmentation: true,
+        regionalAnalysis: true,
+        swotAnalysis: true,
+        keyPlayers: true,
+        regions: true,
+        industryTags: true,
+        reportType: true,
+        researchMethod: true,
+        keywords: true,
+        semanticKeywords: true,
+        regionalKeywords: true,
+        competitorKeywords: true,
+        trendingKeywords: true,
+        longTailKeywords: true,
+        metaTitle: true,
+        metaDescription: true,
+        canonicalUrl: true,
+        ogTitle: true,
+        ogDescription: true,
+        ogImage: true,
+        twitterTitle: true,
+        twitterDescription: true,
+        schemaMarkup: true,
+        breadcrumbData: true,
+        faqData: true,
+        singlePrice: true,
+        multiPrice: true,
+        corporatePrice: true,
+        enterprisePrice: true,
+        currency: true,
+        aiGenerated: true,
+        contentGenerationWorkflowId: true,
+        humanApproved: true,
+        contentQualityScore: true,
+        aiConfidenceScore: true,
+        status: true,
+        featured: true,
+        priority: true,
+        viewCount: true,
+        downloadCount: true,
+        shareCount: true,
+        enquiryCount: true,
+        searchRankings: true,
+        clickThroughRate: true,
+        averagePosition: true,
+        impressions: true,
+        clicks: true,
+        bounceRate: true,
+        timeOnPage: true,
+        avgRating: true,
+        reviewCount: true,
+        totalRatingPoints: true,
+        createdAt: true,
+        updatedAt: true,
         categories: {
           select: {
             id: true,
@@ -103,11 +181,13 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params;
+
     const body = await request.json()
     const validatedData = reportSchema.parse(body)
 
     const existingReport = await prisma.report.findUnique({
-      where: { id: params.id },
+      where: { id: id },
       select: { title: true }
     })
 
@@ -120,7 +200,7 @@ export async function PUT(
       : undefined
 
     const updatedReport = await prisma.report.update({
-      where: { id: params.id },
+      where: { id: id },
       data: {
         ...validatedData,
         slug,
@@ -151,8 +231,10 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params;
+
     await prisma.report.delete({
-      where: { id: params.id }
+      where: { id: id }
     })
 
     return NextResponse.json({ success: true })
@@ -161,3 +243,4 @@ export async function DELETE(
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
+

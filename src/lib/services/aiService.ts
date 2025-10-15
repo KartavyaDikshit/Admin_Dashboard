@@ -270,6 +270,7 @@ export class AIContentService {
     const workflow = await prisma.contentGenerationWorkflow.create({
       data: {
         reportTitle,
+        language: 'en',
         industry: 'N/A',
         geographicScope: 'N/A',
         timeframe: 'N/A',
@@ -287,29 +288,23 @@ export class AIContentService {
   }
 
   async processNextPhase(workflowId: string) {
-    console.log(`[${new Date().toISOString()}] Processing next phase for workflow ${workflowId}`);
     const workflow = await prisma.contentGenerationWorkflow.findUnique({
       where: { id: workflowId },
       include: { jobs: { orderBy: { phase: 'asc' } } }
     })
 
     if (!workflow) {
-      console.log(`[${new Date().toISOString()}] Workflow ${workflowId} not found.`);
       return;
     }
 
     if (workflow.currentPhase > PHASE_CONFIGS.length) {
-      console.log(`[${new Date().toISOString()}] Workflow ${workflowId} has already completed all phases.`);
       return
     }
-
-    console.log(`[${new Date().toISOString()}] Current phase for workflow ${workflowId} is ${workflow.currentPhase}`);
 
     const phaseConfig = PHASE_CONFIGS[workflow.currentPhase - 1]
     const previousContent = this.buildContextFromPreviousPhases(workflow.jobs)
 
     // Create job for current phase
-    console.log(`[${new Date().toISOString()}] Creating job for phase ${workflow.currentPhase} of workflow ${workflowId}`);
     const job = await prisma.contentGenerationJob.create({
       data: {
         workflowId: workflow.id,
@@ -329,13 +324,11 @@ export class AIContentService {
         status: 'PROCESSING'
       }
     })
-    console.log(`[${new Date().toISOString()}] Created job ${job.id} for phase ${workflow.currentPhase} of workflow ${workflowId}`);
 
     try {
       await this.executeJob(job.id)
           } catch (error: unknown) {
             const message = error instanceof Error ? error.message : 'An unknown error occurred';
-            console.error(`[${new Date().toISOString()}] Error executing job ${job.id} for workflow ${workflowId}:`, error);
             await prisma.contentGenerationJob.update({
               where: { id: job.id },
               data: {
@@ -346,17 +339,13 @@ export class AIContentService {
           }  }
 
   private async executeJob(jobId: string) {
-    console.log(`[${new Date().toISOString()}] Executing job ${jobId}`);
     const job = await prisma.contentGenerationJob.findUnique({
       where: { id: jobId }
     })
 
     if (!job) {
-      console.log(`[${new Date().toISOString()}] Job ${jobId} not found.`);
       return;
     }
-
-    console.log(`[${new Date().toISOString()}] Found job ${jobId} for phase ${job.phase} of workflow ${job.workflowId}`);
 
     const startTime = Date.now()
     let processingTime = 0;
@@ -366,7 +355,6 @@ export class AIContentService {
     let cost = 0;
 
     try {
-      console.log(`[${new Date().toISOString()}] Calling OpenAI for job ${jobId}`);
       const completion = await openai.chat.completions.create({
         model: job.aiModel,
         messages: [
@@ -382,7 +370,6 @@ export class AIContentService {
         max_tokens: job.maxTokens,
         temperature: job.temperature.toNumber()
       })
-      console.log(`[${new Date().toISOString()}] OpenAI call completed for job ${jobId}`);
 
       const outputText = completion.choices[0]?.message?.content || ''
 
@@ -392,11 +379,7 @@ export class AIContentService {
       cost = calculateCost(inputTokens, outputTokens);
       processingTime = Date.now() - startTime;
 
-      console.log('OpenAI Completion Usage:', completion.usage);
-      console.log('Calculated Tokens:', { inputTokens, outputTokens, totalTokens, cost });
-
       // Update job with results
-      console.log(`[${new Date().toISOString()}] Updating job ${jobId} with results`);
       await prisma.contentGenerationJob.update({
         where: { id: jobId },
         data: {
@@ -411,10 +394,8 @@ export class AIContentService {
           completenessScore: await this.assessCompleteness(outputText, job.phase)
         }
       })
-      console.log(`[${new Date().toISOString()}] Updated job ${jobId} with results`);
 
       // Update parent workflow's total tokens and cost
-      console.log(`[${new Date().toISOString()}] Updating workflow ${job.workflowId} with total tokens and cost`);
       await prisma.contentGenerationWorkflow.update({
         where: { id: job.workflowId! },
         data: {
@@ -432,16 +413,8 @@ export class AIContentService {
           }
         }
       })
-      console.log(`[${new Date().toISOString()}] Updated workflow ${job.workflowId} with total tokens and cost`);
-
-      const updatedWorkflow = await prisma.contentGenerationWorkflow.findUnique({
-        where: { id: job.workflowId! },
-        select: { totalTokensUsed: true, totalCost: true }
-      });
-      console.log('Updated Workflow Totals:', updatedWorkflow);
 
       // Log API usage
-      console.log(`[${new Date().toISOString()}] Logging API usage for job ${jobId}`);
       await prisma.apiUsageLog.create({
         data: {
           serviceType: 'content_generation',
@@ -458,16 +431,11 @@ export class AIContentService {
           responseData: { content: outputText }
         }
       })
-      console.log(`[${new Date().toISOString()}] Logged API usage for job ${jobId}`);
 
       // Update workflow and continue to next phase
-      console.log(`[${new Date().toISOString()}] Updating workflow after job ${jobId}`);
       await this.updateWorkflowAfterJob(job.workflowId!, job.phase, outputText)
-      console.log(`[${new Date().toISOString()}] Updated workflow after job ${jobId}`);
 
     } catch (error: unknown) {
-      console.error(`[${new Date().toISOString()}] Error in executeJob for job ${jobId}:`, error);
-      
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
       const errorCode = error && typeof error === 'object' && 'code' in error ? String((error as { code: unknown }).code) : 'UNKNOWN';
 
@@ -537,12 +505,6 @@ export class AIContentService {
     updateData.totalTokensUsed = recalculatedTotalTokensUsed;
     updateData.totalCost = recalculatedTotalCost;
 
-    // Store content in appropriate field
-    // The fields marketAnalysis, competitiveAnalysis, trendsAnalysis, finalSynthesis
-    // are specific to the old workflow. For the new workflow, we will rely on job.outputText
-    // for each phase. We can remove these fields from the workflow model if they are not used elsewhere.
-    // For now, we will just update the workflow status and current phase.
-
     if (completedPhase < PHASE_CONFIGS.length) {
       // Continue to next phase
       updateData.currentPhase = completedPhase + 1
@@ -563,6 +525,13 @@ export class AIContentService {
         where: { id: workflowId },
         data: updateData
       })
+
+      const completedWorkflow = await prisma.contentGenerationWorkflow.findUnique({ where: { id: workflowId } });
+      if (completedWorkflow?.parentWorkflowId) {
+
+        // This is a child workflow that just completed. Let's approve it.
+        await this.approveWorkflow(workflowId, completedWorkflow.createdBy);
+      }
     }
   }
 
@@ -739,7 +708,6 @@ export class AIContentService {
   }
 
   async approveWorkflow(workflowId: string, userId: string, categoryIds?: string[]) {
-    console.log(`Approving workflow ${workflowId} by user ${userId}`);
     const updatedWorkflow = await prisma.contentGenerationWorkflow.update({
       where: { id: workflowId },
       data: {
@@ -748,7 +716,6 @@ export class AIContentService {
         approvedBy: userId,
       }
     });
-    console.log('Workflow status updated to APPROVED');
 
     const workflowWithJobs = await prisma.contentGenerationWorkflow.findUnique({
         where: { id: workflowId },
@@ -756,10 +723,8 @@ export class AIContentService {
     });
 
     if (!workflowWithJobs) {
-        console.error("Could not find the approved workflow after update.");
         throw new Error("Could not find the approved workflow.");
     }
-    console.log('Found workflow with jobs');
 
     const reportTitle = workflowWithJobs.reportTitle;
     const slug = generateSlug(reportTitle);
@@ -837,7 +802,6 @@ export class AIContentService {
       let savedReport;
 
       if (existingReport) {
-          console.log(`Updating existing report with slug: ${slug}`);
           savedReport = await prisma.report.update({
               where: { slug },
               data: {
@@ -847,9 +811,7 @@ export class AIContentService {
                   }
               },
           });
-          console.log(`Report updated with id: ${savedReport.id}`);
       } else {
-          console.log(`Creating new report with slug: ${slug}`);
           savedReport = await prisma.report.create({
               data: {
                   ...reportData,
@@ -859,7 +821,6 @@ export class AIContentService {
                   }
               },
           });
-          console.log(`Report created with id: ${savedReport.id}`);
       }
 
       // Create child workflows for other languages
@@ -880,8 +841,7 @@ export class AIContentService {
                       reportType: workflowWithJobs.reportType,
                   }
               });
-              await new Promise(resolve => setTimeout(resolve, 5000));
-              await this.processNextPhase(childWorkflow.id);
+              this.processNextPhase(childWorkflow.id);
           }
       }
 

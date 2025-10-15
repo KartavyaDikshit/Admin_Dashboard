@@ -189,6 +189,11 @@ model Report {
   methodology                 String?       @db.Text
   keyFindings                 String[]      @default([]) @map("key_findings")
   executiveSummary            String?       @map("executive_summary") @db.Text
+  marketAnalysis              String?       @map("market_analysis") @db.Text
+  competitiveAnalysis         String?       @map("competitive_analysis") @db.Text
+  trendsAnalysis              String?       @map("trends_analysis") @db.Text
+  strategicDevelopments       String?       @map("strategic_developments") @db.Text
+  finalSynthesis              String?       @map("final_synthesis") @db.Text
   marketData                  Json?         @map("market_data")
   competitiveLandscape        Json?         @map("competitive_landscape")
   marketSegmentation          Json?         @map("market_segmentation")
@@ -278,6 +283,7 @@ model ContentGenerationWorkflow {
   competitiveAnalysis   String?               @map("competitive_analysis") @db.Text
   trendsAnalysis        String?               @map("trends_analysis") @db.Text
   finalSynthesis        String?               @map("final_synthesis") @db.Text
+
   overallQualityScore   Decimal?              @map("overall_quality_score") @db.Decimal(3, 2)
   contentCoherence      Decimal?              @map("content_coherence") @db.Decimal(3, 2)
   factualAccuracy       Decimal?              @map("factual_accuracy") @db.Decimal(3, 2)
@@ -774,6 +780,7 @@ model ReportTranslation {
   finalSynthesis          String?           @map("final_synthesis") @db.Text
   keyPlayers              String[]          @default([]) @map("key_players")
   strategicDevelopments   String?           @map("strategic_developments") @db.Text
+
   slug                    String            @db.VarChar(200)
   tableOfContents         String?           @map("table_of_contents") @db.Text
   listOfFigures           String?           @map("list_of_figures") @db.Text

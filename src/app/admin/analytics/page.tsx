@@ -1,10 +1,10 @@
 import AdminLayout from '@/components/layout/AdminLayout'
-import AnalyticsOverview from '@/components/dashboard/AnalyticsOverview'
+import { ApiUsageAnalytics } from '@/components/dashboard/ApiUsageAnalytics'
 
 export default function AdminAnalyticsPage() {
   return (
     <AdminLayout>
-      <AnalyticsOverview />
+      <ApiUsageAnalytics />
     </AdminLayout>
   )
 }
