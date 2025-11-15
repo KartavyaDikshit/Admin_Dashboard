@@ -1,360 +1,178 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { toast } from 'react-hot-toast'
-import { cn } from '@/lib/utils'
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import { Category } from '@prisma/client';
 
 const categorySchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  description: z.string().nullable().optional(), // Allow null for description
   shortcode: z.string().min(2, 'Shortcode must be at least 2 characters').max(20, 'Shortcode cannot exceed 20 characters'),
-  title_en: z.string().min(1, 'Title is required'),
-  description_en: z.string().optional(),
-  title_de: z.string().optional(),
-  description_de: z.string().optional(),
-  title_fr: z.string().optional(),
-  description_fr: z.string().optional(),
-  title_it: z.string().optional(),
-  description_it: z.string().optional(),
-  title_ja: z.string().optional(),
-  description_ja: z.string().optional(),
-  title_ko: z.string().optional(),
-  description_ko: z.string().optional(),
-  title_es: z.string().optional(),
-  description_es: z.string().optional(),
-  icon: z.string().optional(),
-  featured: z.boolean().default(false),
-  sortOrder: z.coerce.number().int().default(0),
-  seoKeywords: z.string().transform(val => val.split(',').map(s => s.trim()).filter(Boolean)).optional(),
-  metaTitle: z.string().optional(),
-  metaDescription: z.string().optional(),
-  status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED', 'ACTIVE']).default('PUBLISHED')
-})
+  icon: z.string().nullable().optional(), // Allow null for icon
+  featured: z.boolean(),
+  sortOrder: z.number().int(),
+  status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED', 'ACTIVE']),
+});
 
-type FormData = z.infer<typeof categorySchema>
+type FormData = z.infer<typeof categorySchema>;
 
 interface CategoryFormProps {
-  categoryId?: string
-  initialData?: FormData & { translations?: CategoryTranslation[] }
+  initialData?: Category;
+  categoryId?: string;
 }
 
-interface CategoryTranslation {
-  id: string;
-  categoryId: string;
-  locale: string;
-  title: string | null;
-  description: string | null;
-  seoKeywords: string[];
-  metaTitle: string | null;
-  metaDescription: string | null;
-  status: string;
-}
-
-export default function CategoryForm({ categoryId, initialData }: CategoryFormProps) {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
+export default function CategoryForm({ initialData }: CategoryFormProps) {
+  const router = useRouter();
+  const defaultFormValues: FormData = {
+    name: initialData?.name ?? '',
+    description: initialData?.description ?? null,
+    shortcode: initialData?.shortcode ?? '',
+    icon: initialData?.icon ?? null,
+    featured: initialData?.featured ?? false,
+    sortOrder: initialData?.sortOrder ?? 0,
+    status: initialData?.status ?? 'PUBLISHED',
+  };
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
-    watch,
-    setValue
   } = useForm<FormData>({
     resolver: zodResolver(categorySchema),
-    defaultValues: {
-      featured: false,
-      sortOrder: 0,
-      status: 'PUBLISHED',
-      title_en: '',
-      description_en: '',
-      ...initialData
-    }
-  })
+    defaultValues: defaultFormValues,
+  });
 
   useEffect(() => {
     if (initialData) {
-      const translatedData: Record<string, any> = {};
-      initialData.translations?.forEach(t => {
-        if (t.title) translatedData[`title_${t.locale}`] = t.title;
-        if (t.description) translatedData[`description_${t.locale}`] = t.description;
-      });
-
       reset({
-        ...initialData,
-        ...translatedData,
-        seoKeywords: initialData.seoKeywords ? initialData.seoKeywords.join(', ') : '',
+        name: initialData.name,
+        description: initialData.description,
+        shortcode: initialData.shortcode,
+        icon: initialData.icon,
+        featured: initialData.featured,
+        sortOrder: initialData.sortOrder,
+        status: initialData.status,
       });
     }
   }, [initialData, reset]);
 
   const onSubmit = async (data: FormData) => {
-    setLoading(true)
-
+    const toastId = toast.loading(initialData ? 'Updating category...' : 'Creating category...');
+    
     try {
-      const baseCategoryData = {
-        shortcode: data.shortcode,
-        title_en: data.title_en,
-        description_en: data.description_en,
-        icon: data.icon,
-        featured: data.featured,
-        sortOrder: data.sortOrder,
-        seoKeywords: data.seoKeywords,
-        metaTitle: data.metaTitle,
-        metaDescription: data.metaDescription,
-        status: data.status,
-      };
-
-      const translationData: Record<string, any> = {};
-      const languages = ['de', 'fr', 'it', 'ja', 'ko', 'es'];
-
-      languages.forEach(lang => {
-        const titleKey = `title_${lang}` as keyof FormData;
-        const descriptionKey = `description_${lang}` as keyof FormData;
-
-        if (data[titleKey] || data[descriptionKey]) {
-          translationData[lang] = {
-            title: data[titleKey],
-            description: data[descriptionKey],
-          };
-        }
-      });
-
-      const url = categoryId ? `/api/categories/${categoryId}` : '/api/categories'
-      const method = categoryId ? 'PUT' : 'POST'
+      const url = initialData ? `/api/categories/${initialData.id}` : '/api/categories';
+      const method = initialData ? 'PATCH' : 'POST';
 
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(baseCategoryData)
-      })
+        body: JSON.stringify(data),
+      });
 
-      const result = await response.json()
+      const result = await response.json();
+      toast.dismiss(toastId);
 
       if (response.ok) {
-        const createdOrUpdatedCategoryId = result.category.id;
-
-        // Handle translations
-        for (const lang of languages) {
-          if (translationData[lang]) {
-            const translationUrl = `/api/category-translations`;
-            const translationMethod = 'POST'; // Always POST for upserting translations
-
-            await fetch(translationUrl, {
-              method: translationMethod,
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                categoryId: createdOrUpdatedCategoryId,
-                locale: lang,
-                ...translationData[lang],
-              }),
-            });
-          }
-        }
-
-        toast.success(`Category ${categoryId ? 'updated' : 'created'} successfully`)
-        router.push('/admin/categories')
+        toast.success(`Category ${initialData ? 'updated' : 'created'} successfully!`);
+        router.push('/admin/categories');
+        router.refresh(); // Refreshes the server components on the target route
       } else {
-        toast.error(result.error || `Failed to ${categoryId ? 'update' : 'create'} category`)
+        toast.error(result.error || 'An error occurred.');
       }
-    } catch (error) {
-      toast.error('An error occurred')
-    } finally {
-      setLoading(false)
+    } catch {
+      toast.dismiss(toastId);
+      toast.error('An unexpected error occurred.');
     }
-  }
-
-  const watchedTitle = watch('title_en')
-
-  // Auto-generate meta title when title changes (if not already set)
-  useEffect(() => {
-    if (watchedTitle && !initialData?.metaTitle) {
-      // Simple auto-generation, can be more sophisticated
-      // For now, just use the title as meta title
-      setValue('metaTitle', `${watchedTitle} | Categories | TheBrainyInsights`)
-    }
-  }, [watchedTitle, initialData, setValue])
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white shadow rounded-lg">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-black">
-            {categoryId ? 'Edit Category' : 'Create New Category'}
-          </h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="bg-white shadow-md rounded-lg p-8 space-y-8">
+        <div className="border-b border-gray-200 pb-6">
+            <h2 className="text-xl font-semibold text-gray-900">
+                {initialData ? 'Edit Category' : 'Create New Category'}
+            </h2>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6 text-black">
-          {/* Basic Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-black mb-1">
-                Title *
-              </label>
-              <input
-                type="text"
-                {...register('title_en')}
-                className={cn(
-                  'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black',
-                  errors.title_en && 'border-red-500'
-                )}
-                placeholder="e.g., Artificial Intelligence Market Research"
-              />
-              {errors.title_en && (
-                <p className="mt-1 text-sm text-red-600">{errors.title_en.message}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-black mb-1">
-                Shortcode *
-              </label>
-              <input
-                type="text"
-                {...register('shortcode')}
-                className={cn(
-                  'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black',
-                  errors.shortcode && 'border-red-500'
-                )}
-                placeholder="e.g., AI, HEALTH"
-              />
-              {errors.shortcode && (
-                <p className="mt-1 text-sm text-red-600">{errors.shortcode.message}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Description */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-black mb-1">
-              Description
-            </label>
-            <textarea
-              {...register('description_en')}
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
-              placeholder="A brief description of the category..."
-            />
-          </div>
-
-          {/* Icon & Sort Order */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-black mb-1">
-                Icon (e.g., Emoji or URL)
-              </label>
-              <input
-                type="text"
-                {...register('icon')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
-                placeholder="💻 or https://example.com/icon.png"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-black mb-1">
-                Sort Order
-              </label>
-              <input
-                type="number"
-                {...register('sortOrder')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
-                placeholder="0"
-              />
-            </div>
-          </div>
-
-          {/* SEO Keywords */}
-          <div>
-            <label className="block text-sm font-medium text-black mb-1">
-              SEO Keywords (comma-separated)
-            </label>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name *</label>
             <input
-              type="text"
-              {...register('seoKeywords')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
-              placeholder="keyword1, keyword2, keyword3"
+              id="name"
+              {...register('name')}
+              className={cn('mt-1 block w-full rounded-md border-gray-300 shadow-sm', errors.name && 'border-red-500')}
             />
+            {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
           </div>
+          <div>
+            <label htmlFor="shortcode" className="block text-sm font-medium text-gray-700">Shortcode *</label>
+            <input
+              id="shortcode"
+              {...register('shortcode')}
+              className={cn('mt-1 block w-full rounded-md border-gray-300 shadow-sm', errors.shortcode && 'border-red-500')}
+            />
+            {errors.shortcode && <p className="mt-1 text-sm text-red-600">{errors.shortcode.message}</p>}
+          </div>
+        </div>
 
-          {/* Meta Title & Description */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+          <textarea
+            id="description"
+            {...register('description')}
+            rows={4}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-black mb-1">
-                Meta Title
-              </label>
-              <input
-                type="text"
-                {...register('metaTitle')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
-                placeholder="SEO-optimized meta title..."
-              />
+                <label htmlFor="icon" className="block text-sm font-medium text-gray-700">Icon URL</label>
+                <input id="icon" {...register('icon')} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-black mb-1">
-                Meta Description
-              </label>
-              <textarea
-                {...register('metaDescription')}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-black"
-                placeholder="SEO-optimized meta description..."
-              />
+                <label htmlFor="sortOrder" className="block text-sm font-medium text-gray-700">Sort Order</label>
+                <input id="sortOrder" type="number" {...register('sortOrder')} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
             </div>
-          </div>
+        </div>
 
-          {/* Status & Featured */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-black mb-1">
-                Status
-              </label>
-              <select
-                {...register('status')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
-              >
-                <option value="PUBLISHED">Published</option>
-                <option value="DRAFT">Draft</option>
-                <option value="ACTIVE">Active</option>
-                <option value="ARCHIVED">Archived</option>
-              </select>
+                <label htmlFor="status" className="block text-sm font-medium text-gray-700">Status</label>
+                <select id="status" {...register('status')} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    <option value="PUBLISHED">Published</option>
+                    <option value="DRAFT">Draft</option>
+                </select>
             </div>
             <div className="flex items-center pt-6">
-              <input
-                type="checkbox"
-                {...register('featured')}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-              <label className="ml-2 block text-sm text-black">
-                Featured Category
-              </label>
+                <input id="featured" type="checkbox" {...register('featured')} className="h-4 w-4 rounded border-gray-300 text-indigo-600" />
+                <label htmlFor="featured" className="ml-2 block text-sm text-gray-900">Featured Category</label>
             </div>
-          </div>
+        </div>
 
-          {/* Submit */}
-          <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-black bg-white hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className={cn(
-                'px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700',
-                loading && 'opacity-50 cursor-not-allowed'
-              )}
-            >
-              {loading ? 'Saving...' : categoryId ? 'Update Category' : 'Create Category'}
-            </button>
-          </div>
-        </form>
-      </div>
+        <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
+          >
+            {isSubmitting ? 'Saving...' : (initialData ? 'Update Category' : 'Create Category')}
+          </button>
+        </div>
+      </form>
     </div>
-  )
+  );
 }

@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '../auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { generateSlug } from '@/lib/utils'
 import '@/lib/json-bigint'
+
+
+// ... existing code ...
+
+
 
 const reportSchema = z.object({
   categoryIds: z.array(z.string()).optional(),
@@ -51,20 +56,10 @@ export async function GET(request: NextRequest) {
 
     const skip = (page - 1) * limit
     
-    interface ReportWhereClause {
-      OR?: Array<{
-        title?: { contains: string; mode: 'insensitive' };
-        description?: { contains: string; mode: 'insensitive' };
-        sku?: { contains: string; mode: 'insensitive' };
-      }>;
-      categories?: { some: { id: string } };
-      status?: string;
-      featured?: boolean;
-      aiGenerated?: boolean;
-    }
+
     const locale = searchParams.get('locale')
 
-    const where: ReportWhereClause = {}
+    const where: any = {}
 
     if (search) {
       where.OR = [
@@ -75,11 +70,19 @@ export async function GET(request: NextRequest) {
     }
 
     if (categoryId) where.categories = { some: { id: categoryId } }
-    if (status) where.status = status
+    if (status) {
+      const parsedStatus = z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED', 'ACTIVE']).safeParse(status);
+      if (parsedStatus.success) {
+        where.status = parsedStatus.data;
+      }
+      else {
+        console.warn(`Invalid status query parameter: ${status}. Ignoring.`);
+      }
+    }
     if (featured !== null) where.featured = featured === 'true'
     if (aiGenerated !== null) where.aiGenerated = aiGenerated === 'true'
 
-    const reports = await prisma.report.findMany({
+    const reports: any[] = await prisma.report.findMany({
       where,
       skip,
       take: limit,
@@ -113,7 +116,7 @@ export async function GET(request: NextRequest) {
         categories: {
           select: {
             id: true,
-            title_en: true,
+            name: true,
             shortcode: true,
             translations: true,
           }
@@ -161,6 +164,19 @@ export async function GET(request: NextRequest) {
       ]
     })
 
+interface CategoryTranslation {
+  locale: string;
+  title: string;
+  // Add other properties of CategoryTranslation if needed
+}
+
+interface CategoryWithTranslations {
+  id: string;
+  name: string;
+  shortcode: string;
+  translations: CategoryTranslation[];
+}
+
     const reportsWithTranslatedFields = reports.map(report => {
       const translated = report.translations && report.translations.length > 0 ? report.translations[0] : null;
       const processedReport = {
@@ -174,33 +190,33 @@ export async function GET(request: NextRequest) {
         methodology: translated?.methodology || report.methodology,
         keyFindings: translated?.keyFindings || report.keyFindings,
         executiveSummary: translated?.executiveSummary || report.executiveSummary,
-        keywords: translated?.keywords || report.keywords,
-        semanticKeywords: translated?.semanticKeywords || report.semanticKeywords,
-        localizedKeywords: translated?.localizedKeywords || report.localizedKeywords,
-        culturalKeywords: translated?.culturalKeywords || report.culturalKeywords,
-        longTailKeywords: translated?.longTailKeywords || report.longTailKeywords,
-        localCompetitorKeywords: translated?.localCompetitorKeywords || report.localCompetitorKeywords,
+        keywords: translated?.keywords || [],
+        semanticKeywords: translated?.semanticKeywords || [],
+        localizedKeywords: translated?.localizedKeywords || [],
+        culturalKeywords: translated?.culturalKeywords || [],
+        longTailKeywords: translated?.longTailKeywords || [],
+        localCompetitorKeywords: translated?.localCompetitorKeywords || [],
         metaTitle: translated?.metaTitle || report.metaTitle,
         metaDescription: translated?.metaDescription || report.metaDescription,
-        canonicalUrl: translated?.canonicalUrl || report.canonicalUrl,
-        ogTitle: translated?.ogTitle || report.ogTitle,
-        ogDescription: translated?.ogDescription || report.ogDescription,
-        ogImage: translated?.ogImage || report.ogImage,
-        twitterTitle: translated?.twitterTitle || report.twitterTitle,
-        twitterDescription: translated?.twitterDescription || report.twitterDescription,
-        schemaMarkup: translated?.schemaMarkup || report.schemaMarkup,
-        breadcrumbData: translated?.breadcrumbData || report.breadcrumbData,
-        faqData: translated?.faqData || report.faqData,
-        localBusinessSchema: translated?.localBusinessSchema || report.localBusinessSchema,
+        canonicalUrl: translated?.canonicalUrl || undefined,
+        ogTitle: translated?.ogTitle || undefined,
+        ogDescription: translated?.ogDescription || undefined,
+        ogImage: translated?.ogImage || undefined,
+        twitterTitle: translated?.twitterTitle || undefined,
+        twitterDescription: translated?.twitterDescription || undefined,
+        schemaMarkup: translated?.schemaMarkup || undefined,
+        breadcrumbData: translated?.breadcrumbData || undefined,
+        faqData: translated?.faqData || undefined,
+        localBusinessSchema: translated?.localBusinessSchema || undefined,
       };
 
       // Apply category translations
-      processedReport.categories = processedReport.categories.map(category => {
+      processedReport.categories = processedReport.categories.map((category: CategoryWithTranslations) => {
         const translatedCategory = {
           ...category,
-          title: category.title_en, // Default to English title
+          title: category.name, // Default to English title
         };
-        const categoryTranslation = category.translations.find(t => t.locale === locale);
+        const categoryTranslation = category.translations.find((t: CategoryTranslation) => t.locale === locale);
         if (categoryTranslation && categoryTranslation.title) {
           translatedCategory.title = categoryTranslation.title;
         }
@@ -262,7 +278,7 @@ export async function POST(request: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({
         error: 'Validation error',
-        details: error.errors
+        details: error.issues
       }, { status: 400 })
     }
 

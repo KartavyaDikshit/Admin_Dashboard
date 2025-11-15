@@ -1,125 +1,144 @@
-import { createMocks } from 'node-mocks-http'
-import { GET, POST } from '@/app/api/reports/route'
-import { prisma } from '@/lib/prisma'
-import { NextRequest } from 'next/server'
-
-// Mock prisma
-jest.mock('@/lib/prisma', () => ({
-  prisma: {
-    report: {
-      findMany: jest.fn(),
-      count: jest.fn(),
-      create: jest.fn()
-    }
-  }
-}))
+import { getServerSession } from 'next-auth/next';
+import { prisma } from '@/lib/prisma';
+import { createMocks } from 'node-mocks-http';
+import { GET, PATCH, DELETE } from '@/app/api/reports/[id]/route';
+import { POST as generatePOST } from '@/app/api/reports/generate/route';
+import { POST as publishPOST } from '@/app/api/reports/[id]/publish/route';
+import { NextRequest } from 'next/server';
 
 // Mock next-auth
 jest.mock('next-auth/next', () => ({
-  getServerSession: jest.fn(() => Promise.resolve({
-    user: { id: '1', role: 'SUPERADMIN' }
-  }))
-}))
+  getServerSession: jest.fn(),
+}));
 
-describe('/api/reports', () => {
+// Mock prisma
+jest.mock('@/lib/prisma', () => ({
+  __esModule: true,
+  default: {
+    report: {
+      findUnique: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+      create: jest.fn(),
+    },
+    reportTranslation: {
+      upsert: jest.fn(),
+    },
+    apiUsageLog: {
+      create: jest.fn(),
+    },
+  },
+}));
+
+// Mock @/lib/utils
+jest.mock('@/lib/utils', () => ({
+  generateSlug: jest.fn((title) => title.toLowerCase().replace(/\s/g, '-')),
+  generateSKU: jest.fn(() => 'TBI-SKU-123'),
+}));
+
+// Mock OpenAI
+jest.mock('openai', () => {
+    return jest.fn().mockImplementation(() => ({
+      chat: {
+        completions: {
+          create: jest.fn().mockResolvedValue({
+            choices: [{ message: { content: '{"title":"Translated Title", "marketResearchSummary":"Translated Summary", "marketDynamics":"Translated Dynamics", "regionalInsights":"Translated Insights", "keyMarketPlayers":"Translated Players", "tableOfContents":"Translated ToC"}' } }],
+            usage: { prompt_tokens: 10, completion_tokens: 20, total_tokens: 30 },
+            model: 'gpt-4o-mini',
+          }),
+        },
+      },
+    }));
+  });
+
+describe('Reports API', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+    (getServerSession as jest.Mock).mockResolvedValue({
+      user: { id: 'test-user-id' },
+    });
+  });
 
-  describe('GET', () => {
-    it('returns reports with pagination', async () => {
-      const mockReports = [
-        { id: '1', title: 'Test Report 1' },
-        { id: '2', title: 'Test Report 2' }
-      ]
+  describe('GET /api/reports/[id]', () => {
+    it('should return a single report', async () => {
+      const mockReport = { id: 'report-1', title: 'Test Report', categories: [] };
+      (prisma.report.findUnique as jest.Mock).mockResolvedValue(mockReport);
 
-      ;(prisma.report.findMany as jest.Mock).mockResolvedValue(mockReports)
-      ;(prisma.report.count as jest.Mock).mockResolvedValue(2)
+      const { req } = createMocks({ method: 'GET' });
+      const response = await GET(req as NextRequest, { params: { id: 'report-1' } });
+      const data = await response.json();
 
-      const { req } = createMocks({
-        method: 'GET',
-        url: '/api/reports?page=1&limit=25'
-      })
+      expect(response.status).toBe(200);
+      expect(data).toEqual(mockReport);
+    });
+  });
 
-      const response = await GET(req as NextRequest)
-      const data = await response.json()
-
-      expect(response.status).toBe(200)
-      expect(data.reports).toEqual(mockReports)
-      expect(data.pagination).toEqual({
-        page: 1,
-        limit: 25,
-        total: 2,
-        totalPages: 1
-      })
-    })
-
-    it('handles search queries', async () => {
-      ;(prisma.report.findMany as jest.Mock).mockResolvedValue([])
-      ;(prisma.report.count as jest.Mock).mockResolvedValue(0)
+  describe('PATCH /api/reports/[id]', () => {
+    it('should update an existing report', async () => {
+      const updateData = { title: 'Updated Report' };
+      const updatedReport = { id: 'report-1', ...updateData };
+      (prisma.report.update as jest.Mock).mockResolvedValue(updatedReport);
 
       const { req } = createMocks({
-        method: 'GET',
-        url: '/api/reports?search=artificial+intelligence'
-      })
+        method: 'PATCH',
+        json: () => Promise.resolve(updateData),
+      });
 
-      await GET(req as NextRequest)
+      const response = await PATCH(req as unknown as NextRequest, { params: { id: 'report-1' } });
+      const data = await response.json();
 
-      expect(prisma.report.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: expect.objectContaining({
-            OR: expect.arrayContaining([
-              { title: { contains: 'artificial intelligence', mode: 'insensitive' } }
-            ])
-          })
-        })
-      )
-    })
-  })
+      expect(response.status).toBe(200);
+      expect(data).toEqual(updatedReport);
+    });
+  });
 
-  describe('POST', () => {
-    it('creates a new report', async () => {
-      const mockReport = {
-        id: '1',
-        title: 'New Report',
-        slug: 'new-report'
-      }
+  describe('DELETE /api/reports/[id]', () => {
+    it('should delete a report', async () => {
+      (prisma.report.delete as jest.Mock).mockResolvedValue({ id: 'report-1' });
+      const { req } = createMocks({ method: 'DELETE' });
+      const response = await DELETE(req as NextRequest, { params: { id: 'report-1' } });
+      
+      expect(response.status).toBe(200);
+    });
+  });
 
-      ;(prisma.report.create as jest.Mock).mockResolvedValue(mockReport)
+  describe('POST /api/reports/generate', () => {
+    it('should create a new report', async () => {
+        const generateData = { title: 'New AI Report' };
+        const createdReport = { id: 'new-report-id', ...generateData };
+        (prisma.report.create as jest.Mock).mockResolvedValue(createdReport);
+  
+        const { req } = createMocks({
+          method: 'POST',
+          json: () => Promise.resolve(generateData),
+        });
+  
+        const response = await generatePOST(req as unknown as NextRequest);
+        const data = await response.json();
+  
+        expect(response.status).toBe(201);
+        expect(data).toEqual(createdReport);
+      });
+  });
 
-      const { req } = createMocks({
-        method: 'POST',
-        body: {
-          title: 'New Report',
-          description: 'This is a new report description for testing purposes.',
-          metaTitle: 'New Report Meta Title',
-          metaDescription: 'New report meta description',
-          publishedDate: '2025-01-01'
-        }
-      })
+  describe('POST /api/reports/[id]/publish', () => {
+    it('should publish a report and create translations', async () => {
+        const mockReport = { id: 'report-1', title: 'Test Report' };
+        (prisma.report.findUnique as jest.Mock).mockResolvedValue(mockReport);
+        (prisma.report.update as jest.Mock).mockResolvedValue({ ...mockReport, status: 'PUBLISHED' });
 
-      const response = await POST(req as NextRequest)
-      const data = await response.json()
+        const { req } = createMocks({ method: 'POST' });
+        const response = await publishPOST(req as NextRequest, { params: { id: 'report-1' } });
+        const data = await response.json();
 
-      expect(response.status).toBe(200)
-      expect(data.success).toBe(true)
-      expect(data.report).toEqual(mockReport)
-    })
+        expect(response.status).toBe(200);
+        expect(data.success).toBe(true);
+        expect(prisma.reportTranslation.upsert).toHaveBeenCalledTimes(7);
+        expect(prisma.report.update).toHaveBeenCalledWith({
+            where: { id: 'report-1' },
+            data: { status: 'PUBLISHED' },
+        });
+    });
+  });
 
-    it('validates required fields', async () => {
-      const { req } = createMocks({
-        method: 'POST',
-        body: {
-          title: 'A', // Too short
-          description: 'Short' // Too short
-        }
-      })
-
-      const response = await POST(req as NextRequest)
-      const data = await response.json()
-
-      expect(response.status).toBe(400)
-      expect(data.error).toBe('Validation error')
-    })
-  })
-})
+});

@@ -8,36 +8,39 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { cn } from '@/lib/utils';
-import * as React from "react";
+import { Testimonial } from '@prisma/client';
+import React, { useEffect } from "react";
 
 const formSchema = z.object({
   author: z.string().min(2, { message: 'Author must be at least 2 characters.' }),
-  company: z.string().optional(),
-  position: z.string().optional(),
+  company: z.string().nullable().optional(), // Allow null for company
+  position: z.string().nullable().optional(), // Allow null for position
   content: z.string().min(10, { message: 'Content must be at least 10 characters.' }),
-  rating: z.coerce.number().int().min(1).max(5).optional(),
-  approved: z.boolean().default(false),
+  rating: z.number().int().min(1).max(5).nullable().optional(), // Allow null for rating
+  approved: z.boolean(),
 });
 
 interface TestimonialFormProps {
-  initialData?: Testimonial;
+  initialData?: Omit<Testimonial, 'createdAt' | 'updatedAt'> & {
+    createdAt: string | Date;
+    updatedAt: string | Date;
+  };
 }
 
-interface Testimonial {
-  id: string;
-  author: string;
-  company?: string;
-  position?: string;
-  content: string;
-  rating?: number;
-  approved: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+
 
 export default function TestimonialForm({ initialData }: TestimonialFormProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
+
+  const defaultFormValues: z.infer<typeof formSchema> = {
+    author: initialData?.author ?? '',
+    company: initialData?.company ?? null,
+    position: initialData?.position ?? null,
+    content: initialData?.content ?? '',
+    rating: initialData?.rating ?? null,
+    approved: initialData?.approved ?? false,
+  };
 
   const {
     register,
@@ -46,19 +49,19 @@ export default function TestimonialForm({ initialData }: TestimonialFormProps) {
     reset,
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData || {
-      author: '',
-      company: '',
-      position: '',
-      content: '',
-      rating: 5,
-      approved: false,
-    },
+    defaultValues: defaultFormValues,
   });
 
   React.useEffect(() => {
     if (initialData) {
-      reset(initialData);
+      reset({
+        author: initialData.author,
+        company: initialData.company,
+        position: initialData.position,
+        content: initialData.content,
+        rating: initialData.rating,
+        approved: initialData.approved,
+      });
     }
   }, [initialData, reset]);
 

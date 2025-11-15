@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import * as CardPrimitive from "@/components/ui/card" // This import is incorrect, it should be from "next/card" or similar if it's a custom component. Assuming it's a self-contained component.
 
 import { cn } from "@/lib/utils"
 

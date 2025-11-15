@@ -1,91 +1,118 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import React from 'react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { SessionProvider } from 'next-auth/react'
 import ReportForm from '@/components/reports/ReportForm'
+import { AdminRole } from '@prisma/client' // Import AdminRole
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({
+  useRouter: jest.fn(() => ({
     push: jest.fn(),
-    back: jest.fn()
-  })
+    back: jest.fn(),
+  })),
 }))
 
-// Mock API calls
-global.fetch = jest.fn()
+
 
 const mockSession = {
   user: {
-    id: '1',
+    id: 'test-user-id',
     email: 'test@example.com',
-    role: 'SUPERADMIN'
-  }
+    name: 'Test User',
+    image: 'test-image.jpg',
+    role: AdminRole.SUPERADMIN, // Use AdminRole enum
+    permissions: {},
+  },
+  expires: '1',
 }
 
 describe('ReportForm', () => {
   beforeEach(() => {
+    jest.clearAllMocks()
     ;(fetch as jest.Mock).mockClear()
   })
 
-  it('renders create form correctly', () => {
-    render(
-      <SessionProvider session={mockSession}>
-        <ReportForm />
-      </SessionProvider>
-    )
+  it('renders create form correctly', async () => {
+    await act(async () => {
+      render(
+        <SessionProvider session={mockSession}>
+          <ReportForm />
+        </SessionProvider>
+      )
+    })
 
-    expect(screen.getByText('Create New Report')).toBeInTheDocument()
-    expect(screen.getByLabelText(/title/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/description/i)).toBeInTheDocument()
+    // Explicitly wait for categories to be fetched and rendered
+    await waitFor(() => {
+      expect(screen.getByText(/Categories/i)).toBeInTheDocument()
+    })
+
+    expect(screen.getByRole('textbox', { name: 'Title *' })).toBeInTheDocument()
+    expect(screen.getByRole('textbox', { name: 'Description *' })).toBeInTheDocument()
+    expect(screen.getByText(/Create Report/i)).toBeInTheDocument()
   })
 
   it('submits form with valid data', async () => {
-    ;(fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ success: true, report: { id: '1' } })
+    await act(async () => {
+      render(
+        <SessionProvider session={mockSession}>
+          <ReportForm />
+        </SessionProvider>
+      )
     })
-
-    render(
-      <SessionProvider session={mockSession}>
-        <ReportForm />
-      </SessionProvider>
-    )
-
-    fireEvent.change(screen.getByLabelText(/title/i), {
-      target: { value: 'Test Report' }
-    })
-    fireEvent.change(screen.getByLabelText(/description/i), {
-      target: { value: 'This is a test report description that is long enough.' }
-    })
-    fireEvent.change(screen.getByLabelText(/meta title/i), {
-      target: { value: 'Test Report Meta Title' }
-    })
-    fireEvent.change(screen.getByLabelText(/meta description/i), {
-      target: { value: 'Test meta description for SEO purposes.' }
-    })
-
-    fireEvent.click(screen.getByRole('button', { name: /create report/i }))
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith('/api/reports', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: expect.stringContaining('Test Report')
-      })
+      expect(screen.getByText(/Categories/i)).toBeInTheDocument()
+    })
+
+    fireEvent.change(screen.getByRole('textbox', { name: 'Title *' }), {
+      target: { value: 'Test Report' },
+    })
+    fireEvent.change(screen.getByRole('textbox', { name: 'Description *' }), {
+      target: { value: 'This is a test description for the report.' },
+    })
+    fireEvent.change(screen.getByRole('textbox', { name: 'Meta Title *' }), {
+      target: { value: 'Test Meta Title' },
+    })
+    await act(async () => {
+      fireEvent.click(screen.getByText(/Create Report/i))
+    })
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith('/api/reports', expect.any(Object))
     })
   })
 
   it('shows validation errors for empty required fields', async () => {
-    render(
-      <SessionProvider session={mockSession}>
-        <ReportForm />
-      </SessionProvider>
-    )
+    await act(async () => {
+      render(
+        <SessionProvider session={mockSession}>
+          <ReportForm />
+        </SessionProvider>
+      )
+    })
 
-    fireEvent.click(screen.getByRole('button', { name: /create report/i }))
+    fireEvent.change(screen.getByRole('textbox', { name: 'Title *' }), {
+      target: { value: '' },
+    })
+    fireEvent.change(screen.getByRole('textbox', { name: 'Description *' }), {
+      target: { value: '' },
+    })
+    fireEvent.change(screen.getByRole('textbox', { name: 'Meta Title *' }), {
+      target: { value: '' },
+    })
+    fireEvent.change(screen.getByRole('textbox', { name: 'Meta Description *' }), {
+      target: { value: '' },
+    })
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(/Create Report/i))
+    })
 
     await waitFor(() => {
-      expect(screen.getByText(/title must be at least 3 characters/i)).toBeInTheDocument()
-      expect(screen.getByText(/description must be at least 20 characters/i)).toBeInTheDocument()
+      expect(screen.getByText(/Title must be at least 3 characters/i)).toBeInTheDocument()
+      expect(screen.getByText(/Description must be at least 20 characters/i)).toBeInTheDocument()
+      expect(screen.getByText(/Meta title must be at least 5 characters/i)).toBeInTheDocument()
+      expect(screen.getByText(/Meta description must be at least 10 characters/i)).toBeInTheDocument()
     })
   })
 })

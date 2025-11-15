@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -16,103 +16,55 @@ export async function GET(request: NextRequest) {
 
     console.log("AI Usage Details API: Fetching data from startDate:", startDate);
 
-    const [contentGenerationJobs, workflows] = await Promise.all([
-      prisma.contentGenerationJob.findMany({
-        where: {
-          createdAt: { gte: startDate },
-          status: 'COMPLETED',
-        },
-        select: {
-          aiModel: true,
-          inputTokens: true,
-          outputTokens: true,
-          cost: true,
-        },
-      }),
-      prisma.contentGenerationWorkflow.findMany({
-        where: {
-          createdAt: { gte: startDate },
-          workflowStatus: 'APPROVED',
-        },
-        select: {
-          totalInputTokensUsed: true,
-          totalOutputTokensUsed: true,
-          totalCost: true,
-        },
-      }),
-    ]);
+    const apiUsageLogs = await prisma.apiUsageLog.findMany({
+      where: {
+        createdAt: { gte: startDate },
+        success: true, // Only consider successful requests
+      },
+      select: {
+        serviceType: true,
+        model: true,
+        inputTokens: true,
+        outputTokens: true,
+        totalCost: true,
+      },
+    });
 
-    console.log("AI Usage Details API: ContentGenerationJobs fetched:", contentGenerationJobs.length);
-    console.log("AI Usage Details API: Workflows fetched:", workflows.length);
+    console.log("AI Usage Details API: ApiUsageLogs fetched:", apiUsageLogs.length);
 
     let totalInputTokens = 0;
     let totalOutputTokens = 0;
     let totalCost = 0;
-    let totalRequests = 0;
+    const totalRequests = apiUsageLogs.length;
 
     const usageByType: { [key: string]: { totalInputTokens: number; totalOutputTokens: number; totalCost: number } } = {};
     const usageByModel: { [key: string]: { totalInputTokens: number; totalOutputTokens: number; totalCost: number } } = {};
 
-    contentGenerationJobs.forEach((job) => {
-      const input = job.inputTokens || 0;
-      const output = job.outputTokens || 0;
-      const cost = job.cost?.toNumber() || 0;
-      const type = 'report'; // Infer type for ContentGenerationJob
+    apiUsageLogs.forEach((log) => {
+      const input = log.inputTokens || 0;
+      const output = log.outputTokens || 0;
+      const cost = log.totalCost?.toNumber() || 0; // totalCost is Decimal in schema
 
       totalInputTokens += input;
       totalOutputTokens += output;
       totalCost += cost;
-      totalRequests++;
 
-      if (!usageByType[type]) {
-        usageByType[type] = { totalInputTokens: 0, totalOutputTokens: 0, totalCost: 0 };
+      if (!usageByType[log.serviceType]) {
+        usageByType[log.serviceType] = { totalInputTokens: 0, totalOutputTokens: 0, totalCost: 0 };
       }
-      usageByType[type].totalInputTokens += input;
-      usageByType[type].totalOutputTokens += output;
-      usageByType[type].totalCost += cost;
+      usageByType[log.serviceType].totalInputTokens += input;
+      usageByType[log.serviceType].totalOutputTokens += output;
+      usageByType[log.serviceType].totalCost += cost;
 
-      if (!usageByModel[job.aiModel]) {
-        usageByModel[job.aiModel] = { totalInputTokens: 0, totalOutputTokens: 0, totalCost: 0 };
+      if (!usageByModel[log.model]) {
+        usageByModel[log.model] = { totalInputTokens: 0, totalOutputTokens: 0, totalCost: 0 };
       }
-      usageByModel[job.aiModel].totalInputTokens += input;
-      usageByModel[job.aiModel].totalOutputTokens += output;
-      usageByModel[job.aiModel].totalCost += cost;
-    });
-
-    workflows.forEach((workflow) => {
-      const input = workflow.totalInputTokensUsed || 0;
-      const output = workflow.totalOutputTokensUsed || 0;
-      const cost = workflow.totalCost?.toNumber() || 0;
-      const type = 'report'; // Infer type for ContentGenerationWorkflow
-      const model = 'unknown'; // Placeholder for model in Workflow
-
-      totalInputTokens += input;
-      totalOutputTokens += output;
-      totalCost += cost;
-      totalRequests++;
-
-      if (!usageByType[type]) {
-        usageByType[type] = { totalInputTokens: 0, totalOutputTokens: 0, totalCost: 0 };
-      }
-      usageByType[type].totalInputTokens += input;
-      usageByType[type].totalOutputTokens += output;
-      usageByType[type].totalCost += cost;
-
-      if (!usageByModel[model]) {
-        usageByModel[model] = { totalInputTokens: 0, totalOutputTokens: 0, totalCost: 0 };
-      }
-      usageByModel[model].totalInputTokens += input;
-      usageByModel[model].totalOutputTokens += output;
-      usageByModel[model].totalCost += cost;
+      usageByModel[log.model].totalInputTokens += input;
+      usageByModel[log.model].totalOutputTokens += output;
+      usageByModel[log.model].totalCost += cost;
     });
 
     console.log("AI Usage Details API: Aggregation complete.");
-    console.log("AI Usage Details API: totalInputTokens:", totalInputTokens);
-    console.log("AI Usage Details API: totalOutputTokens:", totalOutputTokens);
-    console.log("AI Usage Details API: totalCost:", totalCost);
-    console.log("AI Usage Details API: totalRequests:", totalRequests);
-    console.log("AI Usage Details API: usageByType:", usageByType);
-    console.log("AI Usage Details API: usageByModel:", usageByModel);
 
     const formattedUsageByType = Object.entries(usageByType).map(([type, data]) => ({
       type,

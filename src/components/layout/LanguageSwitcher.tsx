@@ -5,7 +5,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { GlobeAltIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 
-const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
+export const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
 
 export default function LanguageSwitcher() {
   const router = useRouter();

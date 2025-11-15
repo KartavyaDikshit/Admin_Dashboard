@@ -1,246 +1,135 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from '../../auth/[...nextauth]/route'
-import { prisma } from '@/lib/prisma'
-import { z } from 'zod'
-import { generateSlug } from '@/lib/utils'
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
+import { z } from 'zod';
+import { generateSlug } from '@/lib/utils';
 
-const reportSchema = z.object({
-  categoryId: z.string().optional(),
-  title: z.string().min(3, 'Title must be at least 3 characters'),
-  description: z.string().min(20, 'Description must be at least 20 characters'),
-  summary: z.string().optional(),
-  pages: z.coerce.number().int().positive().optional(),
-  publishedDate: z.string(),
-  baseYear: z.coerce.number().int().optional(),
-  forecastPeriod: z.string().optional(),
+const reportUpdateSchema = z.object({
+  title: z.string().min(3, 'Title must be at least 3 characters').optional(),
+  marketResearchSummary: z.string().optional(),
+  marketDynamics: z.string().optional(),
+  regionalInsights: z.string().optional(),
+  keyMarketPlayers: z.string().optional(),
   tableOfContents: z.string().optional(),
-  methodology: z.string().optional(),
-  executiveSummary: z.string().optional(),
-  reportType: z.string().optional(),
-  researchMethod: z.string().optional(),
-  metaTitle: z.string().min(5, 'Meta title must be at least 5 characters'),
-  metaDescription: z.string().min(10, 'Meta description must be at least 10 characters'),
-  singlePrice: z.coerce.number().positive().optional(),
-  multiPrice: z.coerce.number().positive().optional(),
-  corporatePrice: z.coerce.number().positive().optional(),
-  enterprisePrice: z.coerce.number().positive().optional(),
-  status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED', 'ACTIVE']),
-  featured: z.boolean(),
-  priority: z.coerce.number().int().optional()
-})
+  imageUrl: z.literal('').transform(() => null).or(
+    z.string().refine(val => {
+      try {
+        new URL(val); // Try to parse as absolute URL
+        return true;
+      } catch {
+        return val.startsWith('/'); // Check if it's a relative path
+      }
+    }, 'Must be a valid URL or a relative path starting with /')
+  ).optional(),
+  categoryIds: z.array(z.string().uuid()).optional(),
+});
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+interface RouteContext {
+  params: { id: string };
+}
+
+export async function GET(request: NextRequest, context: RouteContext) {
+  const { params } = context;
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
-
     const report = await prisma.report.findUnique({
-      where: { id: id },
-      select: {
-        id: true,
-        sku: true,
-        slug: true,
-        title: true,
-        description: true,
-        summary: true,
-        pages: true,
-        publishedDate: true,
-        baseYear: true,
-        forecastPeriod: true,
-        tableOfContents: true,
-        listOfFigures: true,
-        methodology: true,
-        keyFindings: true,
-        executiveSummary: true,
-        marketAnalysis: true,
-        competitiveAnalysis: true,
-        trendsAnalysis: true,
-        strategicDevelopments: true,
-        finalSynthesis: true,
-        marketData: true,
-        competitiveLandscape: true,
-        marketSegmentation: true,
-        regionalAnalysis: true,
-        swotAnalysis: true,
-        keyPlayers: true,
-        regions: true,
-        industryTags: true,
-        reportType: true,
-        researchMethod: true,
-        keywords: true,
-        semanticKeywords: true,
-        regionalKeywords: true,
-        competitorKeywords: true,
-        trendingKeywords: true,
-        longTailKeywords: true,
-        metaTitle: true,
-        metaDescription: true,
-        canonicalUrl: true,
-        ogTitle: true,
-        ogDescription: true,
-        ogImage: true,
-        twitterTitle: true,
-        twitterDescription: true,
-        schemaMarkup: true,
-        breadcrumbData: true,
-        faqData: true,
-        singlePrice: true,
-        multiPrice: true,
-        corporatePrice: true,
-        enterprisePrice: true,
-        currency: true,
-        aiGenerated: true,
-        contentGenerationWorkflowId: true,
-        humanApproved: true,
-        contentQualityScore: true,
-        aiConfidenceScore: true,
-        status: true,
-        featured: true,
-        priority: true,
-        viewCount: true,
-        downloadCount: true,
-        shareCount: true,
-        enquiryCount: true,
-        searchRankings: true,
-        clickThroughRate: true,
-        averagePosition: true,
-        impressions: true,
-        clicks: true,
-        bounceRate: true,
-        timeOnPage: true,
-        avgRating: true,
-        reviewCount: true,
-        totalRatingPoints: true,
-        createdAt: true,
-        updatedAt: true,
+      where: { id: context.params.id },
+      include: {
         categories: {
           select: {
             id: true,
-            title_en: true,
-            shortcode: true,
-            translations: true,
-          }
+            name: true,
+          },
         },
-        translations: {
-          select: {
-            id: true,
-            locale: true,
-            title: true,
-            status: true
-          }
-        },
-        _count: {
-          select: { reviews: true, orderItems: true }
-        }
-      }
-    })
+      },
+    });
 
     if (!report) {
-      return NextResponse.json({ error: 'Report not found' }, { status: 404 })
+      return NextResponse.json({ error: 'Report not found' }, { status: 404 });
     }
 
-    const locale = request.nextUrl.searchParams.get('locale') || 'en';
-
-    const processedReport = {
-      ...report,
-      categories: report.categories.map(category => {
-        const translatedCategory = {
-          ...category,
-          title: category[`title_${locale}` as keyof typeof category] || category.title_en,
-        };
-        const translation = category.translations.find(t => t.locale === locale);
-        if (translation) {
-          translatedCategory.title = translation.title || translatedCategory.title;
-        }
-        return translatedCategory;
-      }),
-    };
-
-    return NextResponse.json({ report: processedReport })
+    return NextResponse.json(report);
   } catch (error) {
-    console.error('Get report error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('Get report error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, context: RouteContext) {
+  const { params } = context;
+  const { id } = params;
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id } = await params;
+    const body = await request.json();
+    const validatedData = reportUpdateSchema.parse(body);
 
-    const body = await request.json()
-    const validatedData = reportSchema.parse(body)
+    const { categoryIds, ...reportData } = validatedData;
 
-    const existingReport = await prisma.report.findUnique({
-      where: { id: id },
-      select: { title: true }
-    })
+    const dataToUpdate: Prisma.ReportUpdateInput = { ...reportData };
 
-    if (!existingReport) {
-      return NextResponse.json({ error: 'Report not found' }, { status: 404 })
+    if (reportData.title) {
+      const baseSlug = generateSlug(reportData.title);
+      let newSlug = baseSlug;
+      let counter = 1;
+
+      // Ensure slug uniqueness
+      while (await prisma.report.findFirst({ where: { slug: newSlug, id: { not: id } } })) {
+        newSlug = `${baseSlug}-${counter}`;
+        counter++;
+      }
+      dataToUpdate.slug = newSlug;
     }
 
-    const slug = (validatedData.title !== existingReport.title)
-      ? generateSlug(validatedData.title)
-      : undefined
+    if (categoryIds) {
+      dataToUpdate.categories = {
+        set: categoryIds.map((categoryId) => ({ id: categoryId })),
+      };
+    }
 
     const updatedReport = await prisma.report.update({
       where: { id: id },
-      data: {
-        ...validatedData,
-        slug,
-        publishedDate: new Date(validatedData.publishedDate) // Convert string to Date
-      }
-    })
+      data: dataToUpdate,
+    });
 
-    return NextResponse.json({ success: true, report: updatedReport })
+    return NextResponse.json(updatedReport);
   } catch (error) {
-    console.error('Update report error:', error)
+    console.error('Update report error:', error);
     if (error instanceof z.ZodError) {
-      return NextResponse.json({
-        error: 'Validation error',
-        details: error.errors
-      }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Validation error', details: error.issues },
+        { status: 400 }
+      );
     }
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, context: RouteContext) {
+  const { params } = context;
+  const { id } = params;
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const { id } = await params;
 
     await prisma.report.delete({
-      where: { id: id }
-    })
+      where: { id: context.params.id },
+    });
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Delete report error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('Delete report error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
-

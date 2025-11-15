@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { generateSlug } from '@/lib/utils'
@@ -22,17 +22,19 @@ const translatedReportSchema = z.object({
   status: z.nativeEnum(TranslationStatus).default(TranslationStatus.PENDING_REVIEW),
 })
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string; locale: string } }
-) {
+interface RouteContext {
+  params: { id: string; locale: string };
+}
+
+export async function PUT(request: NextRequest, context: RouteContext) {
+  const { params } = context;
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id: reportId, locale } = await params // Await params
+    const { id: reportId, locale } = params
     const body = await request.json()
     const validatedData = translatedReportSchema.parse(body)
 
@@ -68,7 +70,7 @@ export async function PUT(
     if (error instanceof z.ZodError) {
       return NextResponse.json({
         error: 'Validation error',
-        details: error.errors,
+        details: error.issues,
       }, { status: 400 })
     }
     const message = error instanceof Error ? error.message : 'An unknown error occurred';
@@ -76,17 +78,15 @@ export async function PUT(
   }
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string; locale: string } }
-) {
+export async function GET(request: NextRequest, context: RouteContext) {
+  const { params } = context;
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id: reportId, locale } = await params // Await params
+    const { id: reportId, locale } = params
 
     const translation = await prisma.reportTranslation.findUnique({
       where: {

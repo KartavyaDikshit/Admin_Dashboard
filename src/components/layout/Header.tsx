@@ -10,15 +10,21 @@ import {
   MagnifyingGlassIcon
 } from '@heroicons/react/24/outline'
 
+import { AdminRole, Prisma } from '@prisma/client'; // Import AdminRole and Prisma
+
 interface User {
+  id: string;
   name?: string | null;
-  role?: string | null;
+  email?: string | null;
+  image?: string | null;
+  role: AdminRole;
+  permissions: Prisma.JsonValue; // Use Prisma.JsonValue
 }
 
 interface HeaderProps {
   sidebarOpen: boolean
   setSidebarOpen: (open: boolean) => void
-  user: User
+  user?: User // Make user prop optional
 }
 
 export default function Header({ sidebarOpen, setSidebarOpen, user }: HeaderProps) {

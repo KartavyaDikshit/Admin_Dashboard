@@ -3,60 +3,37 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    const contentGenerationJobs = await prisma.contentGenerationJob.findMany({
+    const apiUsageLogs = await prisma.apiUsageLog.findMany({
       select: {
         id: true,
-        type: true,
+        serviceType: true,
         model: true,
         inputTokens: true,
         outputTokens: true,
-        cost: true,
-        createdAt: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-    const workflows = await prisma.workflow.findMany({
-      select: {
-        id: true,
-        type: true,
-        model: true,
-        totalInputTokens: true,
-        totalOutputTokens: true,
         totalCost: true,
         createdAt: true,
+        success: true,
+        errorMessage: true,
       },
       orderBy: {
         createdAt: "desc",
       },
     });
 
-    const aiUsageLog = [
-      ...contentGenerationJobs.map((job) => ({
-        id: job.id,
-        type: job.type,
-        model: job.model,
-        inputTokens: job.inputTokens,
-        outputTokens: job.outputTokens,
-        cost: job.cost,
-        createdAt: job.createdAt,
-        source: "ContentGenerationJob",
-      })),
-      ...workflows.map((workflow) => ({
-        id: workflow.id,
-        type: workflow.type,
-        model: workflow.model,
-        inputTokens: workflow.totalInputTokens,
-        outputTokens: workflow.totalOutputTokens,
-        cost: workflow.totalCost,
-        createdAt: workflow.createdAt,
-        source: "Workflow",
-      })),
-    ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    const formattedLogs = apiUsageLogs.map((log) => ({
+      id: log.id,
+      type: log.serviceType, // Map serviceType to type for consistency
+      model: log.model,
+      inputTokens: log.inputTokens,
+      outputTokens: log.outputTokens,
+      cost: log.totalCost,
+      createdAt: log.createdAt,
+      source: "ApiUsageLog",
+      success: log.success,
+      errorMessage: log.errorMessage,
+    }));
 
-    return NextResponse.json(aiUsageLog);
+    return NextResponse.json(formattedLogs);
   } catch (error) {
     console.error("Error fetching AI usage log:", error);
     return NextResponse.json(

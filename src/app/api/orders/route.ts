@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '../auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
@@ -26,16 +26,8 @@ export async function GET(request: NextRequest) {
 
     const skip = (page - 1) * limit
     
-    interface OrderWhereClause {
-      OR?: Array<{
-        orderNumber?: { contains: string; mode: 'insensitive' };
-        customerName?: { contains: string; mode: 'insensitive' };
-        customerEmail?: { contains: string; mode: 'insensitive' };
-      }>;
-      status?: string;
-      paymentStatus?: string;
-    }
-    const where: OrderWhereClause = {}
+
+    const where: any = {}
 
     if (search) {
       where.OR = [

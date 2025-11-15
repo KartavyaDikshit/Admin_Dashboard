@@ -1,0 +1,6 @@
+Generate a comprehensive and logical Table of Contents (TOC) for a full market research report on the {title}.
+
+Include major sections and relevant sub-sections (e.g., Executive Summary, Market Dynamics, Regional Analysis, Competitive Landscape, Methodology, etc.).
+Ensure the TOC is well-structured and reflects a professional report.
+Do not include page numbers or placeholder text like "Chapter 1".
+Format the TOC clearly, using indentation for sub-sections.

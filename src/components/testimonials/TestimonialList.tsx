@@ -3,7 +3,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'sonner';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
@@ -31,7 +30,7 @@ export default function TestimonialList() {
       await axios.put(`/api/testimonials/${id}`, { approved: !currentStatus });
       toast.success(`Testimonial ${!currentStatus ? 'approved' : 'unapproved'} successfully.`);
       refetch();
-    } catch (error) {
+    } catch {
       toast.error('Failed to update testimonial status.');
     }
   };
@@ -42,7 +41,7 @@ export default function TestimonialList() {
       await axios.delete(`/api/testimonials/${id}`);
       toast.success('Testimonial deleted successfully.');
       refetch();
-    } catch (error) {
+    } catch {
       toast.error('Failed to delete testimonial.');
     }
   };

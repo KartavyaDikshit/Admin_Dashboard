@@ -1,0 +1,4 @@
+Summarize the following text concisely, retaining all key information and data points. The summary should be suitable for providing context to a large language model for generating subsequent sections of a market research report.
+
+Text to summarize:
+{text_to_summarize}

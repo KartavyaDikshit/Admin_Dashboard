@@ -1,0 +1,363 @@
+prisma:error
+Invalid `prisma.report.findMany()` invocation:
+
+{
+  where: {
+    status: "resolved_model"
+            ~~~~~~~~~~~~~~~~
+  },
+  skip: 0,
+  take: 25,
+  select: {
+    id: true,
+    sku: true,
+    slug: true,
+    title: true,
+    description: true,
+    summary: true,
+    pages: true,
+    publishedDate: true,
+    baseYear: true,
+    forecastPeriod: true,
+    tableOfContents: true,
+    listOfFigures: true,
+    methodology: true,
+    keyFindings: true,
+    executiveSummary: true,
+    reportType: true,
+    researchMethod: true,
+    metaTitle: true,
+    metaDescription: true,
+    singlePrice: true,
+    multiPrice: true,
+    corporatePrice: true,
+    enterprisePrice: true,
+    status: true,
+    featured: true,
+    priority: true,
+    categories: {
+      select: {
+        id: true,
+        title_en: true,
+        shortcode: true,
+        translations: true
+      }
+    },
+    translations: undefined,
+    _count: {
+      select: {
+        reviews: true,
+        orderItems: true
+      }
+    }
+  },
+  orderBy: [
+    {
+      featured: "desc"
+    },
+    {
+      priority: "desc"
+    },
+    {
+      createdAt: "desc"
+    }
+  ]
+}
+
+Invalid value for argument `status`. Expected ContentStatus.
+Get reports error: Error [PrismaClientValidationError]:
+Invalid `prisma.report.findMany()` invocation:
+
+{
+  where: {
+    status: "resolved_model"
+            ~~~~~~~~~~~~~~~~
+  },
+  skip: 0,
+  take: 25,
+  select: {
+    id: true,
+    sku: true,
+    slug: true,
+    title: true,
+    description: true,
+    summary: true,
+    pages: true,
+    publishedDate: true,
+    baseYear: true,
+    forecastPeriod: true,
+    tableOfContents: true,
+    listOfFigures: true,
+    methodology: true,
+    keyFindings: true,
+    executiveSummary: true,
+    reportType: true,
+    researchMethod: true,
+    metaTitle: true,
+    metaDescription: true,
+    singlePrice: true,
+    multiPrice: true,
+    corporatePrice: true,
+    enterprisePrice: true,
+    status: true,
+    featured: true,
+    priority: true,
+    categories: {
+      select: {
+        id: true,
+        title_en: true,
+        shortcode: true,
+        translations: true
+      }
+    },
+    translations: undefined,
+    _count: {
+      select: {
+        reviews: true,
+        orderItems: true
+      }
+    }
+  },
+  orderBy: [
+    {
+      featured: "desc"
+    },
+    {
+      priority: "desc"
+    },
+    {
+      createdAt: "desc"
+    }
+  ]
+}
+
+Invalid value for argument `status`. Expected ContentStatus.
+    at async GET (src\app\api\reports\route.ts:82:21)
+  80 |     if (aiGenerated !== null) where.aiGenerated = aiGenerated === 'true'
+  81 |
+> 82 |     const reports = await prisma.report.findMany({
+     |                     ^
+  83 |       where,
+  84 |       skip,
+  85 |       take: limit, {
+  clientVersion: '6.16.1'
+}
+ GET /api/reports?status=resolved_model&value=%7B%7D&reason=%5Bobject+Object%5D&_debugChunk=%5Bobject+Promise%5D&_debugInfo=%5Bobject+Object%5D 500 in 591ms
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "public"."orders"."id" FROM "public"."orders" WHERE 1=1 OFFSET $1) AS "sub"
+ GET /api/orders?countOnly=true 200 in 626ms
+prisma:error
+Invalid `prisma.report.findMany()` invocation:
+
+{
+  where: {
+    status: "resolved_model"
+            ~~~~~~~~~~~~~~~~
+  },
+  skip: 0,
+  take: 25,
+  select: {
+    id: true,
+    sku: true,
+    slug: true,
+    title: true,
+    description: true,
+    summary: true,
+    pages: true,
+    publishedDate: true,
+    baseYear: true,
+    forecastPeriod: true,
+    tableOfContents: true,
+    listOfFigures: true,
+    methodology: true,
+    keyFindings: true,
+    executiveSummary: true,
+    reportType: true,
+    researchMethod: true,
+    metaTitle: true,
+    metaDescription: true,
+    singlePrice: true,
+    multiPrice: true,
+    corporatePrice: true,
+    enterprisePrice: true,
+    status: true,
+    featured: true,
+    priority: true,
+    categories: {
+      select: {
+        id: true,
+        title_en: true,
+        shortcode: true,
+        translations: true
+      }
+    },
+    translations: undefined,
+    _count: {
+      select: {
+        reviews: true,
+        orderItems: true
+      }
+    }
+  },
+  orderBy: [
+    {
+      featured: "desc"
+    },
+    {
+      priority: "desc"
+    },
+    {
+      createdAt: "desc"
+    }
+  ]
+}
+
+Invalid value for argument `status`. Expected ContentStatus.
+Get reports error: Error [PrismaClientValidationError]:
+Invalid `prisma.report.findMany()` invocation:
+
+{
+  where: {
+    status: "resolved_model"
+            ~~~~~~~~~~~~~~~~
+  },
+  skip: 0,
+  take: 25,
+  select: {
+    id: true,
+    sku: true,
+    slug: true,
+    title: true,
+    description: true,
+    summary: true,
+    pages: true,
+    publishedDate: true,
+    baseYear: true,
+    forecastPeriod: true,
+    tableOfContents: true,
+    listOfFigures: true,
+    methodology: true,
+    keyFindings: true,
+    executiveSummary: true,
+    reportType: true,
+    researchMethod: true,
+    metaTitle: true,
+    metaDescription: true,
+    singlePrice: true,
+    multiPrice: true,
+    corporatePrice: true,
+    enterprisePrice: true,
+    status: true,
+    featured: true,
+    priority: true,
+    categories: {
+      select: {
+        id: true,
+        title_en: true,
+        shortcode: true,
+        translations: true
+      }
+    },
+    translations: undefined,
+    _count: {
+      select: {
+        reviews: true,
+        orderItems: true
+      }
+    }
+  },
+  orderBy: [
+    {
+      featured: "desc"
+    },
+    {
+      priority: "desc"
+    },
+    {
+      createdAt: "desc"
+    }
+  ]
+}
+
+Invalid value for argument `status`. Expected ContentStatus.
+    at async GET (src\app\api\reports\route.ts:82:21)
+  80 |     if (aiGenerated !== null) where.aiGenerated = aiGenerated === 'true'
+  81 |
+> 82 |     const reports = await prisma.report.findMany({
+     |                     ^
+  83 |       where,
+  84 |       skip,
+  85 |       take: limit, {
+  clientVersion: '6.16.1'
+}
+ GET /api/reports?status=resolved_model&value=%7B%7D&reason=%5Bobject+Object%5D&_debugChunk=%5Bobject+Promise%5D&_debugInfo=%5Bobject+Object%5D 500 in 384ms
+
+ ✓ Compiled /api/upload in 2.7s (2032 modules)
+ POST /api/upload 200 in 2963ms
+Update report error: Error [ZodError]: [
+  {
+    "code": "invalid_format",
+    "format": "url",
+    "path": [
+      "imageUrl"
+    ],
+    "message": "Must be a valid URL"
+  }
+]
+    at PATCH (src\app\api\reports\[id]\route.ts:64:46)
+  62 |
+  63 |     const body = await request.json();
+> 64 |     const validatedData = reportUpdateSchema.parse(body);
+     |                                              ^
+  65 |
+  66 |     const { categoryIds, ...reportData } = validatedData;
+  67 |
+ PATCH /api/reports/6b286ef6-31a2-4806-b7db-f02d74647ca8 400 in 620ms
+Update report error: Error [ZodError]: [
+  {
+    "code": "invalid_format",
+    "format": "url",
+    "path": [
+      "imageUrl"
+    ],
+    "message": "Must be a valid URL"
+  }
+]
+    at PATCH (src\app\api\reports\[id]\route.ts:64:46)
+  62 |
+  63 |     const body = await request.json();
+> 64 |     const validatedData = reportUpdateSchema.parse(body);
+     |                                              ^
+  65 |
+  66 |     const { categoryIds, ...reportData } = validatedData;
+  67 |
+ PATCH /api/reports/6b286ef6-31a2-4806-b7db-f02d74647ca8 400 in 1026ms
+Update report error: Error [ZodError]: [
+  {
+    "code": "invalid_format",
+    "format": "url",
+    "path": [
+      "imageUrl"
+    ],
+    "message": "Must be a valid URL"
+  }
+]
+    at PATCH (src\app\api\reports\[id]\route.ts:64:46)
+  62 |
+  63 |     const body = await request.json();
+> 64 |     const validatedData = reportUpdateSchema.parse(body);
+     |                                              ^
+  65 |
+  66 |     const { categoryIds, ...reportData } = validatedData;
+  67 |
+ PATCH /api/reports/6b286ef6-31a2-4806-b7db-f02d74647ca8 400 in 266ms
+ ○ Compiling /api/reports/[id]/publish ...
+ ✓ Compiled /api/reports/[id]/publish in 6s (1999 modules)
+Error: Route "/api/reports/[id]/publish" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at POST (src\app\api\reports\[id]\publish\route.ts:115:27)
+  113 |
+  114 |     const report = await prisma.report.findUnique({
+> 115 |       where: { id: params.id },
+      |                           ^
+  116 |     });
+  117 |
+  118 |     if (!report) 

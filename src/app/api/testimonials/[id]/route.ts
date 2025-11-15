@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+interface RouteContext {
+  params: { id: string };
+}
+
+export async function GET(request: Request, context: RouteContext) {
+  const { params } = context;
   try {
     const { id } = params;
     const testimonial = await prisma.testimonial.findUnique({
@@ -19,7 +24,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, context: RouteContext) {
+  const { params } = context;
   try {
     const { id } = params;
     const body = await request.json();
@@ -44,7 +50,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, context: RouteContext) {
+  const { params } = context;
   try {
     const { id } = params;
     await prisma.testimonial.delete({

@@ -1,9 +1,14 @@
-
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { hash } from 'bcrypt';
+import { Prisma } from '@prisma/client';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+interface RouteContext {
+  params: { id: string };
+}
+
+export async function GET(req: NextRequest, context: RouteContext) {
+  const { params } = context;
   try {
     const admin = await prisma.admin.findUnique({
       where: { id: params.id },
@@ -20,12 +25,13 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: RouteContext) {
+  const { params } = context;
   try {
     const body = await req.json();
     const { email, username, password, role } = body;
 
-    let data: any = { email, username, role };
+    const data: Prisma.AdminUpdateInput = { email, username, role };
 
     if (password) {
       data.password = await hash(password, 10);
@@ -43,7 +49,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, context: RouteContext) {
+  const { params } = context;
   try {
     await prisma.admin.delete({
       where: { id: params.id },

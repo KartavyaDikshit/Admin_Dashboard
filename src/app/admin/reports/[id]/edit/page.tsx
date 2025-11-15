@@ -1,276 +1,386 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react'
-import AdminLayout from '@/components/layout/AdminLayout'
-import ReportForm from '@/components/reports/ReportForm'
-import { toast } from 'react-hot-toast'
-import { Report, ReportTranslation, TranslationStatus } from '@prisma/client' // Import Report and ReportTranslation
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import AdminLayout from '@/components/layout/AdminLayout';
+import { toast } from 'sonner';
+import { Report, Category, Prisma, ReportTranslation } from '@prisma/client'; // Import Prisma and ReportTranslation
+import { locales } from '@/components/layout/LanguageSwitcher'; // Import locales
+import { Menu, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import Image from 'next/image';
 
-export default function EditReportPage({ params }) {
-  const { id } = React.use(params)
-  const [initialData, setInitialData] = useState<Report | null>(null) // Use Report type
-  const [loading, setLoading] = useState(true)
-  const [targetLocale, setTargetLocale] = useState('es') // Default for translation trigger
-  const [isTranslating, setIsTranslating] = useState(false)
+type ReportWithCategories = Report & { categories: { id: string; name: string }[] };
+type ReportTranslationWithRelations = ReportTranslation;
 
-  // New states for viewing/editing translations
-  const [viewLocale, setViewLocale] = useState<string>('') // Selected locale for viewing
-  const [translatedData, setTranslatedData] = useState<ReportTranslation | null>(null) // Use ReportTranslation type
-  const [loadingTranslatedData, setLoadingTranslatedData] = useState(false)
-  const [isSavingTranslatedData, setIsSavingTranslatedData] = useState(false)
+// Helper function to safely convert value to string for input fields
+const formatInputValue = (value: unknown): string => {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'string' || typeof value === 'number') return String(value);
+  if (typeof value === 'boolean') return value ? 'true' : 'false';
+  if (value instanceof Date) return value.toISOString().split('T')[0]; // Format Date for date inputs
+  if (value instanceof Prisma.Decimal) return value.toString();
+  if (typeof value === 'bigint') return value.toString();
+  if (typeof value === 'object') return JSON.stringify(value); // For JsonObject, JsonArray
+  return '';
+};
 
-  // Fetch original report data
+export default function EditReportPage() {
+  const params = useParams();
+  const id = params.id as string;
+  const router = useRouter();
+
+  const [report, setReport] = useState<Partial<ReportWithCategories>>({});
+  const [translatedReport, setTranslatedReport] = useState<Partial<ReportTranslationWithRelations>>({});
+  const [allCategories, setAllCategories] = useState<Category[]>([]);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<Set<string>>(new Set());
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [viewLocale, setViewLocale] = useState('en');
+
   useEffect(() => {
+    if (!id) return;
+
     const fetchReport = async () => {
-      console.log('Fetching report...');
       try {
-        const response = await fetch(`/api/reports/${id}`)
-        console.log('Report API response:', response);
-        const data = await response.json()
-        console.log('Report API data:', data);
+        const response = await fetch(`/api/reports/${id}`);
         if (response.ok) {
-          setInitialData(data.report)
+          const data: ReportWithCategories = await response.json();
+          setReport(data);
+          setSelectedCategoryIds(new Set(data.categories.map(c => c.id)));
+          if (data.imageUrl) {
+            setImagePreview(data.imageUrl);
+          }
         } else {
-          toast.error(data.error || 'Failed to fetch report')
+          toast.error('Failed to fetch report data.');
         }
-      } catch (error) {
-        console.error('Error during report fetch:', error);
-        toast.error('An error occurred while fetching report.')
-      } finally {
-        console.log('Finished report fetch. Setting loading to false.');
-        setLoading(false)
+      } catch {
+        toast.error('An error occurred while fetching the report.');
       }
-    }
+    };
 
-    if (id) {
-      fetchReport()
-    }
-  }, [id])
-
-  // Fetch translated data when viewLocale changes
-  useEffect(() => {
-    const fetchTranslatedReport = async () => {
-      if (!id || !viewLocale) {
-        setTranslatedData(null)
-        return
+    const fetchTranslatedReport = async (locale: string) => {
+      if (locale === 'en') {
+        setTranslatedReport({});
+        return;
       }
-      setLoadingTranslatedData(true)
       try {
-        const response = await fetch(`/api/reports/${id}/translations/${viewLocale}`)
-        const data = await response.json()
+        const response = await fetch(`/api/reports/${id}/translations/${locale}`);
         if (response.ok) {
-          setTranslatedData(data.translation)
-        } else if (response.status === 404) {
-          setTranslatedData(null) // No translation found for this locale
-          toast('No translation found for this locale. You can generate one.')
+          const data = await response.json();
+          setTranslatedReport(data.translation);
         } else {
-          toast.error(data.error || `Failed to fetch ${viewLocale} translation.`) 
+          setTranslatedReport({});
+          toast.error(`Failed to fetch ${locale} translation.`);
         }
-      } catch (error) {
-        toast.error(`An error occurred while fetching ${viewLocale} translation.`) 
-      } finally {
-        setLoadingTranslatedData(false)
+      } catch {
+        setTranslatedReport({});
+        toast.error(`An error occurred while fetching ${locale} translation.`);
       }
+    };
+
+    const fetchCategories = async () => {
+        try {
+            const response = await fetch('/api/categories');
+            if(response.ok) {
+                const data = await response.json();
+                setAllCategories(data.categories);
+            } else {
+                toast.error('Failed to fetch categories.');
+            }
+        } catch {
+            toast.error('An error occurred while fetching categories.');
+        }
     }
 
-    fetchTranslatedReport()
-  }, [id, viewLocale])
+    setIsLoading(true);
+    Promise.all([
+      fetchReport(),
+      fetchCategories(),
+      fetchTranslatedReport(viewLocale)
+    ]).finally(() => setIsLoading(false));
+  }, [id, viewLocale]);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setReport(prev => ({ ...prev, [name]: value }));
+  };
 
-  const handleTranslate = async () => {
-    if (!targetLocale) {
-      toast.error('Please select a target locale.')
-      return
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      setSelectedFile(null);
+      setImagePreview(null);
     }
-    setIsTranslating(true)
+  };
+
+  const handleImageUpload = async () => {
+    if (!selectedFile) return;
+
+    setIsUploading(true);
+    toast.loading('Uploading image...');
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
     try {
-      const response = await fetch('/api/ai/translate', {
+      const response = await fetch('/api/upload', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contentType: 'REPORT',
-          contentId: id,
-          targetLocale,
-        }),
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        toast.success(`Translation job started for ${targetLocale}. Job ID: ${data.job.id}`)
-        // After generating, automatically switch to view this locale
-        setViewLocale(targetLocale);
-      } else {
-        toast.error(data.error || 'Failed to start translation job.')
-      }
-    } catch (error) {
-      console.error('Error initiating translation:', error)
-      toast.error('An error occurred while initiating translation.')
-    } finally {
-      setIsTranslating(false)
-    }
-  }
-
-  const handleSaveTranslatedData = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!translatedData || !viewLocale) return;
-
-    setIsSavingTranslatedData(true);
-    try {
-      const response = await fetch(`/api/reports/${id}/translations/${viewLocale}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: translatedData.title,
-          description: translatedData.description,
-          summary: translatedData.summary,
-          marketAnalysis: translatedData.marketAnalysis,
-          competitiveAnalysis: translatedData.competitiveAnalysis,
-          trendsAnalysis: translatedData.trendsAnalysis,
-          strategicDevelopments: translatedData.strategicDevelopments,
-          keyPlayers: translatedData.keyPlayers,
-          metaTitle: translatedData.metaTitle,
-          metaDescription: translatedData.metaDescription,
-          status: translatedData.status,
-        }),
+        body: formData,
       });
 
-      const data = await response.json();
-
+      toast.dismiss();
       if (response.ok) {
-        toast.success(`Translation for ${viewLocale} saved successfully!`);
-        setTranslatedData(data.translation); // Update with fresh data from server
+        const data = await response.json();
+        setReport(prev => ({ ...prev, imageUrl: data.url }));
+        toast.success('Image uploaded successfully!');
+        setSelectedFile(null); // Clear selected file after upload
       } else {
-        toast.error(data.error || `Failed to save ${viewLocale} translation.`);
+        const data = await response.json();
+        toast.error(data.error || 'Failed to upload image.');
       }
-    } catch (error) {
-      console.error('Error saving translated data:', error);
-      toast.error('An error occurred while saving translated data.');
+    } catch {
+      toast.dismiss();
+      toast.error('An unexpected error occurred during image upload.');
     } finally {
-      setIsSavingTranslatedData(false);
+      setIsUploading(false);
     }
   };
 
 
-  console.log('Current loading state before render:', loading);
-  if (loading) {
-    return (
-      <AdminLayout>
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
-        </div>
-      </AdminLayout>
-    )
+  const handleCategoryChange = (categoryId: string) => {
+    const newSelectedIds = new Set(selectedCategoryIds);
+    if (newSelectedIds.has(categoryId)) {
+      newSelectedIds.delete(categoryId);
+    } else {
+      newSelectedIds.add(categoryId);
+    }
+    setSelectedCategoryIds(newSelectedIds);
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    toast.loading('Saving changes...');
+
+    const payload = {
+        ...report,
+        categoryIds: Array.from(selectedCategoryIds),
+        imageUrl: report.imageUrl === '' ? null : report.imageUrl, // Explicitly set empty string to null
+    };
+
+    try {
+      const response = await fetch(`/api/reports/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      toast.dismiss();
+      if (response.ok) {
+        toast.success('Report saved successfully!');
+      } else {
+        const data = await response.json();
+        toast.error(data.error || 'Failed to save report.');
+      }
+    } catch {
+      toast.dismiss();
+      toast.error('An unexpected error occurred while saving.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handlePublish = async () => {
+    // Optional: auto-save before publishing
+    await handleSave();
+
+    setIsPublishing(true);
+    toast.loading('Publishing report in all languages...');
+
+    try {
+        const response = await fetch(`/api/reports/${id}/publish`, {
+            method: 'POST',
+        });
+
+        toast.dismiss();
+        if(response.ok) {
+            toast.success('Report published successfully!');
+            router.push('/admin/reports'); // Navigate to reports list after publish
+        } else {
+            const data = await response.json();
+            toast.error(data.error || 'Failed to publish report.');
+        }
+    } catch {
+        toast.dismiss();
+        toast.error('An unexpected error occurred during publishing.');
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+  
+  if (isLoading) {
+    return <AdminLayout><div className="text-center py-12">Loading report...</div></AdminLayout>;
   }
 
-  if (!initialData) {
-    return (
-      <AdminLayout>
-        <div className="text-center py-12">
-          <h2 className="text-2xl font-semibold text-black">Report Not Found</h2>
-          <p className="mt-2 text-black">The report you are looking for does not exist.</p>
-        </div>
-      </AdminLayout>
-    )
+  if (!report.id) {
+    return <AdminLayout><div className="text-center py-12">Report not found.</div></AdminLayout>;
   }
-
-  const availableLocales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es']; // All 7 languages
 
   return (
     <AdminLayout>
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4 text-black">Edit Report</h1>
-
-        {/* Translation Trigger Section */}
-        <div className="mb-6 p-4 border rounded-lg shadow-sm bg-white">
-          <h2 className="text-xl font-semibold mb-3 text-black">Generate AI Translation</h2>
-          <div className="flex items-center space-x-3">
-            <select
-              value={targetLocale}
-              onChange={(e) => setTargetLocale(e.target.value)}
-              className="block w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-              disabled={isTranslating}
-            >
-              <option value="">Select Locale</option>
-              {availableLocales.map(locale => (
-                <option key={locale} value={locale}>{locale.toUpperCase()}</option>
-              ))}
-            </select>
-            <button
-              onClick={handleTranslate}
-              disabled={isTranslating || !targetLocale}
-              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isTranslating ? 'Generating...' : 'Generate Translation'}
-            </button>
-          </div>
-          {isTranslating && <p className="mt-2 text-sm text-black">AI translation in progress. This may take a moment.</p>}
-        </div>
-
-        {/* View Translations Section */}
-        <div className="mb-6 p-4 border rounded-lg shadow-sm bg-white">
-          <h2 className="text-xl font-semibold mb-3 text-black">View Translations</h2>
-          <div className="flex items-center space-x-3 mb-4">
-            <select
-              value={viewLocale}
-              onChange={(e) => setViewLocale(e.target.value)}
-              className="block w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-              disabled={loadingTranslatedData}
-            >
-              <option value="">Select Locale to View</option>
-              {availableLocales.map(locale => (
-                <option key={locale} value={locale}>{locale.toUpperCase()}</option>
-              ))}
-            </select>
-            {loadingTranslatedData && <p className="text-sm text-black">Loading translation...</p>}
-          </div>
-
-          {viewLocale && !loadingTranslatedData && (translatedData ? (
-            <div className="space-y-4">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">Market Research Summary</h3>
-                <div className="p-4 border rounded-md bg-gray-50 text-black">{translatedData.summary}</div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">Market Dynamics</h3>
-                <div className="p-4 border rounded-md bg-gray-50 text-black">{translatedData.marketAnalysis}</div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">Regional Insights</h3>
-                <div className="p-4 border rounded-md bg-gray-50 text-black">{translatedData.trendsAnalysis}</div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">Key Market Players</h3>
-                <div className="p-4 border rounded-md bg-gray-50 text-black">
-                  {translatedData.keyPlayers && translatedData.keyPlayers.length > 0 ? (
-                    <ul>
-                      {translatedData.keyPlayers.map((player, index) => (
-                        <li key={index}>{player}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p>No key players found.</p>
-                  )}
-                  {translatedData.strategicDevelopments && (
-                    <p className="mt-2">{translatedData.strategicDevelopments}</p>
-                  )}
-                </div>
-              </div>
+      <div className="max-w-4xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold">Edit Report</h1>
+            <div className="flex items-center space-x-4">
+                <Menu as="div" className="relative inline-block text-left">
+                    <div>
+                        <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            View Language: {viewLocale.toUpperCase()}
+                            <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" />
+                        </Menu.Button>
+                    </div>
+                    <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                    >
+                        <Menu.Items className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                            <div className="py-1">
+                                {locales.map((locale) => (
+                                    <Menu.Item key={locale}>
+                                        {({ active }) => (
+                                            <button
+                                                onClick={() => setViewLocale(locale)}
+                                                className={`${
+                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
+                                                } ${
+                                                    viewLocale === locale ? 'font-bold bg-gray-50' : 'font-normal'
+                                                } block w-full text-left px-4 py-2 text-sm`}
+                                            >
+                                                {locale.toUpperCase()}
+                                            </button>
+                                        )}
+                                    </Menu.Item>
+                                ))}
+                            </div>
+                        </Menu.Items>
+                    </Transition>
+                </Menu>
+                <button
+                    onClick={handlePublish}
+                    disabled={isPublishing || isSaving}
+                    className="px-6 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 disabled:bg-gray-400"
+                >
+                    {isPublishing ? 'Publishing...' : 'Publish in all languages'}
+                </button>
             </div>
-          ) : (
-            <p className="text-sm text-black">No translation found for {viewLocale.toUpperCase()}. Generate one using the section above.</p>
-          ))}
         </div>
 
-        {/* Original Report Form */}
-        {initialData && (
-          <ReportForm reportId={id} initialData={initialData} />
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="md:col-span-2 space-y-6">
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                    <h2 className="text-xl font-semibold mb-4">Report Content</h2>
+                    {/* Render a form field for each section */}
+                    {[
+                        { name: 'title', label: 'Title', type: 'input' },
+                        { name: 'marketResearchSummary', label: 'Market Research Summary', type: 'textarea' },
+                        { name: 'marketDynamics', label: 'Market Dynamics', type: 'textarea' },
+                        { name: 'regionalInsights', label: 'Regional Insights', type: 'textarea' },
+                        { name: 'keyMarketPlayers', label: 'Key Market Players', type: 'textarea' },
+                        { name: 'tableOfContents', label: 'Table of Contents', type: 'textarea' },
+                    ].map(field => (
+                        <div key={field.name} className="mb-4">
+                            <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
+                            {field.type === 'textarea' ? (
+                                <textarea
+                                    id={field.name}
+                                    name={field.name}
+                                    value={formatInputValue(viewLocale === 'en' ? report[field.name as keyof typeof report] : translatedReport[field.name as keyof typeof translatedReport])}
+                                    onChange={handleInputChange}
+                                    rows={8}
+                                    className="w-full p-2 border rounded-md"
+                                />
+                            ) : (
+                                <input
+                                    type="text"
+                                    id={field.name}
+                                    name={field.name}
+                                    value={formatInputValue(viewLocale === 'en' ? report[field.name as keyof typeof report] : translatedReport[field.name as keyof typeof translatedReport])}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 border rounded-md"
+                                />
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="space-y-6">
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                    <h2 className="text-xl font-semibold mb-4">Configuration</h2>
+                    <div className="mb-4">
+                        <label htmlFor="imageUpload" className="block text-sm font-medium text-gray-700 mb-1">Upload Image</label>
+                        <input
+                            type="file"
+                            id="imageUpload"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="w-full p-2 border rounded-md"
+                        />
+                        {imagePreview && (
+                          <div className="mt-2 relative w-full h-48 border rounded-md overflow-hidden">
+                            <Image src={imagePreview} alt="Image Preview" layout="fill" objectFit="cover" />
+                          </div>
+                        )}
+                        {selectedFile && (
+                          <button
+                            onClick={handleImageUpload}
+                            disabled={isUploading}
+                            className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md"
+                          >
+                            {isUploading ? 'Uploading...' : 'Upload Image'}
+                          </button>
+                        )}
+                    </div>
+                </div>
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                    <h2 className="text-xl font-semibold mb-4">Categories</h2>
+                    <div className="space-y-2">
+                        {allCategories.map(category => (
+                            <label key={category.id} className="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedCategoryIds.has(category.id)}
+                                    onChange={() => handleCategoryChange(category.id)}
+                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                />
+                                <span className="ml-2 text-sm text-gray-700">{category.name}</span>
+                            </label>
+                        ))}
+                    </div>
+                </div>
+                <button
+                    onClick={handleSave}
+                    disabled={isSaving || isPublishing}
+                    className="w-full px-6 py-3 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 disabled:bg-gray-400"
+                >
+                    {isSaving ? 'Saving...' : 'Save Changes'}
+                </button>
+            </div>
+        </div>
       </div>
     </AdminLayout>
-  )
+  );
 }

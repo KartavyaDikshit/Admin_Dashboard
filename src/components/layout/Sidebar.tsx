@@ -1,6 +1,5 @@
 'use client'
 
-import { Fragment } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -18,14 +17,15 @@ import {
 } from '@heroicons/react/24/outline'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import { Dispatch, SetStateAction } from 'react' // Import Dispatch and SetStateAction
 
 interface SidebarProps {
   open: boolean
-  setOpen: (open: boolean) => void
+  setOpen: Dispatch<SetStateAction<boolean>> // Add setOpen property
   userRole?: string
 }
 
-export default function Sidebar({ open, setOpen, userRole }: SidebarProps) {
+export default function Sidebar({ open, userRole }: SidebarProps) {
   const pathname = usePathname()
 
   const { data: reportsCount } = useQuery<number>({ queryKey: ['reportsCount'], queryFn: async () => {

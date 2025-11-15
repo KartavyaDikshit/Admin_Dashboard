@@ -107,22 +107,8 @@ model Category {
   id        String @id @default(uuid()) @db.Uuid
   shortcode String @unique @db.VarChar(20)
   slug      String @unique @db.VarChar(150)
-
-  // Translated fields
-  title_en       String? @db.VarChar(300)
-  description_en String? @db.Text
-  title_de       String? @db.VarChar(300)
-  description_de String? @db.Text
-  title_fr       String? @db.VarChar(300)
-  description_fr String? @db.Text
-  title_it       String? @db.VarChar(300)
-  description_it String? @db.Text
-  title_ja       String? @db.VarChar(300)
-  description_ja String? @db.Text
-  title_ko       String? @db.VarChar(300)
-  description_ko String? @db.Text
-  title_es       String? @db.VarChar(300)
-  description_es String? @db.Text
+  name      String @default("Untitled") @db.VarChar(300)
+  description String? @db.Text
 
   icon             String?       @db.VarChar(100)
   featured         Boolean       @default(false)
@@ -163,6 +149,8 @@ model CategoryTranslation {
   seoKeywords     String[]          @default([]) @map("seo_keywords")
   metaTitle       String?           @db.VarChar(300) @map("meta_title")
   metaDescription String?           @db.VarChar(500) @map("meta_description")
+  aiGenerated     Boolean           @default(false) @map("ai_generated")
+  humanReviewed   Boolean           @default(false) @map("human_reviewed")
   status          TranslationStatus @default(DRAFT)
   createdAt       DateTime          @default(now()) @map("created_at")
   updatedAt       DateTime          @updatedAt @map("updated_at")
@@ -174,178 +162,90 @@ model CategoryTranslation {
 }
 
 model Report {
-  id                          String        @id @default(uuid()) @db.Uuid
-  sku                         String?       @unique @db.VarChar(50)
-  slug                        String        @unique @db.VarChar(200)
-  title                       String        @db.VarChar(500)
-  description                 String        @db.Text
-  summary                     String?       @db.Text
-  pages                       Int           @default(0)
-  publishedDate               DateTime      @map("published_date") @db.Date
-  baseYear                    Int?          @map("base_year")
-  forecastPeriod              String?       @map("forecast_period") @db.VarChar(50)
-  tableOfContents             String?       @map("table_of_contents") @db.Text
-  listOfFigures               String?       @map("list_of_figures") @db.Text
-  methodology                 String?       @db.Text
-  keyFindings                 String[]      @default([]) @map("key_findings")
-  executiveSummary            String?       @map("executive_summary") @db.Text
-  marketAnalysis              String?       @map("market_analysis") @db.Text
-  competitiveAnalysis         String?       @map("competitive_analysis") @db.Text
-  trendsAnalysis              String?       @map("trends_analysis") @db.Text
-  strategicDevelopments       String?       @map("strategic_developments") @db.Text
-  finalSynthesis              String?       @map("final_synthesis") @db.Text
-  marketData                  Json?         @map("market_data")
-  competitiveLandscape        Json?         @map("competitive_landscape")
-  marketSegmentation          Json?         @map("market_segmentation")
-  regionalAnalysis            Json?         @map("regional_analysis")
-  swotAnalysis                Json?         @map("swot_analysis")
-  keyPlayers                  String[]      @default([]) @map("key_players")
-  regions                     String[]      @default([])
-  industryTags                String[]      @default([]) @map("industry_tags")
-  reportType                  String?       @map("report_type") @db.VarChar(50)
-  researchMethod              String?       @map("research_method") @db.VarChar(100)
-  keywords                    String[]      @default([])
-  semanticKeywords            String[]      @default([]) @map("semantic_keywords")
-  regionalKeywords            Json?         @map("regional_keywords")
-  competitorKeywords          String[]      @default([]) @map("competitor_keywords")
-  trendingKeywords            String[]      @default([]) @map("trending_keywords")
-  longTailKeywords            String[]      @default([]) @map("long_tail_keywords")
-  metaTitle                   String        @map("meta_title") @db.VarChar(500)
-  metaDescription             String        @map("meta_description") @db.VarChar(500)
-  canonicalUrl                String?       @map("canonical_url") @db.VarChar(500)
-  ogTitle                     String?       @map("og_title") @db.VarChar(500)
-  ogDescription               String?       @map("og_description") @db.VarChar(500)
-  ogImage                     String?       @map("og_image") @db.VarChar(500)
-  twitterTitle                String?       @map("twitter_title") @db.VarChar(500)
-  twitterDescription          String?       @map("twitter_description") @db.VarChar(500)
-  schemaMarkup                Json?         @map("schema_markup")
-  breadcrumbData              Json?         @map("breadcrumb_data")
-  faqData                     Json?         @map("faq_data")
-  singlePrice                 Decimal?      @map("single_price") @db.Decimal(10, 2)
-  multiPrice                  Decimal?      @map("multi_price") @db.Decimal(10, 2)
-  corporatePrice              Decimal?      @map("corporate_price") @db.Decimal(10, 2)
-  enterprisePrice             Decimal?      @map("enterprise_price") @db.Decimal(10, 2)
-  currency                    String        @default("USD") @db.VarChar(3)
-  aiGenerated                 Boolean       @default(false) @map("ai_generated")
-  contentGenerationWorkflowId String?       @map("content_generation_workflow_id") @db.Uuid
-  humanApproved               Boolean       @default(false) @map("human_approved")
-  contentQualityScore         Decimal?      @map("content_quality_score") @db.Decimal(3, 2)
-  aiConfidenceScore           Decimal?      @map("ai_confidence_score") @db.Decimal(3, 2)
-  status                      ContentStatus @default(DRAFT)
-  featured                    Boolean       @default(false)
-  priority                    Int           @default(0)
-  viewCount                   BigInt        @default(0) @map("view_count")
-  downloadCount               BigInt        @default(0) @map("download_count")
-  shareCount                  BigInt        @default(0) @map("share_count")
-  enquiryCount                BigInt        @default(0) @map("enquiry_count")
-  searchRankings              Json?         @map("search_rankings")
-  clickThroughRate            Decimal?      @map("click_through_rate") @db.Decimal(5, 4)
-  averagePosition             Decimal?      @map("average_position") @db.Decimal(5, 2)
-  impressions                 BigInt        @default(0)
-  clicks                      BigInt        @default(0)
-  bounceRate                  Decimal?      @map("bounce_rate") @db.Decimal(5, 4)
-  timeOnPage                  Int?          @map("time_on_page")
-  avgRating                   Decimal?      @map("avg_rating") @db.Decimal(3, 2)
-  reviewCount                 Int           @default(0) @map("review_count")
-  totalRatingPoints           Int           @default(0) @map("total_rating_points")
-  createdAt                   DateTime      @default(now()) @map("created_at")
-  updatedAt                   DateTime      @updatedAt @map("updated_at")
+  id               String   @id @default(uuid()) @db.Uuid
+  sku              String?  @unique @db.VarChar(50)
+  slug             String   @unique @db.VarChar(200)
+  title            String   @db.VarChar(500)
+  description      String   @db.Text
+  summary          String?  @db.Text
+  pages            Int      @default(0)
+  publishedDate    DateTime @map("published_date") @db.Date
+  baseYear         Int?     @map("base_year")
+  forecastPeriod   String?  @map("forecast_period") @db.VarChar(50)
+  tableOfContents  String?  @map("table_of_contents") @db.Text
+  listOfFigures    String?  @map("list_of_figures") @db.Text
+  methodology      String?  @db.Text
+  keyFindings      String[] @default([]) @map("key_findings")
+  executiveSummary String?  @map("executive_summary") @db.Text
+
+  recentStrategicDevelopments Json? @map("recent_strategic_developments")
+  marketResearchSummary String? @map("market_research_summary") @db.Text
+  marketDynamics        String? @map("market_dynamics") @db.Text
+  regionalInsights      String? @map("regional_insights") @db.Text
+  keyMarketPlayers      String? @map("key_market_players") @db.Text
+
+  imageUrl             String?       @map("image_url") @db.VarChar(500)
+  marketData           Json?         @map("market_data")
+  competitiveLandscape Json?         @map("competitive_landscape")
+  marketSegmentation   Json?         @map("market_segmentation")
+  regionalAnalysis     Json?         @map("regional_analysis")
+  swotAnalysis         Json?         @map("swot_analysis")
+  keyPlayers           String[]      @default([]) @map("key_players")
+  regions              String[]      @default([])
+  industryTags         String[]      @default([]) @map("industry_tags")
+  reportType           String?       @map("report_type") @db.VarChar(50)
+  researchMethod       String?       @map("research_method") @db.VarChar(100)
+  keywords             String[]      @default([])
+  semanticKeywords     String[]      @default([]) @map("semantic_keywords")
+  regionalKeywords     Json?         @map("regional_keywords")
+  competitorKeywords   String[]      @default([]) @map("competitor_keywords")
+  trendingKeywords     String[]      @default([]) @map("trending_keywords")
+  longTailKeywords     String[]      @default([]) @map("long_tail_keywords")
+  metaTitle            String        @map("meta_title") @db.VarChar(500)
+  metaDescription      String        @map("meta_description") @db.VarChar(500)
+  canonicalUrl         String?       @map("canonical_url") @db.VarChar(500)
+  ogTitle              String?       @map("og_title") @db.VarChar(500)
+  ogDescription        String?       @map("og_description") @db.VarChar(500)
+  ogImage              String?       @map("og_image") @db.VarChar(500)
+  twitterTitle         String?       @map("twitter_title") @db.VarChar(500)
+  twitterDescription   String?       @map("twitter_description") @db.VarChar(500)
+  schemaMarkup         Json?         @map("schema_markup")
+  breadcrumbData       Json?         @map("breadcrumb_data")
+  faqData              Json?         @map("faq_data")
+  singlePrice          Decimal?      @map("single_price") @db.Decimal(10, 2)
+  multiPrice           Decimal?      @map("multi_price") @db.Decimal(10, 2)
+  corporatePrice       Decimal?      @map("corporate_price") @db.Decimal(10, 2)
+  enterprisePrice      Decimal?      @map("enterprise_price") @db.Decimal(10, 2)
+  currency             String        @default("USD") @db.VarChar(3)
+  aiGenerated          Boolean       @default(false) @map("ai_generated")
+  status               ContentStatus @default(DRAFT)
+  featured             Boolean       @default(false)
+  priority             Int           @default(0)
+  viewCount            BigInt        @default(0) @map("view_count")
+  downloadCount        BigInt        @default(0) @map("download_count")
+  shareCount           BigInt        @default(0) @map("share_count")
+  enquiryCount         BigInt        @default(0) @map("enquiry_count")
+  searchRankings       Json?         @map("search_rankings")
+  clickThroughRate     Decimal?      @map("click_through_rate") @db.Decimal(5, 4)
+  averagePosition      Decimal?      @map("average_position") @db.Decimal(5, 2)
+  impressions          BigInt        @default(0)
+  clicks               BigInt        @default(0)
+  bounceRate           Decimal?      @map("bounce_rate") @db.Decimal(5, 4)
+  timeOnPage           Int?          @map("time_on_page")
+  avgRating            Decimal?      @map("avg_rating") @db.Decimal(3, 2)
+  reviewCount          Int           @default(0) @map("review_count")
+  totalRatingPoints    Int           @default(0) @map("total_rating_points")
+  createdAt            DateTime      @default(now()) @map("created_at")
+  updatedAt            DateTime      @updatedAt @map("updated_at")
 
   // Relations
-  categories                Category[]
-  orderItems                OrderItem[]
-  enquiries                 Enquiry[]
-  reviews                   ReportReview[]
-  contentGenerationWorkflow ContentGenerationWorkflow? @relation(fields: [contentGenerationWorkflowId], references: [id])
-  translations              ReportTranslation[]
+  categories   Category[]
+  orderItems   OrderItem[]
+  enquiries    Enquiry[]
+  reviews      ReportReview[]
+  translations ReportTranslation[]
 
   @@map("reports")
-}
-
-model ContentGenerationWorkflow {
-  id                    String                @id @default(uuid()) @db.Uuid
-  reportTitle           String                @map("report_title") @db.VarChar(500)
-  language              String                @default("en") @db.VarChar(10)
-  parentWorkflowId      String?               @map("parent_workflow_id") @db.Uuid
-  industry              String?               @db.VarChar(255)
-  marketSize            String?               @map("market_size") @db.VarChar(255)
-  geographicScope       String?               @map("geographic_scope") @db.VarChar(255)
-  timeframe             String?               @db.VarChar(50)
-  reportType            String?               @map("report_type") @db.VarChar(50)
-  customRequirements    String?               @map("custom_requirements") @db.Text
-  targetLanguages       String[]              @default([]) @map("target_languages")
-  phase1JobId           String?               @map("phase1_job_id") @db.Uuid
-  phase2JobId           String?               @map("phase2_job_id") @db.Uuid
-  phase3JobId           String?               @map("phase3_job_id") @db.Uuid
-  phase4JobId           String?               @map("phase4_job_id") @db.Uuid
-  phase5JobId           String?               @map("phase5_job_id") @db.Uuid
-  marketAnalysis        String?               @map("market_analysis") @db.Text
-  competitiveAnalysis   String?               @map("competitive_analysis") @db.Text
-  trendsAnalysis        String?               @map("trends_analysis") @db.Text
-  finalSynthesis        String?               @map("final_synthesis") @db.Text
-
-  overallQualityScore   Decimal?              @map("overall_quality_score") @db.Decimal(3, 2)
-  contentCoherence      Decimal?              @map("content_coherence") @db.Decimal(3, 2)
-  factualAccuracy       Decimal?              @map("factual_accuracy") @db.Decimal(3, 2)
-  marketInsightDepth    Decimal?              @map("market_insight_depth") @db.Decimal(3, 2)
-  innovationScore       Decimal?              @map("innovation_score") @db.Decimal(3, 2)
-  workflowStatus        ContentWorkflowStatus @default(GENERATING) @map("workflow_status")
-  currentPhase          Int                   @default(1) @map("current_phase")
-  assignedReviewerId    String?               @map("assigned_reviewer_id") @db.Uuid
-  reviewNotes           String?               @map("review_notes") @db.Text
-  revisionRequests      String[]              @default([]) @map("revision_requests")
-  approvedBy            String?               @map("approved_by") @db.Uuid
-  approvedAt            DateTime?             @map("approved_at")
-  totalInputTokensUsed  Int?                  @default(0) @map("total_input_tokens_used")
-  totalOutputTokensUsed Int?                  @default(0) @map("total_output_tokens_used")
-  totalTokensUsed       Int?                  @default(0) @map("total_tokens_used")
-  totalCost             Decimal?              @default(0) @map("total_cost") @db.Decimal(8, 4)
-  processingTime        Int?                  @map("processing_time")
-  createdAt             DateTime              @default(now()) @map("created_at")
-  updatedAt             DateTime              @updatedAt @map("updated_at")
-  createdBy             String                @map("created_by") @db.Uuid
-
-  // Relations
-  jobs           ContentGenerationJob[]
-  reports        Report[]
-  parentWorkflow ContentGenerationWorkflow?  @relation("WorkflowParent", fields: [parentWorkflowId], references: [id])
-  childWorkflows ContentGenerationWorkflow[] @relation("WorkflowParent")
-
-  @@map("content_generation_workflows")
-}
-
-model ContentGenerationJob {
-  id                String           @id @default(uuid()) @db.Uuid
-  workflowId        String?          @map("workflow_id") @db.Uuid
-  phase             Int
-  promptTemplate    String           @map("prompt_template") @db.Text
-  contextData       Json?            @map("context_data")
-  aiModel           String           @default("gpt-4-turbo-preview") @map("ai_model") @db.VarChar(50)
-  temperature       Decimal          @default(0.4) @db.Decimal(3, 2)
-  maxTokens         Int              @default(4000) @map("max_tokens")
-  inputPrompt       String           @map("input_prompt") @db.Text
-  outputText        String?          @map("output_text") @db.Text
-  imageUrl          String?          @map("image_url") @db.VarChar(500)
-  qualityScore      Decimal?         @map("quality_score") @db.Decimal(3, 2)
-  relevanceScore    Decimal?         @map("relevance_score") @db.Decimal(3, 2)
-  innovationScore   Decimal?         @map("innovation_score") @db.Decimal(3, 2)
-  completenessScore Decimal?         @map("completeness_score") @db.Decimal(3, 2)
-  status            ContentJobStatus @default(PENDING)
-  processingTime    Int?             @map("processing_time")
-  retryCount        Int              @default(0) @map("retry_count")
-  inputTokens       Int?             @map("input_tokens")
-  outputTokens      Int?             @map("output_tokens")
-  totalTokens       Int?             @map("total_tokens")
-  cost              Decimal?         @db.Decimal(8, 4)
-  errorMessage      String?          @map("error_message") @db.Text
-  errorCode         String?          @map("error_code") @db.VarChar(50)
-  createdAt         DateTime         @default(now()) @map("created_at")
-  updatedAt         DateTime         @updatedAt @map("updated_at")
-
-  // Relations
-  workflow ContentGenerationWorkflow? @relation(fields: [workflowId], references: [id])
-
-  @@map("content_generation_jobs")
 }
 
 model TranslationJob {
@@ -721,38 +621,6 @@ model SeoAnalytic {
   @@map("seo_analytics")
 }
 
-model AiReportSession {
-  id                String   @id @default(uuid()) @db.Uuid
-  reportTitle       String   @db.VarChar(500)
-  totalInputTokens  Int
-  totalOutputTokens Int
-  totalCost         Decimal  @db.Decimal(10, 4)
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @updatedAt @map("updated_at")
-
-  promptResults AiPromptResult[]
-
-  @@map("ai_report_sessions")
-}
-
-model AiPromptResult {
-  id            String   @id @default(uuid()) @db.Uuid
-  sessionId     String   @map("session_id") @db.Uuid
-  promptId      String   @db.VarChar(50)
-  title         String   @db.VarChar(255)
-  content       String   @db.Text
-  inputTokens   Int
-  outputTokens  Int
-  totalTokens   Int
-  cost          Decimal  @db.Decimal(10, 4)
-  executionTime Int
-  createdAt     DateTime @default(now()) @map("created_at")
-
-  session AiReportSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-
-  @@map("ai_prompt_results")
-}
-
 model Testimonial {
   id        String   @id @default(uuid()) @db.Uuid
   author    String   @db.VarChar(255)
@@ -768,58 +636,59 @@ model Testimonial {
 }
 
 model ReportTranslation {
-  id                      String            @id @default(uuid()) @db.Uuid
-  reportId                String            @map("report_id") @db.Uuid
-  locale                  String            @db.VarChar(5)
-  title                   String            @db.VarChar(500)
-  description             String            @db.Text
-  summary                 String?           @db.Text
-  marketAnalysis          String?           @map("market_analysis") @db.Text
-  competitiveAnalysis     String?           @map("competitive_analysis") @db.Text
-  trendsAnalysis          String?           @map("trends_analysis") @db.Text
-  finalSynthesis          String?           @map("final_synthesis") @db.Text
-  keyPlayers              String[]          @default([]) @map("key_players")
-  strategicDevelopments   String?           @map("strategic_developments") @db.Text
+  id                String   @id @default(uuid()) @db.Uuid
+  reportId          String   @map("report_id") @db.Uuid
+  locale            String   @db.VarChar(5)
+  title             String   @db.VarChar(500)
+  description       String   @db.Text
+  summary           String?  @db.Text
+  tableOfContents   String?  @map("table_of_contents") @db.Text
+  keyPlayers        String[] @default([]) @map("key_players")
 
-  slug                    String            @db.VarChar(200)
-  tableOfContents         String?           @map("table_of_contents") @db.Text
-  listOfFigures           String?           @map("list_of_figures") @db.Text
-  methodology             String?           @db.Text
-  keyFindings             String[]          @default([]) @map("key_findings")
-  executiveSummary        String?           @map("executive_summary") @db.Text
-  keywords                String[]          @default([])
-  semanticKeywords        String[]          @default([]) @map("semantic_keywords")
-  localizedKeywords       String[]          @default([]) @map("localized_keywords")
-  culturalKeywords        String[]          @default([]) @map("cultural_keywords")
-  longTailKeywords        String[]          @default([]) @map("long_tail_keywords")
-  localCompetitorKeywords String[]          @default([]) @map("local_competitor_keywords")
-  metaTitle               String            @map("meta_title") @db.VarChar(500)
-  metaDescription         String            @map("meta_description") @db.VarChar(500)
-  canonicalUrl            String?           @map("canonical_url") @db.VarChar(500)
-  ogTitle                 String?           @map("og_title") @db.VarChar(500)
-  ogDescription           String?           @map("og_description") @db.VarChar(500)
-  ogImage                 String?           @map("og_image") @db.VarChar(500)
-  twitterTitle            String?           @map("twitter_title") @db.VarChar(500)
-  twitterDescription      String?           @map("twitter_description") @db.VarChar(500)
-  schemaMarkup            Json?             @map("schema_markup")
-  breadcrumbData          Json?             @map("breadcrumb_data")
-  faqData                 Json?             @map("faq_data")
-  localBusinessSchema     Json?             @map("local_business_schema")
-  translationJobId        String?           @map("translation_job_id") @db.Uuid
-  aiGenerated             Boolean           @default(false) @map("ai_generated")
-  humanReviewed           Boolean           @default(false) @map("human_reviewed")
-  translationQuality      Decimal?          @map("translation_quality") @db.Decimal(3, 2)
-  culturalAdaptationScore Decimal?          @map("cultural_adaptation_score") @db.Decimal(3, 2)
-  culturalAdaptationNotes String?           @map("cultural_adaptation_notes") @db.Text
-  localizationNotes       String?           @map("localization_notes") @db.Text
-  searchPerformance       Json?             @map("search_performance")
-  localRankings           Json?             @map("local_rankings")
-  regionalCtr             Decimal?          @map("regional_ctr") @db.Decimal(5, 4)
-  regionalImpressions     BigInt            @default(0) @map("regional_impressions")
-  regionalClicks          BigInt            @default(0) @map("regional_clicks")
+  recentStrategicDevelopments Json? @map("recent_strategic_developments")
+  marketResearchSummary String? @map("market_research_summary") @db.Text
+  marketDynamics        String? @map("market_dynamics") @db.Text
+  regionalInsights      String? @map("regional_insights") @db.Text
+  keyMarketPlayers      String? @map("key_market_players") @db.Text
+
+  slug                    String   @db.VarChar(200)
+  listOfFigures           String?  @map("list_of_figures") @db.Text
+  methodology             String?  @map("methodology") @db.Text
+  keyFindings             String[] @default([]) @map("key_findings")
+  executiveSummary        String?  @map("executive_summary") @db.Text
+  keywords                String[] @default([])
+  semanticKeywords        String[] @default([]) @map("semantic_keywords")
+  localizedKeywords       String[] @default([]) @map("localized_keywords")
+  culturalKeywords        String[] @default([]) @map("cultural_keywords")
+  longTailKeywords        String[] @default([]) @map("long_tail_keywords")
+  localCompetitorKeywords String[] @default([]) @map("local_competitor_keywords")
+  metaTitle               String   @map("meta_title") @db.VarChar(500)
+  metaDescription         String   @map("meta_description") @db.VarChar(500)
+  canonicalUrl            String?  @map("canonical_url") @db.VarChar(500)
+  ogTitle                 String?  @map("og_title") @db.VarChar(500)
+  ogDescription           String?  @map("og_description") @db.VarChar(500)
+  ogImage                 String?  @map("og_image") @db.VarChar(500)
+  twitterTitle            String?  @map("twitter_title") @db.VarChar(500)
+  twitterDescription      String?  @map("twitter_description") @db.VarChar(500)
+  schemaMarkup            Json?    @map("schema_markup")
+  breadcrumbData          Json?    @map("breadcrumb_data")
+  faqData                 Json?    @map("faq_data")
+  localBusinessSchema     Json?    @map("local_business_schema")
+  translationJobId        String?  @map("translation_job_id") @db.Uuid
+  aiGenerated             Boolean  @default(false) @map("ai_generated")
+  humanReviewed           Boolean  @default(false) @map("human_reviewed")
+  translationQuality      Decimal? @map("translation_quality") @db.Decimal(3, 2)
+  culturalAdaptationScore Decimal? @map("cultural_adaptation_score") @db.Decimal(3, 2)
+  culturalAdaptationNotes String?  @map("cultural_adaptation_notes") @db.Text
+  localizationNotes       String?  @map("localization_notes") @db.Text
+  searchPerformance       Json?    @map("search_performance")
+  localRankings           Json?    @map("local_rankings")
+  regionalCtr             Decimal? @map("regional_ctr") @db.Decimal(5, 4)
+  regionalImpressions     BigInt   @default(0) @map("regional_impressions")
+  regionalClicks          BigInt   @default(0) @map("regional_clicks")
   status                  TranslationStatus @default(DRAFT)
-  createdAt               DateTime          @default(now()) @map("created_at")
-  updatedAt               DateTime          @updatedAt @map("updated_at")
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
 
   // Relations
   report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)

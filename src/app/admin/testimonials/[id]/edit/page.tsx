@@ -8,17 +8,7 @@ import { useParams } from 'next/navigation';
 import TestimonialForm from '@/components/testimonials/TestimonialForm';
 import AdminLayout from '@/components/layout/AdminLayout';
 
-interface Testimonial {
-  id: string;
-  author: string;
-  company?: string;
-  position?: string;
-  content: string;
-  rating?: number;
-  approved: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Testimonial } from '@prisma/client';
 
 export default function EditTestimonialPage() {
   const params = useParams();
@@ -28,7 +18,13 @@ export default function EditTestimonialPage() {
     queryKey: ['testimonial', testimonialId],
     queryFn: async () => {
       const response = await axios.get(`/api/testimonials/${testimonialId}`);
-      return response.data;
+      const data = response.data;
+      return {
+        ...data,
+        company: data.company ?? null,
+        position: data.position ?? null,
+        rating: data.rating ?? null,
+      };
     },
     enabled: !!testimonialId, // Only run query if testimonialId is available
   });

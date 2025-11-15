@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 // A placeholder for the report type
 type Report = {
   id: string;
@@ -15,7 +17,7 @@ export default function ReportList({ reports }: { reports: Report[] }) {
           {reports.map((report) => (
             <div key={report.id} className="bg-white rounded-lg shadow-md overflow-hidden">
               {report.imageUrl && (
-                <img className="w-full h-48 object-cover" src={report.imageUrl} alt={report.title} />
+                <Image className="w-full h-48 object-cover" src={report.imageUrl} alt={report.title} width={500} height={300} />
               )}
               {!report.imageUrl && (
                 <div className="w-full h-48 bg-gray-200 flex items-center justify-center">

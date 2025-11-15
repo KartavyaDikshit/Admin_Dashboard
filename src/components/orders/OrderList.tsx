@@ -1,9 +1,6 @@
 'use client'
 
-'use client'
-
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { toast } from 'react-hot-toast'
 import { formatCurrency, formatDateTime, cn } from '@/lib/utils'
@@ -32,16 +29,11 @@ interface OrderListProps {
 }
 
 export default function OrderList({ searchParams }: OrderListProps) {
-  const router = useRouter()
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [pagination, setPagination] = useState({ page: 1, limit: 25, total: 0, totalPages: 0 })
 
-  useEffect(() => {
-    fetchOrders()
-  }, [searchParams])
-
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     setLoading(true)
     try {
       const validStatuses = ['PENDING', 'PROCESSING', 'COMPLETED', 'CANCELLED', 'REFUNDED']
@@ -69,12 +61,16 @@ export default function OrderList({ searchParams }: OrderListProps) {
       } else {
         toast.error(data.error || 'Failed to load orders')
       }
-    } catch (error) {
+    } catch {
       toast.error('Failed to load orders')
     } finally {
       setLoading(false)
     }
-  }
+  }, [searchParams])
+
+  useEffect(() => {
+    fetchOrders()
+  }, [fetchOrders])
 
   return (
     <div className="space-y-6">

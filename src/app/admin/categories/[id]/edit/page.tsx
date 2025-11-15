@@ -14,6 +14,7 @@ export default function EditCategoryPage() {
   const [loading, setLoading] = useState(true)
   const [targetLocale, setTargetLocale] = useState('es') // Default for translation trigger
   const [isTranslating, setIsTranslating] = useState(false)
+  const [isTranslatingAll, setIsTranslatingAll] = useState(false)
 
   // New states for viewing/editing translations
   const [viewLocale, setViewLocale] = useState<string>('') // Selected locale for viewing
@@ -28,11 +29,11 @@ export default function EditCategoryPage() {
         const response = await fetch(`/api/categories/${id}`)
         const data = await response.json()
         if (response.ok) {
-          setInitialData(data.category)
+          setInitialData(data)
         } else {
           toast.error(data.error || 'Failed to fetch category')
         }
-      } catch (error) {
+      } catch {
         toast.error('An error occurred while fetching category.')
       } finally {
         setLoading(false)
@@ -53,17 +54,21 @@ export default function EditCategoryPage() {
       }
       setLoadingTranslatedData(true)
       try {
-        const response = await fetch(`/api/categories/${id}/translations/${viewLocale}`)
+        const fetchUrl = `/api/categories/${id}/translations/${viewLocale}`;
+        console.log('Fetching translation from URL:', fetchUrl);
+        const response = await fetch(fetchUrl)
         const data = await response.json()
+        console.log('API response for translated category:', data); // Our debug log
         if (response.ok) {
           setTranslatedData(data.translation)
         } else if (response.status === 404) {
           setTranslatedData(null) // No translation found for this locale
           toast('No translation found for this locale. You can generate one.')
         } else {
-          toast.error(data.error || `Failed to fetch ${viewLocale} translation.`) 
+          toast.error(data.message || data.error || `Failed to fetch ${viewLocale} translation.`) 
         }
       } catch (error) {
+        console.error('Client-side fetch error:', error);
         toast.error(`An error occurred while fetching ${viewLocale} translation.`) 
       } finally {
         setLoadingTranslatedData(false)
@@ -97,7 +102,6 @@ export default function EditCategoryPage() {
 
       if (response.ok) {
         toast.success(`Translation job started for ${targetLocale}. Job ID: ${data.job.id}`)
-        // After generating, automatically switch to view this locale
         setViewLocale(targetLocale);
       } else {
         toast.error(data.error || 'Failed to start translation job.')
@@ -109,6 +113,33 @@ export default function EditCategoryPage() {
       setIsTranslating(false)
     }
   }
+
+  const handleTranslateAllLanguages = async () => {
+    setIsTranslatingAll(true);
+    try {
+      const response = await fetch(`/api/categories/${id}/translate-all`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success(data.message || 'Category translation initiated for all languages.');
+        // Optionally, refresh the page or set a default viewLocale to see progress
+        // For now, we'll just show a success message.
+      } else {
+        toast.error(data.error || 'Failed to initiate translation for all languages.');
+      }
+    } catch (error) {
+      console.error('Error initiating translation for all languages:', error);
+      toast.error('An error occurred while initiating translation for all languages.');
+    } finally {
+      setIsTranslatingAll(false);
+    }
+  };
 
   const handleSaveTranslatedData = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -173,7 +204,7 @@ export default function EditCategoryPage() {
   return (
     <AdminLayout>
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4 text-black">Edit Category: {initialData.title}</h1>
+        <h1 className="text-2xl font-bold mb-4 text-black">Edit Category: {initialData.name}</h1>
 
         {/* Translation Trigger Section */}
         <div className="mb-6 p-4 border rounded-lg shadow-sm bg-white">
@@ -183,7 +214,7 @@ export default function EditCategoryPage() {
               value={targetLocale}
               onChange={(e) => setTargetLocale(e.target.value)}
               className="block w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
-              disabled={isTranslating}
+              disabled={isTranslating || isTranslatingAll}
             >
               <option value="">Select Locale</option>
               {availableLocales.map(locale => (
@@ -192,10 +223,17 @@ export default function EditCategoryPage() {
             </select>
             <button
               onClick={handleTranslate}
-              disabled={isTranslating || !targetLocale}
+              disabled={isTranslating || !targetLocale || isTranslatingAll}
               className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isTranslating ? 'Generating...' : 'Generate Translation'}
+            </button>
+            <button
+              onClick={handleTranslateAllLanguages}
+              disabled={isTranslatingAll || isTranslating}
+              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isTranslatingAll ? 'Translating All...' : 'Translate into All Languages'}
             </button>
           </div>
           {isTranslating && <p className="mt-2 text-sm text-black">AI translation in progress. This may take a moment.</p>}

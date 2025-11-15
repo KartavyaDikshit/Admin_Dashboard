@@ -43,7 +43,7 @@ export default function LoginPage() {
         toast.success('Login successful!')
         router.push('/admin')
       }
-    } catch (error) {
+    } catch {
       toast.error('An unexpected error occurred.')
     } finally {
       setLoading(false)
