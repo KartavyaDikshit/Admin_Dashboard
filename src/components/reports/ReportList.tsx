@@ -102,7 +102,7 @@ export default function ReportList({ searchParams }: ReportListProps) {
                         <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
                           <span>SKU: {report.sku || 'N/A'}</span>
                           <span>Categories: {report.categories.map(cat => cat.name).join(', ') || 'None'}</span>
-                          <span>Translations: {report._count.translations}</span>
+                          <span>Translations: {report._count.translations}/6</span>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2 flex-shrink-0">

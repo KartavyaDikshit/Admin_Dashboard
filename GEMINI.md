@@ -1,80 +1,91 @@
-# Project Overview
+# Project: TBI Admin Dashboard
 
-This is a Next.js project that serves as an admin dashboard for managing content, users, and orders. It utilizes Prisma as an ORM for database management and integrates with the OpenAI API for AI-powered content generation and translation. The application supports multiple languages and has a role-based access control system for admins.
+## Project Overview
 
-## Key Technologies
+This is a Next.js project bootstrapped with `create-next-app`. It serves as an admin dashboard for an AI pipeline that generates reports. The project uses TypeScript, Tailwind CSS, and Prisma for database management with a PostgreSQL database. Authentication is handled by NextAuth.js. The application is designed to manage content, users, orders, and other aspects of the AI report generation pipeline.
 
-*   **Framework:** Next.js
+### Key Technologies
+
+*   **Framework:** Next.js 15.5.3
 *   **Language:** TypeScript
 *   **Styling:** Tailwind CSS
-*   **Database:** PostgreSQL with Prisma
+*   **Database:** PostgreSQL
+*   **ORM:** Prisma
 *   **Authentication:** NextAuth.js
-*   **API Communication:** Axios
-*   **AI:** OpenAI (gpt-4o-mini)
+*   **API:** OpenAI
 *   **UI Components:** Recharts for charts
 
-# Building and Running
+## Building and Running
 
-## Prerequisites
+### Prerequisites
 
 *   Node.js
-*   pnpm
-*   PostgreSQL
+*   pnpm (or npm/yarn)
+*   PostgreSQL database
 
-## Installation
+### Installation
 
-1.  Install dependencies:
+1.  Clone the repository.
+2.  Install dependencies:
     ```bash
     pnpm install
     ```
+3.  Set up your environment variables by creating a `.env` file. A sample `.env.example` file should be created with the following content:
+    ```
+    DATABASE_URL="postgresql://tbi_user:karta123@localhost:5432/tbi_db"
+    NEXTAUTH_URL="http://localhost:3000"
+    OPENAI_API_KEY="your-openai-api-key"
+    ```
+4.  Generate Prisma client:
+    ```bash
+    pnpm db:generate
+    ```
+5.  Run database migrations:
+    ```bash
+    pnpm db:migrate
+    ```
+6. Seed the database (optional):
+   ```bash
+   pnpm seed
+   ```
 
-2.  Set up the database:
-    *   Ensure your PostgreSQL database is running.
-    *   Create a `.env` file and set the `DATABASE_URL`, `NEXTAUTH_URL`, and `OPENAI_API_KEY` environment variables.
-    *   Run the following command to create and seed the database:
-        ```bash
-        pnpm db:migrate
-        pnpm db:seed
-        ```
+### Running the application
 
-## Running the Application
-
-To run the application in development mode, use the following command:
+To run the development server:
 
 ```bash
 pnpm dev
 ```
 
-The application will be available at [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Building for Production
+### Available Scripts
 
-To build the application for production, use the following command:
+*   `pnpm dev`: Starts the development server.
+*   `pnpm build`: Creates a production build.
+*   `pnpm start`: Starts the production server.
+*   `pnpm lint`: Lints the code.
+*   `pnpm test`: Runs API tests using Jest.
+*   `pnpm test:watch`: Runs tests in watch mode.
+*   `pnpm test:coverage`: Generates a test coverage report.
+*   `pnpm db:generate`: Generates the Prisma client.
+*   `pnpm db:push`: Pushes the Prisma schema to the database.
+*   `pnpm db:migrate`: Runs database migrations.
+*   `pnpm db:studio`: Opens the Prisma Studio.
+*   `pnpm seed`: Seeds the database.
+*   `pnpm build:analyze`: Analyzes the bundle size.
+*   `pnpm type-check`: Checks for TypeScript errors.
 
-```bash
-pnpm build
-```
+## Development Conventions
 
-## Testing
+*   **Authentication:** Authentication is handled by NextAuth.js with a credentials provider. The `Admin` model is used for authentication. The session is managed with JWT.
+*   **Database:** The database schema is managed with Prisma. Migrations are located in the `prisma/migrations` directory.
+*   **API Routes:** API routes are located in the `src/app/api` directory.
+*   **Components:** Reusable components are located in the `src/components` directory.
+*   **Types:** TypeScript types are defined in the `src/types` directory.
+*   **Styling:** Tailwind CSS is used for styling.
+*   **Linting:** ESLint is used for linting.
+*   **Testing:** Jest is used for testing. API tests are located in `src/__tests__/api` and component tests in `src/__tests__/components`.
+*   **Build-time type errors**: The project is configured to ignore TypeScript errors during the build process (`ignoreBuildErrors: true` in `next.config.mjs`). It is recommended to use `pnpm type-check` to check for type errors before committing code.
 
-To run the tests, use the following command:
-
-```bash
-pnpm test
-```
-
-# Development Conventions
-
-*   **Linting:** The project uses ESLint for code linting. Run `pnpm lint` to check for linting errors.
-*   **Type Checking:** The project uses TypeScript for type checking. Run `pnpm type-check` to check for type errors.
-*   **Database Migrations:** Database migrations are managed with Prisma. To create a new migration, run `pnpm db:migrate`.
-*   **Seeding:** The database is seeded with initial data using `pnpm db:seed`. The seed script is located at `prisma/seed.ts`.
-
-# AI Services
-
-The application uses two main AI services for translation:
-
-*   **`AITranslationService`:** This service translates the entire content of a report or category.
-*   **`OptimizedAiTranslationService`:** This service is designed to be more efficient by only translating the sections of a report that have been edited.
-
-Both services use the `gpt-4o-mini` model from OpenAI.
+This `GEMINI.md` file provides a comprehensive overview of the project, including its purpose, technologies, and development conventions. It should be a useful resource for future interactions.

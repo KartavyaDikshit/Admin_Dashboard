@@ -10,7 +10,16 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const TARGET_LANGUAGES = ['de', 'fr', 'it', 'ja', 'ko', 'es', 'pt']; // Example target languages
+const TARGET_LANGUAGES = ['de', 'fr', 'it', 'ja', 'ko', 'es'];
+
+const languageMap: { [key: string]: string } = {
+    de: 'German',
+    fr: 'French',
+    it: 'Italian',
+    ja: 'Japanese',
+    ko: 'Korean',
+    es: 'Spanish',
+};
 
 interface CategoryTranslationPayload {
   title: string; // Corresponds to Category.name
@@ -33,7 +42,8 @@ async function translateAndStoreCategory(category: Category, language: string): 
 
   console.log(`[Category ${category.id}] Content to translate for ${language}:`, JSON.stringify(contentToTranslate, null, 2));
 
-  const prompt = `Translate the following category content into ${language}. Return the response as a valid JSON object with the following keys: "title", "description", "seoKeywords" (as a semicolon-separated string), "metaTitle", "metaDescription".
+  const fullLanguageName = languageMap[language] || language;
+  const prompt = `Translate the following category content into ${fullLanguageName}. Return the response as a valid JSON object with the following keys: "title", "description", "seoKeywords" (as a semicolon-separated string), "metaTitle", "metaDescription".
 
 ${JSON.stringify(contentToTranslate, null, 2)}`;
 
@@ -120,6 +130,8 @@ ${JSON.stringify(contentToTranslate, null, 2)}`;
           totalCost: totalCost,
           success: true,
           responseTime: 0,
+          requestData: prompt,
+          responseData: JSON.stringify(response),
         },
       });
     console.log(`[Category ${category.id}] API usage logged for ${language}.`);
@@ -139,6 +151,8 @@ ${JSON.stringify(contentToTranslate, null, 2)}`;
           success: false,
           errorMessage: error instanceof Error ? error.message : 'Unknown error',
           responseTime: 0,
+          requestData: prompt,
+          responseData: JSON.stringify(error instanceof Error ? { message: error.message, stack: error.stack } : { message: 'Unknown error' }),
         },
       });
   }

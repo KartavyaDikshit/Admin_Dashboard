@@ -8,7 +8,16 @@ const nextConfig = {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY
   },
   images: {
-    domains: ['localhost', 'your-domain.com']
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'https',
+        hostname: 'your-domain.com',
+      },
+    ],
   },
   typescript: {
     ignoreBuildErrors: true,

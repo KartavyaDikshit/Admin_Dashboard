@@ -87,6 +87,8 @@ async function translateAndStoreCategory(category: Category, language: string): 
           totalCost: totalCost,
           success: true,
           responseTime: 0,
+          requestData: prompt,
+          responseData: JSON.stringify(response),
         },
       });
 
@@ -105,6 +107,8 @@ async function translateAndStoreCategory(category: Category, language: string): 
           success: false,
           errorMessage: error instanceof Error ? error.message : 'Unknown error',
           responseTime: 0,
+          requestData: prompt,
+          responseData: JSON.stringify(error instanceof Error ? { message: error.message, stack: error.stack } : { message: 'Unknown error' }),
         },
       });
   }

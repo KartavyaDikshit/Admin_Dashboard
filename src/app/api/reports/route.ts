@@ -113,6 +113,7 @@ export async function GET(request: NextRequest) {
         status: true,
         featured: true,
         priority: true,
+        createdAt: true,
         categories: {
           select: {
             id: true,
@@ -154,7 +155,7 @@ export async function GET(request: NextRequest) {
           }
         } : undefined,
         _count: {
-          select: { reviews: true, orderItems: true }
+          select: { reviews: true, orderItems: true, translations: true }
         }
       },
       orderBy: [

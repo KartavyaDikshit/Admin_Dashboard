@@ -66,6 +66,8 @@ async function generateSection(
         totalCost: totalCost,
         success: true,
         responseTime: 0, // You could calculate this
+        requestData: fullPrompt,
+        responseData: JSON.stringify(response),
       },
     });
 
@@ -91,6 +93,8 @@ async function generateSection(
           success: false,
           errorMessage: error instanceof Error ? error.message : 'Unknown error',
           responseTime: 0,
+          requestData: fullPrompt,
+          responseData: JSON.stringify(error instanceof Error ? { message: error.message, stack: error.stack } : { message: 'Unknown error' }),
         },
       });
     throw new Error(`Failed to generate content for section: ${sectionTitle}`);

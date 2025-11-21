@@ -7,12 +7,14 @@ import { generateSlug } from '@/lib/utils';
 
 const categoryUpdateSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  description: z.string().optional(),
+  description: z.string().nullable().optional(),
   shortcode: z.string().min(2).max(20),
-  icon: z.string().optional(),
+  icon: z.string().nullable().optional(),
   featured: z.boolean().default(false),
   sortOrder: z.number().int().default(0),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED', 'ACTIVE']).default('PUBLISHED'),
+  metaTitle: z.string().nullable().optional(),
+  metaDescription: z.string().nullable().optional(),
 });
 
 interface RouteContext {

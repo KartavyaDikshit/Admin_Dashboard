@@ -1,29 +1,55 @@
-// A placeholder for the category type
-type Category = {
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+
+interface Category {
   id: string;
   name: string;
-};
+  description: string | null;
+  slug: string;
+}
 
-export default function CategoryList({ categories }: { categories: Category[] }) {
+export default function CategoryList({ lang }: { lang: string }) {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/${lang}/categories`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+        const data = await response.json();
+        setCategories(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, [lang]);
+
+  if (loading) return <div>Loading categories...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
-    <div id="categories" className="py-12 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-extrabold text-gray-900">Categories</h2>
-        <div className="mt-6 grid grid-cols-2 gap-y-6 gap-x-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-          {categories.map((category) => (
-            <div key={category.id} className="group relative text-center">
-              <div className="w-full h-24 bg-indigo-100 rounded-lg overflow-hidden">
-                {/* Placeholder for an image or icon */}
-              </div>
-              <h3 className="mt-2 text-sm font-medium text-gray-900">
-                <a href="#">
-                  <span className="absolute inset-0" />
-                  {category.name}
-                </a>
-              </h3>
+    <div>
+      <h2 className="text-2xl font-bold mb-4">Categories</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {categories.map((category) => (
+          <Link key={category.id} href={`/${lang}/categories/${category.slug}`}>
+            <div className="border p-4 rounded-lg block hover:bg-gray-100 cursor-pointer">
+              <h3 className="text-xl font-semibold">{category.name}</h3>
+              <p>{category.description}</p>
             </div>
-          ))}
-        </div>
+          </Link>
+        ))}
       </div>
     </div>
   );

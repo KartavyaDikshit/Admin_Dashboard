@@ -9,7 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { cn } from '@/lib/utils';
 import { Testimonial } from '@prisma/client';
-import React, { useEffect } from "react";
+import React from "react";
 
 const formSchema = z.object({
   author: z.string().min(2, { message: 'Author must be at least 2 characters.' }),

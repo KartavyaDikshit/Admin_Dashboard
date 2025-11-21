@@ -1,5 +1,14 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
 export default function RootPage() {
-  // This page is not intended to be rendered directly.
-  // The middleware redirects the root path to the default locale /en.
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace('/en');
+  }, [router]);
+
   return null;
 }

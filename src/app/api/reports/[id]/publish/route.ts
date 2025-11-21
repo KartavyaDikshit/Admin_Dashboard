@@ -12,7 +12,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const TARGET_LANGUAGES = ['de', 'fr', 'it', 'ja', 'ko', 'es', 'pt']; // 7 languages
+const TARGET_LANGUAGES = ['de', 'fr', 'it', 'ja', 'ko', 'es']; // 7 languages
 
 interface RecentStrategicDevelopment {
   date: string;
@@ -72,8 +72,16 @@ function parseReportJsonField<T>(field: Prisma.JsonValue | undefined | null, def
   return field as T;
 }
 
+const languageMap: { [key: string]: string } = {
+  de: 'German',
+  fr: 'French',
+  it: 'Italian',
+  ja: 'Japanese',
+  ko: 'Korean',
+  es: 'Spanish',
+};
+
 // Helper function to translate and store
-// eslint-disable @typescript-eslint/no-explicit-any
 async function translateAndStore(report: Report, language: string): Promise<void> {
   console.log(`[${report.id}] Starting translation for locale: ${language}`);
 
@@ -112,7 +120,8 @@ async function translateAndStore(report: Report, language: string): Promise<void
 
   console.log(`[${report.id}] Content to translate for ${language}:`, JSON.stringify(contentToTranslate, null, 2));
 
-  const prompt = `Translate the following report content into ${language}. Return the response as a valid JSON object with the following keys: "title", "description", "summary", "recentStrategicDevelopments" (as a JSON string representing an array of objects with "date" and "event" keys), "marketResearchSummary", "marketDynamics", "regionalInsights", "keyMarketPlayers", "tableOfContents", "listOfFigures", "methodology", "keyFindings" (as a semicolon-separated string), "executiveSummary", "keywords" (as a semicolon-separated string), "semanticKeywords" (as a semicolon-separated string), "localizedKeywords" (as a semicolon-separated string), "culturalKeywords" (as a semicolon-separated string), "longTailKeywords" (as a semicolon-separated string), "localCompetitorKeywords" (as a semicolon-separated string), "metaTitle", "metaDescription", "canonicalUrl", "ogTitle", "ogDescription", "ogImage", "twitterTitle", "twitterDescription", "schemaMarkup" (as a JSON string), "breadcrumbData" (as a JSON string), "faqData" (as a JSON string), "localBusinessSchema" (as a JSON string).\n\n${JSON.stringify(
+  const fullLanguageName = languageMap[language] || language;
+  const prompt = `Translate the following report content into ${fullLanguageName}. Return the response as a valid JSON object with the following keys: "title", "description", "summary", "recentStrategicDevelopments" (as a JSON string representing an array of objects with "date" and "event" keys), "marketResearchSummary", "marketDynamics", "regionalInsights", "keyMarketPlayers", "tableOfContents", "listOfFigures", "methodology", "keyFindings" (as a semicolon-separated string), "executiveSummary", "keywords" (as a semicolon-separated string), "semanticKeywords" (as a semicolon-separated string), "localizedKeywords" (as a semicolon-separated string), "culturalKeywords" (as a semicolon-separated string), "longTailKeywords" (as a semicolon-separated string), "localCompetitorKeywords" (as a semicolon-separated string), "metaTitle", "metaDescription", "canonicalUrl", "ogTitle", "ogDescription", "ogImage", "twitterTitle", "twitterDescription", "schemaMarkup" (as a JSON string), "breadcrumbData" (as a JSON string), "faqData" (as a JSON string), "localBusinessSchema" (as a JSON string).\n\n${JSON.stringify(
     {
       ...contentToTranslate,
       recentStrategicDevelopments: JSON.stringify(contentToTranslate.recentStrategicDevelopments),
@@ -187,22 +196,23 @@ async function translateAndStore(report: Report, language: string): Promise<void
       title: translatedContent.title,
       description: translatedContent.description,
       summary: translatedContent.summary,
-      recentStrategicDevelopments: JSON.stringify(parsedRecentStrategicDevelopments),
+      recentStrategicDevelopments: parsedRecentStrategicDevelopments,
       marketResearchSummary: translatedContent.marketResearchSummary,
       marketDynamics: translatedContent.marketDynamics,
       regionalInsights: translatedContent.regionalInsights,
       keyMarketPlayers: translatedContent.keyMarketPlayers,
+      keyPlayers: parseStringToArray(translatedContent.keyMarketPlayers ?? ''),
       tableOfContents: translatedContent.tableOfContents,
       listOfFigures: translatedContent.listOfFigures,
       methodology: translatedContent.methodology,
-      keyFindings: parseStringToArray(translatedContent.keyFindings),
+      keyFindings: parseStringToArray(translatedContent.keyFindings ?? ''),
       executiveSummary: translatedContent.executiveSummary,
-      keywords: parseStringToArray(translatedContent.keywords),
-      semanticKeywords: parseStringToArray(translatedContent.semanticKeywords),
-      localizedKeywords: parseStringToArray(translatedContent.localizedKeywords),
-      culturalKeywords: parseStringToArray(translatedContent.culturalKeywords),
-      longTailKeywords: parseStringToArray(translatedContent.longTailKeywords),
-      localCompetitorKeywords: parseStringToArray(translatedContent.localCompetitorKeywords),
+      keywords: parseStringToArray(translatedContent.keywords ?? ''),
+      semanticKeywords: parseStringToArray(translatedContent.semanticKeywords ?? ''),
+      localizedKeywords: parseStringToArray(translatedContent.localizedKeywords ?? ''),
+      culturalKeywords: parseStringToArray(translatedContent.culturalKeywords ?? ''),
+      longTailKeywords: parseStringToArray(translatedContent.longTailKeywords ?? ''),
+      localCompetitorKeywords: parseStringToArray(translatedContent.localCompetitorKeywords ?? ''),
       metaTitle: translatedContent.metaTitle,
       metaDescription: translatedContent.metaDescription,
       canonicalUrl: translatedContent.canonicalUrl,
@@ -211,18 +221,33 @@ async function translateAndStore(report: Report, language: string): Promise<void
       ogImage: translatedContent.ogImage,
       twitterTitle: translatedContent.twitterTitle,
       twitterDescription: translatedContent.twitterDescription,
-      schemaMarkup: JSON.stringify(parseJsonString(translatedContent.schemaMarkup as string)),
-      breadcrumbData: JSON.stringify(parseJsonString(translatedContent.breadcrumbData as string)),
-      faqData: JSON.stringify(parseJsonString(translatedContent.faqData as string)),
-      localBusinessSchema: JSON.stringify(parseJsonString(translatedContent.localBusinessSchema as string)),
+      schemaMarkup: parseJsonString(translatedContent.schemaMarkup as string),
+      breadcrumbData: parseJsonString(translatedContent.breadcrumbData as string),
+      faqData: parseJsonString(translatedContent.faqData as string),
+      localBusinessSchema: parseJsonString(translatedContent.localBusinessSchema as string),
     };
 
-    console.log(`[${report.id}] Final content for Prisma upsert for ${language}:`, JSON.stringify(finalTranslatedContent, null, 2));
+    const finalTranslatedContentForPrisma = {
+      ...finalTranslatedContent,
+      recentStrategicDevelopments: finalTranslatedContent.recentStrategicDevelopments as unknown as Prisma.InputJsonValue,
+      schemaMarkup: finalTranslatedContent.schemaMarkup as unknown as Prisma.InputJsonValue,
+      breadcrumbData: finalTranslatedContent.breadcrumbData as unknown as Prisma.InputJsonValue,
+      faqData: finalTranslatedContent.faqData as unknown as Prisma.InputJsonValue,
+      localBusinessSchema: finalTranslatedContent.localBusinessSchema as unknown as Prisma.InputJsonValue,
+    };
+
+    console.log(`[${report.id}] Final content for Prisma upsert for ${language}:`, JSON.stringify(finalTranslatedContentForPrisma, null, 2));
+
+    console.log(`[${report.id}] Attempting upsert for translation for locale: ${language} with data:`, {
+      reportId: report.id,
+      locale: language,
+      finalTranslatedContent: finalTranslatedContentForPrisma,
+    });
 
     await prisma.reportTranslation.upsert({
       where: { reportId_locale: { reportId: report.id, locale: language } },
       update: {
-        ...finalTranslatedContent,
+        ...finalTranslatedContentForPrisma,
         slug: generateSlug(translatedContent.title),
         aiGenerated: true,
         status: 'APPROVED',
@@ -230,7 +255,7 @@ async function translateAndStore(report: Report, language: string): Promise<void
       create: {
         reportId: report.id,
         locale: language,
-        ...finalTranslatedContent,
+        ...finalTranslatedContentForPrisma,
         slug: generateSlug(translatedContent.title),
         aiGenerated: true,
         status: 'APPROVED',
@@ -255,6 +280,8 @@ async function translateAndStore(report: Report, language: string): Promise<void
           totalCost: totalCost,
           success: true,
           responseTime: 0,
+          requestData: prompt,
+          responseData: JSON.stringify(response),
         },
       });
     console.log(`[${report.id}] API usage logged for ${language}.`);
@@ -274,8 +301,11 @@ async function translateAndStore(report: Report, language: string): Promise<void
           success: false,
           errorMessage: error instanceof Error ? error.message : 'Unknown error',
           responseTime: 0,
+          requestData: prompt,
+          responseData: JSON.stringify(error instanceof Error ? { message: error.message, stack: error.stack } : { message: 'Unknown error' }),
         },
       });
+    throw error; // Re-throw the error to be caught by Promise.all
   }
 }
 

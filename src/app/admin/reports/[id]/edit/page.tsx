@@ -108,7 +108,11 @@ export default function EditReportPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setReport(prev => ({ ...prev, [name]: value }));
+    if (viewLocale === 'en') {
+      setReport(prev => ({ ...prev, [name]: value }));
+    } else {
+      setTranslatedReport(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,22 +174,30 @@ export default function EditReportPage() {
     setIsSaving(true);
     toast.loading('Saving changes...');
 
-    const payload = {
-        ...report,
-        categoryIds: Array.from(selectedCategoryIds),
-        imageUrl: report.imageUrl === '' ? null : report.imageUrl, // Explicitly set empty string to null
-    };
-
     try {
-      const response = await fetch(`/api/reports/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      let response;
+      if (viewLocale === 'en') {
+        const payload = {
+            ...report,
+            categoryIds: Array.from(selectedCategoryIds),
+            imageUrl: report.imageUrl === '' ? null : report.imageUrl,
+        };
+        response = await fetch(`/api/reports/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        response = await fetch(`/api/reports/${id}/translations/${viewLocale}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(translatedReport),
+        });
+      }
 
       toast.dismiss();
       if (response.ok) {
-        toast.success('Report saved successfully!');
+        toast.success(`Report ${viewLocale === 'en' ? '' : `(${viewLocale.toUpperCase()}) `}saved successfully!`);
       } else {
         const data = await response.json();
         toast.error(data.error || 'Failed to save report.');
@@ -329,9 +341,15 @@ export default function EditReportPage() {
 
             <div className="space-y-6">
                 <div className="bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold mb-4">Configuration</h2>
-                    <div className="mb-4">
-                        <label htmlFor="imageUpload" className="block text-sm font-medium text-gray-700 mb-1">Upload Image</label>
+                    <h2 className="text-xl font-semibold mb-4">Image</h2>
+                    {imagePreview && (
+                        <div className="mt-2 relative w-full h-48 border rounded-md overflow-hidden">
+                        <Image src={imagePreview} alt="Image Preview" layout="fill" objectFit="cover" />
+                        </div>
+                    )}
+                    {viewLocale === 'en' && (
+                        <div className="mt-4">
+                        <label htmlFor="imageUpload" className="block text-sm font-medium text-gray-700 mb-1">Upload New Image</label>
                         <input
                             type="file"
                             id="imageUpload"
@@ -339,21 +357,17 @@ export default function EditReportPage() {
                             onChange={handleFileChange}
                             className="w-full p-2 border rounded-md"
                         />
-                        {imagePreview && (
-                          <div className="mt-2 relative w-full h-48 border rounded-md overflow-hidden">
-                            <Image src={imagePreview} alt="Image Preview" layout="fill" objectFit="cover" />
-                          </div>
-                        )}
                         {selectedFile && (
-                          <button
+                            <button
                             onClick={handleImageUpload}
                             disabled={isUploading}
                             className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md"
-                          >
-                            {isUploading ? 'Uploading...' : 'Upload Image'}
-                          </button>
+                            >
+                            {isUploading ? 'Uploading...' : 'Upload'}
+                            </button>
                         )}
-                    </div>
+                        </div>
+                    )}
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <h2 className="text-xl font-semibold mb-4">Categories</h2>

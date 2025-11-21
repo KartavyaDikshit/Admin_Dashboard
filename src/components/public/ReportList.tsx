@@ -1,39 +1,105 @@
-import Image from 'next/image';
+'use client';
 
-// A placeholder for the report type
-type Report = {
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+
+interface Report {
   id: string;
   title: string;
-  summary: string;
-  imageUrl?: string;
-};
+  description: string;
+  imageUrl: string | null;
+  slug: string;
+  publishedDate: string;
+  // The 5 sections
+  marketResearchSummary: string | null;
+  marketDynamics: string | null;
+  regionalInsights: string | null;
+  keyMarketPlayers: string | null;
+}
 
-export default function ReportList({ reports }: { reports: Report[] }) {
+export default function ReportList({ lang }: { lang: string }) {
+  const [reports, setReports] = useState<Report[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/${lang}/reports`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch reports');
+        }
+        const data = await response.json();
+        setReports(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+  }, [lang]);
+
+  if (loading) return <div>Loading reports...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
-    <div id="reports" className="py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-extrabold text-gray-900">Latest Reports</h2>
-        <div className="mt-6 grid gap-8 lg:grid-cols-3">
-          {reports.map((report) => (
-            <div key={report.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div>
+      <h2 className="text-2xl font-bold mt-8 mb-4">Reports</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {reports.map((report) => (
+          <Link key={report.id} href={`/${lang}/reports/${report.slug}`}>
+            <div className="border rounded-lg overflow-hidden block hover:bg-gray-100 cursor-pointer">
               {report.imageUrl && (
-                <Image className="w-full h-48 object-cover" src={report.imageUrl} alt={report.title} width={500} height={300} />
-              )}
-              {!report.imageUrl && (
-                <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-500">No Image</span>
+                <div className="relative h-48">
+                  <Image
+                    src={report.imageUrl}
+                    alt={report.title}
+                    layout="fill"
+                    objectFit="cover"
+                  />
                 </div>
               )}
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900">{report.title}</h3>
-                <p className="mt-2 text-base text-gray-500">{report.summary}</p>
-                <a href="#" className="mt-4 inline-block text-indigo-600 hover:text-indigo-500 font-semibold">
-                  Read more
-                </a>
+              <div className="p-4">
+                <h3 className="text-xl font-semibold mb-2">{report.title}</h3>
+                <p className="text-gray-700 mb-4">{report.description}</p>
+                <details>
+                  <summary>Details</summary>
+                  <div className="mt-4 space-y-2">
+                    {report.marketResearchSummary && (
+                      <div>
+                        <h4 className="font-semibold">Market Research Summary</h4>
+                        <p>{report.marketResearchSummary}</p>
+                      </div>
+                    )}
+                    {report.marketDynamics && (
+                      <div>
+                        <h4 className="font-semibold">Market Dynamics</h4>
+                        <p>{report.marketDynamics}</p>
+                      </div>
+                    )}
+                    {report.regionalInsights && (
+                      <div>
+                        <h4 className="font-semibold">Regional Insights</h4>
+                        <p>{report.regionalInsights}</p>
+                      </div>
+                    )}
+                    {report.keyMarketPlayers && (
+                      <div>
+                        <h4 className="font-semibold">Key Market Players</h4>
+                        <p>{report.keyMarketPlayers}</p>
+                      </div>
+                    )}
+                    
+                  </div>
+                </details>
               </div>
             </div>
-          ))}
-        </div>
+          </Link>
+        ))}
       </div>
     </div>
   );

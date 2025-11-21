@@ -13,16 +13,10 @@ const reportUpdateSchema = z.object({
   regionalInsights: z.string().optional(),
   keyMarketPlayers: z.string().optional(),
   tableOfContents: z.string().optional(),
-  imageUrl: z.literal('').transform(() => null).or(
-    z.string().refine(val => {
-      try {
-        new URL(val); // Try to parse as absolute URL
-        return true;
-      } catch {
-        return val.startsWith('/'); // Check if it's a relative path
-      }
-    }, 'Must be a valid URL or a relative path starting with /')
-  ).optional(),
+  imageUrl: z.preprocess(
+    (val) => (val === "" ? null : val),
+    z.string().url().nullable().optional()
+  ),
   categoryIds: z.array(z.string().uuid()).optional(),
 });
 
@@ -31,7 +25,6 @@ interface RouteContext {
 }
 
 export async function GET(request: NextRequest, context: RouteContext) {
-  const { params } = context;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -115,8 +108,6 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 }
 
 export async function DELETE(request: NextRequest, context: RouteContext) {
-  const { params } = context;
-  const { id } = params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
