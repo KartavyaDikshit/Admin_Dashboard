@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { getCategories, getReports } from '@/lib/data';
 import { getDictionary } from '@/i18n/dictionaries';
 
@@ -17,15 +18,8 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
             {dict.latestInsights}
           </h1>
           <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Discover market intelligence that drives decision making.
+            {dict.heroSubtitle}
           </p>
-          <div className="max-w-xl mx-auto">
-            <input
-              type="text"
-              placeholder={dict.searchPlaceholder}
-              className="w-full px-6 py-4 rounded-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-lg"
-            />
-          </div>
         </div>
       </section>
 
@@ -70,7 +64,13 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
             >
               <div className="h-48 bg-gray-200 relative">
                  {report.imageUrl ? (
-                    <img src={report.imageUrl} alt={report.title} className="w-full h-full object-cover" />
+                    <Image 
+                      src={report.imageUrl} 
+                      alt={report.title} 
+                      className="w-full h-full object-cover" 
+                      fill
+                      unoptimized
+                    />
                  ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">No Image</div>
                  )}

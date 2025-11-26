@@ -33,20 +33,35 @@ export async function POST(request: NextRequest) {
       - "metaDescription": A compelling meta description for SEO (around 150-160 characters).
     `;
 
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are an expert in SEO and market research content strategy. Your output must be a single, valid JSON object.',
-        },
-        { role: 'user', content: prompt },
-      ],
-      response_format: { type: 'json_object' },
-      temperature: 0.5,
-    });
+    let response;
+    const MAX_RETRIES = 3;
+    let retries = 0;
 
-    const generatedContentString = response.choices[0]?.message?.content;
+    while (retries < MAX_RETRIES) {
+      try {
+        response = await openai.chat.completions.create({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert in SEO and market research content strategy. Your output must be a single, valid JSON object.',
+            },
+            { role: 'user', content: prompt },
+          ],
+          response_format: { type: 'json_object' },
+          temperature: 0.5,
+        });
+        break; // Success, exit loop
+      } catch (error) {
+        retries++;
+        console.error(`OpenAI API request failed (attempt ${retries}/${MAX_RETRIES}):`, error);
+        if (retries >= MAX_RETRIES) throw error; // Rethrow if max retries reached
+        // Wait for a short delay before retrying (exponential backoff: 1s, 2s, 3s)
+        await new Promise(resolve => setTimeout(resolve, 1000 * retries));
+      }
+    }
+
+    const generatedContentString = response?.choices[0]?.message?.content;
     if (!generatedContentString) {
       throw new Error('OpenAI returned empty content.');
     }

@@ -54,7 +54,8 @@ export const getCategory = cache(async (slug: string, locale: string) => {
 
 export const getReports = cache(async (locale: string, categoryId?: string) => {
   try {
-    const where: any = { status: 'PUBLISHED' };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const where: Record<string, any> = { status: 'PUBLISHED' };
     if (categoryId) {
       where.categories = { some: { id: categoryId } };
     }

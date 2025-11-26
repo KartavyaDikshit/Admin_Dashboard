@@ -1,9 +1,36 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { getCategory, getReports } from '@/lib/data';
 import { getDictionary } from '@/i18n/dictionaries';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
-export default async function CategoryDetailPage({ params }: { params: Promise<{ lang: string; slug: string }> }) {
+type Props = {
+  params: Promise<{ lang: string; slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang, slug } = await params;
+  const category = await getCategory(slug, lang);
+
+  if (!category) {
+    return {
+      title: 'Category Not Found',
+    };
+  }
+
+  return {
+    title: category.name,
+    description: category.description || `Explore market research reports for ${category.name}.`,
+    openGraph: {
+      title: category.name,
+      description: category.description || `Explore market research reports for ${category.name}.`,
+      type: 'website',
+    },
+  };
+}
+
+export default async function CategoryDetailPage({ params }: Props) {
   const { lang, slug } = await params;
   const dict = getDictionary(lang);
   const category = await getCategory(slug, lang);
@@ -34,7 +61,13 @@ export default async function CategoryDetailPage({ params }: { params: Promise<{
             >
               <div className="h-48 bg-gray-200 relative">
                  {report.imageUrl ? (
-                    <img src={report.imageUrl} alt={report.title} className="w-full h-full object-cover" />
+                    <Image 
+                      src={report.imageUrl} 
+                      alt={report.title} 
+                      className="w-full h-full object-cover" 
+                      fill
+                      unoptimized
+                    />
                  ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">No Image</div>
                  )}

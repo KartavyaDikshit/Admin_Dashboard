@@ -1,9 +1,38 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { getReport } from '@/lib/data';
 import { getDictionary } from '@/i18n/dictionaries';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
-export default async function ReportDetailPage({ params }: { params: Promise<{ lang: string; slug: string }> }) {
+type Props = {
+  params: Promise<{ lang: string; slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang, slug } = await params;
+  const report = await getReport(slug, lang);
+
+  if (!report) {
+    return {
+      title: 'Report Not Found',
+    };
+  }
+
+  return {
+    title: report.title,
+    description: report.summary || report.description,
+    openGraph: {
+      title: report.title,
+      description: report.summary || report.description,
+      type: 'article',
+      publishedTime: report.publishedDate.toISOString(),
+      images: report.imageUrl ? [report.imageUrl] : [],
+    },
+  };
+}
+
+export default async function ReportDetailPage({ params }: Props) {
   const { lang, slug } = await params;
   const dict = getDictionary(lang);
   const report = await getReport(slug, lang);
@@ -14,7 +43,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ l
 
   return (
     <div className="container mx-auto px-4 py-12">
-      {/* Breadcrumbs (Simple) */}
+      {/* Breadcrumbs */}
       <nav className="text-sm text-gray-500 mb-6">
         <Link href={`/${lang}`} className="hover:text-blue-600">{dict.home}</Link>
         <span className="mx-2">/</span>
@@ -29,8 +58,14 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ l
           <h1 className="text-4xl font-bold text-gray-900 mb-6">{report.title}</h1>
           
           {report.imageUrl && (
-             <div className="mb-8 rounded-xl overflow-hidden shadow-sm">
-                <img src={report.imageUrl} alt={report.title} className="w-full h-auto" />
+             <div className="mb-8 rounded-xl overflow-hidden shadow-sm relative w-full h-auto min-h-[400px]">
+                <Image 
+                  src={report.imageUrl} 
+                  alt={report.title} 
+                  className="w-full h-auto object-cover"
+                  fill
+                  unoptimized
+                />
              </div>
           )}
 
@@ -46,17 +81,11 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ l
           </div>
 
           <div className="prose max-w-none text-gray-800 space-y-8">
-            {/* Executive Summary / Description */}
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Executive Summary</h2>
-              <p className="whitespace-pre-line">{report.summary || report.description}</p>
-            </section>
-
             {/* Market Research Summary */}
             {report.marketResearchSummary && (
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Market Research Summary</h2>
-                <p className="whitespace-pre-line">{report.marketResearchSummary}</p>
+                <div className="whitespace-pre-line">{report.marketResearchSummary}</div>
               </section>
             )}
 
@@ -64,7 +93,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ l
             {report.marketDynamics && (
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Market Dynamics</h2>
-                <p className="whitespace-pre-line">{report.marketDynamics}</p>
+                <div className="whitespace-pre-line">{report.marketDynamics}</div>
               </section>
             )}
 
@@ -72,7 +101,7 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ l
             {report.regionalInsights && (
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Regional Insights</h2>
-                <p className="whitespace-pre-line">{report.regionalInsights}</p>
+                <div className="whitespace-pre-line">{report.regionalInsights}</div>
               </section>
             )}
 
@@ -80,7 +109,15 @@ export default async function ReportDetailPage({ params }: { params: Promise<{ l
              {report.keyMarketPlayers && (
               <section>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Key Market Players</h2>
-                <p className="whitespace-pre-line">{report.keyMarketPlayers}</p>
+                <div className="whitespace-pre-line">{report.keyMarketPlayers}</div>
+              </section>
+            )}
+
+            {/* Table of Contents */}
+            {report.tableOfContents && (
+              <section>
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">Table of Contents</h2>
+                <div className="whitespace-pre-line">{report.tableOfContents}</div>
               </section>
             )}
           </div>

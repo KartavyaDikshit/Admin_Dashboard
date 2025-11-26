@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { getReports } from '@/lib/data';
 import { getDictionary } from '@/i18n/dictionaries';
 
@@ -19,7 +20,13 @@ export default async function ReportsPage({ params }: { params: Promise<{ lang: 
           >
             <div className="md:w-1/3 h-48 md:h-auto bg-gray-200 relative">
                  {report.imageUrl ? (
-                    <img src={report.imageUrl} alt={report.title} className="w-full h-full object-cover" />
+                    <Image 
+                      src={report.imageUrl} 
+                      alt={report.title} 
+                      className="w-full h-full object-cover" 
+                      fill
+                      unoptimized
+                    />
                  ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">No Image</div>
                  )}
