@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
   }
 
   // 2. Check if the path is for a public i18n route
-  const isPublicI18nRoute = /^\/(en|de|ko|fr|es|ja|zh)(\/.*)?$/.test(pathname);
+  const isPublicI18nRoute = /^\/(en|de|fr|it|ja|ko|es)(\/.*)?$/.test(pathname);
 
   // If it's a public route, just let it pass through.
   // This prevents any default auth middleware from trying to protect it.

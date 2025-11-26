@@ -1,0 +1,1149 @@
+[
+  {
+    "type": "behavior",
+    "filePath": "next.config.js",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "misc",
+    "filePath": "package.json",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "misc",
+    "filePath": "packages/ui/package.json",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/common/image-with-fallback.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/icons/CategoryIcons.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ReportCard.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/reports/report-content.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/reports/report-hero.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/reports/report-sidebar.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ReportsGrid.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/SearchFilterBar.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/accordion.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/alert-dialog.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/alert.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/aspect-ratio.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/avatar.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/badge.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/breadcrumb.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/button.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/card.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/collapsible.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/dialog.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/dropdown-menu.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/input.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/label.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/pagination.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/radio-group.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/select.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/separator.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/sheet.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/skeleton.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/tabs.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/textarea.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "packages/ui/src/components/ui/utils.ts",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "misc",
+    "filePath": "packages/ui/src/Container.tsx",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "packages/ui/src/index.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "misc",
+    "filePath": "packages/ui/src/Pagination.tsx",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "misc",
+    "filePath": "packages/ui/src/SearchBar.tsx",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "misc",
+    "filePath": "packages/ui/src/Section.tsx",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "misc",
+    "filePath": "packages/ui/src/Table.tsx",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "misc",
+    "filePath": "packages/ui/src/templates/ListingTemplate.tsx",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "misc",
+    "filePath": "packages/ui/tsconfig.json",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "misc",
+    "filePath": "postcss.config.cjs",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "assets",
+    "filePath": "public/og-image.jpg",
+    "summary": "Static asset",
+    "dependencies": []
+  },
+  {
+    "type": "assets",
+    "filePath": "public/robots.txt",
+    "summary": "Static asset",
+    "dependencies": []
+  },
+  {
+    "type": "assets",
+    "filePath": "public/sw.js",
+    "summary": "Static asset",
+    "dependencies": []
+  },
+  {
+    "type": "assets",
+    "filePath": "public/twitter-image.jpg",
+    "summary": "Static asset",
+    "dependencies": []
+  },
+  {
+    "type": "assets",
+    "filePath": "public/workbox-e9849328.js",
+    "summary": "Static asset",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/admin/users/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/cache/invalidate/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/categories/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/categories/[slug]/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/contact/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/example/cached/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/health/redis/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/health/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/metrics/redis/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/reports/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/reports/[slug]/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/search/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/api/sitemap-data/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "styles",
+    "filePath": "src/app/globals.css",
+    "summary": "Stylesheet",
+    "dependencies": []
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/layout.tsx",
+    "summary": "Page Layout",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "misc",
+    "filePath": "src/app/providers.tsx",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/robots.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/sitemap.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "misc",
+    "filePath": "src/app/temp-not-found.tsx",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/about/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "styles",
+    "filePath": "src/app/[locale]/admin/admin.module.css",
+    "summary": "Stylesheet",
+    "dependencies": []
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/admin/layout.tsx",
+    "summary": "Page Layout",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/admin/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/admin/redirects/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/admin/reports/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/admin/staging/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/admin/users/create/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/app/[locale]/api/auth/[...nextauth]/route.ts",
+    "summary": "API Route",
+    "dependencies": []
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/auth/error/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "styles",
+    "filePath": "src/app/[locale]/auth/signin/page.module.css",
+    "summary": "Stylesheet",
+    "dependencies": []
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/auth/signin/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/auth/signup/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/blog/[slug]/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/blogs/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/categories/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/categories/[slug]/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/category/[slug]/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/collaboration/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/contact/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "misc",
+    "filePath": "src/app/[locale]/dashboard/LogoutButton.tsx",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/dashboard/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/data-visualizations/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/layout.tsx",
+    "summary": "Page Layout",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "misc",
+    "filePath": "src/app/[locale]/not-found.tsx",
+    "summary": "File",
+    "dependencies": []
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/notifications/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/report/[slug]/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/reports/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/reports/[slug]/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/search/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/services/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/test-db/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "pages",
+    "filePath": "src/app/[locale]/test-reports/page.tsx",
+    "summary": "Page View",
+    "dependencies": [
+      "react",
+      "next"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/CategoriesHeroSection.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/CategoriesPageClient.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/CategoryCard.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/CategoryDetailHero.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/CategoryDetailPageClient.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/CategoryDetailSidebar.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/CategoryFilterSortBar.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/CategoryGrid.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/CategoryReportCard.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ClientReportPage.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/contact/AddressSection.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/contact/ContactForm.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/contact/ContactMethods.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/contact/HeroSection.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/FeaturedCategoriesGrid.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/Footer.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/Header.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/Hero.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/icons/CategoryIcons.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ImageWithFallback.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/index.ts",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/LocaleSwitcher.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ReportGrid.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/SearchAndFilter.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ServiceCard.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/SimpleCategoriesGrid.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/Testimonials.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/TrustedBySection.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ui/badge.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ui/breadcrumb.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ui/button.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ui/card.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ui/dropdown-menu.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ui/input.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ui/pagination.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ui/select.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "components",
+    "filePath": "src/components/ui/sheet.tsx",
+    "summary": "UI Component",
+    "dependencies": [
+      "react"
+    ]
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/lib/ai/translation-service.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/lib/auth.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/lib/blogs.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/lib/data/adapter.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/lib/data/db.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/lib/db/categories.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/lib/db/postgres-client.js",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/lib/db/postgres-client.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/lib/db/reports.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/lib/db/services/enhanced-report-service.js",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/lib/db/services/enhanced-report-service.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "src/lib/utils.ts",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "behavior",
+    "filePath": "tailwind.config.js",
+    "summary": "Logic/Utility",
+    "dependencies": []
+  },
+  {
+    "type": "misc",
+    "filePath": "tsconfig.json",
+    "summary": "File",
+    "dependencies": []
+  }
+]

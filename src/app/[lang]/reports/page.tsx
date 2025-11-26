@@ -1,82 +1,48 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import { format } from 'date-fns';
+import { getReports } from '@/lib/data';
+import { getDictionary } from '@/i18n/dictionaries';
 
-interface Report {
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  summary: string;
-  ogImage?: string;
-  createdAt: string;
-  updatedAt: string;
-  locale: string;
-}
-
-async function getReports(lang: string): Promise<Report[]> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  if (!baseUrl) {
-    throw new Error('NEXT_PUBLIC_BASE_URL is not defined');
-  }
-  const res = await fetch(`${baseUrl}/api/${lang}/reports`, {
-    next: { revalidate: 3600 } // Revalidate every hour
-  });
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch reports');
-  }
-  return res.json();
-}
-
-export default async function ReportsPage({ params }: { params: { lang: string } }) {
-  const lang = params.lang;
+export default async function ReportsPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  const dict = getDictionary(lang);
   const reports = await getReports(lang);
 
   return (
-    <div className="bg-white py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Reports</h2>
-          <p className="mt-2 text-lg leading-8 text-gray-600">
-            Explore our latest market research reports.
-          </p>
-        </div>
-        <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-          {reports.map((report) => (
-            <article key={report.id} className="flex flex-col items-start justify-between">
-              <div className="relative w-full">
-                <Image
-                  src={report.ogImage || 'https://via.placeholder.com/400x200?text=No+Image'}
-                  alt=""
-                  className="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]"
-                  width={400}
-                  height={200}
-                />
-                <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
-              </div>
-              <div className="max-w-xl">
-                <div className="mt-8 flex items-center gap-x-4 text-xs">
-                  <time dateTime={report.createdAt} className="text-gray-500">
-                    {format(new Date(report.createdAt), 'MMM dd, yyyy')}
-                  </time>
-                  <span className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">
-                    Report
-                  </span>
-                </div>
-                <div className="group relative">
-                  <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                    <Link href={`/${lang}/reports/${report.slug}`}>
-                      <span className="absolute inset-0" />
-                      {report.title}
-                    </Link>
-                  </h3>
-                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{report.summary}</p>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+    <div className="container mx-auto px-4 py-12">
+      <h1 className="text-4xl font-bold text-gray-900 mb-8">{dict.reports}</h1>
+      <div className="grid grid-cols-1 gap-8">
+        {reports.map((report) => (
+          <Link
+            key={report.id}
+            href={`/${lang}/reports/${report.slug}`}
+            className="flex flex-col md:flex-row bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow"
+          >
+            <div className="md:w-1/3 h-48 md:h-auto bg-gray-200 relative">
+                 {report.imageUrl ? (
+                    <img src={report.imageUrl} alt={report.title} className="w-full h-full object-cover" />
+                 ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">No Image</div>
+                 )}
+            </div>
+            <div className="p-8 md:w-2/3 flex flex-col justify-center">
+               <div className="flex items-center gap-2 mb-3">
+                   <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">
+                     Report
+                   </span>
+                   <span className="text-gray-400 text-sm">
+                     {new Date(report.publishedDate).toLocaleDateString(lang)}
+                   </span>
+               </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-blue-600">
+                {report.title}
+              </h2>
+              <p className="text-gray-600 mb-6 line-clamp-2">{report.summary || report.description}</p>
+              <span className="text-blue-600 font-medium">
+                {dict.readMore} &rarr;
+              </span>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );

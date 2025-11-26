@@ -1,69 +1,71 @@
-'use client';
+import Link from 'next/link';
+import { getCategory, getReports } from '@/lib/data';
+import { getDictionary } from '@/i18n/dictionaries';
+import { notFound } from 'next/navigation';
 
-import { useEffect, useState } from 'react';
-import PublicHeader from '@/components/public/PublicHeader';
-import { useParams } from 'next/navigation';
-import Image from 'next/image';
+export default async function CategoryDetailPage({ params }: { params: Promise<{ lang: string; slug: string }> }) {
+  const { lang, slug } = await params;
+  const dict = getDictionary(lang);
+  const category = await getCategory(slug, lang);
 
-interface Category {
-  id: string;
-  name: string;
-  description: string | null;
-  icon: string | null;
-}
+  if (!category) {
+    notFound();
+  }
 
-export default function CategoryPage() {
-  const params = useParams();
-  const { lang, slug } = params;
-  const [category, setCategory] = useState<Category | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchCategory = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`/api/${lang}/categories/${slug}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch category');
-        }
-        const data = await response.json();
-        setCategory(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (lang && slug) {
-      fetchCategory();
-    }
-  }, [lang, slug]);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!category) return <div>Category not found</div>;
+  const reports = await getReports(lang, category.id);
 
   return (
-    <div>
-      <PublicHeader />
-      <main className="container mx-auto p-4">
-        <div className="flex items-center space-x-4 mb-4">
-            {category.icon && (
-                <div className="relative h-16 w-16">
-                <Image
-                    src={category.icon}
-                    alt={category.name}
-                    layout="fill"
-                    objectFit="contain"
-                />
+    <div className="container mx-auto px-4 py-12">
+      {/* Category Header */}
+      <div className="mb-12 text-center">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">{category.name}</h1>
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto">{category.description}</p>
+      </div>
+
+      {/* Reports Grid */}
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">{dict.reports}</h2>
+      {reports.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {reports.map((report) => (
+            <Link
+              key={report.id}
+              href={`/${lang}/reports/${report.slug}`}
+              className="group block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow"
+            >
+              <div className="h-48 bg-gray-200 relative">
+                 {report.imageUrl ? (
+                    <img src={report.imageUrl} alt={report.title} className="w-full h-full object-cover" />
+                 ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">No Image</div>
+                 )}
+              </div>
+              <div className="p-6">
+                 <div className="flex items-center gap-2 mb-3">
+                   <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">
+                     Report
+                   </span>
+                   <span className="text-gray-400 text-sm">
+                     {new Date(report.publishedDate).toLocaleDateString(lang)}
+                   </span>
                 </div>
-            )}
-            <h1 className="text-3xl font-bold">{category.name}</h1>
+                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 line-clamp-2">
+                  {report.title}
+                </h3>
+                <p className="text-gray-600 line-clamp-3 mb-4">
+                  {report.summary || report.description}
+                </p>
+                <span className="text-blue-600 font-medium group-hover:underline">
+                  {dict.readMore}
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
-        <p>{category.description}</p>
-      </main>
+      ) : (
+        <div className="text-center text-gray-500 py-12 bg-gray-50 rounded-xl border border-gray-200">
+          No reports found in this category.
+        </div>
+      )}
     </div>
   );
 }
