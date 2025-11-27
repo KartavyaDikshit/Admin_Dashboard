@@ -8,20 +8,20 @@ import { generateSlug } from '@/lib/utils';
 
 const reportUpdateSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters').optional(),
-  marketResearchSummary: z.string().optional(),
-  marketDynamics: z.string().optional(),
-  regionalInsights: z.string().optional(),
-  keyMarketPlayers: z.string().optional(),
-  tableOfContents: z.string().optional(),
+  marketResearchSummary: z.string().nullable().optional(),
+  marketDynamics: z.string().nullable().optional(),
+  regionalInsights: z.string().nullable().optional(),
+  keyMarketPlayers: z.string().nullable().optional(),
+  tableOfContents: z.string().nullable().optional(),
   imageUrl: z.preprocess(
     (val) => (val === "" ? null : val),
-    z.string().url().nullable().optional()
+    z.string().nullable().optional()
   ),
   categoryIds: z.array(z.string().uuid()).optional(),
 });
 
 interface RouteContext {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function GET(request: NextRequest, context: RouteContext) {
@@ -31,8 +31,10 @@ export async function GET(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await context.params;
+
     const report = await prisma.report.findUnique({
-      where: { id: context.params.id },
+      where: { id },
       include: {
         categories: {
           select: {
@@ -55,9 +57,8 @@ export async function GET(request: NextRequest, context: RouteContext) {
 }
 
 export async function PATCH(request: NextRequest, context: RouteContext) {
-  const { params } = context;
-  const { id } = params;
   try {
+    const { id } = await context.params;
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -68,7 +69,8 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
     const { categoryIds, ...reportData } = validatedData;
 
-    const dataToUpdate: Prisma.ReportUpdateInput = { ...reportData };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const dataToUpdate: any = { ...reportData };
 
     if (reportData.title) {
       const baseSlug = generateSlug(reportData.title);
@@ -109,13 +111,14 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
 export async function DELETE(request: NextRequest, context: RouteContext) {
   try {
+    const { id } = await context.params;
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     await prisma.report.delete({
-      where: { id: context.params.id },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });

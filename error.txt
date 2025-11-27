@@ -1,0 +1,29 @@
+ GET /api/reports/e8375625-f061-4040-b03c-e2b021ab9537 200 in 160ms
+Error: Route "/api/reports/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PATCH (src\app\api\reports\[id]\route.ts:59:11)
+  57 | export async function PATCH(request: NextRequest, context: RouteContext) {
+  58 |   const { params } = context;
+> 59 |   const { id } = params;
+     |           ^
+  60 |   try {
+  61 |     const session = await getServerSession(authOptions);
+  62 |     if (!session?.user?.id) {
+Update report error: Error [ZodError]: [
+  {
+    "expected": "string",
+    "code": "invalid_type",
+    "path": [
+      "tableOfContents"
+    ],
+    "message": "Invalid input: expected string, received null"
+  }
+]
+    at PATCH (src\app\api\reports\[id]\route.ts:67:46)
+  65 |
+  66 |     const body = await request.json();
+> 67 |     const validatedData = reportUpdateSchema.parse(body);
+     |                                              ^
+  68 |
+  69 |     const { categoryIds, ...reportData } = validatedData;
+  70 |
+ PATCH /api/reports/e8375625-f061-4040-b03c-e2b021ab9537 400 in 546ms

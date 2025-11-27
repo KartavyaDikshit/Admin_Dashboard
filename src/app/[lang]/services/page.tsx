@@ -95,29 +95,35 @@ export default async function ServicesPage({ params }: { params: Promise<{ lang:
   ];
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="text-center mb-16">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">{dict.servicesTitle}</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          {dict.aboutText.split('.')[0]}. {dict.servicesIntroDesc}
-        </p>
+    <div className="flex flex-col">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-blue-700 to-blue-900 text-white py-20 mb-12">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">{dict.servicesTitle}</h1>
+          <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+            {dict.aboutText.split('.')[0]}. {dict.servicesIntroDesc}
+          </p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {services.map((service, index) => (
-          <div key={index} className="bg-white rounded-xl p-8 shadow-lg border border-gray-100 hover:-translate-y-2 transition-transform duration-300 flex flex-col group">
-            <div className={`w-16 h-16 rounded-lg flex items-center justify-center mb-6 text-${service.color}-600 bg-${service.color}-50 group-hover:scale-110 transition-transform duration-300`}>
-              {service.icon}
+      {/* Services Grid */}
+      <div className="container mx-auto px-4 pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {services.map((service, index) => (
+            <div key={index} className="bg-white rounded-xl p-8 shadow-lg border border-gray-100 hover:-translate-y-2 transition-transform duration-300 flex flex-col group">
+              <div className={`w-16 h-16 rounded-lg flex items-center justify-center mb-6 text-${service.color}-600 bg-${service.color}-50 group-hover:scale-110 transition-transform duration-300`}>
+                {service.icon}
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
+              <p className="text-gray-600 mb-6 flex-grow leading-relaxed">
+                {service.description}
+              </p>
+              <Link href={`/${lang}/contact`} className={`text-${service.color}-600 font-medium hover:underline mt-auto inline-flex items-center`}>
+                {dict.contactUs} &rarr;
+              </Link>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
-            <p className="text-gray-600 mb-6 flex-grow leading-relaxed">
-              {service.description}
-            </p>
-            <Link href={`/${lang}/contact`} className={`text-${service.color}-600 font-medium hover:underline mt-auto inline-flex items-center`}>
-              {dict.contactUs} &rarr;
-            </Link>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

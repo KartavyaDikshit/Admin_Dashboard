@@ -24,7 +24,7 @@ interface CategoryListProps {
 export default function CategoryList({ searchParams }: CategoryListProps) {
   const [categories, setCategories] = useState<CategoryWithCounts[]>([]);
   const [loading, setLoading] = useState(true);
-  const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 1 });
+  const [pagination, setPagination] = useState({ page: 1, limit: 100, total: 0, totalPages: 1 });
   const [translatingId, setTranslatingId] = useState<string | null>(null);
 
   const queryParams = useMemo(() => new URLSearchParams(searchParams), [searchParams]);

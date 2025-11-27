@@ -27,11 +27,11 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
   return (
     <div className="flex flex-col">
       {/* Hero/Intro Section */}
-      <div className="bg-gradient-to-b from-gray-900 to-blue-900 text-white py-20">
+      <div className="bg-gradient-to-r from-blue-700 to-blue-900 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">{dict.aboutTitle}</h1>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed whitespace-pre-line">
-            {dict.aboutText.split('\n\n')[0]}
+          <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+            {dict.aboutText.split('.')[0]}. {dict.servicesIntroDesc}
           </p>
         </div>
       </div>
