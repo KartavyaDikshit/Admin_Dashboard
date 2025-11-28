@@ -2,8 +2,10 @@ import { PrismaClient } from '@prisma/client'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import bcrypt from 'bcryptjs'
 
+const url = process.env.PRISMA_DATABASE_URL?.replace('prisma+postgres://', 'prisma://')
+
 const prisma = new PrismaClient({
-  datasourceUrl: process.env.PRISMA_DATABASE_URL,
+  datasourceUrl: url,
 }).$extends(withAccelerate())
 
 function generateSlug(text: string): string {

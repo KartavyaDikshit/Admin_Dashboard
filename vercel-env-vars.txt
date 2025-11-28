@@ -1,0 +1,29 @@
+# ------------------------------------------------------------------------------
+# VERCEL ENVIRONMENT VARIABLES
+# Copy and paste these values into your Vercel Project Settings.
+# ------------------------------------------------------------------------------
+
+# 1. Standard PostgreSQL Connection (Used for Migrations & Schema Validation)
+# MUST act as the 'DATABASE_URL' during the build process.
+DATABASE_URL="postgres://280b9f947216dac4337bde5eedf09ca3ef52eac7c85fc35a186db7a121cc328c:sk_n_R1gQtzUbw5tfUUDJ0vk@db.prisma.io:5432/postgres?sslmode=require"
+
+# 2. Direct Connection (Used for Migrations)
+DIRECT_URL="postgres://280b9f947216dac4337bde5eedf09ca3ef52eac7c85fc35a186db7a121cc328c:sk_n_R1gQtzUbw5tfUUDJ0vk@db.prisma.io:5432/postgres?sslmode=require"
+
+# 3. Prisma Accelerate Connection (Used by the App Runtime)
+# This is the 'prisma://' URL required for edge caching and connection pooling.
+PRISMA_DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqd3RfaWQiOjEsInNlY3VyZV9rZXkiOiJza19uX1IxZ1F0elVidzV0ZlVVREowdmsiLCJhcGlfa2V5IjoiMDFLQjNYVE1BMDM3TjRRQTFXQzZDOURSVkYiLCJ0ZW5hbnRfaWQiOiIyODBiOWY5NDcyMTZkYWM0MzM3YmRlNWVlZGYwOWNhM2VmNTJlYWM3Yzg1ZmMzNWExODZkYjdhMTIxY2MzMjhjIiwiaW50ZXJuYWxfc2VjcmV0IjoiNmZjYTI2YWUtNzQyNy00NGY2LWEyOTQtNmJhNDc4ODE0ODNjIn0.HiYWL6oEU-1arVx4zUbQr2Fpv0F6Sx5_sExkbSzWU9o"
+
+# 4. Authentication URL
+# REPLACE this with your actual Vercel domain after your first deployment.
+NEXTAUTH_URL="https://tbi-admin-dashboard.vercel.app"
+
+# 5. Authentication Secret
+NEXTAUTH_SECRET="supersecretkey1234567890verysecurelongstring"
+
+# 6. OpenAI API Key
+# ⚠️ SECURITY WARNING: You leaked your previous key. Generate a NEW one at platform.openai.com/api-keys
+OPENAI_API_KEY="sk-proj-..."
+
+# 7. Optional: Legacy Postgres URL (Good to have for compatibility)
+POSTGRES_URL="postgres://280b9f947216dac4337bde5eedf09ca3ef52eac7c85fc35a186db7a121cc328c:sk_n_R1gQtzUbw5tfUUDJ0vk@db.prisma.io:5432/postgres?sslmode=require"

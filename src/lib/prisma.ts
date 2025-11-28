@@ -2,8 +2,10 @@ import { PrismaClient } from '@prisma/client'
 import { withAccelerate } from '@prisma/extension-accelerate'
 
 const prismaClientSingleton = () => {
+  const url = process.env.PRISMA_DATABASE_URL?.replace('prisma+postgres://', 'prisma://')
+  
   return new PrismaClient({
-    datasourceUrl: process.env.PRISMA_DATABASE_URL,
+    datasourceUrl: url,
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
   }).$extends(withAccelerate())
 }

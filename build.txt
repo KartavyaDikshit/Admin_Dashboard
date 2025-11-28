@@ -1,4 +1,5 @@
 Application error: a client-side exception has occurred while loading tbi-beta.vercel.app (see the browser console for more information).
+https://tbi-beta.vercel.app/admin is still not reachable but the categories are now showing on the website ui and i can access the admin panel from the localhost but not on vercel
 7552-98e8bbe211e4a333.js:1 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'data')
     at 7552-98e8bbe211e4a333.js:1:1412
     at Object.f (7552-98e8bbe211e4a333.js:1:1461)

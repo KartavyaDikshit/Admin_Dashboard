@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
       dailyDataMap.set(date.toISOString().split('T')[0], 0);
     }
 
-    timeSeriesRawData.forEach(item => {
+    timeSeriesRawData.forEach((item: any) => {
       const dateKey = item.createdAt.toISOString().split('T')[0];
       dailyDataMap.set(dateKey, (dailyDataMap.get(dateKey) || 0) + (item._sum.totalTokens ?? 0));
     });
@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    const formattedTokenDistribution = tokenDistributionData.map((item) => ({
+    const formattedTokenDistribution = tokenDistributionData.map((item: any) => ({
       name: item.serviceType,
       value: item._sum.totalTokens ?? 0,
     }));

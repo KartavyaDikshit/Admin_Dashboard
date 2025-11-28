@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
       totalOutputTokens: totalUsage._sum.outputTokens || 0,
       totalTokens: totalUsage._sum.totalTokens || 0,
       totalCost: totalUsage._sum.totalCost?.toNumber() || 0, // Convert Decimal to Number
-      breakdownByServiceType: breakdownByServiceType.map(item => ({
+      breakdownByServiceType: breakdownByServiceType.map((item: any) => ({
         serviceType: item.serviceType,
         inputTokens: item._sum.inputTokens || 0,
         outputTokens: item._sum.outputTokens || 0,
