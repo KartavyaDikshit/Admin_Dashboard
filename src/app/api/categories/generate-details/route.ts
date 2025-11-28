@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
-import OpenAI from 'openai';
 import { z } from 'zod';
 import { openai } from '@/lib/openai';
 
