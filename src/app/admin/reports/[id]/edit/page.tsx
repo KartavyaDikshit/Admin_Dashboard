@@ -42,6 +42,7 @@ export default function EditReportPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [viewLocale, setViewLocale] = useState('en');
+  const [isGeneratingSeo, setIsGeneratingSeo] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -107,11 +108,20 @@ export default function EditReportPage() {
   }, [id, viewLocale]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+    let processedValue: string | number | null = value;
+
+    if (type === 'number') {
+      processedValue = value === '' ? null : parseFloat(value);
+    } else if (value === '') {
+      // Treat empty strings as null for optional text fields if desired by schema
+      processedValue = null;
+    }
+
     if (viewLocale === 'en') {
-      setReport(prev => ({ ...prev, [name]: value }));
+      setReport(prev => ({ ...prev, [name]: processedValue }));
     } else {
-      setTranslatedReport(prev => ({ ...prev, [name]: value }));
+      setTranslatedReport(prev => ({ ...prev, [name]: processedValue }));
     }
   };
 
@@ -237,6 +247,43 @@ export default function EditReportPage() {
       setIsPublishing(false);
     }
   };
+
+  const handleGenerateSeo = async () => {
+    if (viewLocale !== 'en') {
+      toast.error('SEO generation is only available for the English version.');
+      return;
+    }
+    if (!report.title) {
+      toast.error('Please provide a title for the report before generating SEO metadata.');
+      return;
+    }
+
+    setIsGeneratingSeo(true);
+    toast.loading('Generating SEO metadata...');
+
+    try {
+      const response = await fetch(`/api/reports/${id}/generate-seo`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      toast.dismiss();
+      if (response.ok) {
+        const updatedReport = await response.json();
+        setReport(prev => ({ ...prev, ...updatedReport }));
+        toast.success('SEO metadata generated successfully!');
+      } else {
+        const data = await response.json();
+        toast.error(data.error || 'Failed to generate SEO metadata.');
+      }
+    } catch (error) {
+      toast.dismiss();
+      console.error('Error generating SEO:', error);
+      toast.error('An unexpected error occurred during SEO generation.');
+    } finally {
+      setIsGeneratingSeo(false);
+    }
+  };
   
   if (isLoading) {
     return <AdminLayout><div className="text-center py-12">Loading report...</div></AdminLayout>;
@@ -312,6 +359,22 @@ export default function EditReportPage() {
                         { name: 'regionalInsights', label: 'Regional Insights', type: 'textarea' },
                         { name: 'keyMarketPlayers', label: 'Key Market Players', type: 'textarea' },
                         { name: 'tableOfContents', label: 'Table of Contents', type: 'textarea' },
+                        // SEO Fields
+                        { name: 'metaTitle', label: 'Meta Title', type: 'input' },
+                        { name: 'metaDescription', label: 'Meta Description', type: 'textarea' },
+                        { name: 'canonicalUrl', label: 'Canonical URL', type: 'input' },
+                        { name: 'ogTitle', label: 'OG Title', type: 'input' },
+                        { name: 'ogDescription', label: 'OG Description', type: 'textarea' },
+                        { name: 'ogImage', label: 'OG Image URL', type: 'input' },
+                        { name: 'twitterTitle', label: 'Twitter Title', type: 'input' },
+                        { name: 'twitterDescription', label: 'Twitter Description', type: 'textarea' },
+                        { name: 'schemaMarkup', label: 'Schema Markup (JSON)', type: 'textarea' },
+                        { name: 'breadcrumbData', label: 'Breadcrumb Data (JSON)', type: 'textarea' },
+                        { name: 'faqData', label: 'FAQ Data (JSON)', type: 'textarea' },
+                        // Price Fields
+                        { name: 'singlePrice', label: 'Single User Price', type: 'number' },
+                        { name: 'multiPrice', label: 'Multi User Price', type: 'number' },
+                        { name: 'corporatePrice', label: 'Corporate Price', type: 'number' },
                     ].map(field => (
                         <div key={field.name} className="mb-4">
                             <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
@@ -326,7 +389,7 @@ export default function EditReportPage() {
                                 />
                             ) : (
                                 <input
-                                    type="text"
+                                    type={field.type === 'number' ? 'number' : 'text'}
                                     id={field.name}
                                     name={field.name}
                                     value={formatInputValue(viewLocale === 'en' ? report[field.name as keyof typeof report] : translatedReport[field.name as keyof typeof translatedReport])}
@@ -336,6 +399,16 @@ export default function EditReportPage() {
                             )}
                         </div>
                     ))}
+                    {viewLocale === 'en' && (
+                      <button
+                        type="button"
+                        onClick={handleGenerateSeo}
+                        disabled={isGeneratingSeo || isSaving || isPublishing}
+                        className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 disabled:bg-gray-400"
+                      >
+                        {isGeneratingSeo ? 'Generating SEO...' : 'Generate SEO with AI'}
+                      </button>
+                    )}
                 </div>
             </div>
 

@@ -1,79 +1,124 @@
 C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6e2c3d4b._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_88e5a833._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-Error: Route "/api/reports/[id]/translations/[locale]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-    at GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6e2c3d4b._.js:434:21)
-    at async responseGenerator (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_88e5a833._.js:20855:38)
-    at async handleResponse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_88e5a833._.js:20917:32)
-    at async handler (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_88e5a833._.js:20970:13)
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6e2c3d4b._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_88e5a833._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-Error: Route "/api/reports/[id]/translations/[locale]" used `params.locale`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-    at GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6e2c3d4b._.js:434:31)
-    at async responseGenerator (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_88e5a833._.js:20855:38)
-    at async handleResponse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_88e5a833._.js:20917:32)
-    at async handler (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_88e5a833._.js:20970:13)
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6a4a8d78._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\trace\tracer.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/api/categories/[id]/translate-all" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at POST (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6a4a8d78._.js:480:13)
 prisma:error
-Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].reportTranslation.findUnique()` invocation in
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6e2c3d4b._.js:435:182
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].category.findUnique()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6a4a8d78._.js:492:170
 
-  432     });
-  433 }
-  434 const { id: reportId, locale } = params;
-→ 435 const translation = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].reportTranslation.findUnique({
+  489         status: 401
+  490     });
+  491 }
+→ 492 const category = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].category.findUnique({
         where: {
-          reportId_locale: {
-            locale: undefined,
-      +     reportId: String
-          }
+          id: undefined,
+      ?   shortcode?: String,
+      ?   slug?: String,
+      ?   AND?: CategoryWhereInput | CategoryWhereInput[],
+      ?   OR?: CategoryWhereInput[],
+      ?   NOT?: CategoryWhereInput | CategoryWhereInput[],
+      ?   name?: StringFilter | String,
+      ?   description?: StringNullableFilter | String | Null,
+      ?   icon?: StringNullableFilter | String | Null,
+      ?   featured?: BoolFilter | Boolean,
+      ?   sortOrder?: IntFilter | Int,
+      ?   seoKeywords?: StringNullableListFilter,
+      ?   regionalKeywords?: JsonNullableFilter,
+      ?   searchVolume?: JsonNullableFilter,
+      ?   rankingFactors?: JsonNullableFilter,
+      ?   metaTitle?: StringNullableFilter | String | Null,
+      ?   metaDescription?: StringNullableFilter | String | Null,
+      ?   canonicalUrl?: StringNullableFilter | String | Null,
+      ?   ogTitle?: StringNullableFilter | String | Null,
+      ?   ogDescription?: StringNullableFilter | String | Null,
+      ?   ogImage?: StringNullableFilter | String | Null,
+      ?   hreflangAlts?: JsonNullableFilter,
+      ?   status?: EnumContentStatusFilter | ContentStatus,
+      ?   viewCount?: BigIntFilter | BigInt,
+      ?   clickCount?: BigIntFilter | BigInt,
+      ?   conversionRate?: DecimalFilter | Decimal,
+      ?   createdAt?: DateTimeFilter | DateTime,
+      ?   updatedAt?: DateTimeFilter | DateTime,
+      ?   reports?: ReportListRelationFilter,
+      ?   blogs?: BlogListRelationFilter,
+      ?   translations?: CategoryTranslationListRelationFilter
         }
       })
 
-Argument `reportId` is missing.
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6e2c3d4b._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Argument `where` of type CategoryWhereUniqueInput needs at least one of `id`, `shortcode` or `slug` arguments. Available options are marked with ?.
 C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_88e5a833._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6a4a8d78._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_7a4884cd._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
 C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
 C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
 C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
 C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
 C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
 C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
-Get report translation error: Error [PrismaClientValidationError]:
-Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].reportTranslation.findUnique()` invocation in
-C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6e2c3d4b._.js:435:182
+Error: Route "/api/categories/[id]/translate-all" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at POST (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6a4a8d78._.js:513:77)
+    at async responseGenerator (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_7a4884cd._.js:15485:38)
+    at async handleResponse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_7a4884cd._.js:15547:32)
+    at async handler (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_7a4884cd._.js:15600:13)
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6a4a8d78._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_7a4884cd._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Failed to initiate category translation for undefined: Error [PrismaClientValidationError]:
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].category.findUnique()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6a4a8d78._.js:492:170
 
-  432     });
-  433 }
-  434 const { id: reportId, locale } = params;
-→ 435 const translation = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].reportTranslation.findUnique({
+  489         status: 401
+  490     });
+  491 }
+→ 492 const category = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].category.findUnique({
         where: {
-          reportId_locale: {
-            locale: undefined,
-      +     reportId: String
-          }
+          id: undefined,
+      ?   shortcode?: String,
+      ?   slug?: String,
+      ?   AND?: CategoryWhereInput | CategoryWhereInput[],
+      ?   OR?: CategoryWhereInput[],
+      ?   NOT?: CategoryWhereInput | CategoryWhereInput[],
+      ?   name?: StringFilter | String,
+      ?   description?: StringNullableFilter | String | Null,
+      ?   icon?: StringNullableFilter | String | Null,
+      ?   featured?: BoolFilter | Boolean,
+      ?   sortOrder?: IntFilter | Int,
+      ?   seoKeywords?: StringNullableListFilter,
+      ?   regionalKeywords?: JsonNullableFilter,
+      ?   searchVolume?: JsonNullableFilter,
+      ?   rankingFactors?: JsonNullableFilter,
+      ?   metaTitle?: StringNullableFilter | String | Null,
+      ?   metaDescription?: StringNullableFilter | String | Null,
+      ?   canonicalUrl?: StringNullableFilter | String | Null,
+      ?   ogTitle?: StringNullableFilter | String | Null,
+      ?   ogDescription?: StringNullableFilter | String | Null,
+      ?   ogImage?: StringNullableFilter | String | Null,
+      ?   hreflangAlts?: JsonNullableFilter,
+      ?   status?: EnumContentStatusFilter | ContentStatus,
+      ?   viewCount?: BigIntFilter | BigInt,
+      ?   clickCount?: BigIntFilter | BigInt,
+      ?   conversionRate?: DecimalFilter | Decimal,
+      ?   createdAt?: DateTimeFilter | DateTime,
+      ?   updatedAt?: DateTimeFilter | DateTime,
+      ?   reports?: ReportListRelationFilter,
+      ?   blogs?: BlogListRelationFilter,
+      ?   translations?: CategoryTranslationListRelationFilter
         }
       })
 
-Argument `reportId` is missing.
-    at <unknown> (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6e2c3d4b._.js:435:182)
-    at async GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6e2c3d4b._.js:435:29)
-    at async responseGenerator (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_88e5a833._.js:20855:38)
-    at async handleResponse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_88e5a833._.js:20917:32)
-    at async handler (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_88e5a833._.js:20970:13) {
+Argument `where` of type CategoryWhereUniqueInput needs at least one of `id`, `shortcode` or `slug` arguments. Available options are marked with ?.
+    at <unknown> (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6a4a8d78._.js:492:170)
+    at async POST (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__6a4a8d78._.js:492:26)
+    at async responseGenerator (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_7a4884cd._.js:15485:38)
+    at async handleResponse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_7a4884cd._.js:15547:32)
+    at async handler (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_7a4884cd._.js:15600:13) {
   clientVersion: '5.22.0'
 }
- GET /api/reports/9a2d5df7-4468-4e68-bbe1-4e8f84b98812/translations/de 500 in 2.6s (compile: 2.1s, render: 559ms)
+ POST /api/categories/66e93db7-aa33-4569-b8a8-65a9711c0dfb/translate-all 500 in 3.0s (compile: 2.3s, render: 682ms)

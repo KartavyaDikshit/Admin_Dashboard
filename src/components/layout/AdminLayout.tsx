@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import Sidebar from './Sidebar'
 import Header from './Header'
-import { Toaster } from 'react-hot-toast'
+import { Toaster } from 'sonner'
 
 interface AdminLayoutProps {
   children: React.ReactNode
@@ -51,7 +51,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </main>
       </div>
       
-      <Toaster position="top-right" />
+      <Toaster position="top-right" richColors />
     </div>
   )
 }

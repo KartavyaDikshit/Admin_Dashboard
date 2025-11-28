@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { toast } from 'react-hot-toast'
+import { toast } from 'sonner'
 import { formatCurrency, formatDateTime, cn } from '@/lib/utils'
 
 interface Order {

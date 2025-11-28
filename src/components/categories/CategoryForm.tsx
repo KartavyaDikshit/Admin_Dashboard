@@ -60,7 +60,7 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
     reset,
     setValue,
     getValues,
-  } = useForm({
+  } = useForm<any>({
     resolver: zodResolver(viewLocale === 'en' ? categorySchema : translatedCategorySchema),
     defaultValues: {
         ...initialData,
@@ -181,7 +181,7 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
     }
   };
 
-  const onSubmit = async (data: CategoryFormData | TranslatedCategoryFormData) => {
+  const onSubmit = async (data: any) => {
     if (viewLocale === 'en' && selectedFile && !isUploading) {
         toast.error('Please upload the selected icon before saving.');
         return;

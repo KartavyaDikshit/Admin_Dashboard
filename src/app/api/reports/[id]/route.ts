@@ -17,6 +17,22 @@ const reportUpdateSchema = z.object({
     z.string().nullable().optional()
   ),
   categoryIds: z.array(z.string().uuid()).optional(),
+  // SEO Fields
+  metaTitle: z.string().nullable().optional(),
+  metaDescription: z.string().nullable().optional(),
+  canonicalUrl: z.string().nullable().optional(),
+  ogTitle: z.string().nullable().optional(),
+  ogDescription: z.string().nullable().optional(),
+  ogImage: z.string().nullable().optional(),
+  twitterTitle: z.string().nullable().optional(),
+  twitterDescription: z.string().nullable().optional(),
+  schemaMarkup: z.any().nullable().optional(),
+  breadcrumbData: z.any().nullable().optional(),
+  faqData: z.any().nullable().optional(),
+  // Price Fields
+  singlePrice: z.number().nullable().optional(),
+  multiPrice: z.number().nullable().optional(),
+  corporatePrice: z.number().nullable().optional(),
 });
 
 interface RouteContext {

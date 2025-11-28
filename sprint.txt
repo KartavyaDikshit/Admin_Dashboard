@@ -1,0 +1,1 @@
+"Please provide a title and description for the report before generating SEO metadata".this error -  the report has a title meta title too i want the ai to generate the meta description and all other seo field on the basis of the title and make the prompt in a way that it is tailored to market research report seo and all keywords 

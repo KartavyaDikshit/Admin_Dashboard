@@ -6,7 +6,7 @@ import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { toast } from 'react-hot-toast'
+import { toast, Toaster } from 'sonner'
 
 const loginSchema = z.object({
   username: z.string().min(1, 'Username or Email is required'),
@@ -52,6 +52,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Toaster position="top-center" richColors />
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">

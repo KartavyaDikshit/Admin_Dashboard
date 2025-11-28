@@ -98,8 +98,9 @@ async function translateAndStore(report: Report, language: string): Promise<void
     keywords: report.keywords.join('; ') || '',
     semanticKeywords: report.semanticKeywords.join('; ') || '',
     longTailKeywords: report.longTailKeywords.join('; ') || '',
-    metaTitle: report.metaTitle,
-    metaDescription: report.metaDescription,
+    // New SEO Fields
+    metaTitle: report.metaTitle || '',
+    metaDescription: report.metaDescription || '',
     canonicalUrl: report.canonicalUrl || '',
     ogTitle: report.ogTitle || '',
     ogDescription: report.ogDescription || '',
@@ -124,6 +125,15 @@ async function translateAndStore(report: Report, language: string): Promise<void
       schemaMarkup: JSON.stringify(contentToTranslate.schemaMarkup),
       breadcrumbData: JSON.stringify(contentToTranslate.breadcrumbData),
       faqData: JSON.stringify(contentToTranslate.faqData),
+      // Add new SEO fields to be stringified for the prompt
+      metaTitle: contentToTranslate.metaTitle,
+      metaDescription: contentToTranslate.metaDescription,
+      canonicalUrl: contentToTranslate.canonicalUrl,
+      ogTitle: contentToTranslate.ogTitle,
+      ogDescription: contentToTranslate.ogDescription,
+      ogImage: contentToTranslate.ogImage,
+      twitterTitle: contentToTranslate.twitterTitle,
+      twitterDescription: contentToTranslate.twitterDescription,
     },
     null,
     2
@@ -209,6 +219,7 @@ async function translateAndStore(report: Report, language: string): Promise<void
       culturalKeywords: parseStringToArray(translatedContent.culturalKeywords ?? ''),
       longTailKeywords: parseStringToArray(translatedContent.longTailKeywords ?? ''),
       localCompetitorKeywords: parseStringToArray(translatedContent.localCompetitorKeywords ?? ''),
+      // Translated SEO Fields
       metaTitle: translatedContent.metaTitle,
       metaDescription: translatedContent.metaDescription,
       canonicalUrl: translatedContent.canonicalUrl,
@@ -350,7 +361,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
 
     return NextResponse.json({ success: true, message: 'Report published in all languages.' });
   } catch (error) {
-    console.error(`Failed to publish report ${params.id}:`, error);
+    console.error(`Failed to publish report ${id}:`, error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

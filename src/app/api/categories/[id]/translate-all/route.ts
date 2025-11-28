@@ -155,12 +155,11 @@ ${JSON.stringify(contentToTranslate, null, 2)}`;
 }
 
 interface RouteContext {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function POST(request: NextRequest, context: RouteContext) {
-  const { params } = context;
-  const { id } = params;
+  const { id } = await context.params;
   try {
     if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy-key') {
       return NextResponse.json({ error: 'OpenAI API Key not configured properly.' }, { status: 500 });
@@ -189,7 +188,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
 
     return NextResponse.json({ success: true, message: 'Category translation initiated for all languages.' });
   } catch (error) {
-    console.error(`Failed to initiate category translation for ${params.id}:`, error);
+    console.error(`Failed to initiate category translation for ${id}:`, error); // Changed params.id to id
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
