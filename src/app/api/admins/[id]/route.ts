@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { hash } from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { Prisma } from '@prisma/client';
 
 interface RouteContext {
@@ -34,7 +34,7 @@ export async function PUT(req: NextRequest, context: RouteContext) {
     const data: Prisma.AdminUpdateInput = { email, username, role };
 
     if (password) {
-      data.password = await hash(password, 10);
+      data.password = await bcrypt.hash(password, 10);
     }
 
     const updatedAdmin = await prisma.admin.update({

@@ -1,7 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { hash } from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export async function GET() {
   try {
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       return new NextResponse('Missing required fields', { status: 400 });
     }
 
-    const hashedPassword = await hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newAdmin = await prisma.admin.create({
       data: {
