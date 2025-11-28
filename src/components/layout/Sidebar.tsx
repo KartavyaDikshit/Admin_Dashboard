@@ -29,23 +29,43 @@ export default function Sidebar({ open, userRole }: SidebarProps) {
   const pathname = usePathname()
 
   const { data: reportsCount } = useQuery<number>({ queryKey: ['reportsCount'], queryFn: async () => {
-    const response = await axios.get('/api/reports?countOnly=true'); // Assuming an endpoint for count
-    return response.data.count;
+    try {
+      const response = await axios.get('/api/reports?countOnly=true');
+      return response?.data?.count ?? 0;
+    } catch (error) {
+      console.error('Failed to fetch reports count', error);
+      return 0;
+    }
   }});
 
   const { data: ordersCount } = useQuery<number>({ queryKey: ['ordersCount'], queryFn: async () => {
-    const response = await axios.get('/api/orders?countOnly=true'); // Assuming an endpoint for count
-    return response.data.count;
+    try {
+      const response = await axios.get('/api/orders?countOnly=true');
+      return response?.data?.count ?? 0;
+    } catch (error) {
+      console.error('Failed to fetch orders count', error);
+      return 0;
+    }
   }});
 
   const { data: requestsCount } = useQuery<number>({ queryKey: ['requestsCount'], queryFn: async () => {
-    const response = await axios.get('/api/requests?countOnly=true'); // Corrected endpoint
-    return response.data.count;
+    try {
+      const response = await axios.get('/api/requests?countOnly=true');
+      return response?.data?.count ?? 0;
+    } catch (error) {
+      console.error('Failed to fetch requests count', error);
+      return 0;
+    }
   }});
 
   const { data: categoriesCount } = useQuery<number>({ queryKey: ['categoriesCount'], queryFn: async () => {
-    const response = await axios.get('/api/categories?countOnly=true'); // Assuming an endpoint for count
-    return response.data.count;
+    try {
+      const response = await axios.get('/api/categories?countOnly=true');
+      return response?.data?.count ?? 0;
+    } catch (error) {
+      console.error('Failed to fetch categories count', error);
+      return 0;
+    }
   }});
 
   const navigation = [
