@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { generateSlug } from '@/lib/utils';
 
@@ -69,7 +68,6 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
     const { categoryIds, ...reportData } = validatedData;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const dataToUpdate: any = { ...reportData };
 
     if (reportData.title) {
