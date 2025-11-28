@@ -4,19 +4,22 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate --no-engine && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest --config jest.config.api.js",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "db:generate": "prisma generate",
+    "db:generate": "prisma generate --no-engine",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "seed": "tsx prisma/seed.ts",
     "build:analyze": "cross-env ANALYZE=true next build",
     "type-check": "tsc --noEmit"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",

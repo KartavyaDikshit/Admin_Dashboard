@@ -1,7 +1,10 @@
 import { PrismaClient } from '@prisma/client'
+import { withAccelerate } from '@prisma/extension-accelerate'
 import bcrypt from 'bcryptjs'
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+  datasourceUrl: process.env.PRISMA_DATABASE_URL,
+}).$extends(withAccelerate())
 
 function generateSlug(text: string): string {
   return text
@@ -134,12 +137,22 @@ async function main() {
     return prisma.category.upsert({
       where: { shortcode: categoryData.shortcode },
       update: {
-        ...categoryData,
-        slug,
+        name: categoryData.title_en,
+        shortcode: categoryData.shortcode,
+        description: categoryData.description_en,
+        seoKeywords: categoryData.seoKeywords,
+        metaTitle: categoryData.metaTitle,
+        metaDescription: categoryData.metaDescription,
+        slug: slug,
       },
       create: {
-        ...categoryData,
-        slug,
+        name: categoryData.title_en,
+        shortcode: categoryData.shortcode,
+        description: categoryData.description_en,
+        seoKeywords: categoryData.seoKeywords,
+        metaTitle: categoryData.metaTitle,
+        metaDescription: categoryData.metaDescription,
+        slug: slug,
         featured: true,
         sortOrder: index + 1,
         status: 'PUBLISHED',

@@ -13,6 +13,7 @@ import "./globals.css";
 // });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXTAUTH_URL || 'http://localhost:3000'),
   title: "AI Pipeline Admin Dashboard",
   description: "Token-optimized sequential AI report generation with GPT-4o mini",
   keywords: ["AI", "Pipeline", "Token Optimization", "GPT-4o mini", "Report Generation"],
