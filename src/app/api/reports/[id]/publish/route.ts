@@ -325,10 +325,22 @@ export async function POST(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'Report not found' }, { status: 404 });
     }
 
+    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy-key') {
+      return NextResponse.json({ error: 'OpenAI API Key not configured properly.' }, { status: 500 });
+    }
+
     // Run translations in parallel
-    await Promise.all(
-      TARGET_LANGUAGES.map((lang) => translateAndStore(report, lang))
-    );
+    try {
+      await Promise.all(
+        TARGET_LANGUAGES.map((lang) => translateAndStore(report, lang))
+      );
+    } catch (translationError) {
+      console.error('Translation failed:', translationError);
+      return NextResponse.json({ 
+        error: 'Translation failed', 
+        details: translationError instanceof Error ? translationError.message : 'Unknown error' 
+      }, { status: 500 });
+    }
 
     // Update the main report status
     await prisma.report.update({

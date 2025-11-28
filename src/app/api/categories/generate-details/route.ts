@@ -11,6 +11,10 @@ const generateSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy-key') {
+      return NextResponse.json({ error: 'OpenAI API Key not configured properly.' }, { status: 500 });
+    }
+
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

@@ -15,18 +15,17 @@ const translatedCategorySchema = z.object({
 })
 
 interface RouteContext {
-  params: { id: string; locale: string };
+  params: Promise<{ id: string; locale: string }>;
 }
 
 export async function PUT(request: NextRequest, context: RouteContext) {
-  const { params } = context;
+  const { id: categoryId, locale } = await context.params;
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id: categoryId, locale } = params
     const body = await request.json()
     const validatedData = translatedCategorySchema.parse(body)
 
@@ -62,14 +61,12 @@ export async function PUT(request: NextRequest, context: RouteContext) {
 }
 
 export async function GET(request: NextRequest, context: RouteContext) {
-  const { params } = context;
+  const { id: categoryId, locale } = await context.params;
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
-    const { id: categoryId, locale } = params
 
     const translation = await prisma.categoryTranslation.findUnique({
       where: {

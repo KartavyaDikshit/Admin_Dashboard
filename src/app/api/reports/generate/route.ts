@@ -99,6 +99,10 @@ async function generateSection(
 
 export async function POST(request: Request) {
   try {
+    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy-key') {
+      return NextResponse.json({ error: 'OpenAI API Key not configured properly.' }, { status: 500 });
+    }
+
     const { title } = await request.json();
 
     if (!title) {
