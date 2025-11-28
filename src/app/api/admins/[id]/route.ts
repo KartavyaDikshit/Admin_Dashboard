@@ -4,14 +4,14 @@ import bcrypt from 'bcryptjs';
 import { Prisma } from '@prisma/client';
 
 interface RouteContext {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function GET(req: NextRequest, context: RouteContext) {
-  const { params } = context;
+  const { id } = await context.params;
   try {
     const admin = await prisma.admin.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!admin) {
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest, context: RouteContext) {
 }
 
 export async function PUT(req: NextRequest, context: RouteContext) {
-  const { params } = context;
+  const { id } = await context.params;
   try {
     const body = await req.json();
     const { email, username, password, role } = body;
@@ -38,7 +38,7 @@ export async function PUT(req: NextRequest, context: RouteContext) {
     }
 
     const updatedAdmin = await prisma.admin.update({
-      where: { id: params.id },
+      where: { id },
       data,
     });
 
@@ -50,10 +50,10 @@ export async function PUT(req: NextRequest, context: RouteContext) {
 }
 
 export async function DELETE(req: NextRequest, context: RouteContext) {
-  const { params } = context;
+  const { id } = await context.params;
   try {
     await prisma.admin.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return new NextResponse(null, { status: 204 });

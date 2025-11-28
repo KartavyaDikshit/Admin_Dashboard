@@ -18,14 +18,20 @@ export async function POST(request: NextRequest) {
     const uploadDir = path.join(process.cwd(), 'public', 'uploads');
     const filePath = path.join(uploadDir, uniqueFileName);
 
-    // Ensure the uploads directory exists
-    await fs.mkdir(uploadDir, { recursive: true });
-
-    await fs.writeFile(filePath, buffer);
-
-    const fileUrl = `/uploads/${uniqueFileName}`;
-
-    return NextResponse.json({ url: fileUrl }, { status: 200 });
+    try {
+      // Ensure the uploads directory exists
+      await fs.mkdir(uploadDir, { recursive: true });
+      await fs.writeFile(filePath, buffer);
+      const fileUrl = `/uploads/${uniqueFileName}`;
+      return NextResponse.json({ url: fileUrl }, { status: 200 });
+    } catch (error) {
+      console.warn('Filesystem write failed (likely read-only environment). Returning Data URI fallback.', error);
+      // Fallback: Return Data URI
+      const base64String = buffer.toString('base64');
+      const mimeType = file.type || 'application/octet-stream';
+      const dataUri = `data:${mimeType};base64,${base64String}`;
+      return NextResponse.json({ url: dataUri }, { status: 200 });
+    }
   } catch (error) {
     console.error('Error uploading file:', error);
     return NextResponse.json({ error: 'Failed to upload file.' }, { status: 500 });

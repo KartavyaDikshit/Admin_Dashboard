@@ -306,12 +306,11 @@ async function translateAndStore(report: Report, language: string): Promise<void
 }
 
 interface RouteContext {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function POST(request: NextRequest, context: RouteContext) {
-  const { params } = context;
-  const { id } = params;
+  const { id } = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {

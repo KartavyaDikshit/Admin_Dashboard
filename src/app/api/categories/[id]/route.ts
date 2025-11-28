@@ -18,11 +18,11 @@ const categoryUpdateSchema = z.object({
 });
 
 interface RouteContext {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function GET(request: NextRequest, context: RouteContext) {
-  const { params } = context;
+  const { id } = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
     }
 
     const category = await prisma.category.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         translations: true,
       },
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
 }
 
 export async function PATCH(request: NextRequest, context: RouteContext) {
-  const { params } = context;
+  const { id } = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -64,7 +64,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     };
 
     const updatedCategory = await prisma.category.update({
-      where: { id: params.id },
+      where: { id },
       data: dataToUpdate,
     });
 
@@ -82,7 +82,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 }
 
 export async function DELETE(request: NextRequest, context: RouteContext) {
-  const { params } = context;
+  const { id } = await context.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -90,7 +90,7 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
     }
 
     await prisma.category.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });
