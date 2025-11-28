@@ -3,10 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import OpenAI from 'openai';
 import { z } from 'zod';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { openai } from '@/lib/openai';
 
 const generateSchema = z.object({
   name: z.string().min(1, 'Name is required'),

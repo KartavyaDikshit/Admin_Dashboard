@@ -6,11 +6,7 @@ import { prisma } from '@/lib/prisma';
 import { Report, Prisma } from '@prisma/client';
 import OpenAI from 'openai';
 import { generateSlug } from '@/lib/utils';
-import { calculateCost } from '@/lib/openai'; // Import calculateCost
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { calculateCost, openai } from '@/lib/openai'; // Import openai and calculateCost
 
 const TARGET_LANGUAGES = ['de', 'fr', 'it', 'ja', 'ko', 'es']; // 7 languages
 

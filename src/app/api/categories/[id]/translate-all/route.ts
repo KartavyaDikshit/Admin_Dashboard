@@ -4,11 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { Category } from '@prisma/client';
 import OpenAI from 'openai';
-import { calculateCost } from '@/lib/openai'; // Import calculateCost
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { calculateCost, openai } from '@/lib/openai'; // Import openai and calculateCost
 
 const TARGET_LANGUAGES = ['de', 'fr', 'it', 'ja', 'ko', 'es'];
 

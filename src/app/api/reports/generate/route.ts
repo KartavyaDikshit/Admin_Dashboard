@@ -5,11 +5,7 @@ import path from 'path';
 import OpenAI from 'openai';
 import { prisma } from '@/lib/prisma';
 import { generateSlug, generateSKU } from '@/lib/utils';
-import { calculateCost } from '@/lib/openai'; // Import calculateCost
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { calculateCost, openai } from '@/lib/openai'; // Import openai and calculateCost
 
 // Helper function to get prompt content
 async function getPrompt(promptName: string): Promise<string> {
