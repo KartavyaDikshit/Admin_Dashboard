@@ -629,6 +629,7 @@ model Testimonial {
   position  String?  @db.VarChar(255)
   content   String   @db.Text
   rating    Int?     @default(5) @db.SmallInt // e.g., 1 to 5 stars
+  image     String?  @db.VarChar(500)
   approved  Boolean  @default(false)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

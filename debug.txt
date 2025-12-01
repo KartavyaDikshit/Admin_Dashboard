@@ -1,0 +1,339 @@
+.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:110:17)
+prisma:error
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:176
+
+  108 const { params } = context;
+  109 try {
+  110     const { id } = params;
+→ 111     const testimonial = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique({
+            where: {
+              id: undefined,
+          ?   AND?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   OR?: TestimonialWhereInput[],
+          ?   NOT?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   author?: StringFilter | String,
+          ?   company?: StringNullableFilter | String | Null,
+          ?   position?: StringNullableFilter | String | Null,
+          ?   content?: StringFilter | String,
+          ?   rating?: IntNullableFilter | Int | Null,
+          ?   approved?: BoolFilter | Boolean,
+          ?   createdAt?: DateTimeFilter | DateTime,
+          ?   updatedAt?: DateTimeFilter | DateTime
+            }
+          })
+
+Argument `where` of type TestimonialWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\node_modules__pnpm_943ae287._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/api/testimonials/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:125:68)
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\node_modules__pnpm_943ae287._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error fetching testimonial with ID undefined: Error [PrismaClientValidationError]:
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:176
+
+  108 const { params } = context;
+  109 try {
+  110     const { id } = params;
+→ 111     const testimonial = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique({
+            where: {
+              id: undefined,
+          ?   AND?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   OR?: TestimonialWhereInput[],
+          ?   NOT?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   author?: StringFilter | String,
+          ?   company?: StringNullableFilter | String | Null,
+          ?   position?: StringNullableFilter | String | Null,
+          ?   content?: StringFilter | String,
+          ?   rating?: IntNullableFilter | Int | Null,
+          ?   approved?: BoolFilter | Boolean,
+          ?   createdAt?: DateTimeFilter | DateTime,
+          ?   updatedAt?: DateTimeFilter | DateTime
+            }
+          })
+
+Argument `where` of type TestimonialWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
+    at <unknown> (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:176)
+    at async GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:29) {
+  clientVersion: '5.22.0'
+}
+ GET /api/testimonials/6666a307-8d7f-47c0-b9a0-47bf1ccd8ae0 500 in 384ms (compile: 22ms, render: 362ms)
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\trace\tracer.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/api/testimonials/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:110:17)
+prisma:error
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:176
+
+  108 const { params } = context;
+  109 try {
+  110     const { id } = params;
+→ 111     const testimonial = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique({
+            where: {
+              id: undefined,
+          ?   AND?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   OR?: TestimonialWhereInput[],
+          ?   NOT?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   author?: StringFilter | String,
+          ?   company?: StringNullableFilter | String | Null,
+          ?   position?: StringNullableFilter | String | Null,
+          ?   content?: StringFilter | String,
+          ?   rating?: IntNullableFilter | Int | Null,
+          ?   approved?: BoolFilter | Boolean,
+          ?   createdAt?: DateTimeFilter | DateTime,
+          ?   updatedAt?: DateTimeFilter | DateTime
+            }
+          })
+
+Argument `where` of type TestimonialWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\node_modules__pnpm_943ae287._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/api/testimonials/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:125:68)
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\node_modules__pnpm_943ae287._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error fetching testimonial with ID undefined: Error [PrismaClientValidationError]:
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:176
+
+  108 const { params } = context;
+  109 try {
+  110     const { id } = params;
+→ 111     const testimonial = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique({
+            where: {
+              id: undefined,
+          ?   AND?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   OR?: TestimonialWhereInput[],
+          ?   NOT?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   author?: StringFilter | String,
+          ?   company?: StringNullableFilter | String | Null,
+          ?   position?: StringNullableFilter | String | Null,
+          ?   content?: StringFilter | String,
+          ?   rating?: IntNullableFilter | Int | Null,
+          ?   approved?: BoolFilter | Boolean,
+          ?   createdAt?: DateTimeFilter | DateTime,
+          ?   updatedAt?: DateTimeFilter | DateTime
+            }
+          })
+
+Argument `where` of type TestimonialWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
+    at <unknown> (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:176)
+    at async GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:29) {
+  clientVersion: '5.22.0'
+}
+ GET /api/testimonials/6666a307-8d7f-47c0-b9a0-47bf1ccd8ae0 500 in 907ms (compile: 24ms, render: 883ms)
+PS C:\Users\User\Admin_Dashboard\tbi-admin-dashboard>
+                                                      pnpm run dev
+
+> tbi-admin-dashboard@0.1.0 dev C:\Users\User\Admin_Dashboard\tbi-admin-dashboard
+> next dev
+
+   ▲ Next.js 16.0.5 (Turbopack)
+   - Local:         http://localhost:3000
+   - Network:       http://192.168.1.120:3000
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+   Using external babel configuration from C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\babel.config.js
+ ○ Compiling middleware ...
+ ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+ ✓ Ready in 7.2s
+ ○ Compiling /admin/testimonials/[id]/edit ...
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\trace\tracer.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/api/testimonials/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:110:17)
+ GET /api/auth/session 200 in 5.6s (compile: 4.7s, render: 893ms)
+ GET /api/testimonials/6666a307-8d7f-47c0-b9a0-47bf1ccd8ae0 200 in 5.5s (compile: 4.5s, render: 1046ms)
+ POST /api/auth/_log 200 in 82ms (compile: 41ms, render: 41ms)
+ GET /admin/testimonials/6666a307-8d7f-47c0-b9a0-47bf1ccd8ae0/edit 200 in 13.1s (compile: 10.2s, proxy.ts: 225ms, render: 2.6s)
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\trace\tracer.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/api/testimonials/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:110:17)
+prisma:error
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:176
+
+  108 const { params } = context;
+  109 try {
+  110     const { id } = params;
+→ 111     const testimonial = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique({
+            where: {
+              id: undefined,
+          ?   AND?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   OR?: TestimonialWhereInput[],
+          ?   NOT?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   author?: StringFilter | String,
+          ?   company?: StringNullableFilter | String | Null,
+          ?   position?: StringNullableFilter | String | Null,
+          ?   content?: StringFilter | String,
+          ?   rating?: IntNullableFilter | Int | Null,
+          ?   approved?: BoolFilter | Boolean,
+          ?   createdAt?: DateTimeFilter | DateTime,
+          ?   updatedAt?: DateTimeFilter | DateTime
+            }
+          })
+
+Argument `where` of type TestimonialWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\node_modules__pnpm_943ae287._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/api/testimonials/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:125:68)
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\node_modules__pnpm_943ae287._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error fetching testimonial with ID undefined: Error [PrismaClientValidationError]:
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:176
+
+  108 const { params } = context;
+  109 try {
+  110     const { id } = params;
+→ 111     const testimonial = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique({
+            where: {
+              id: undefined,
+          ?   AND?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   OR?: TestimonialWhereInput[],
+          ?   NOT?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   author?: StringFilter | String,
+          ?   company?: StringNullableFilter | String | Null,
+          ?   position?: StringNullableFilter | String | Null,
+          ?   content?: StringFilter | String,
+          ?   rating?: IntNullableFilter | Int | Null,
+          ?   approved?: BoolFilter | Boolean,
+          ?   createdAt?: DateTimeFilter | DateTime,
+          ?   updatedAt?: DateTimeFilter | DateTime
+            }
+          })
+
+Argument `where` of type TestimonialWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
+    at <unknown> (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:176)
+    at async GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:29) {
+  clientVersion: '5.22.0'
+}
+ GET /api/auth/session 200 in 256ms (compile: 42ms, render: 214ms)
+prisma:error
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:176
+
+  108 const { params } = context;
+  109 try {
+  110     const { id } = params;
+→ 111     const testimonial = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique({
+            where: {
+              id: undefined,
+          ?   AND?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   OR?: TestimonialWhereInput[],
+          ?   NOT?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   author?: StringFilter | String,
+          ?   company?: StringNullableFilter | String | Null,
+          ?   position?: StringNullableFilter | String | Null,
+          ?   content?: StringFilter | String,
+          ?   rating?: IntNullableFilter | Int | Null,
+          ?   approved?: BoolFilter | Boolean,
+          ?   createdAt?: DateTimeFilter | DateTime,
+          ?   updatedAt?: DateTimeFilter | DateTime
+            }
+          })
+
+Argument `where` of type TestimonialWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\node_modules__pnpm_943ae287._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error: Route "/api/testimonials/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:125:68)
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\node_modules__pnpm_943ae287._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error fetching testimonial with ID undefined: Error [PrismaClientValidationError]:
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:176
+
+  108 const { params } = context;
+  109 try {
+  110     const { id } = params;
+→ 111     const testimonial = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].testimonial.findUnique({
+            where: {
+              id: undefined,
+          ?   AND?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   OR?: TestimonialWhereInput[],
+          ?   NOT?: TestimonialWhereInput | TestimonialWhereInput[],
+          ?   author?: StringFilter | String,
+          ?   company?: StringNullableFilter | String | Null,
+          ?   position?: StringNullableFilter | String | Null,
+          ?   content?: StringFilter | String,
+          ?   rating?: IntNullableFilter | Int | Null,
+          ?   approved?: BoolFilter | Boolean,
+          ?   createdAt?: DateTimeFilter | DateTime,
+          ?   updatedAt?: DateTimeFilter | DateTime
+            }
+          })
+
+Argument `where` of type TestimonialWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
+    at <unknown> (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:176)
+    at async GET (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__575e45de._.js:111:29) {
+  clientVersion: '5.22.0'
+}
+ GET /api/testimonials/6666a307-8d7f-47c0-b9a0-47bf1ccd8ae0 500 in 711ms (compile: 31ms, render: 680ms)

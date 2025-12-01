@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import {
@@ -93,20 +94,28 @@ export default function Sidebar({ open, userRole }: SidebarProps) {
   return (
     <div className={cn(
       'fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out',
-      open ? 'translate-x-0' : '-translate-x-48'
+      open ? 'translate-x-0' : '-translate-x-full'
     )}>
       <div className="flex flex-col h-full">
         {/* Logo */}
-        <div className="flex items-center justify-center h-16 px-4 border-b border-gray-200">
-          <div className="flex items-center">
-            <div className="flex-shrink-0 w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">TBI</span>
+        <div className="flex items-center h-16 px-6 border-b border-gray-200 bg-white">
+          <Link href="/admin" className="flex items-center gap-3">
+            <div className="relative h-8 w-auto">
+              <Image
+                src="/logo.png"
+                alt="TBI Logo"
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="h-full w-auto object-contain"
+                style={{ width: 'auto', height: '100%' }}
+              />
             </div>
-            <div className="ml-3">
-              <p className="text-lg font-semibold text-gray-900">Admin</p>
-              <p className="text-xs text-gray-500">The Brainy Insights</p>
+            <div>
+              <p className="text-lg font-semibold text-gray-900 leading-none">Admin</p>
+              <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-0.5">The Brainy Insights</p>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* Navigation */}

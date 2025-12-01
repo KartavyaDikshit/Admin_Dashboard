@@ -9,14 +9,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { cn } from '@/lib/utils';
 import { Testimonial } from '@prisma/client';
-import React from "react";
+import React, { useState } from "react";
+import Image from 'next/image';
 
 const formSchema = z.object({
   author: z.string().min(2, { message: 'Author must be at least 2 characters.' }),
-  company: z.string().nullable().optional(), // Allow null for company
-  position: z.string().nullable().optional(), // Allow null for position
+  company: z.string().nullable().optional(),
+  position: z.string().nullable().optional(),
   content: z.string().min(10, { message: 'Content must be at least 10 characters.' }),
-  rating: z.number().int().min(1).max(5).nullable().optional(), // Allow null for rating
+  rating: z.number().int().min(1).max(5).nullable().optional(),
+  image: z.string().nullable().optional(),
   approved: z.boolean(),
 });
 
@@ -27,11 +29,10 @@ interface TestimonialFormProps {
   };
 }
 
-
-
 export default function TestimonialForm({ initialData }: TestimonialFormProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [isUploading, setIsUploading] = useState(false);
 
   const defaultFormValues: z.infer<typeof formSchema> = {
     author: initialData?.author ?? '',
@@ -39,6 +40,7 @@ export default function TestimonialForm({ initialData }: TestimonialFormProps) {
     position: initialData?.position ?? null,
     content: initialData?.content ?? '',
     rating: initialData?.rating ?? null,
+    image: initialData?.image ?? null,
     approved: initialData?.approved ?? false,
   };
 
@@ -47,10 +49,14 @@ export default function TestimonialForm({ initialData }: TestimonialFormProps) {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
+    watch,
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultFormValues,
   });
+
+  const currentImage = watch('image');
 
   React.useEffect(() => {
     if (initialData) {
@@ -60,6 +66,7 @@ export default function TestimonialForm({ initialData }: TestimonialFormProps) {
         position: initialData.position,
         content: initialData.content,
         rating: initialData.rating,
+        image: initialData.image,
         approved: initialData.approved,
       });
     }
@@ -97,6 +104,35 @@ export default function TestimonialForm({ initialData }: TestimonialFormProps) {
     } else {
       createTestimonial.mutate(values);
     }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await axios.post('/api/upload/image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      const imageUrl = response.data.imageUrl;
+      setValue('image', imageUrl);
+      toast.success('Image uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error('Failed to upload image.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setValue('image', null);
   };
 
   return (
@@ -196,6 +232,52 @@ export default function TestimonialForm({ initialData }: TestimonialFormProps) {
             )}
           </div>
 
+          {/* Image Upload */}
+          <div>
+            <label className="block text-sm font-medium text-black mb-1">
+              Author Image
+            </label>
+            <div className="flex items-center gap-4">
+              {currentImage && (
+                <div className="relative w-20 h-20 rounded-full overflow-hidden border border-gray-200">
+                  <Image 
+                    src={currentImage} 
+                    alt="Author" 
+                    fill 
+                    className="object-cover"
+                    unoptimized
+                  />
+                  <button
+                    type="button"
+                    onClick={handleRemoveImage}
+                    className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity text-xs"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
+              
+              <div className="flex-1">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="block w-full text-sm text-slate-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-full file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-indigo-50 file:text-indigo-700
+                    hover:file:bg-indigo-100
+                  "
+                  disabled={isUploading}
+                />
+                {isUploading && <p className="text-sm text-indigo-600 mt-1">Uploading...</p>}
+              </div>
+            </div>
+            {/* Hidden input to register field */}
+            <input type="hidden" {...register('image')} />
+          </div>
+
           {/* Approved */}
           <div className="flex items-center space-x-2">
             <input
@@ -220,10 +302,10 @@ export default function TestimonialForm({ initialData }: TestimonialFormProps) {
             </button>
             <button
               type="submit"
-              disabled={createTestimonial.isPending || updateTestimonial.isPending}
+              disabled={createTestimonial.isPending || updateTestimonial.isPending || isUploading}
               className={cn(
                 'px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700',
-                (createTestimonial.isPending || updateTestimonial.isPending) && 'opacity-50 cursor-not-allowed'
+                (createTestimonial.isPending || updateTestimonial.isPending || isUploading) && 'opacity-50 cursor-not-allowed'
               )}
             >
               {initialData ? 'Save Changes' : 'Create Testimonial'}

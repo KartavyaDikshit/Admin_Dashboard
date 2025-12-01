@@ -36,7 +36,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       />
       
       <div className={`flex-1 flex flex-col overflow-hidden transition-all duration-200 ${
-        sidebarOpen ? 'ml-64' : 'ml-16'
+        sidebarOpen ? 'ml-64' : 'ml-0'
       }`}>
         <Header 
           sidebarOpen={sidebarOpen}

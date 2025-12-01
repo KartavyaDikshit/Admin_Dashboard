@@ -23,8 +23,8 @@ export default function PublicHeader({ lang }: { lang: string }) {
              </div>
           </Link>
           <nav className="hidden lg:flex gap-8">
-            <Link href={`/${lang}`} className="text-gray-700 hover:text-blue-700 font-medium transition-colors">
-              {dict.home}
+            <Link href={`/${lang}/reports`} className="text-gray-700 hover:text-blue-700 font-medium transition-colors">
+              {dict.reports}
             </Link>
             <Link href={`/${lang}/categories`} className="text-gray-700 hover:text-blue-700 font-medium transition-colors">
               {dict.categories}

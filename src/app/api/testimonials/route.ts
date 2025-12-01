@@ -16,7 +16,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { author, company, position, content, rating, approved } = body;
+    const { author, company, position, content, rating, image, approved } = body;
 
     if (!author || !content) {
       return NextResponse.json({ message: 'Author and content are required' }, { status: 400 });
@@ -29,6 +29,7 @@ export async function POST(request: Request) {
         position,
         content,
         rating: rating ? parseInt(rating, 10) : undefined,
+        image,
         approved: approved || false,
       },
     });
