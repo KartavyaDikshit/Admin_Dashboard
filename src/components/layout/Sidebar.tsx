@@ -14,7 +14,8 @@ import {
   CogIcon,
   ChartBarIcon,
   GlobeAltIcon,
-  CpuChipIcon
+  CpuChipIcon,
+  NewspaperIcon
 } from '@heroicons/react/24/outline'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
@@ -35,6 +36,16 @@ export default function Sidebar({ open, userRole }: SidebarProps) {
       return response?.data?.count ?? 0;
     } catch (error) {
       console.error('Failed to fetch reports count', error);
+      return 0;
+    }
+  }});
+
+  const { data: pressReleasesCount } = useQuery<number>({ queryKey: ['pressReleasesCount'], queryFn: async () => {
+    try {
+      const response = await axios.get('/api/press-releases?countOnly=true'); // Assuming this endpoint supports countOnly or you might need to implement it
+      return response?.data?.total ?? 0; // Or however your API returns the count for list endpoints
+    } catch (error) {
+      // Fail silently or log
       return 0;
     }
   }});
@@ -73,6 +84,7 @@ export default function Sidebar({ open, userRole }: SidebarProps) {
     { name: 'Dashboard', href: '/admin', icon: HomeIcon, current: false },
     { name: 'AI Generation', href: '/admin/ai-generation', icon: CpuChipIcon, current: false },
     { name: 'Reports', href: '/admin/reports', icon: DocumentTextIcon, current: false, badge: reportsCount !== undefined ? reportsCount.toLocaleString() : undefined },
+    { name: 'Press Releases', href: '/admin/press-releases', icon: NewspaperIcon, current: false, badge: pressReleasesCount !== undefined && pressReleasesCount > 0 ? pressReleasesCount.toLocaleString() : undefined },
     { name: 'Testimonials', href: '/admin/testimonials', icon: ChatBubbleLeftRightIcon, current: false },
     { name: 'Categories', href: '/admin/categories', icon: FolderIcon, current: false, badge: categoriesCount !== undefined ? categoriesCount.toLocaleString() : undefined },
     { name: 'Orders', href: '/admin/orders', icon: ShoppingCartIcon, current: false, badge: ordersCount !== undefined ? ordersCount.toLocaleString() : undefined },

@@ -7,6 +7,7 @@ import { generateSlug } from '@/lib/utils';
 
 const reportUpdateSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters').optional(),
+  titleDescription: z.string().nullable().optional(),
   marketResearchSummary: z.string().nullable().optional(),
   marketDynamics: z.string().nullable().optional(),
   regionalInsights: z.string().nullable().optional(),
@@ -30,9 +31,10 @@ const reportUpdateSchema = z.object({
   breadcrumbData: z.any().nullable().optional(),
   faqData: z.any().nullable().optional(),
   // Price Fields
-  singlePrice: z.number().nullable().optional(),
-  multiPrice: z.number().nullable().optional(),
-  corporatePrice: z.number().nullable().optional(),
+  singlePrice: z.coerce.number().nullable().optional(),
+  multiPrice: z.coerce.number().nullable().optional(),
+  corporatePrice: z.coerce.number().nullable().optional(),
+  featured: z.boolean().optional(),
 });
 
 interface RouteContext {
@@ -87,16 +89,26 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     const dataToUpdate: any = { ...reportData };
 
     if (reportData.title) {
-      const baseSlug = generateSlug(reportData.title);
-      let newSlug = baseSlug;
-      let counter = 1;
+      const currentReport = await prisma.report.findUnique({
+        where: { id },
+        select: { reportId: true }
+      });
 
-      // Ensure slug uniqueness
-      while (await prisma.report.findFirst({ where: { slug: newSlug, id: { not: id } } })) {
-        newSlug = `${baseSlug}-${counter}`;
-        counter++;
+      let reportId = currentReport?.reportId;
+      let numericPart = '';
+
+      if (reportId) {
+        numericPart = reportId.split('-')[1];
+      } else {
+        // Generate new if missing
+        const randomNum = Math.floor(10000 + Math.random() * 90000);
+        numericPart = randomNum.toString();
+        reportId = `TBI-${numericPart}`;
+        dataToUpdate.reportId = reportId;
       }
-      dataToUpdate.slug = newSlug;
+
+      const baseSlug = generateSlug(reportData.title);
+      dataToUpdate.slug = `${baseSlug}-${numericPart}`;
     }
 
     if (categoryIds) {

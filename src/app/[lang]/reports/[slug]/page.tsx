@@ -4,8 +4,10 @@ import { getReport } from '@/lib/data';
 import { getDictionary } from '@/i18n/dictionaries';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import ReportTabs from '@/components/reports/ReportTabs';
-import ReportSidebar from '@/components/reports/ReportSidebar';
+import { formatDate, extractMarketStats } from '@/lib/utils';
+import ReportTabs from '@/components/new_ui/ReportTabs';
+import ReportSidebar from '@/components/new_ui/ReportSidebar';
+import { DocumentTextIcon, ClockIcon, GlobeAltIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 
 type Props = {
   params: Promise<{ lang: string; slug: string }>;
@@ -34,45 +36,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// Helper to parse sections based on headers
+// Helper to parse sections based on headers - reused from previous
 const parseContent = (text: string | null, markers: string[]) => {
   if (!text) return [];
-  
-  // Escape markers for regex
-  const escapedMarkers = markers.map(m => m.replace(/[.*+?^${}()|[\\]/g, '\\$&'));
+  const escapedMarkers = markers.map(m => m.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
   const regex = new RegExp(`(${escapedMarkers.join('|')})`, 'g');
-  
   const parts = text.split(regex);
   const sections: { title: string; content: string }[] = [];
-  
-  let currentTitle = 'Overview'; // Default title for content before first marker
+  let currentTitle = 'Overview';
   let currentContent = '';
-
-  // If the text doesn't start with a marker, the first part is content for "Overview" (or just skip if empty)
   if (parts.length > 0 && !markers.includes(parts[0])) {
      currentContent = parts[0].trim();
      if(currentContent) sections.push({ title: currentTitle, content: currentContent });
   }
-
   for (let i = 0; i < parts.length; i++) {
     if (markers.includes(parts[i])) {
       currentTitle = parts[i].replace(/\*\*/g, '').replace(/###/g, '').trim();
-      // The next part is the content
       if (i + 1 < parts.length) {
-        sections.push({
-          title: currentTitle,
-          content: parts[i + 1].trim()
-        });
-        i++; // Skip the content part
+        sections.push({ title: currentTitle, content: parts[i + 1].trim() });
+        i++;
       }
     }
   }
-  
-  // Fallback: if no markers found but text exists, return as single block
   if (sections.length === 0 && text.trim().length > 0) {
      return [{ title: '', content: text }];
   }
-
   return sections;
 };
 
@@ -85,201 +73,198 @@ export default async function ReportDetailPage({ params }: Props) {
     notFound();
   }
 
-  // Parse Market Dynamics
   const dynamicsMarkers = ['**A. Market Drivers**', '**B. Market Restraints**', '**C. Market Opportunities**'];
   const dynamicsSections = parseContent(report.marketDynamics, dynamicsMarkers);
-
-  // Parse Key Players
   const playersMarkers = ['### Key Market Players', '### Recent Strategic Developments'];
   const playersSections = parseContent(report.keyMarketPlayers, playersMarkers);
 
-  // Summary Content Component
+  const stats = extractMarketStats(report.marketResearchSummary || report.summary || report.description);
+  console.log(`[Report ${report.slug}] Extracted stats:`, stats);
+
   const SummaryContent = (
-    <div className="space-y-10">
-      {/* Market Research Summary */}
-      {report.marketResearchSummary && (
-        <section>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <span className="w-1 h-6 bg-indigo-600 rounded-full"></span>
-            {dict.marketResearchSummary}
-          </h2>
-          <div className="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line">
-            {report.marketResearchSummary}
-          </div>
-        </section>
-      )}
-
-      {/* Market Dynamics */}
-      {dynamicsSections.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <span className="w-1 h-6 bg-indigo-600 rounded-full"></span>
-            {dict.marketDynamics}
-          </h2>
-          <div className="grid gap-6">
-            {dynamicsSections.map((section, index) => (
-              <div key={index} className="bg-gray-50 border border-gray-200 rounded-xl p-6 hover:border-indigo-200 transition-colors">
-                {section.title && (
-                  <h3 className="text-lg font-bold text-indigo-900 mb-3 pb-2 border-b border-gray-200">
-                    {section.title}
-                  </h3>
-                )}
-                <div className="prose max-w-none text-gray-700 whitespace-pre-line">
-                  {section.content}
-                </div>
+    <div className="space-y-8">
+      <div className="space-y-6">
+        <div className="space-y-4">
+          <h3 className="font-bold text-2xl text-gray-900">{report.title}</h3>
+          
+          {/* Dynamic stats extracted from content */}
+          {(stats.cagr || stats.marketSize) && (
+          <div className="grid grid-cols-2 gap-4">
+            {stats.cagr && (
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-5 rounded-lg border border-green-200 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chart-column h-5 w-5 text-green-600" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+                <h5 className="font-semibold text-gray-700 text-sm">CAGR</h5>
               </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Regional Insights */}
-      {report.regionalInsights && (
-        <section>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-             <span className="w-1 h-6 bg-indigo-600 rounded-full"></span>
-             {dict.regionalInsights}
-          </h2>
-          <div className="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line bg-white p-6 border border-gray-100 rounded-xl shadow-sm">
-            {report.regionalInsights}
-          </div>
-        </section>
-      )}
-
-      {/* Key Market Players */}
-      {playersSections.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-             <span className="w-1 h-6 bg-indigo-600 rounded-full"></span>
-             {dict.keyMarketPlayers}
-          </h2>
-          <div className="space-y-6">
-            {playersSections.map((section, index) => (
-              <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                {section.title && (
-                  <h3 className="text-lg font-bold text-indigo-900 mb-4">
-                    {section.title}
-                  </h3>
-                )}
-                <div className="prose max-w-none text-gray-700 whitespace-pre-line">
-                  {section.content}
-                </div>
+              <p className="text-green-900 font-bold text-2xl">{stats.cagr}</p>
+              <p className="text-green-700 text-xs mt-1">Compound Annual Growth Rate</p>
+            </div>
+            )}
+            {stats.marketSize && (
+            <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-5 rounded-lg border border-indigo-200 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trending-up h-5 w-5 text-indigo-600" aria-hidden="true"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
+                <h5 className="font-semibold text-gray-700 text-sm">Market Size</h5>
               </div>
-            ))}
+              <p className="text-indigo-900 font-bold text-2xl">{stats.marketSize}</p>
+              <p className="text-indigo-700 text-xs mt-1">Current Market Valuation</p>
+            </div>
+            )}
           </div>
-        </section>
-      )}
+          )}
+        </div>
+        <div>
+          <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
+            <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">
+              {report.marketResearchSummary || report.summary || report.description}
+            </p>
+          </div>
+        </div>
+        
+        {/* Recent Development Section */}
+        {report.recentStrategicDevelopments && (
+           <div>
+             <h5 className="font-bold text-lg text-gray-900 mb-3">Recent Development</h5>
+             <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
+               <div className="space-y-3">
+                 <p className="text-base text-gray-700 leading-relaxed text-justify">
+                   {/* If array, map it, otherwise display string */}
+                   {Array.isArray(report.recentStrategicDevelopments) 
+                      ? report.recentStrategicDevelopments.map((d: any) => `${d.date}: ${d.event}`).join('\n\n')
+                      : report.recentStrategicDevelopments}
+                 </p>
+               </div>
+             </div>
+           </div>
+        )}
 
-      {/* Research Methodology */}
-      <section className="bg-indigo-50 border border-indigo-100 rounded-xl p-8">
-         <h2 className="text-2xl font-bold text-indigo-900 mb-4">{dict.researchMethodologyTitle}</h2>
-         <p className="text-indigo-800 leading-relaxed">
-            {dict.researchMethodologyText}
-         </p>
-      </section>
+        <div className="mt-6 mb-3">
+          <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Market Dynamics</h3>
+        </div>
+        
+        {dynamicsSections.map((section, index) => (
+          <div key={index}>
+            <h6 className="font-semibold text-base text-gray-900 mb-2">{section.title.replace('Market ', '')}</h6>
+            <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400">
+              <p className="text-base text-gray-700 leading-relaxed text-justify">{section.content}</p>
+            </div>
+          </div>
+        ))}
+
+        {/* Key Players */}
+        <div className="mt-6 mb-3">
+           <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Key Market Players</h3>
+        </div>
+        {playersSections.map((section, index) => (
+           <div key={index} className="bg-slate-50 p-5 rounded-lg border border-slate-200">
+              {section.title && <h5 className="font-bold text-lg text-gray-900 mb-3">{section.title}</h5>}
+              <div className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">{section.content}</div>
+           </div>
+        ))}
+
+      </div>
     </div>
   );
 
-  // TOC Content Component
-  const TocContent = (
-    <div className="space-y-6">
-      {report.tableOfContents ? (
-         <div className="prose max-w-none text-gray-700 whitespace-pre-line leading-loose">
-            {report.tableOfContents}
-         </div>
-      ) : (
-         <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl p-10 text-center">
-            <h3 className="text-xl font-bold text-gray-900 mb-3">
-               {dict.tocFallbackTitle}
-            </h3>
-            <button className="mt-4 bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors shadow-md">
-               {dict.tocFallbackButton}
-            </button>
-         </div>
-      )}
+  const TocContent = report.tableOfContents ? (
+    <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+       <div className="prose max-w-none text-gray-700 whitespace-pre-line text-justify leading-relaxed">
+          {report.tableOfContents}
+       </div>
+    </div>
+  ) : (
+    <div id="table-of-contents-section" className="bg-gradient-to-br from-amber-50 to-orange-50 p-10 rounded-lg border-2 border-dashed border-amber-300 text-center shadow-sm">
+      <div className="flex flex-col items-center space-y-6">
+        <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center shadow-inner">
+          <DocumentTextIcon className="h-10 w-10 text-amber-600" />
+        </div>
+        <div className="space-y-2">
+          <h4 className="font-bold text-xl text-gray-900">{dict.tocFallbackTitle || "Table of Contents Not Available"}</h4>
+          <p className="text-gray-600 max-w-md mx-auto">Get a detailed chapter breakdown and page-by-page content structure delivered to your inbox.</p>
+        </div>
+        <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-base transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-md hover:shadow-lg h-12 px-8 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold">
+          <DocumentTextIcon className="h-5 w-5" />
+          {dict.tocFallbackButton || "Request Table of Contents"}
+        </button>
+      </div>
     </div>
   );
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-20">
-       {/* Hero Section */}
-      <section className="bg-indigo-900 text-white py-16 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('/grid-pattern.svg')]"></div>
-        <div className="container mx-auto px-4 relative z-10">
-           {/* Breadcrumbs */}
-           <nav className="text-sm text-indigo-200 mb-6 flex flex-wrap gap-2 items-center">
-            <Link href={`/${lang}`} className="hover:text-white transition-colors">{dict.home}</Link>
-            <span className="opacity-50">/</span>
-            <Link href={`/${lang}/reports`} className="hover:text-white transition-colors">{dict.reports}</Link>
-            <span className="opacity-50">/</span>
-            <span className="text-white font-medium truncate max-w-[200px] md:max-w-md">{report.title}</span>
-          </nav>
+    <div className="min-h-screen bg-gray-50">
+      <header className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.3) 1px, transparent 0px)', backgroundSize: '20px 20px'}}></div>
+        </div>
+        <div className="absolute top-10 right-10 w-20 h-20 bg-white/5 rounded-lg transform rotate-12"></div>
+        <div className="absolute bottom-20 left-20 w-16 h-16 bg-purple-300/10 rounded-full"></div>
+        <div className="absolute top-1/2 right-1/4 w-12 h-12 bg-indigo-300/10 rounded-full"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 py-12 md:py-16">
+          <div className="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
+            <div className="flex-1 text-left flex flex-col justify-center min-h-[200px]">
+               {/* Breadcrumbs */}
+               <nav aria-label="breadcrumb" className="mb-6">
+                <ol className="flex flex-wrap items-center gap-1.5 break-words text-sm sm:gap-2.5 text-indigo-100">
+                  <li className="inline-flex items-center gap-1.5"><Link className="transition-colors text-indigo-100 hover:text-white" href={`/${lang}`}>{dict.home}</Link></li>
+                  <li className="text-indigo-300">/</li>
+                  <li className="inline-flex items-center gap-1.5"><Link className="transition-colors text-indigo-100 hover:text-white" href={`/${lang}/reports`}>{dict.reports}</Link></li>
+                  <li className="text-indigo-300">/</li>
+                  <li className="inline-flex items-center gap-1.5"><span className="text-white font-medium line-clamp-1">{report.title}</span></li>
+                </ol>
+              </nav>
 
-          {/* Categories moved here from sidebar */}
-          {report.categories && report.categories.length > 0 && (
-             <div className="flex flex-wrap gap-2 mb-6">
-                {report.categories.map(cat => (
-                   <Link 
-                      key={cat.id} 
-                      href={`/${lang}/categories/${cat.slug}`}
-                      className="bg-indigo-800/50 hover:bg-indigo-700 border border-indigo-700 text-indigo-100 text-xs font-medium px-3 py-1 rounded-full transition-colors"
-                   >
-                      {cat.name}
-                   </Link>
-                ))}
-             </div>
-          )}
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight text-left">
+                {report.title}
+                {report.titleDescription && <span className="block text-indigo-200 text-lg md:text-xl lg:text-2xl mt-4 font-normal text-left">{report.titleDescription}</span>}
+              </h1>
+            </div>
 
-          <h1 className="text-3xl md:text-5xl font-bold mb-8 leading-tight max-w-4xl">
-            {report.title}
-          </h1>
-
-          <div className="flex flex-wrap items-center gap-6 text-sm md:text-base">
-             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-                <svg className="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                <span className="font-medium">{new Date(report.publishedDate).toLocaleDateString(lang, { month: 'long', year: 'numeric' })}</span>
-             </div>
-             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-                 <svg className="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-                <span className="font-medium">{report.pages || "N/A"} {dict.pages}</span>
-             </div>
-             {report.sku && (
-               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-                  <svg className="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg>
-                  <span className="font-medium">{dict.reportId}: {report.sku}</span>
-               </div>
-             )}
+            {/* Report Details Card in Hero */}
+            <div className="w-full lg:w-80 flex-shrink-0">
+              <div className="text-card-foreground flex flex-col gap-6 rounded-xl border bg-white/95 backdrop-blur-sm shadow-xl">
+                <div className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 pt-6 [.border-b]:pb-6">
+                  <h4 className="text-lg font-semibold">Report Details</h4>
+                </div>
+                <div className="px-3 [&:last-child]:pb-6 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground flex items-center"><DocumentTextIcon className="h-4 w-4 mr-2" />Pages</span>
+                    <span className="font-medium text-gray-900">{report.pages || '150+'}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground flex items-center"><ClockIcon className="h-4 w-4 mr-2" />Published</span>
+                    <span className="font-medium text-gray-900">{new Date(report.publishedDate).toLocaleDateString(lang, { month: 'short', year: 'numeric' })}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground flex items-center"><GlobeAltIcon className="h-4 w-4 mr-2" />Coverage</span>
+                    <span className="font-medium text-gray-900">Global</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground flex items-center"><UserGroupIcon className="h-4 w-4 mr-2" />Format</span>
+                    <span className="font-medium text-gray-900">PDF, Excel</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground flex items-center">ID</span>
+                    <span className="font-medium text-gray-900">{report.reportId || report.sku}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      </header>
 
-      <div className="container mx-auto px-4 py-12 -mt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content Column */}
-          <div className="lg:col-span-2">
-             {/* Optional Report Image */}
-             {report.imageUrl && (
-                <div className="relative h-[400px] w-full rounded-2xl overflow-hidden shadow-lg mb-8">
-                   <Image 
-                     src={report.imageUrl} 
-                     alt={report.title} 
-                     fill 
-                     className="object-cover"
-                     unoptimized
-                   />
-                </div>
-             )}
-
-             {/* Tabs & Content */}
-             <ReportTabs 
-               summaryContent={SummaryContent} 
-               tocContent={TocContent}
-               labels={{ summary: dict.tabSummary, toc: dict.tabToc }}
-             />
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex-1 min-w-0">
+            <ReportTabs 
+              summaryContent={SummaryContent} 
+              tocContent={TocContent}
+              labels={{ summary: dict.tabSummary, toc: dict.tabToc }}
+            />
           </div>
-
-          {/* Sidebar Column */}
-          <div className="lg:col-span-1">
+          
+          <div className="hidden lg:block lg:w-80 flex-shrink-0">
              <ReportSidebar 
                 prices={{
                    singleUser: report.singlePrice ? Number(report.singlePrice) : null,
@@ -287,21 +272,19 @@ export default async function ReportDetailPage({ params }: Props) {
                    corporate: report.corporatePrice ? Number(report.corporatePrice) : null,
                    currency: report.currency || 'USD'
                 }}
-                labels={{
-                  chooseLicense: dict.chooseLicense,
-                  singleUser: dict.singleUser,
-                  multiUser: dict.multiUser,
-                  corporate: dict.corporate,
-                  mostPopular: dict.mostPopular,
-                  buyNow: dict.buyNow,
-                  securePayment: dict.securePayment,
-                  requestSample: dict.requestSample,
-                  requestCustomization: dict.requestCustomization,
-                  talkToAnalyst: dict.talkToAnalyst,
-                  scheduleConsultation: dict.scheduleConsultation,
-                  customPricing: dict.customPricing
-                }}
+                labels={dict}
              />
+          </div>
+          
+          {/* Mobile Sidebar (Bottom Fixed) or just stacked? MHTML has a fixed bottom bar for mobile. 
+              <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
+          */}
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg p-4">
+             <div className="flex gap-2">
+                <button className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 text-white py-3 px-4 rounded-lg font-bold shadow-lg">
+                   {dict.buyNow} - ${report.singlePrice?.toLocaleString()}
+                </button>
+             </div>
           </div>
         </div>
       </div>

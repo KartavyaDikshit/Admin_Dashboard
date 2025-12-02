@@ -1,97 +1,138 @@
 import { getDictionary } from '@/i18n/dictionaries';
-import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'About Us | The Brainy Insights',
-  description: 'Learn more about The Brainy Insights, our mission, vision, and why you should choose us for your market research and consulting needs.',
-  keywords: ['About The Brainy Insights', 'Market Research Company', 'Consulting Firm', 'Mission and Vision', 'Business Intelligence'],
-};
-
-export default async function AboutPage({ params }: { params: Promise<{ lang: string }> }) {
+export default async function About({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   const dict = getDictionary(lang);
 
-  const whyChooseUs = [
-    { title: dict.wcu1Title, desc: dict.wcu1Desc, icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
-    { title: dict.wcu2Title, desc: dict.wcu2Desc, icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { title: dict.wcu3Title, desc: dict.wcu3Desc, icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
-    { title: dict.wcu4Title, desc: dict.wcu4Desc, icon: 'M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z' },
-    { title: dict.wcu5Title, desc: dict.wcu5Desc, icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
-    { title: dict.wcu6Title, desc: dict.wcu6Desc, icon: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z' },
-    { title: dict.wcu7Title, desc: dict.wcu7Desc, icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' },
-    { title: dict.wcu8Title, desc: dict.wcu8Desc, icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { title: dict.wcu9Title, desc: dict.wcu9Desc, icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { title: dict.wcu10Title, desc: dict.wcu10Desc, icon: 'M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-  ];
-
   return (
-    <div className="flex flex-col">
-      {/* Hero/Intro Section */}
-      <div className="bg-gradient-to-r from-blue-700 to-blue-900 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">{dict.aboutTitle}</h1>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            {dict.aboutText.split('.')[0]}. {dict.servicesIntroDesc}
-          </p>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-16">
-        {/* Extended About Text */}
-        <div className="max-w-4xl mx-auto mb-20 text-gray-700 space-y-6 leading-relaxed text-lg">
-           {dict.aboutText.split('\n\n').slice(1).map((para, idx) => (
-             <p key={idx}>{para}</p>
-           ))}
-        </div>
-
-        {/* Mission & Vision Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-          <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100 flex flex-col items-center text-center hover:shadow-lg transition-shadow">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-6">
-               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+    <div className="min-h-screen bg-gray-50">
+      <section className="relative bg-gradient-to-br from-indigo-600 to-indigo-700 text-white">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="relative max-w-7xl mx-auto px-6 py-24 lg:py-32">
+          <div className="text-center max-w-4xl mx-auto">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">Transforming Data Into<span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-orange-200">Actionable Insights</span></h1>
+            <p className="text-xl md:text-2xl text-blue-100 mb-8 leading-relaxed">At TheBrainyInsights, we empower businesses to make informed decisions through comprehensive market research, data analytics, and strategic consulting services.</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 rounded-md px-6 has-[>svg]:px-4 bg-white text-indigo-600 hover:bg-gray-100">
+                Our Services <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right ml-2 h-5 w-5" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              </button>
+              <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-10 rounded-md px-6 has-[>svg]:px-4 border-white text-white hover:bg-white/10">
+                Contact Us
+              </button>
             </div>
-            <h2 className="text-3xl font-bold text-blue-900 mb-4">{dict.missionTitle}</h2>
-            <p className="text-blue-800 text-lg leading-relaxed">
-              {dict.missionText}
-            </p>
-          </div>
-
-          <div className="bg-green-50 rounded-2xl p-8 border border-green-100 flex flex-col items-center text-center hover:shadow-lg transition-shadow">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-6">
-               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-            </div>
-            <h2 className="text-3xl font-bold text-green-900 mb-4">{dict.visionTitle}</h2>
-            <p className="text-green-800 text-lg leading-relaxed">
-              {dict.visionText}
-            </p>
           </div>
         </div>
+      </section>
 
-        {/* Why Choose Us Section */}
-        <div>
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">{dict.whyChooseUsTitle}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {whyChooseUs.map((item, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:-translate-y-1 transition-transform duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center text-blue-600 flex-shrink-0">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-                    </svg>
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Values</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">These core values guide everything we do and shape how we serve our clients.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-card-foreground flex flex-col gap-6 rounded-xl border bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
+              <div className="[&_:last-child]:pb-6 p-8">
+                <div className="w-16 h-16 mx-auto mb-6 bg-indigo-600/10 rounded-full flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-shield h-8 w-8 text-indigo-600" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Integrity & Reliability</h3>
+                <p className="text-gray-600 leading-relaxed">We are committed to delivering accurate, validated, and dependable data through rigorous quality control and ethical research practices.</p>
+              </div>
+            </div>
+            <div className="text-card-foreground flex flex-col gap-6 rounded-xl border bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
+              <div className="[&_:last-child]:pb-6 p-8">
+                <div className="w-16 h-16 mx-auto mb-6 bg-indigo-600/10 rounded-full flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-heart h-8 w-8 text-indigo-600" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path></svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Client-Centric Approach</h3>
+                <p className="text-gray-600 leading-relaxed">Client satisfaction drives everything we do — from tailored solutions and proactive support to long-term partnerships built on trust and transparency.</p>
+              </div>
+            </div>
+            <div className="text-card-foreground flex flex-col gap-6 rounded-xl border bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
+              <div className="[&_:last-child]:pb-6 p-8">
+                <div className="w-16 h-16 mx-auto mb-6 bg-indigo-600/10 rounded-full flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-globe h-8 w-8 text-indigo-600" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Expertise & Excellence</h3>
+                <p className="text-gray-600 leading-relaxed">Our experienced analysts and senior researchers personally oversee every project, ensuring insightful analysis and consistent high-quality outcomes.</p>
+              </div>
+            </div>
+            <div className="text-card-foreground flex flex-col gap-6 rounded-xl border bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
+              <div className="[&_:last-child]:pb-6 p-8">
+                <div className="w-16 h-16 mx-auto mb-6 bg-indigo-600/10 rounded-full flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-lightbulb h-8 w-8 text-indigo-600" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Innovation & Agility</h3>
+                <p className="text-gray-600 leading-relaxed">We continuously track global market trends, adapt swiftly to industry dynamics, and ensure fast, efficient project delivery without compromising quality.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Research Methodology</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Our proven research methodologies combine traditional techniques with cutting-edge technology to deliver comprehensive market intelligence.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="text-card-foreground flex flex-col gap-6 rounded-xl border bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="[&_:last-child]:pb-6 p-8">
+                <div className="flex items-start space-x-4">
+                  <div className="w-16 h-16 bg-indigo-600/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-search h-8 w-8 text-indigo-600" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {item.desc}
-                    </p>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">Comprehensive Data Procurement</h3>
+                    <p className="text-gray-600 leading-relaxed">We gather reliable market data through primary and secondary sources, including expert interviews, surveys, and trusted databases like Bloomberg, Statista, and Factiva to ensure accurate market insights.</p>
                   </div>
                 </div>
               </div>
-            ))}
+            </div>
+            <div className="text-card-foreground flex flex-col gap-6 rounded-xl border bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="[&_:last-child]:pb-6 p-8">
+                <div className="flex items-start space-x-4">
+                  <div className="w-16 h-16 bg-indigo-600/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-database h-8 w-8 text-indigo-600" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">Robust Data Analysis & Synthesis</h3>
+                    <p className="text-gray-600 leading-relaxed">Our team employs advanced statistical tools and systematic screening, integration, and validation techniques to ensure precision and consistency in every dataset.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="text-card-foreground flex flex-col gap-6 rounded-xl border bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="[&_:last-child]:pb-6 p-8">
+                <div className="flex items-start space-x-4">
+                  <div className="w-16 h-16 bg-indigo-600/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-brain h-8 w-8 text-indigo-600" aria-hidden="true"><path d="M12 18V5"></path><path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4"></path><path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5"></path><path d="M17.997 5.125a4 4 0 0 1 2.526 5.77"></path><path d="M18 18a4 4 0 0 0 2-7.464"></path><path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517"></path><path d="M6 18a4 4 0 0 1-2-7.464"></path><path d="M6.003 5.125a4 4 0 0 0-2.526 5.77"></path></svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">Balanced Qualitative & Quantitative Insights</h3>
+                    <p className="text-gray-600 leading-relaxed">We combine qualitative research (understanding customer behavior and perceptions) with quantitative research (surveys, statistical validation, and trend estimation) for a complete market view.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="text-card-foreground flex flex-col gap-6 rounded-xl border bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="[&_:last-child]:pb-6 p-8">
+                <div className="flex items-start space-x-4">
+                  <div className="w-16 h-16 bg-indigo-600/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chart-pie h-8 w-8 text-indigo-600" aria-hidden="true"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z"></path><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path></svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">Expert Validation & Forecasting</h3>
+                    <p className="text-gray-600 leading-relaxed">Final insights are validated by CXOs, industry specialists, and key opinion leaders, followed by data interpolation and trend forecasting to deliver accurate, actionable market intelligence.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

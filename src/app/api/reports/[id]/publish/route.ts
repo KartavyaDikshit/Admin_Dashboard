@@ -20,6 +20,7 @@ type JsonObject = Record<string, unknown>;
 
 interface TranslationPayload {
   title: string;
+  titleDescription: string;
   description: string;
   summary: string;
   recentStrategicDevelopments: RecentStrategicDevelopment[] | string; // Can be array or JSON string
@@ -83,6 +84,7 @@ async function translateAndStore(report: Report, language: string): Promise<void
 
   const contentToTranslate = {
     title: report.title,
+    titleDescription: report.titleDescription || '',
     description: report.description,
     summary: report.summary || '',
     recentStrategicDevelopments: parseReportJsonField(report.recentStrategicDevelopments, [] as RecentStrategicDevelopment[]),
@@ -118,7 +120,7 @@ async function translateAndStore(report: Report, language: string): Promise<void
   console.log(`[${report.id}] Content to translate for ${language}:`, JSON.stringify(contentToTranslate, null, 2));
 
   const fullLanguageName = languageMap[language] || language;
-  const prompt = `Translate the following report content into ${fullLanguageName}. Return the response as a valid JSON object with the following keys: "title", "description", "summary", "recentStrategicDevelopments" (as a JSON string representing an array of objects with "date" and "event" keys), "marketResearchSummary", "marketDynamics", "regionalInsights", "keyMarketPlayers", "tableOfContents", "listOfFigures", "methodology", "keyFindings" (as a semicolon-separated string), "executiveSummary", "keywords" (as a semicolon-separated string), "semanticKeywords" (as a semicolon-separated string), "localizedKeywords" (as a semicolon-separated string), "culturalKeywords" (as a semicolon-separated string), "longTailKeywords" (as a semicolon-separated string), "localCompetitorKeywords" (as a semicolon-separated string), "metaTitle", "metaDescription", "canonicalUrl", "ogTitle", "ogDescription", "ogImage", "twitterTitle", "twitterDescription", "schemaMarkup" (as a JSON string), "breadcrumbData" (as a JSON string), "faqData" (as a JSON string), "localBusinessSchema" (as a JSON string).\n\n${JSON.stringify(
+  const prompt = `Translate the following report content into ${fullLanguageName}. Return the response as a valid JSON object with the following keys: "title", "titleDescription", "description", "summary", "recentStrategicDevelopments" (as a JSON string representing an array of objects with "date" and "event" keys), "marketResearchSummary", "marketDynamics", "regionalInsights", "keyMarketPlayers", "tableOfContents", "listOfFigures", "methodology", "keyFindings" (as a semicolon-separated string), "executiveSummary", "keywords" (as a semicolon-separated string), "semanticKeywords" (as a semicolon-separated string), "localizedKeywords" (as a semicolon-separated string), "culturalKeywords" (as a semicolon-separated string), "longTailKeywords" (as a semicolon-separated string), "localCompetitorKeywords" (as a semicolon-separated string), "metaTitle", "metaDescription", "canonicalUrl", "ogTitle", "ogDescription", "ogImage", "twitterTitle", "twitterDescription", "schemaMarkup" (as a JSON string), "breadcrumbData" (as a JSON string), "faqData" (as a JSON string), "localBusinessSchema" (as a JSON string).\n\n${JSON.stringify(
     {
       ...contentToTranslate,
       recentStrategicDevelopments: JSON.stringify(contentToTranslate.recentStrategicDevelopments),
@@ -200,6 +202,7 @@ async function translateAndStore(report: Report, language: string): Promise<void
 
     const finalTranslatedContent = {
       title: translatedContent.title,
+      titleDescription: translatedContent.titleDescription,
       description: translatedContent.description,
       summary: translatedContent.summary,
       recentStrategicDevelopments: parsedRecentStrategicDevelopments,

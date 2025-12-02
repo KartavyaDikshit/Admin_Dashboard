@@ -8,39 +8,83 @@ export default async function CategoriesPage({ params }: { params: Promise<{ lan
   const categories = await getCategories(lang);
 
   return (
-    <div className="flex flex-col">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-700 to-blue-900 text-white py-20 mb-12">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">{dict.categories}</h1>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            {dict.aboutText.split('.')[0]}. {dict.servicesIntroDesc}
-          </p>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+         {/* Header is global Layout, so this section is redundant if Layout handles it. 
+             However, the MHTML includes header code. Since Layout wraps this page, I assume Layout handles Header/Footer.
+             I will focus on the Page Content.
+         */}
+      </header>
 
-      <div className="container mx-auto px-4 pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              href={`/${lang}/categories/${category.slug}`}
-              className="block bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-center gap-4 mb-4">
-                 {/* Icon placeholder if exists */}
-                 <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                    </svg>
-                 </div>
-                 <h2 className="text-2xl font-bold text-gray-900">{category.name}</h2>
-              </div>
-              <p className="text-gray-600">{category.description}</p>
-            </Link>
-          ))}
+      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 py-20">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/90 via-indigo-700/95 to-purple-800/90"></div>
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute inset-0" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px'}}></div>
+          </div>
+          <div className="absolute top-10 left-10 w-20 h-20 bg-white/5 rounded-full blur-xl"></div>
+          <div className="absolute top-32 right-20 w-32 h-32 bg-purple-300/10 rounded-lg rotate-45 blur-lg"></div>
+          <div className="absolute bottom-20 left-1/4 w-16 h-16 bg-indigo-300/10 rounded-full blur-lg"></div>
+          <div className="absolute bottom-32 right-1/3 w-24 h-24 bg-white/5 rounded-lg rotate-12 blur-xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/20 via-transparent to-transparent"></div>
         </div>
-      </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="mb-8">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">{dict.categories}</h1>
+            <p className="text-xl md:text-2xl text-indigo-100 max-w-4xl mx-auto leading-relaxed">{dict.featuredCategoriesDesc}</p>
+          </div>
+          <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-indigo-300 mx-auto rounded-full"></div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto max-w-7xl px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Browse Categories</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">{dict.featuredCategoriesDesc}</p>
+          </div>
+          <div className="bg-indigo-600/10 backdrop-blur-sm rounded-2xl p-6 border border-indigo-200/30 shadow-lg mb-12">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="relative flex-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-search absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" aria-hidden="true">
+                  <path d="m21 21-4.34-4.34"></path>
+                  <circle cx="11" cy="11" r="8"></circle>
+                </svg>
+                <input className="flex w-full rounded-md border px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pl-10 h-10 bg-white border-gray-300" placeholder="Search categories..." type="search" />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {categories.map((category) => (
+                <Link 
+                  key={category.id} 
+                  href={`/${lang}/categories/${category.slug}`}
+                  className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                >
+                  <div className="mb-3 text-indigo-600">
+                    <svg className="w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="32" cy="32" r="24" stroke="currentColor" strokeWidth="2.5" fill="none"></circle>
+                      <rect x="28" y="18" width="8" height="28" rx="1" fill="currentColor"></rect>
+                      <rect x="18" y="28" width="28" height="8" rx="1" fill="currentColor"></rect>
+                    </svg>
+                  </div>
+                  <h3 className="font-semibold mb-2 group-hover:text-indigo-600 transition-colors">{category.name}</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">{category.description || 'Market insights.'}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+          
+          <div className="mt-12 text-center">
+            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-8">
+              <h3 className="text-2xl font-semibold text-gray-900 mb-4">Need a Custom Report?</h3>
+              <p className="text-gray-600 mb-6 max-w-2xl mx-auto">Can't find what you're looking for? Request a customized market research report tailored to your specific needs.</p>
+              <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-primary/90 h-10 rounded-md has-[>svg]:px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-6 text-lg">
+                {dict.requestCustomization}
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

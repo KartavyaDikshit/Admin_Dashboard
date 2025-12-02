@@ -354,6 +354,7 @@ export default function EditReportPage() {
                     {/* Render a form field for each section */}
                     {[
                         { name: 'title', label: 'Title', type: 'input' },
+                        { name: 'titleDescription', label: 'Title Description', type: 'textarea' },
                         { name: 'marketResearchSummary', label: 'Market Research Summary', type: 'textarea' },
                         { name: 'marketDynamics', label: 'Market Dynamics', type: 'textarea' },
                         { name: 'regionalInsights', label: 'Regional Insights', type: 'textarea' },

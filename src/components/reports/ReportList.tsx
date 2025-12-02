@@ -106,21 +106,50 @@ export default function ReportList({ searchParams }: ReportListProps) {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2 flex-shrink-0">
+                        <button
+                          onClick={async () => {
+                            const newStatus = !report.featured;
+                            // Optimistic update
+                            setReports(prev => prev.map(r => r.id === report.id ? { ...r, featured: newStatus } : r));
+                            try {
+                              const res = await fetch(`/api/reports/${report.id}`, {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ featured: newStatus })
+                              });
+                              if (!res.ok) throw new Error('Failed to update');
+                              toast.success(newStatus ? 'Marked as featured' : 'Removed from featured');
+                            } catch {
+                              // Revert on error
+                              setReports(prev => prev.map(r => r.id === report.id ? { ...r, featured: !newStatus } : r));
+                              toast.error('Failed to update featured status');
+                            }
+                          }}
+                          className={cn(
+                            'inline-flex items-center px-2 py-1 rounded border text-xs font-medium transition-colors',
+                            report.featured 
+                              ? 'bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200' 
+                              : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
+                          )}
+                        >
+                          <span className={cn("w-3 h-3 mr-1.5 rounded-sm border flex items-center justify-center", report.featured ? "bg-purple-600 border-purple-600" : "border-gray-400")}>
+                            {report.featured && <svg className="w-2.5 h-2.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><path d="M20 6L9 17l-5-5"/></svg>}
+                          </span>
+                          Featured
+                        </button>
                         <span className={cn(
                           'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
                           report.status === 'PUBLISHED' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                         )}>
                           {report.status}
                         </span>
-                        {report.featured && (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                            Featured
-                          </span>
-                        )}
                       </div>
                     </div>
                     <div className="mt-2 flex items-center justify-between">
                       <div className="flex items-center space-x-4">
+                        <Link href={`/en/reports/${report.slug}`} target="_blank" className="text-xs text-green-600 hover:text-green-900 font-medium">
+                          View
+                        </Link>
                         <Link href={`/admin/reports/${report.id}/edit`} className="text-xs text-indigo-600 hover:text-indigo-900 font-medium">
                           Edit
                         </Link>

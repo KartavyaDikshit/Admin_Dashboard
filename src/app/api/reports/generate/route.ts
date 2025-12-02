@@ -1,21 +1,25 @@
 
 import { NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
 import OpenAI from 'openai';
 import { prisma } from '@/lib/prisma';
 import { generateSlug, generateSKU } from '@/lib/utils';
 import { calculateCost, openai } from '@/lib/openai'; // Import openai and calculateCost
 
-// Helper function to get prompt content
+// Helper function to get prompt content from DB
 async function getPrompt(promptName: string): Promise<string> {
-  const promptsDir = path.join(process.cwd(), 'prompts');
-  const filePath = path.join(promptsDir, `${promptName}.txt`);
   try {
-    return await fs.readFile(filePath, 'utf-8');
+    const template = await prisma.aiPromptTemplate.findUnique({
+      where: { name: promptName },
+    });
+
+    if (!template) {
+      throw new Error(`Prompt template '${promptName}' not found in database.`);
+    }
+
+    return template.templateText;
   } catch (error) {
-    console.error(`Error reading prompt ${promptName}:`, error);
-    throw new Error(`Could not read prompt file: ${promptName}`);
+    console.error(`Error fetching prompt ${promptName}:`, error);
+    throw error;
   }
 }
 

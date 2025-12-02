@@ -27,6 +27,7 @@ const mapReport = (report: any) => {
   return {
     ...report,
     title: translation?.title || report.title,
+    titleDescription: translation?.titleDescription || report.titleDescription,
     description: translation?.description || report.description,
     summary: translation?.summary || report.summary,
     tableOfContents: translation?.tableOfContents || report.tableOfContents,
@@ -281,6 +282,54 @@ export const getReport = cache(async (slug: string, locale: string) => {
     };
   } catch (error) {
     console.error('Error fetching report:', error);
+    return null;
+  }
+});
+
+const mapPressRelease = (pr: any) => {
+  const translation = pr.translations?.[0];
+  return {
+    ...pr,
+    title: translation?.title || pr.title,
+    description: translation?.description || pr.description,
+  };
+};
+
+export const getPressReleases = cache(async (locale: string) => {
+  try {
+    const pressReleases = await prisma.pressRelease.findMany({
+      where: { published: true },
+      include: {
+        translations: {
+          where: { locale: locale },
+        },
+      },
+      orderBy: { publishedAt: 'desc' },
+    });
+
+    return pressReleases.map(mapPressRelease);
+  } catch (error) {
+    console.error('Error fetching press releases:', error);
+    return [];
+  }
+});
+
+export const getPressRelease = cache(async (slug: string, locale: string) => {
+  try {
+    const pressRelease = await prisma.pressRelease.findUnique({
+      where: { slug },
+      include: {
+        translations: {
+          where: { locale: locale },
+        },
+      },
+    });
+
+    if (!pressRelease) return null;
+
+    return mapPressRelease(pressRelease);
+  } catch (error) {
+    console.error('Error fetching press release:', error);
     return null;
   }
 });

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
-import PublicHeader from '@/components/layout/PublicHeader';
-import Footer from '@/components/layout/Footer';
+import Header from '@/components/new_ui/Header';
+import Footer from '@/components/new_ui/Footer';
+import { getDictionary } from '@/i18n/dictionaries';
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
@@ -36,13 +37,15 @@ export default async function Layout({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
+  const dict = getDictionary(lang);
+
   return (
-    <div className="min-h-screen flex flex-col font-sans text-gray-900">
-      <PublicHeader lang={lang} />
-      <main className="flex-grow bg-gray-50">
+    <div className="min-h-screen flex flex-col font-sans text-gray-900 bg-gray-50">
+      <Header dict={dict} lang={lang} />
+      <main className="flex-grow">
         {children}
       </main>
-      <Footer lang={lang} />
+      <Footer dict={dict} lang={lang} />
     </div>
   );
 }

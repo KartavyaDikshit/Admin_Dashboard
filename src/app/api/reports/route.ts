@@ -31,6 +31,9 @@ const reportSchema = z.object({
   multiPrice: z.coerce.number().positive().optional(),
   corporatePrice: z.coerce.number().positive().optional(),
   enterprisePrice: z.coerce.number().positive().optional(),
+  trendingKeywords: z.array(z.string()).optional(),
+  longTailKeywords: z.array(z.string()).optional(),
+  titleDescription: z.string().optional(),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED', 'ACTIVE']),
   featured: z.boolean(),
   priority: z.coerce.number().int().optional()
@@ -65,7 +68,8 @@ export async function GET(request: NextRequest) {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },
         { description: { contains: search, mode: 'insensitive' } },
-        { sku: { contains: search, mode: 'insensitive' } }
+        { sku: { contains: search, mode: 'insensitive' } },
+        { reportId: { contains: search, mode: 'insensitive' } }
       ]
     }
 
@@ -89,8 +93,10 @@ export async function GET(request: NextRequest) {
       select: {
         id: true,
         sku: true,
+        reportId: true,
         slug: true,
         title: true,
+        titleDescription: true,
         description: true,
         summary: true,
         pages: true,
@@ -126,6 +132,7 @@ export async function GET(request: NextRequest) {
           where: { locale: locale },
           select: {
             title: true,
+            titleDescription: true,
             description: true,
             summary: true,
             slug: true,
@@ -183,6 +190,7 @@ interface CategoryWithTranslations {
       const processedReport = {
         ...report,
         title: translated?.title || report.title,
+        titleDescription: translated?.titleDescription || report.titleDescription,
         description: translated?.description || report.description,
         summary: translated?.summary || report.summary,
         slug: translated?.slug || report.slug,
@@ -255,12 +263,36 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { categoryIds, ...rest } = reportSchema.parse(body)
 
-    const slug = generateSlug(rest.title)
+    // Generate unique reportId and slug
+    let isUnique = false;
+    let reportId = '';
+    let slug = '';
+    let counter = 0;
+
+    while (!isUnique && counter < 10) {
+      const randomNum = Math.floor(10000 + Math.random() * 90000); // 5 digits
+      reportId = `TBI-${randomNum}`;
+      slug = `${generateSlug(rest.title)}-${randomNum}`;
+
+      const existing = await prisma.report.findFirst({
+        where: { OR: [{ reportId }, { slug }] }
+      });
+
+      if (!existing) {
+        isUnique = true;
+      }
+      counter++;
+    }
+
+    if (!isUnique) {
+       return NextResponse.json({ error: 'Failed to generate unique report ID' }, { status: 500 });
+    }
 
     const report = await prisma.report.create({
       data: {
         ...rest,
         slug,
+        reportId,
         publishedDate: new Date(rest.publishedDate), // Convert string to Date
         categories: {
           connect: categoryIds?.map(id => ({ id }))

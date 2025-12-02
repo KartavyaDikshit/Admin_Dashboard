@@ -16,31 +16,34 @@ export function formatNumber(num: number): string {
   return new Intl.NumberFormat().format(num)
 }
 
-export function formatDate(date: Date): string {
+export function formatDate(date: string | Date): string {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric'
-  }).format(date)
+  }).format(new Date(date))
 }
 
-export function formatDateTime(date: Date): string {
+export function formatDateTime(date: string | Date): string {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
     hour: 'numeric',
     minute: 'numeric'
-  }).format(date)
+  }).format(new Date(date))
 }
 
 export function generateSlug(text: string): string {
   return text
+    .toString()
     .toLowerCase()
-    .replace(/[^a-z0-9 -]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-+|-+$/g, '')
+    .trim()
+    .replace(/\s+/g, '-')     // Replace spaces with -
+    .replace(/&/g, '-and-')   // Replace & with 'and'
+    .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+    .replace(/\-\-+/g, '-')   // Replace multiple - with single -
+    .replace(/^-+|-+$/g, ''); // Trim - from start and end
 }
 
 export function generateSKU(title: string, id?: string): string {
@@ -50,7 +53,7 @@ export function generateSKU(title: string, id?: string): string {
     .replace(/[^a-zA-Z0-9]/g, '')
     .substring(0, 6)
     .toUpperCase()
-  const randomPart = id ? id.substring(0, 8) : Math.random().toString(36).substring(2, 10)
+  const randomPart = id ? id.substring(0, 8) : Math.floor(1000 + Math.random() * 9000).toString();
   
   return `${prefix}-${titlePart}-${year}-${randomPart}`
 }
@@ -58,4 +61,31 @@ export function generateSKU(title: string, id?: string): string {
 export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text
   return text.substring(0, maxLength) + '...'
+}
+
+export function extractMarketStats(text: string | null | undefined) {
+  if (!text) return { cagr: null, marketSize: null };
+
+  // Extract CAGR
+  // Matches: "CAGR of 7.5%", "CAGR of 7.5 %", "7.5% CAGR", "CAGR: 7.5%"
+  const cagrMatch = text.match(/(?:CAGR of|CAGR:|CAGR)\s*([\d\.,]+)\s*%/i) || 
+                    text.match(/([\d\.,]+)\s*%\s*CAGR/i);
+  const cagr = cagrMatch ? `${cagrMatch[1]}%` : null;
+
+  // Extract Market Size
+  // Matches: "valued at USD 5.80 billion", "size of USD 5.8 billion", "reach USD 10 billion", "revenue of $5B"
+  // Handles "USD" or "$"
+  // Handles "billion", "million", "trillion", "B", "M", "T" (case insensitive)
+  const sizeMatch = text.match(/(?:valued at|size of|reach|revenue of|valuation of|worth)\s*(?:USD|\$)\s*([\d\.,]+\s*(?:billion|million|trillion|B|M|T))/i);
+  
+  // Ensure we capitalize the unit if it's just a letter
+  let formattedSize = null;
+  if (sizeMatch) {
+    let val = sizeMatch[1];
+    // If unit is missing, it might just be a number, but our regex requires unit-like text or at least a space? 
+    // The regex `[\d\.,]+\s*(?:...)` requires the unit part.
+    formattedSize = `USD ${val}`;
+  }
+
+  return { cagr, marketSize: formattedSize };
 }

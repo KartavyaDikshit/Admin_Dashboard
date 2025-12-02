@@ -1,0 +1,51 @@
+ GET /api/reports/47f485ba-ba1d-4563-abe6-7cdeeb0f49bb 200 in 281ms (compile: 15ms, render: 266ms)
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\c383b_zod_lib_index_mjs_d8c683d1._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_1db65f83._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Update report error: Error [ZodError]: [
+  {
+    "code": "invalid_type",
+    "expected": "number",
+    "received": "string",
+    "path": [
+      "singlePrice"
+    ],
+    "message": "Expected number, received string"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "number",
+    "received": "string",
+    "path": [
+      "multiPrice"
+    ],
+    "message": "Expected number, received string"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "number",
+    "received": "string",
+    "path": [
+      "corporatePrice"
+    ],
+    "message": "Expected number, received string"
+  }
+]
+    at get error (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\c383b_zod_lib_index_mjs_d8c683d1._.js:773:31)
+    at ZodObject.parse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\c383b_zod_lib_index_mjs_d8c683d1._.js:887:22)
+    at PATCH (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:422:50)
+    at async responseGenerator (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_1db65f83._.js:15485:38)
+    at async handleResponse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_1db65f83._.js:15547:32)
+    at async handler (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\17608_next_1db65f83._.js:15600:13) {
+  issues: [Array],
+  addIssue: [Function (anonymous)],
+  addIssues: [Function (anonymous)]
+}
+ PATCH /api/reports/47f485ba-ba1d-4563-abe6-7cdeeb0f49bb 400 in 176ms (compile: 22ms, render: 155ms)
