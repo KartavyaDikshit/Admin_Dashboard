@@ -41,11 +41,19 @@ const parseContent = (text: string | null, markers: string[]) => {
   
   // Fixed: Escape special characters properly in regex
   const escapedMarkers = markers.map(m => m.replace(/[.*+?^${}()|[\\]/g, '\\$&'));
+  const markerGroup = escapedMarkers.join('|');
   
-  // This pattern looks for the markers, optionally preceded by "#### " or just spaces/newlines
-  // The (?:^|[\s#*]+) part handles start of string, newlines, or markdown headers like "####"
-  const pattern = `(?:^|[\\s#*]+)(${escapedMarkers.join('|')})(?:$|[\\s#*:]+)`;
-  const regex = new RegExp(pattern, 'i');
+  // Pattern 1: Specific markers (handling optional markdown prefix like #### or **)
+  // Uses lookbehind (?<=[\r\n]) to ensure it starts on a new line (or start of string) without consuming the newline
+  // Uses lookahead (?=[\r\n]|$) to ensure it ends at a newline without consuming it
+  const pattern1 = `(?:^|(?<=[\\r\\n]))[\\s#*]*(${markerGroup})(?:[:\\s]*)(?=[\\r\\n]|$)`;
+  
+  // Pattern 2: Generic Markdown headers (#### Title)
+  // Matches: (start/newline lookbehind) + (##... ) + (Title) + (newline lookahead)
+  const pattern2 = `(?:^|(?<=[\\r\\n]))[\\t ]*#{2,}[\\t ]+([^\\r\\n]+?)[\\t ]*(?=[\\r\\n]|$)`;
+
+  // Combine patterns. Specific markers take precedence if they match.
+  const regex = new RegExp(`${pattern1}|${pattern2}`, 'i');
   
   const parts = text.split(regex);
   const sections: { title: string; content: string }[] = [];
@@ -53,20 +61,28 @@ const parseContent = (text: string | null, markers: string[]) => {
   let currentTitle = 'Overview';
   
   // Handle the first part (before any marker)
-  if (parts.length > 0 && parts[0].trim()) {
+  if (parts.length > 0 && parts[0]?.trim()) {
      sections.push({ title: currentTitle, content: parts[0].trim() });
   }
   
-  // Iterate through the split parts. 
-  // split() with capturing group returns: [pre-match, match, post-match, match, post-match...]
-  // So parts[i] is the Title, parts[i+1] is the Content.
-  for (let i = 1; i < parts.length; i += 2) {
-    const rawTitle = parts[i];
-    const content = parts[i + 1];
+  // Iterate through the split parts.
+  // split() with 2 capturing groups returns: 
+  // [content0, match1_group1, match1_group2, content1, match2_group1, match2_group2, content2...]
+  // So the stride is 3.
+  for (let i = 1; i < parts.length; i += 3) {
+    const markerTitle = parts[i];
+    const genericTitle = parts[i + 1];
+    const content = parts[i + 2];
     
-    // Clean up the title (remove markdown symbols)
+    // One of the groups will be defined
+    const rawTitle = markerTitle || genericTitle;
+    
+    if (!rawTitle) continue;
+    
+    // Clean up the title (remove markdown symbols if any remain)
     const cleanTitle = rawTitle.replace(/[#*]/g, '').trim();
     
+    // Ensure content exists and is not just whitespace
     if (content && content.trim()) {
       sections.push({ title: cleanTitle, content: content.trim() });
     }
