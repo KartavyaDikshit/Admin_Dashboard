@@ -100,7 +100,7 @@ export default async function ReportsPage({ params, searchParams }: Props) {
                             <span>{new Date(report.publishedDate).toLocaleDateString(lang, { month: 'short', year: 'numeric' })}</span>
                         </div>
                         <span>•</span>
-                        <span>ID: {report.id.substring(0,8)}</span>
+                        <span>ID: {report.reportId || report.sku}</span>
                       </div>
 
                       <div className="grid grid-cols-3 gap-2 mb-4">

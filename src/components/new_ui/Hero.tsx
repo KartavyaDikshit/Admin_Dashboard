@@ -20,7 +20,7 @@ export default function Hero({ dict, lang }: HeroProps) {
   }
 
   return (
-    <section className="hero-section" style={{height: '323.75px'}}>
+    <section className="hero-section" style={{height: '600px'}}>
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/90 via-indigo-700/95 to-purple-800/90"></div>
         <div className="hero-overlay-pattern"></div>
