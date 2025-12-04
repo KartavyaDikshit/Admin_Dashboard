@@ -6,12 +6,12 @@ export default async function About({ params }: { params: Promise<{ lang: string
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="relative bg-gradient-to-br from-indigo-600 to-indigo-700 text-white">
+      <section className="hero-section py-24 lg:py-32">
         <div className="absolute inset-0 bg-black/10"></div>
-        <div className="relative max-w-7xl mx-auto px-6 py-24 lg:py-32">
+        <div className="hero-container">
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">Transforming Data Into<span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-orange-200">Actionable Insights</span></h1>
-            <p className="text-xl md:text-2xl text-blue-100 mb-8 leading-relaxed">At TheBrainyInsights, we empower businesses to make informed decisions through comprehensive market research, data analytics, and strategic consulting services.</p>
+            <h1 className="hero-title">Transforming Data Into <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-orange-200">Actionable Insights</span></h1>
+            <p className="hero-subtitle mb-8">At TheBrainyInsights, we empower businesses to make informed decisions through comprehensive market research, data analytics, and strategic consulting services.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 rounded-md px-6 has-[>svg]:px-4 bg-white text-indigo-600 hover:bg-gray-100">
                 Our Services <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right ml-2 h-5 w-5" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>

@@ -90,6 +90,29 @@ body {
   .status-error {
     @apply text-red-600 bg-red-50 border-red-200;
   }
+
+  /* Hero Standardization */
+  .hero-section {
+    @apply relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800;
+  }
+
+  .hero-overlay-pattern {
+    @apply absolute inset-0 opacity-10;
+    background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+  
+  .hero-container {
+    @apply relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center h-full;
+  }
+
+  .hero-title {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-6;
+  }
+
+  .hero-subtitle {
+    @apply text-lg md:text-xl text-indigo-100 leading-relaxed max-w-3xl mx-auto;
+  }
 }
 
 @layer utilities {

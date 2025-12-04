@@ -6,13 +6,13 @@ export default async function Contact({ params }: { params: Promise<{ lang: stri
 
   return (
     <div className="min-h-screen bg-white">
-      <section className="relative bg-gradient-to-br from-indigo-600 to-indigo-700 text-white">
+      <section className="hero-section">
         <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="hero-container py-24 lg:py-32">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center text-left">
             <div>
-              <h1 className="text-4xl lg:text-6xl font-bold mb-6 text-white">Get Expert Market Research Insights</h1>
-              <p className="text-xl mb-8 text-indigo-100 leading-relaxed">Partner with industry-leading analysts to unlock actionable insights that drive your business forward. Our team of experts delivers comprehensive market intelligence tailored to your needs.</p>
+              <h1 className="hero-title text-left mb-6">Get Expert Market Research Insights</h1>
+              <p className="hero-subtitle text-left mb-8 mx-0">Partner with industry-leading analysts to unlock actionable insights that drive your business forward. Our team of experts delivers comprehensive market intelligence tailored to your needs.</p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button data-slot="button" className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-10 rounded-md has-[>svg]:px-4 bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3">Request Callback</button>
               </div>

@@ -35,10 +35,10 @@ export default async function PressReleaseDetail({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 py-20">
+      <section className="hero-section py-20">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/90 via-indigo-700/95 to-purple-800/90"></div>
-          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+          <div className="hero-overlay-pattern"></div>
         </div>
         
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -50,7 +50,7 @@ export default async function PressReleaseDetail({ params }: Props) {
             <span className="text-white truncate max-w-[200px]">{pressRelease.title}</span>
           </nav>
           
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 tracking-tight leading-tight">
+          <h1 className="hero-title">
             {pressRelease.title}
           </h1>
           

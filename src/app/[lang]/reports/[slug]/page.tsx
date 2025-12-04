@@ -228,13 +228,16 @@ export default async function ReportDetailPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="relative bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.3) 1px, transparent 0px)', backgroundSize: '20px 20px'}}></div>
+      <header className="hero-section">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/90 via-indigo-700/95 to-purple-800/90"></div>
+          <div className="hero-overlay-pattern"></div>
+          <div className="absolute top-10 left-10 w-20 h-20 bg-white/5 rounded-full blur-xl"></div>
+          <div className="absolute top-32 right-20 w-32 h-32 bg-purple-300/10 rounded-lg rotate-45 blur-lg"></div>
+          <div className="absolute bottom-20 left-1/4 w-16 h-16 bg-indigo-300/10 rounded-full blur-lg"></div>
+          <div className="absolute bottom-32 right-1/3 w-24 h-24 bg-white/5 rounded-lg rotate-12 blur-xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/20 via-transparent to-transparent"></div>
         </div>
-        <div className="absolute top-10 right-10 w-20 h-20 bg-white/5 rounded-lg transform rotate-12"></div>
-        <div className="absolute bottom-20 left-20 w-16 h-16 bg-purple-300/10 rounded-full"></div>
-        <div className="absolute top-1/2 right-1/4 w-12 h-12 bg-indigo-300/10 rounded-full"></div>
         
         <div className="relative max-w-7xl mx-auto px-4 py-12 md:py-16">
           <div className="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
@@ -249,9 +252,9 @@ export default async function ReportDetailPage({ params }: Props) {
                 </ol>
               </nav>
 
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight text-left">
+              <h1 className="hero-title text-left">
                 {report.title}
-                {report.titleDescription && <span className="block text-indigo-200 text-base md:text-lg mt-4 font-normal text-left">{report.titleDescription}</span>}
+                {report.titleDescription && <span className="hero-subtitle block text-left mt-4 font-normal">{report.titleDescription}</span>}
               </h1>
             </div>
 

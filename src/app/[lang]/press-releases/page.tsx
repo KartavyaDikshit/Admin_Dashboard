@@ -11,16 +11,16 @@ export default async function PressReleases({ params }: { params: Promise<{ lang
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 py-20">
+      <section className="hero-section py-20">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/90 via-indigo-700/95 to-purple-800/90"></div>
-          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+          <div className="hero-overlay-pattern"></div>
         </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-8">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">Press Releases</h1>
-            <p className="text-xl md:text-2xl text-indigo-100 max-w-4xl mx-auto leading-relaxed">Latest news and updates from The Brainy Insights.</p>
+            <h1 className="hero-title">Press Releases</h1>
+            <p className="hero-subtitle">Latest news and updates from The Brainy Insights.</p>
           </div>
           <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-indigo-300 mx-auto rounded-full"></div>
         </div>

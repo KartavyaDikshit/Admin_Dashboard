@@ -6,24 +6,22 @@ export default async function Services({ params }: { params: Promise<{ lang: str
 
   return (
     <div className="min-h-screen">
-      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800" style={{height: '323.75px'}}>
+      <section className="hero-section" style={{height: '323.75px'}}>
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/90 via-indigo-700/95 to-purple-800/90"></div>
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px'}}></div>
-          </div>
+          <div className="hero-overlay-pattern"></div>
           <div className="absolute top-10 left-10 w-20 h-20 bg-white/5 rounded-full blur-xl"></div>
           <div className="absolute top-32 right-20 w-32 h-32 bg-purple-300/10 rounded-lg rotate-45 blur-lg"></div>
           <div className="absolute bottom-20 left-1/4 w-16 h-16 bg-indigo-300/10 rounded-full blur-lg"></div>
           <div className="absolute bottom-32 right-1/3 w-24 h-24 bg-white/5 rounded-lg rotate-12 blur-xl"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/20 via-transparent to-transparent"></div>
         </div>
-        <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+        <div className="hero-container">
           <div className="text-center w-full">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-tight">
+            <h1 className="hero-title">
               <span className="block bg-gradient-to-r from-purple-300 to-indigo-200 bg-clip-text text-transparent">{dict.services}</span>
             </h1>
-            <p className="text-lg md:text-xl text-indigo-100 max-w-4xl mx-auto leading-relaxed">{dict.servicesIntroDesc}</p>
+            <p className="hero-subtitle">{dict.servicesIntroDesc}</p>
             <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-indigo-300 mx-auto rounded-full mt-6"></div>
           </div>
         </div>
