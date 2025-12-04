@@ -36,28 +36,42 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// Helper to parse sections based on headers - reused from previous
 const parseContent = (text: string | null, markers: string[]) => {
   if (!text) return [];
-  const escapedMarkers = markers.map(m => m.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-  const regex = new RegExp(`(${escapedMarkers.join('|')})`, 'g');
+  
+  // Fixed: Escape special characters properly in regex
+  const escapedMarkers = markers.map(m => m.replace(/[.*+?^${}()|[\\]/g, '\\$&'));
+  
+  // This pattern looks for the markers, optionally preceded by "#### " or just spaces/newlines
+  // The (?:^|[\s#*]+) part handles start of string, newlines, or markdown headers like "####"
+  const pattern = `(?:^|[\\s#*]+)(${escapedMarkers.join('|')})(?:$|[\\s#*:]+)`;
+  const regex = new RegExp(pattern, 'i');
+  
   const parts = text.split(regex);
   const sections: { title: string; content: string }[] = [];
+  
   let currentTitle = 'Overview';
-  let currentContent = '';
-  if (parts.length > 0 && !markers.includes(parts[0])) {
-     currentContent = parts[0].trim();
-     if(currentContent) sections.push({ title: currentTitle, content: currentContent });
+  
+  // Handle the first part (before any marker)
+  if (parts.length > 0 && parts[0].trim()) {
+     sections.push({ title: currentTitle, content: parts[0].trim() });
   }
-  for (let i = 0; i < parts.length; i++) {
-    if (markers.includes(parts[i])) {
-      currentTitle = parts[i].replace(/\*\*/g, '').replace(/###/g, '').trim();
-      if (i + 1 < parts.length) {
-        sections.push({ title: currentTitle, content: parts[i + 1].trim() });
-        i++;
-      }
+  
+  // Iterate through the split parts. 
+  // split() with capturing group returns: [pre-match, match, post-match, match, post-match...]
+  // So parts[i] is the Title, parts[i+1] is the Content.
+  for (let i = 1; i < parts.length; i += 2) {
+    const rawTitle = parts[i];
+    const content = parts[i + 1];
+    
+    // Clean up the title (remove markdown symbols)
+    const cleanTitle = rawTitle.replace(/[#*]/g, '').trim();
+    
+    if (content && content.trim()) {
+      sections.push({ title: cleanTitle, content: content.trim() });
     }
   }
+  
   if (sections.length === 0 && text.trim().length > 0) {
      return [{ title: '', content: text }];
   }
@@ -73,13 +87,17 @@ export default async function ReportDetailPage({ params }: Props) {
     notFound();
   }
 
-  const dynamicsMarkers = ['**A. Market Drivers**', '**B. Market Restraints**', '**C. Market Opportunities**'];
+  // Updated markers based on user feedback: "A. Market Drivers", "B. Market Restraints" etc.
+  // We also include "Market Dynamics" and "Regional Insights" to ensure they are split out if present in the text, preventing duplication.
+  const dynamicsMarkers = ['Market Dynamics', 'A. Market Drivers', 'B. Market Restraints', 'C. Market Opportunities', 'Regional Insights'];
   const dynamicsSections = parseContent(report.marketDynamics, dynamicsMarkers);
-  const playersMarkers = ['### Key Market Players', '### Recent Strategic Developments'];
+  
+  // User mentioned: "### Key Market Players" and "### Recent Strategic Developments"
+  // We include "Key Market Players" to split it out if it appears as a header in the text.
+  const playersMarkers = ['Key Market Players', 'Recent Strategic Developments'];
   const playersSections = parseContent(report.keyMarketPlayers, playersMarkers);
 
   const stats = extractMarketStats(report.marketResearchSummary || report.summary || report.description);
-  console.log(`[Report ${report.slug}] Extracted stats:`, stats);
 
   const SummaryContent = (
     <div className="space-y-8">
@@ -87,7 +105,6 @@ export default async function ReportDetailPage({ params }: Props) {
         <div className="space-y-4">
           <h3 className="font-bold text-2xl text-gray-900">{report.title}</h3>
           
-          {/* Dynamic stats extracted from content */}
           {(stats.cagr || stats.marketSize) && (
           <div className="grid grid-cols-2 gap-4">
             {stats.cagr && (
@@ -121,14 +138,12 @@ export default async function ReportDetailPage({ params }: Props) {
           </div>
         </div>
         
-        {/* Recent Development Section */}
         {report.recentStrategicDevelopments && (
            <div>
              <h5 className="font-bold text-lg text-gray-900 mb-3">Recent Development</h5>
              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
                <div className="space-y-3">
                  <p className="text-base text-gray-700 leading-relaxed text-justify">
-                   {/* If array, map it, otherwise display string */}
                    {Array.isArray(report.recentStrategicDevelopments) 
                       ? report.recentStrategicDevelopments.map((d: any) => `${d.date}: ${d.event}`).join('\n\n')
                       : report.recentStrategicDevelopments}
@@ -142,25 +157,46 @@ export default async function ReportDetailPage({ params }: Props) {
           <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Market Dynamics</h3>
         </div>
         
-        {dynamicsSections.map((section, index) => (
-          <div key={index}>
-            <h6 className="font-semibold text-base text-gray-900 mb-2">{section.title.replace('Market ', '')}</h6>
-            <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400">
-              <p className="text-base text-gray-700 leading-relaxed text-justify">{section.content}</p>
+        {/* Render Market Dynamics Sections */}
+        {dynamicsSections.map((section, index) => {
+          // Skip rendering if the title is just "Market Dynamics" or "Regional Insights" as they are main headers
+          if (['Market Dynamics', 'Regional Insights'].includes(section.title)) return null;
+          
+          return (
+          <div key={index} className="mb-4">
+            {/* We don't show "Overview" title if it's just the intro text */}
+            {section.title !== 'Overview' && (
+                <h6 className="font-semibold text-base text-gray-900 mb-2">{section.title.replace(/^Market\s+/, '')}</h6>
+            )}
+            <div className={section.title === 'Overview' ? "bg-white p-0" : "bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400"}>
+              <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">{section.content}</p>
             </div>
           </div>
-        ))}
+        )})}
 
-        {/* Key Players */}
+        {report.regionalInsights && (
+          <>
+            <div className="mt-6 mb-3">
+              <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Regional Insights</h3>
+            </div>
+            <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
+                <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">
+                  {report.regionalInsights.replace(/^[#*\s]*Regional Insights.*[\r\n]*/i, '')}
+                </p>
+            </div>
+          </>
+        )}
+
         <div className="mt-6 mb-3">
-           <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Key Market Players</h3>
+          <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Key Market Players</h3>
         </div>
-        {playersSections.map((section, index) => (
-           <div key={index} className="bg-slate-50 p-5 rounded-lg border border-slate-200">
-              {section.title && <h5 className="font-bold text-lg text-gray-900 mb-3">{section.title}</h5>}
+        {playersSections.map((section, index) => {
+           return (
+           <div key={index} className="bg-slate-50 p-5 rounded-lg border border-slate-200 mb-4">
+              {section.title && section.title !== 'Overview' && !section.title.toLowerCase().includes('key market players') && <h5 className="font-bold text-lg text-gray-900 mb-3">{section.title}</h5>}
               <div className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">{section.content}</div>
            </div>
-        ))}
+        )})}
 
       </div>
     </div>
@@ -203,7 +239,6 @@ export default async function ReportDetailPage({ params }: Props) {
         <div className="relative max-w-7xl mx-auto px-4 py-12 md:py-16">
           <div className="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
             <div className="flex-1 text-left flex flex-col justify-center min-h-[200px]">
-               {/* Breadcrumbs */}
                <nav aria-label="breadcrumb" className="mb-6">
                 <ol className="flex flex-wrap items-center gap-1.5 break-words text-sm sm:gap-2.5 text-indigo-100">
                   <li className="inline-flex items-center gap-1.5"><Link className="transition-colors text-indigo-100 hover:text-white" href={`/${lang}`}>{dict.home}</Link></li>
@@ -216,11 +251,10 @@ export default async function ReportDetailPage({ params }: Props) {
 
               <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight text-left">
                 {report.title}
-                {report.titleDescription && <span className="block text-indigo-200 text-lg md:text-xl lg:text-2xl mt-4 font-normal text-left">{report.titleDescription}</span>}
+                {report.titleDescription && <span className="block text-indigo-200 text-base md:text-lg mt-4 font-normal text-left">{report.titleDescription}</span>}
               </h1>
             </div>
 
-            {/* Report Details Card in Hero */}
             <div className="w-full lg:w-80 flex-shrink-0">
               <div className="text-card-foreground flex flex-col gap-6 rounded-xl border bg-white/95 backdrop-blur-sm shadow-xl">
                 <div className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 pt-6 [.border-b]:pb-6">
@@ -229,7 +263,7 @@ export default async function ReportDetailPage({ params }: Props) {
                 <div className="px-3 [&:last-child]:pb-6 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground flex items-center"><DocumentTextIcon className="h-4 w-4 mr-2" />Pages</span>
-                    <span className="font-medium text-gray-900">{report.pages || '150+'}</span>
+                    <span className="font-medium text-gray-900">120+</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground flex items-center"><ClockIcon className="h-4 w-4 mr-2" />Published</span>
@@ -276,9 +310,6 @@ export default async function ReportDetailPage({ params }: Props) {
              />
           </div>
           
-          {/* Mobile Sidebar (Bottom Fixed) or just stacked? MHTML has a fixed bottom bar for mobile. 
-              <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg">
-          */}
           <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg p-4">
              <div className="flex gap-2">
                 <button className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 text-white py-3 px-4 rounded-lg font-bold shadow-lg">

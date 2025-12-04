@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getDictionary } from '@/i18n/dictionaries';
 import { getPressReleases } from '@/lib/data';
 import { ArrowRightIcon, CalendarIcon } from '@heroicons/react/24/outline';
-import { formatDate } from '@/lib/utils';
+import { formatDate, generateSlug } from '@/lib/utils';
 
 export default async function PressReleases({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
@@ -29,10 +29,23 @@ export default async function PressReleases({ params }: { params: Promise<{ lang
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto max-w-7xl px-4">
           <div className="grid gap-8">
-            {pressReleases.map((pr: any) => (
+            {pressReleases.map((pr: any) => {
+              // Logic to create the link: Title until "Market", slugified, + "-analysis"
+              // User requested format: /press-releases/{slug}-analysis where slug is part of title till "Market"
+              
+              // Find index of "Market"
+              const marketIndex = pr.title.toLowerCase().indexOf('market');
+              let titlePart = pr.title;
+              if (marketIndex !== -1) {
+                  titlePart = pr.title.substring(0, marketIndex);
+              }
+              
+              const linkSlug = generateSlug(titlePart) + '-analysis';
+
+              return (
               <Link 
                 key={pr.id} 
-                href={`/${lang}/press-releases/${pr.slug}`}
+                href={`/${lang}/press-releases/${linkSlug}`}
                 className="block bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-indigo-100 group"
               >
                 <div className="flex flex-col md:flex-row gap-6 items-start">
@@ -55,7 +68,7 @@ export default async function PressReleases({ params }: { params: Promise<{ lang
                   </div>
                 </div>
               </Link>
-            ))}
+            )})}
 
             {pressReleases.length === 0 && (
               <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">

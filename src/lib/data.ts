@@ -115,7 +115,6 @@ export const getFeaturedCategories = cache(async (locale: string) => {
         },
       },
       orderBy: { sortOrder: 'asc' },
-      take: 8,
     });
 
     return categories.map(mapCategory);
@@ -316,7 +315,8 @@ export const getPressReleases = cache(async (locale: string) => {
 
 export const getPressRelease = cache(async (slug: string, locale: string) => {
   try {
-    const pressRelease = await prisma.pressRelease.findUnique({
+    // 1. Try exact match first (unlikely with the new URL format but good safety)
+    let pressRelease = await prisma.pressRelease.findUnique({
       where: { slug },
       include: {
         translations: {
@@ -324,6 +324,32 @@ export const getPressRelease = cache(async (slug: string, locale: string) => {
         },
       },
     });
+
+    // 2. If not found, handle the custom URL format: partial-slug+analysis
+    if (!pressRelease) {
+        // Remove +analysis or -analysis suffix
+        const cleanSlug = slug.replace(/[-+]analysis$/i, '');
+        
+        if (cleanSlug !== slug) {
+            // Strategy: The cleanSlug is "global-shoe" from "Global Shoe Market...".
+            // The DB slug is likely "global-shoe-market-..."
+            // So we look for a slug that STARTS with the cleanSlug.
+            // We use findFirst.
+            pressRelease = await prisma.pressRelease.findFirst({
+                where: { 
+                  slug: { 
+                    startsWith: cleanSlug,
+                    mode: 'insensitive' 
+                  } 
+                },
+                include: {
+                  translations: {
+                    where: { locale: locale },
+                  },
+                },
+            });
+        }
+    }
 
     if (!pressRelease) return null;
 

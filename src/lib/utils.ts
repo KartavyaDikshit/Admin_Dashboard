@@ -67,9 +67,9 @@ export function extractMarketStats(text: string | null | undefined) {
   if (!text) return { cagr: null, marketSize: null };
 
   // Extract CAGR
-  // Matches: "CAGR of 7.5%", "CAGR of 7.5 %", "7.5% CAGR", "CAGR: 7.5%"
-  const cagrMatch = text.match(/(?:CAGR of|CAGR:|CAGR)\s*([\d\.,]+)\s*%/i) || 
-                    text.match(/([\d\.,]+)\s*%\s*CAGR/i);
+  // Matches: "CAGR of 7.5%", "CAGR of 7.5 %", "7.5% CAGR", "CAGR: 7.5%", "7.5% (CAGR)", "(CAGR) of 7.5%"
+  const cagrMatch = text.match(/(?:CAGR of|CAGR:|CAGR|\(CAGR\) of)\s*([\d\.,]+)\s*%/i) || 
+                    text.match(/([\d\.,]+)\s*%\s*(?:CAGR|\(CAGR\))/i);
   const cagr = cagrMatch ? `${cagrMatch[1]}%` : null;
 
   // Extract Market Size

@@ -25,7 +25,33 @@ export default function AdminSettingsPage() {
       const res = await fetch('/api/settings/prompts');
       const data = await res.json();
       if (res.ok) {
-        setPrompts(data.prompts);
+        const sortedPrompts = (data.prompts as Prompt[]).sort((a, b) => {
+            const aName = a.name.toLowerCase();
+            const bName = b.name.toLowerCase();
+            
+            const topOrder = ['prompt 1', 'prompt 2', 'prompt 3', 'prompt 4'];
+            const bottomOrder = ['market analysis template v1', 'translation template v1'];
+
+            const getTopIndex = (name: string) => topOrder.findIndex(p => name.includes(p));
+            const getBottomIndex = (name: string) => bottomOrder.findIndex(p => name.includes(p));
+
+            const aTop = getTopIndex(aName);
+            const bTop = getTopIndex(bName);
+
+            if (aTop !== -1 && bTop !== -1) return aTop - bTop;
+            if (aTop !== -1) return -1;
+            if (bTop !== -1) return 1;
+
+            const aBottom = getBottomIndex(aName);
+            const bBottom = getBottomIndex(bName);
+
+            if (aBottom !== -1 && bBottom !== -1) return aBottom - bBottom;
+            if (aBottom !== -1) return 1;
+            if (bBottom !== -1) return -1;
+
+            return 0;
+        });
+        setPrompts(sortedPrompts);
       } else {
         toast.error('Failed to fetch prompts');
       }
