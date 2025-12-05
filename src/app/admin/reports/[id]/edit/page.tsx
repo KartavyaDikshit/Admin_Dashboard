@@ -11,6 +11,8 @@ import { Fragment } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 
+import RichTextEditor from '@/components/RichTextEditor';
+
 type ReportWithCategories = Report & { categories: { id: string; name: string }[] };
 type ReportTranslationWithRelations = ReportTranslation;
 
@@ -122,6 +124,14 @@ export default function EditReportPage() {
       setReport(prev => ({ ...prev, [name]: processedValue }));
     } else {
       setTranslatedReport(prev => ({ ...prev, [name]: processedValue }));
+    }
+  };
+
+  const handleRichTextChange = (name: string, value: string) => {
+    if (viewLocale === 'en') {
+      setReport(prev => ({ ...prev, [name]: value }));
+    } else {
+      setTranslatedReport(prev => ({ ...prev, [name]: value }));
     }
   };
 
@@ -355,11 +365,11 @@ export default function EditReportPage() {
                     {[
                         { name: 'title', label: 'Title', type: 'input' },
                         { name: 'titleDescription', label: 'Title Description', type: 'textarea' },
-                        { name: 'marketResearchSummary', label: 'Market Research Summary', type: 'textarea' },
-                        { name: 'marketDynamics', label: 'Market Dynamics', type: 'textarea' },
-                        { name: 'regionalInsights', label: 'Regional Insights', type: 'textarea' },
-                        { name: 'keyMarketPlayers', label: 'Key Market Players', type: 'textarea' },
-                        { name: 'tableOfContents', label: 'Table of Contents', type: 'textarea' },
+                        { name: 'marketResearchSummary', label: 'Market Research Summary', type: 'richtext' },
+                        { name: 'marketDynamics', label: 'Market Dynamics', type: 'richtext' },
+                        { name: 'regionalInsights', label: 'Regional Insights', type: 'richtext' },
+                        { name: 'keyMarketPlayers', label: 'Key Market Players', type: 'richtext' },
+                        { name: 'tableOfContents', label: 'Table of Contents', type: 'richtext' },
                         // SEO Fields
                         { name: 'metaTitle', label: 'Meta Title', type: 'input' },
                         { name: 'metaDescription', label: 'Meta Description', type: 'textarea' },
@@ -378,25 +388,36 @@ export default function EditReportPage() {
                         { name: 'corporatePrice', label: 'Corporate Price', type: 'number' },
                     ].map(field => (
                         <div key={field.name} className="mb-4">
-                            <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
-                            {field.type === 'textarea' ? (
-                                <textarea
-                                    id={field.name}
-                                    name={field.name}
-                                    value={formatInputValue(viewLocale === 'en' ? report[field.name as keyof typeof report] : translatedReport[field.name as keyof typeof translatedReport])}
-                                    onChange={handleInputChange}
-                                    rows={8}
-                                    className="w-full p-2 border rounded-md"
-                                />
+                            {field.type === 'richtext' ? (
+                              <RichTextEditor
+                                id={field.name}
+                                label={field.label}
+                                value={formatInputValue(viewLocale === 'en' ? report[field.name as keyof typeof report] : translatedReport[field.name as keyof typeof translatedReport])}
+                                onChange={(value) => handleRichTextChange(field.name, value)}
+                              />
                             ) : (
-                                <input
-                                    type={field.type === 'number' ? 'number' : 'text'}
-                                    id={field.name}
-                                    name={field.name}
-                                    value={formatInputValue(viewLocale === 'en' ? report[field.name as keyof typeof report] : translatedReport[field.name as keyof typeof translatedReport])}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border rounded-md"
-                                />
+                              <>
+                                <label htmlFor={field.name} className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
+                                {field.type === 'textarea' ? (
+                                    <textarea
+                                        id={field.name}
+                                        name={field.name}
+                                        value={formatInputValue(viewLocale === 'en' ? report[field.name as keyof typeof report] : translatedReport[field.name as keyof typeof translatedReport])}
+                                        onChange={handleInputChange}
+                                        rows={8}
+                                        className="w-full p-2 border rounded-md"
+                                    />
+                                ) : (
+                                    <input
+                                        type={field.type === 'number' ? 'number' : 'text'}
+                                        id={field.name}
+                                        name={field.name}
+                                        value={formatInputValue(viewLocale === 'en' ? report[field.name as keyof typeof report] : translatedReport[field.name as keyof typeof translatedReport])}
+                                        onChange={handleInputChange}
+                                        className="w-full p-2 border rounded-md"
+                                    />
+                                )}
+                              </>
                             )}
                         </div>
                     ))}

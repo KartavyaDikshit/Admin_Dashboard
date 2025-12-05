@@ -14,7 +14,7 @@ jest.mock('next-auth/next', () => ({
 // Mock prisma
 jest.mock('@/lib/prisma', () => ({
   __esModule: true,
-  default: {
+  prisma: {
     report: {
       findUnique: jest.fn(),
       update: jest.fn(),
@@ -26,6 +26,9 @@ jest.mock('@/lib/prisma', () => ({
     },
     apiUsageLog: {
       create: jest.fn(),
+    },
+    aiPromptTemplate: {
+      findUnique: jest.fn(),
     },
   },
 }));
@@ -106,6 +109,9 @@ describe('Reports API', () => {
     it('should create a new report', async () => {
         const generateData = { title: 'New AI Report' };
         const createdReport = { id: 'new-report-id', ...generateData };
+        
+        // Mock prompt templates
+        (prisma.aiPromptTemplate.findUnique as jest.Mock).mockResolvedValue({ templateText: 'Test Prompt' });
         (prisma.report.create as jest.Mock).mockResolvedValue(createdReport);
   
         const { req } = createMocks({
@@ -123,7 +129,14 @@ describe('Reports API', () => {
 
   describe('POST /api/reports/[id]/publish', () => {
     it('should publish a report and create translations', async () => {
-        const mockReport = { id: 'report-1', title: 'Test Report' };
+        const mockReport = { 
+            id: 'report-1', 
+            title: 'Test Report',
+            keyFindings: [],
+            keywords: [],
+            semanticKeywords: [],
+            longTailKeywords: []
+        };
         (prisma.report.findUnique as jest.Mock).mockResolvedValue(mockReport);
         (prisma.report.update as jest.Mock).mockResolvedValue({ ...mockReport, status: 'PUBLISHED' });
 
@@ -133,7 +146,7 @@ describe('Reports API', () => {
 
         expect(response.status).toBe(200);
         expect(data.success).toBe(true);
-        expect(prisma.reportTranslation.upsert).toHaveBeenCalledTimes(7);
+        expect(prisma.reportTranslation.upsert).toHaveBeenCalledTimes(6); // 6 languages
         expect(prisma.report.update).toHaveBeenCalledWith({
             where: { id: 'report-1' },
             data: { status: 'PUBLISHED' },

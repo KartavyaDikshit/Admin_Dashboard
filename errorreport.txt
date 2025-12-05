@@ -1,0 +1,120 @@
+Console Error
+
+
+quill "Cannot register \"bullet\" specified in \"formats\" config. Are you sure it was registered?"
+Call Stack
+56
+
+Hide 52 ignore-listed frame(s)
+createConsoleError
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/src/next-devtools/shared/console-error.ts (16:35)
+handleConsoleError
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/src/next-devtools/userspace/app/errors/use-error-handler.ts (31:31)
+console.error
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/src/next-devtools/userspace/app/errors/intercept-console-error.ts (33:27)
+console.debug
+node_modules/.pnpm/quill@2.0.3/node_modules/src/core/logger.ts (8:22)
+<unknown>
+node_modules/.pnpm/quill@2.0.3/node_modules/src/core/utils/createRegistryWithFormats.ts (20:13)
+Array.forEach
+<anonymous>
+createRegistryWithFormats
+node_modules/.pnpm/quill@2.0.3/node_modules/src/core/utils/createRegistryWithFormats.ts (17:11)
+expandConfig
+node_modules/.pnpm/quill@2.0.3/node_modules/src/core/quill.ts (844:34)
+new Quill
+node_modules/.pnpm/quill@2.0.3/node_modules/src/core/quill.ts (196:20)
+ReactQuill.createEditor
+node_modules/.pnpm/react-quill-new@3.6.0_quill_712f1fb086571109f70a809821d1ea8d/node_modules/react-quill-new/src/index.tsx (343:20)
+ReactQuill.instantiateEditor
+node_modules/.pnpm/react-quill-new@3.6.0_quill_712f1fb086571109f70a809821d1ea8d/node_modules/react-quill-new/src/index.tsx (283:26)
+ReactQuill.componentDidMount
+node_modules/.pnpm/react-quill-new@3.6.0_quill_712f1fb086571109f70a809821d1ea8d/node_modules/react-quill-new/src/index.tsx (246:10)
+Object.react_stack_bottom_frame
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (28039:22)
+runWithFiberInDEV
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (984:30)
+reappearLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16478:13)
+recursivelyTraverseReappearLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16629:9)
+reappearLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16463:11)
+recursivelyTraverseReappearLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16629:9)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15175:18)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15149:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (14981:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15097:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15097:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (14981:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15097:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15202:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15097:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15097:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15097:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15097:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15097:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15097:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15097:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+commitLayoutEffectOnFiber
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (15097:11)
+recursivelyTraverseLayoutEffects
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (16368:11)
+LoadableComponent
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/src/shared/lib/lazy-dynamic/loadable.tsx (65:9)
+RichTextEditor
+file:///C:/Users/User/Admin_Dashboard/tbi-admin-dashboard/.next/dev/static/chunks/src_ad23e9d9._.js (831:330)
+<unknown>
+file:///C:/Users/User/Admin_Dashboard/tbi-admin-dashboard/.next/dev/static/chunks/src_ad23e9d9._.js (1378:386)
+Array.map
+<anonymous>
+EditReportPage
+file:///C:/Users/User/Admin_Dashboard/tbi-admin-dashboard/.next/dev/static/chunks/src_ad23e9d9._.js (1376:39)
+ClientPageRoot
+node_modules/.pnpm/next@16.0.5_@babel+core@7.2_22820440a2cc3fad40639ce67bfa9864/node_modules/next/src/client/components/client-page.tsx (83:12)

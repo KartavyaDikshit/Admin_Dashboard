@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import RichTextEditor from '@/components/RichTextEditor';
 
 const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
 
@@ -154,12 +155,10 @@ export default function EditPressRelease() {
                 />
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700">Description ({viewLocale.toUpperCase()})</label>
-                <textarea 
-                    rows={10} 
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                <RichTextEditor 
+                    label={`Description (${viewLocale.toUpperCase()})`}
                     value={currentData.description || ''}
-                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    onChange={(val) => handleInputChange('description', val)}
                     readOnly={viewLocale !== 'en'}
                 />
             </div>

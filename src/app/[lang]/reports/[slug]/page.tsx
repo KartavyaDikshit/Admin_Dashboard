@@ -148,9 +148,16 @@ export default async function ReportDetailPage({ params }: Props) {
         </div>
         <div>
           <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-            <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">
-              {report.marketResearchSummary || report.summary || report.description}
-            </p>
+            {report.marketResearchSummary && /<[a-z][\s\S]*>/i.test(report.marketResearchSummary) ? (
+               <div 
+                 className="text-base text-gray-700 leading-relaxed text-justify prose max-w-none"
+                 dangerouslySetInnerHTML={{ __html: report.marketResearchSummary }}
+               />
+            ) : (
+               <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">
+                 {report.marketResearchSummary || report.summary || report.description}
+               </p>
+            )}
           </div>
         </div>
         
@@ -173,22 +180,29 @@ export default async function ReportDetailPage({ params }: Props) {
           <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Market Dynamics</h3>
         </div>
         
-        {/* Render Market Dynamics Sections */}
-        {dynamicsSections.map((section, index) => {
-          // Skip rendering if the title is just "Market Dynamics" or "Regional Insights" as they are main headers
-          if (['Market Dynamics', 'Regional Insights'].includes(section.title)) return null;
-          
-          return (
-          <div key={index} className="mb-4">
-            {/* We don't show "Overview" title if it's just the intro text */}
-            {section.title !== 'Overview' && (
-                <h6 className="font-semibold text-base text-gray-900 mb-2">{section.title.replace(/^Market\s+/, '')}</h6>
-            )}
-            <div className={section.title === 'Overview' ? "bg-white p-0" : "bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400"}>
-              <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">{section.content}</p>
+        {report.marketDynamics && /<[a-z][\s\S]*>/i.test(report.marketDynamics) ? (
+           <div 
+             className="text-base text-gray-700 leading-relaxed text-justify prose max-w-none"
+             dangerouslySetInnerHTML={{ __html: report.marketDynamics }}
+           />
+        ) : (
+          /* Render Market Dynamics Sections from parsed content */
+          dynamicsSections.map((section, index) => {
+            // Skip rendering if the title is just "Market Dynamics" or "Regional Insights" as they are main headers
+            if (['Market Dynamics', 'Regional Insights'].includes(section.title)) return null;
+            
+            return (
+            <div key={index} className="mb-4">
+              {/* We don't show "Overview" title if it's just the intro text */}
+              {section.title !== 'Overview' && (
+                  <h6 className="font-semibold text-base text-gray-900 mb-2">{section.title.replace(/^Market\s+/, '')}</h6>
+              )}
+              <div className={section.title === 'Overview' ? "bg-white p-0" : "bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400"}>
+                <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">{section.content}</p>
+              </div>
             </div>
-          </div>
-        )})}
+          )})
+        )}
 
         {report.regionalInsights && (
           <>
@@ -196,9 +210,16 @@ export default async function ReportDetailPage({ params }: Props) {
               <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Regional Insights</h3>
             </div>
             <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">
-                  {report.regionalInsights.replace(/^[#*\s]*Regional Insights.*[\r\n]*/i, '')}
-                </p>
+                {/<[a-z][\s\S]*>/i.test(report.regionalInsights) ? (
+                   <div 
+                     className="text-base text-gray-700 leading-relaxed text-justify prose max-w-none"
+                     dangerouslySetInnerHTML={{ __html: report.regionalInsights }}
+                   />
+                ) : (
+                    <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">
+                      {report.regionalInsights.replace(/^[#*\s]*Regional Insights.*[\r\n]*/i, '')}
+                    </p>
+                )}
             </div>
           </>
         )}
@@ -206,13 +227,20 @@ export default async function ReportDetailPage({ params }: Props) {
         <div className="mt-6 mb-3">
           <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Key Market Players</h3>
         </div>
-        {playersSections.map((section, index) => {
-           return (
-           <div key={index} className="bg-slate-50 p-5 rounded-lg border border-slate-200 mb-4">
-              {section.title && section.title !== 'Overview' && !section.title.toLowerCase().includes('key market players') && <h5 className="font-bold text-lg text-gray-900 mb-3">{section.title}</h5>}
-              <div className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">{section.content}</div>
-           </div>
-        )})}
+        {report.keyMarketPlayers && /<[a-z][\s\S]*>/i.test(report.keyMarketPlayers) ? (
+           <div 
+             className="bg-slate-50 p-5 rounded-lg border border-slate-200 mb-4 text-base text-gray-700 leading-relaxed text-justify prose max-w-none"
+             dangerouslySetInnerHTML={{ __html: report.keyMarketPlayers }}
+           />
+        ) : (
+          playersSections.map((section, index) => {
+             return (
+             <div key={index} className="bg-slate-50 p-5 rounded-lg border border-slate-200 mb-4">
+                {section.title && section.title !== 'Overview' && !section.title.toLowerCase().includes('key market players') && <h5 className="font-bold text-lg text-gray-900 mb-3">{section.title}</h5>}
+                <div className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">{section.content}</div>
+             </div>
+          )})
+        )}
 
       </div>
     </div>
@@ -220,9 +248,16 @@ export default async function ReportDetailPage({ params }: Props) {
 
   const TocContent = report.tableOfContents ? (
     <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-       <div className="prose max-w-none text-gray-700 whitespace-pre-line text-justify leading-relaxed">
-          {report.tableOfContents}
-       </div>
+       {/<[a-z][\s\S]*>/i.test(report.tableOfContents) ? (
+           <div 
+             className="prose max-w-none text-gray-700 text-justify leading-relaxed"
+             dangerouslySetInnerHTML={{ __html: report.tableOfContents }}
+           />
+       ) : (
+           <div className="prose max-w-none text-gray-700 whitespace-pre-line text-justify leading-relaxed">
+              {report.tableOfContents}
+           </div>
+       )}
     </div>
   ) : (
     <div id="table-of-contents-section" className="bg-gradient-to-br from-amber-50 to-orange-50 p-10 rounded-lg border-2 border-dashed border-amber-300 text-center shadow-sm">

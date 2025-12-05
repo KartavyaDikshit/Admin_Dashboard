@@ -66,17 +66,20 @@ export function truncateText(text: string, maxLength: number): string {
 export function extractMarketStats(text: string | null | undefined) {
   if (!text) return { cagr: null, marketSize: null };
 
+  // Strip HTML tags
+  const cleanText = text.replace(/<[^>]*>?/gm, ' ');
+
   // Extract CAGR
   // Matches: "CAGR of 7.5%", "CAGR of 7.5 %", "7.5% CAGR", "CAGR: 7.5%", "7.5% (CAGR)", "(CAGR) of 7.5%"
-  const cagrMatch = text.match(/(?:CAGR of|CAGR:|CAGR|\(CAGR\) of)\s*([\d\.,]+)\s*%/i) || 
-                    text.match(/([\d\.,]+)\s*%\s*(?:CAGR|\(CAGR\))/i);
+  const cagrMatch = cleanText.match(/(?:CAGR of|CAGR:|CAGR|\(CAGR\) of)\s*([\d\.,]+)\s*%/i) || 
+                    cleanText.match(/([\d\.,]+)\s*%\s*(?:CAGR|\(CAGR\))/i);
   const cagr = cagrMatch ? `${cagrMatch[1]}%` : null;
 
   // Extract Market Size
   // Matches: "valued at USD 5.80 billion", "size of USD 5.8 billion", "reach USD 10 billion", "revenue of $5B"
   // Handles "USD" or "$"
   // Handles "billion", "million", "trillion", "B", "M", "T" (case insensitive)
-  const sizeMatch = text.match(/(?:valued at|size of|reach|revenue of|valuation of|worth)\s*(?:USD|\$)\s*([\d\.,]+\s*(?:billion|million|trillion|B|M|T))/i);
+  const sizeMatch = cleanText.match(/(?:valued at|size of|reach|revenue of|valuation of|worth)\s*(?:USD|\$)\s*([\d\.,]+\s*(?:billion|million|trillion|B|M|T))/i);
   
   // Ensure we capitalize the unit if it's just a letter
   let formattedSize = null;

@@ -1,0 +1,199 @@
+on the home page in the trusted by industry leaders the autoscroll speed needs to be reduced by half and remove the black and white effect simple color images and hover to pause same effect
+in the /admin section in the press-releases page add in an option to view the press release near the edit delete option which will link to the actual ui press release 
+next add a text editor with bold italics underline paragraph aligh justify and bullet points and text editor capabilities like that in reports section for the following fileds in the report edit section:
+Market Research Summary
+Market Dynamics 
+Regional Insights
+Key Market Players
+Table Of Contents
+and in the press releases section in the description section
+these text editor enrichment need to render on the ui correctly and also by deflault aligh justify for press release description on the ui 
+refer to the schema for better understanding of the project and related files 
+Skip to content
+kartavyadikshit's projects
+kartavyadikshit's projects
+
+Hobby
+
+tbi
+
+
+Find…
+F
+
+The production deployment of this project contains a vulnerable version of Next.js. Please update immediately.
+
+Learn more
+tbi-blob
+All Databases
+
+Blob Store
+
+Region
+
+BOM1
+Created
+
+Just now
+
+Storage
+
+0 B
+
+Storage (average)
+
+0 B/1 GB
+
+Simple Operations
+
+0/10k
+
+Advanced Operations
+
+0/2k
+
+Data Transfer
+
+0 B/10 GB
+
+Quickstart
+
+
+
+
+
+BLOB_READ_WRITE_TOKEN="vercel_blob_rw_RFoPsTFrkJr3sVWx_vFTCSuut86AysnsaZUqVmfl3u7h1DK"
+Browser
+Getting Started
+Projects
+Settings
+RESOURCES
+
+Documentation
+@vercel/blob
+Getting Started
+Get started using this Blob Storage by following the steps in one of these guides.
+
+
+Next.js
+
+SvelteKit
+1
+
+Prepare your local project
+
+Run vercel link and vercel env pull in your terminal so you have the latest environment variables for your project locally.
+2
+
+Install our package
+
+Then run npm install @vercel/blob to install the Vercel Blob SDK.
+3
+
+Use in code
+
+This example creates a page to upload files using the Next.js App Router and the server upload method: the file goes through your server first and then to Vercel Blob.
+
+⚠️ Server uploads are limited to 4.5 MB, if you need more than that, see the client uploads quickstart.
+
+src/app/avatar/upload/page.tsx
+TypeScript
+
+TypeScript
+
+'use client';
+
+import type { PutBlobResult } from '@vercel/blob';
+import { useState, useRef } from 'react';
+
+export default function AvatarUploadPage() {
+  const inputFileRef = useRef<HTMLInputElement>(null);
+  const [blob, setBlob] = useState<PutBlobResult | null>(null);
+  return (
+    <>
+      <h1>Upload Your Avatar</h1>
+
+      <form
+        onSubmit={async (event) => {
+          event.preventDefault();
+
+          if (!inputFileRef.current?.files) {
+            throw new Error("No file selected");
+          }
+
+          const file = inputFileRef.current.files[0];
+
+          const response = await fetch(
+            `/api/avatar/upload?filename=${file.name}`,
+            {
+              method: 'POST',
+              body: file,
+            },
+          );
+
+          const newBlob = (await response.json()) as PutBlobResult;
+
+          setBlob(newBlob);
+        }}
+      >
+        <input name="file" ref={inputFileRef} type="file" accept="image/jpeg, image/png, image/webp" required />
+        <button type="submit">Upload</button>
+      </form>
+      {blob && (
+        <div>
+          Blob url: <a href={blob.url}>{blob.url}</a>
+        </div>
+      )}
+    </>
+  );
+}
+src/app/api/avatar/upload/route.ts
+TypeScript
+
+TypeScript
+
+import { put } from '@vercel/blob';
+import { NextResponse } from 'next/server';
+
+export async function POST(request: Request): Promise<NextResponse> {
+  const { searchParams } = new URL(request.url);
+  const filename = searchParams.get('filename');
+
+  // ⚠️ The below code is for App Router Route Handlers only
+  const blob = await put(filename, request.body, {
+    access: 'public',
+  });
+
+  // Here's the code for Pages API Routes:
+  // const blob = await put(filename, request, {
+  //   access: 'public',
+  // });
+
+  return NextResponse.json(blob);
+}
+
+// The next lines are required for Pages API Routes only
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };
+
+Home
+Docs
+Guides
+Academy
+Help
+Contact
+All systems normal.
+
+Select a display theme:
+
+system
+
+light
+
+dark
+tbi – Blob – Vercel
+this information is about the blob storge for image this is deployed on vercel and connected with the blog storage find the attached key and sync the local to it as well, now handle all the images routes to use the blob storage this way the image upload error will be handled images are in reports and testimonials and categories will also have a small logo like image read the schema for better understanding 
+understand the user requirements and intent and develop end to end solution for the project scope refer to the project schema and files for better understanding 

@@ -1,39 +1,37 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
+import { put } from '@vercel/blob';
+import { NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request): Promise<NextResponse> {
   try {
-    const formData = await request.formData();
-    const file = formData.get('file') as File;
+    const contentType = request.headers.get('content-type') || '';
+    let file: File | null = null;
+    let filename: string | null = null;
+
+    if (contentType.includes('multipart/form-data')) {
+      const formData = await request.formData();
+      file = (formData.get('file') as File) || (formData.get('image') as File);
+    } else {
+       // Fallback for raw body uploads if any
+       // file = await request.blob() as any; // Typescript might complain
+       return NextResponse.json({ error: 'Content-Type must be multipart/form-data' }, { status: 400 });
+    }
 
     if (!file) {
-      return NextResponse.json({ error: 'No file uploaded.' }, { status: 400 });
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const fileExtension = path.extname(file.name);
-    const uniqueFileName = `${uuidv4()}${fileExtension}`;
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    const filePath = path.join(uploadDir, uniqueFileName);
+    filename = file.name;
+    
+    const blob = await put(filename, file, {
+      access: 'public',
+    });
 
-    try {
-      // Ensure the uploads directory exists
-      await fs.mkdir(uploadDir, { recursive: true });
-      await fs.writeFile(filePath, buffer);
-      const fileUrl = `/uploads/${uniqueFileName}`;
-      return NextResponse.json({ url: fileUrl }, { status: 200 });
-    } catch (error) {
-      console.warn('Filesystem write failed (likely read-only environment). Returning Data URI fallback.', error);
-      // Fallback: Return Data URI
-      const base64String = buffer.toString('base64');
-      const mimeType = file.type || 'application/octet-stream';
-      const dataUri = `data:${mimeType};base64,${base64String}`;
-      return NextResponse.json({ url: dataUri }, { status: 200 });
-    }
+    return NextResponse.json({ 
+        url: blob.url,
+        imageUrl: blob.url // For compatibility with TestimonialForm
+    });
   } catch (error) {
-    console.error('Error uploading file:', error);
-    return NextResponse.json({ error: 'Failed to upload file.' }, { status: 500 });
+    console.error('Upload error:', error);
+    return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
   }
 }

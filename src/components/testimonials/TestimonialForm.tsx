@@ -115,7 +115,7 @@ export default function TestimonialForm({ initialData }: TestimonialFormProps) {
     formData.append('image', file);
 
     try {
-      const response = await axios.post('/api/upload/image', formData, {
+      const response = await axios.post('/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

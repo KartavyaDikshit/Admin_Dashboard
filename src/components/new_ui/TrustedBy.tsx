@@ -36,7 +36,7 @@ export default function TrustedBy({ dict }: TrustedByProps) {
             {/* First Copy */}
             <div className="flex items-center gap-12 px-6">
               {CLIENT_LOGOS.map((logo, index) => (
-                <div key={`logo-1-${index}`} className="relative w-32 h-16 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100 transform hover:scale-110">
+                <div key={`logo-1-${index}`} className="relative w-32 h-16 flex items-center justify-center transition-all duration-300 hover:scale-110">
                   <Image
                     src={`/images/clients/${logo}`}
                     alt={logo.replace('.jpg', '').replace(/-/g, ' ')}
@@ -51,7 +51,7 @@ export default function TrustedBy({ dict }: TrustedByProps) {
             {/* Second Copy for Infinite Loop */}
             <div className="flex items-center gap-12 px-6">
               {CLIENT_LOGOS.map((logo, index) => (
-                <div key={`logo-2-${index}`} className="relative w-32 h-16 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 opacity-70 hover:opacity-100 transform hover:scale-110">
+                <div key={`logo-2-${index}`} className="relative w-32 h-16 flex items-center justify-center transition-all duration-300 hover:scale-110">
                   <Image
                     src={`/images/clients/${logo}`}
                     alt={logo.replace('.jpg', '').replace(/-/g, ' ')}

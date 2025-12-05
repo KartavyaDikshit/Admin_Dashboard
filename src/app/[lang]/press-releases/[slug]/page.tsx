@@ -65,9 +65,16 @@ export default async function PressReleaseDetail({ params }: Props) {
 
       <section className="py-16 bg-white">
         <div className="container mx-auto max-w-4xl px-4">
-          <div className="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line text-lg">
-            {pressRelease.description}
-          </div>
+          {/<[a-z][\s\S]*>/i.test(pressRelease.description) ? (
+            <div 
+              className="prose max-w-none text-gray-700 leading-relaxed text-justify text-lg"
+              dangerouslySetInnerHTML={{ __html: pressRelease.description }}
+            />
+          ) : (
+            <div className="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line text-lg text-justify">
+              {pressRelease.description}
+            </div>
+          )}
         </div>
       </section>
     </div>
