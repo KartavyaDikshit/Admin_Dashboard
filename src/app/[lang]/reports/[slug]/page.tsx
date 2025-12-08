@@ -227,7 +227,10 @@ export default async function ReportDetailPage({ params }: Props) {
                  <p className="text-base text-gray-700 leading-relaxed text-justify">
                    {Array.isArray(report.recentStrategicDevelopments) 
                       ? report.recentStrategicDevelopments.map((d: any) => `${d.date}: ${d.event}`).join('\n\n')
-                      : report.recentStrategicDevelopments}
+                      : typeof report.recentStrategicDevelopments === 'object' && report.recentStrategicDevelopments !== null
+                        ? JSON.stringify(report.recentStrategicDevelopments, null, 2) // Stringify objects
+                        : report.recentStrategicDevelopments as string // Assume it's a string or other primitive
+                   }
                  </p>
                </div>
              </div>
