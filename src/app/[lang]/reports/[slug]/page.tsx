@@ -39,59 +39,112 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const parseContent = (text: string | null, markers: string[]) => {
   if (!text) return [];
   
-  // Fixed: Escape special characters properly in regex
-  const escapedMarkers = markers.map(m => m.replace(/[.*+?^${}()|[\\]/g, '\\$&'));
+  const isHtml = /<[a-z][\s\S]*>/i.test(text);
+
+  // Escape special characters properly in regex
+  // Escape and sort by length desc to match longest first
+  const escapedMarkers = markers
+      .map(m => m.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+'))
+      .sort((a, b) => b.length - a.length);
+  
   const markerGroup = escapedMarkers.join('|');
   
-  // Pattern 1: Specific markers (handling optional markdown prefix like #### or **)
-  // Uses lookbehind (?<=[\r\n]) to ensure it starts on a new line (or start of string) without consuming the newline
-  // Uses lookahead (?=[\r\n]|$) to ensure it ends at a newline without consuming it
-  const pattern1 = `(?:^|(?<=[\\r\\n]))[\\s#*]*(${markerGroup})(?:[:\\s]*)(?=[\\r\\n]|$)`;
-  
-  // Pattern 2: Generic Markdown headers (#### Title)
-  // Matches: (start/newline lookbehind) + (##... ) + (Title) + (newline lookahead)
-  const pattern2 = `(?:^|(?<=[\\r\\n]))[\\t ]*#{2,}[\\t ]+([^\\r\\n]+?)[\\t ]*(?=[\\r\\n]|$)`;
+  if (isHtml) {
+      // HTML Parsing Strategy
+      
+      // Regex Breakdown:
+      // ((?:<[^>]+>\\s*)*)     : Group 1: Opening tags
+      // (?:
+      //   ([#*]+)\\s*          : Group 2: Explicit Markdown Header (e.g. "####")
+      //   |
+      //   (?<=^|>)\\s*([#*\\s]*) : Group 3: Contextual Header (start of block)
+      // )
+      // (${markerGroup})       : Group 4: The Marker Title
+      // ((?:\\s*<\\/[^>]+>)*)  : Group 5: Closing tags
+      // \\s*                   : Optional whitespace
+      
+      const htmlRegex = new RegExp(`((?:<[^>]+>\\s*)*)(?:([#*]+)\\s*|(?<=^|>)\\s*([#*\\s]*))(${markerGroup})((?:\\s*<\\/[^>]+>)*)\\s*`, 'gi');
+      
+      const SPLITTER = '###SECTION_SPLIT###';
+      
+      // Replace found headers with splitter, keeping only the title
+      const processedText = text.replace(htmlRegex, (match, openTags, hardPrefix, softPrefix, title, closeTags) => {
+          return `${SPLITTER}${title}${SPLITTER}`;
+      });
+      
+      const parts = processedText.split(SPLITTER);
+      const sections: { title: string; content: string }[] = [];
+      
+      let currentTitle = 'Overview';
+      // Handle content before first marker
+      if (parts[0] && parts[0].trim()) {
+          sections.push({ title: currentTitle, content: parts[0].trim() });
+      }
+      
+      // Iterate pairs: [title, content, title, content...]
+      for (let i = 1; i < parts.length; i += 2) {
+          const title = parts[i];
+          const content = parts[i+1];
+          
+          if (title && content && content.trim()) {
+              sections.push({ title: title.trim(), content: content.trim() });
+          }
+      }
+      
+      if (sections.length === 0 && text.trim().length > 0) {
+         return [{ title: 'Overview', content: text }];
+      }
+      return sections;
 
-  // Combine patterns. Specific markers take precedence if they match.
-  const regex = new RegExp(`${pattern1}|${pattern2}`, 'i');
-  
-  const parts = text.split(regex);
-  const sections: { title: string; content: string }[] = [];
-  
-  let currentTitle = 'Overview';
-  
-  // Handle the first part (before any marker)
-  if (parts.length > 0 && parts[0]?.trim()) {
-     sections.push({ title: currentTitle, content: parts[0].trim() });
+  } else {
+      // Robust Plain Text Parsing Strategy using Split
+      // This handles "Market Dynamics#### A. Market Drivers" and "**A. Market Drivers**"
+      
+      // Regex to find Headers
+      // captures: full match includes surrounding #, *, whitespace
+      // We look for: [Prefix Symbols (#*)] + [Space] + [Marker] + [Space] + [Suffix Symbols (* only) + Colon]
+      // Using split ensures we capture the "in-between" content reliably
+      const regex = new RegExp(`([#*]*\\s*(?:${markerGroup})\\s*[*]*:?)`, 'gi');
+      
+      const parts = text.split(regex);
+      const sections: { title: string; content: string }[] = [];
+      
+      // parts[0] is text before first match
+      if (parts[0] && parts[0].trim()) {
+         sections.push({ title: 'Overview', content: parts[0].trim() });
+      }
+      
+      // parts array will look like: [preamble, captured_header, content, captured_header, content, ...]
+      for (let i = 1; i < parts.length; i += 2) {
+          const header = parts[i];
+          const content = parts[i + 1];
+          
+          if (!header) continue;
+
+          // Clean the title (remove #, *, :)
+          const title = header.replace(/[#*:]/g, '').trim();
+          
+          // Verify it's a real title match (basic check)
+          if (!title) continue;
+
+          // Boundary Check logic (replicated for safety, though split handles most cases)
+          // If the match was partial inside a word, split would still happen, 
+          // but we might want to validate if needed. 
+          // However, for split strategy, we trust the regex.
+          
+          // Handle content (if undef, empty string)
+          const cleanContent = content ? content.trim() : '';
+          
+          // Logic: "Market Dynamics" might have empty content if followed immediately by "A. Market Drivers"
+          sections.push({ title, content: cleanContent });
+      }
+      
+      if (sections.length === 0 && text.trim().length > 0) {
+          return [{ title: 'Overview', content: text }];
+      }
+
+      return sections;
   }
-  
-  // Iterate through the split parts.
-  // split() with 2 capturing groups returns: 
-  // [content0, match1_group1, match1_group2, content1, match2_group1, match2_group2, content2...]
-  // So the stride is 3.
-  for (let i = 1; i < parts.length; i += 3) {
-    const markerTitle = parts[i];
-    const genericTitle = parts[i + 1];
-    const content = parts[i + 2];
-    
-    // One of the groups will be defined
-    const rawTitle = markerTitle || genericTitle;
-    
-    if (!rawTitle) continue;
-    
-    // Clean up the title (remove markdown symbols if any remain)
-    const cleanTitle = rawTitle.replace(/[#*]/g, '').trim();
-    
-    // Ensure content exists and is not just whitespace
-    if (content && content.trim()) {
-      sections.push({ title: cleanTitle, content: content.trim() });
-    }
-  }
-  
-  if (sections.length === 0 && text.trim().length > 0) {
-     return [{ title: '', content: text }];
-  }
-  return sections;
 };
 
 export default async function ReportDetailPage({ params }: Props) {
@@ -103,14 +156,19 @@ export default async function ReportDetailPage({ params }: Props) {
     notFound();
   }
 
-  // Updated markers based on user feedback: "A. Market Drivers", "B. Market Restraints" etc.
-  // We also include "Market Dynamics" and "Regional Insights" to ensure they are split out if present in the text, preventing duplication.
-  const dynamicsMarkers = ['Market Dynamics', 'A. Market Drivers', 'B. Market Restraints', 'C. Market Opportunities', 'Regional Insights'];
+  // Markers for Market Dynamics
+  // Expanded to include generic headers without prefixes (e.g. "Market Drivers") for reports like Laser Driver Chip Market
+  const dynamicsMarkers = [
+      'Market Dynamics', 
+      'A. Market Drivers', 'B. Market Restraints', 'C. Market Opportunities', 
+      'Market Drivers', 'Market Restraints', 'Market Opportunities',
+      'Market Trends', 'Introduction', 'Conclusion',
+      'Regional Insights'
+  ];
   const dynamicsSections = parseContent(report.marketDynamics, dynamicsMarkers);
   
-  // User mentioned: "### Key Market Players" and "### Recent Strategic Developments"
-  // We include "Key Market Players" to split it out if it appears as a header in the text.
-  const playersMarkers = ['Key Market Players', 'Recent Strategic Developments'];
+  // Markers for Key Market Players
+  const playersMarkers = ['Key Market Players', 'Recent Strategic Developments', 'Company Profiles', 'Key Players'];
   const playersSections = parseContent(report.keyMarketPlayers, playersMarkers);
 
   const stats = extractMarketStats(report.marketResearchSummary || report.summary || report.description);
@@ -180,14 +238,8 @@ export default async function ReportDetailPage({ params }: Props) {
           <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Market Dynamics</h3>
         </div>
         
-        {report.marketDynamics && /<[a-z][\s\S]*>/i.test(report.marketDynamics) ? (
-           <div 
-             className="text-base text-gray-700 leading-relaxed text-justify prose max-w-none"
-             dangerouslySetInnerHTML={{ __html: report.marketDynamics }}
-           />
-        ) : (
-          /* Render Market Dynamics Sections from parsed content */
-          dynamicsSections.map((section, index) => {
+        {/* Market Dynamics - Always Render Sections Loop */}
+        {dynamicsSections.map((section, index) => {
             // Skip rendering if the title is just "Market Dynamics" or "Regional Insights" as they are main headers
             if (['Market Dynamics', 'Regional Insights'].includes(section.title)) return null;
             
@@ -198,11 +250,19 @@ export default async function ReportDetailPage({ params }: Props) {
                   <h6 className="font-semibold text-base text-gray-900 mb-2">{section.title.replace(/^Market\s+/, '')}</h6>
               )}
               <div className={section.title === 'Overview' ? "bg-white p-0" : "bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400"}>
-                <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">{section.content}</p>
+                {/* Render content as HTML if it contains tags, otherwise text */}
+                {/<[a-z][\s\S]*>/i.test(section.content) ? (
+                    <div 
+                        className="text-base text-gray-700 leading-relaxed text-justify prose max-w-none"
+                        dangerouslySetInnerHTML={{ __html: section.content }}
+                    />
+                ) : (
+                    <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">{section.content}</p>
+                )}
               </div>
             </div>
-          )})
-        )}
+          )
+        })}
 
         {report.regionalInsights && (
           <>
@@ -227,20 +287,23 @@ export default async function ReportDetailPage({ params }: Props) {
         <div className="mt-6 mb-3">
           <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Key Market Players</h3>
         </div>
-        {report.keyMarketPlayers && /<[a-z][\s\S]*>/i.test(report.keyMarketPlayers) ? (
-           <div 
-             className="bg-slate-50 p-5 rounded-lg border border-slate-200 mb-4 text-base text-gray-700 leading-relaxed text-justify prose max-w-none"
-             dangerouslySetInnerHTML={{ __html: report.keyMarketPlayers }}
-           />
-        ) : (
-          playersSections.map((section, index) => {
+        
+        {/* Key Market Players - Always Render Sections Loop */}
+        {playersSections.map((section, index) => {
              return (
              <div key={index} className="bg-slate-50 p-5 rounded-lg border border-slate-200 mb-4">
                 {section.title && section.title !== 'Overview' && !section.title.toLowerCase().includes('key market players') && <h5 className="font-bold text-lg text-gray-900 mb-3">{section.title}</h5>}
-                <div className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">{section.content}</div>
+                {/<[a-z][\s\S]*>/i.test(section.content) ? (
+                    <div 
+                        className="text-base text-gray-700 leading-relaxed text-justify prose max-w-none"
+                        dangerouslySetInnerHTML={{ __html: section.content }}
+                    />
+                ) : (
+                    <div className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">{section.content}</div>
+                )}
              </div>
-          )})
-        )}
+          )
+        })}
 
       </div>
     </div>
