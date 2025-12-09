@@ -108,11 +108,11 @@ export default async function ReportsPage({ params, searchParams }: Props) {
                            <div className="text-[10px] text-gray-500 uppercase tracking-wider">{dict.singleUser}</div>
                            <div className="text-xs font-semibold text-gray-900">${report.singlePrice?.toLocaleString()}</div>
                         </div>
-                        <div className="bg-gray-50 p-2 rounded border border-gray-100 text-center hidden sm:block">
+                        <div className="bg-gray-50 p-2 rounded border border-gray-100 text-center">
                            <div className="text-[10px] text-gray-500 uppercase tracking-wider">{dict.multiUser}</div>
                            <div className="text-xs font-semibold text-gray-900">${report.multiPrice?.toLocaleString()}</div>
                         </div>
-                         <div className="bg-gray-50 p-2 rounded border border-gray-100 text-center hidden sm:block">
+                         <div className="bg-gray-50 p-2 rounded border border-gray-100 text-center">
                            <div className="text-[10px] text-gray-500 uppercase tracking-wider">{dict.corporate}</div>
                            <div className="text-xs font-semibold text-gray-900">${report.corporatePrice?.toLocaleString()}</div>
                         </div>

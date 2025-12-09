@@ -454,9 +454,12 @@ export default async function ReportDetailPage({ params }: Props) {
              />
           </div>
           
-          <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-lg p-4">
-             <div className="flex gap-2">
-                <button className="flex-1 bg-gradient-to-r from-orange-500 to-red-600 text-white py-3 px-4 rounded-lg font-bold shadow-lg">
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-4 pb-8 safe-area-pb">
+             <div className="flex gap-3">
+                <button className="flex-1 bg-white border-2 border-indigo-600 text-indigo-600 py-3 px-4 rounded-lg font-bold shadow-sm text-sm">
+                   Request Sample
+                </button>
+                <button className="flex-[2] bg-gradient-to-r from-orange-500 to-red-600 text-white py-3 px-4 rounded-lg font-bold shadow-lg text-sm">
                    {dict.buyNow} - ${report.singlePrice?.toLocaleString()}
                 </button>
              </div>

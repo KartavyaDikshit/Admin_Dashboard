@@ -59,11 +59,11 @@ export default function FeaturedReports({ reports, dict, lang }: FeaturedReports
                            <div className="text-[10px] text-gray-500 uppercase tracking-wider">{dict.singleUser || 'Single'}</div>
                            <div className="text-xs font-semibold text-gray-900">${report.singlePrice?.toLocaleString()}</div>
                         </div>
-                        <div className="bg-gray-50 p-2 rounded border border-gray-100 text-center hidden sm:block">
+                        <div className="bg-gray-50 p-2 rounded border border-gray-100 text-center">
                            <div className="text-[10px] text-gray-500 uppercase tracking-wider">{dict.multiUser || 'Multi'}</div>
                            <div className="text-xs font-semibold text-gray-900">${report.multiPrice?.toLocaleString()}</div>
                         </div>
-                         <div className="bg-gray-50 p-2 rounded border border-gray-100 text-center hidden sm:block">
+                         <div className="bg-gray-50 p-2 rounded border border-gray-100 text-center">
                            <div className="text-[10px] text-gray-500 uppercase tracking-wider">{dict.corporate || 'Corp'}</div>
                            <div className="text-xs font-semibold text-gray-900">${report.corporatePrice?.toLocaleString()}</div>
                         </div>
