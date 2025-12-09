@@ -53,8 +53,8 @@ export default function Footer({ lang }: { lang: string }) {
             <h4 className="text-white font-semibold mb-6 text-lg border-b border-gray-700 pb-2 inline-block">Support</h4>
             <ul className="space-y-3">
               <li><Link href={`/${lang}/contact`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.faqs}</Link></li>
-              <li><Link href="#" className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.privacyPolicy}</Link></li>
-              <li><Link href="#" className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.termsOfService}</Link></li>
+              <li><Link href={`/${lang}/privacy-policy`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.privacyPolicy}</Link></li>
+              <li><Link href={`/${lang}/terms-conditions`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.termsOfService}</Link></li>
             </ul>
           </div>
 

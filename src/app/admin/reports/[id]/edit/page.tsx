@@ -58,6 +58,8 @@ export default function EditReportPage() {
           setSelectedCategoryIds(new Set(data.categories.map(c => c.id)));
           if (data.imageUrl) {
             setImagePreview(data.imageUrl);
+          } else {
+            setImagePreview(null);
           }
         } else {
           toast.error('Failed to fetch report data.');

@@ -113,6 +113,24 @@ body {
   .hero-subtitle {
     @apply text-lg md:text-xl text-indigo-100 leading-relaxed max-w-3xl mx-auto;
   }
+
+  /* Prose for Rich Text */
+  .prose {
+    @apply text-gray-800 leading-relaxed;
+  }
+  .prose a {
+    @apply text-blue-600 underline hover:text-blue-800 transition-colors;
+  }
+  .prose h1 { @apply text-3xl font-bold mt-6 mb-4; }
+  .prose h2 { @apply text-2xl font-bold mt-5 mb-3; }
+  .prose h3 { @apply text-xl font-bold mt-4 mb-2; }
+  .prose h4 { @apply text-lg font-bold mt-3 mb-2; }
+  .prose h5 { @apply text-base font-bold mt-2 mb-1; }
+  .prose h6 { @apply text-sm font-bold mt-2 mb-1; }
+  .prose ul { @apply list-disc list-inside mb-4; }
+  .prose ol { @apply list-decimal list-inside mb-4; }
+  .prose p { @apply mb-4; }
+  .prose blockquote { @apply border-l-4 border-gray-300 pl-4 italic my-4; }
 }
 
 @layer utilities {

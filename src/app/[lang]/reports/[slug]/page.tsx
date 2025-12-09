@@ -162,7 +162,7 @@ export default async function ReportDetailPage({ params }: Props) {
       'Market Dynamics', 
       'A. Market Drivers', 'B. Market Restraints', 'C. Market Opportunities', 
       'Market Drivers', 'Market Restraints', 'Market Opportunities',
-      'Market Trends', 'Introduction', 'Conclusion',
+      'Market Trends', 'Conclusion',
       'Regional Insights'
   ];
   const dynamicsSections = parseContent(report.marketDynamics, dynamicsMarkers);
@@ -170,6 +170,10 @@ export default async function ReportDetailPage({ params }: Props) {
   // Markers for Key Market Players
   const playersMarkers = ['Key Market Players', 'Recent Strategic Developments', 'Company Profiles', 'Key Players'];
   const playersSections = parseContent(report.keyMarketPlayers, playersMarkers);
+  
+  // Extract Recent Strategic Developments from parsed sections if not in DB
+  const parsedRecentDev = playersSections.find(s => s.title === 'Recent Strategic Developments');
+  const recentStrategicDevelopmentsContent = report.recentStrategicDevelopments || (parsedRecentDev ? parsedRecentDev.content : null);
 
   const stats = extractMarketStats(report.marketResearchSummary || report.summary || report.description);
 
@@ -219,22 +223,39 @@ export default async function ReportDetailPage({ params }: Props) {
           </div>
         </div>
         
-        {report.recentStrategicDevelopments && (
+        {recentStrategicDevelopmentsContent && (
            <div>
-             <h5 className="font-bold text-lg text-gray-900 mb-3">Recent Development</h5>
+             <h5 className="font-bold text-lg text-gray-900 mb-3">Recent Strategic Developments</h5>
              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
                <div className="space-y-3">
-                 <p className="text-base text-gray-700 leading-relaxed text-justify">
-                   {Array.isArray(report.recentStrategicDevelopments) 
-                      ? report.recentStrategicDevelopments.map((d: any) => `${d.date}: ${d.event}`).join('\n\n')
-                      : typeof report.recentStrategicDevelopments === 'object' && report.recentStrategicDevelopments !== null
-                        ? JSON.stringify(report.recentStrategicDevelopments, null, 2) // Stringify objects
-                        : report.recentStrategicDevelopments as string // Assume it's a string or other primitive
-                   }
-                 </p>
+                 {typeof recentStrategicDevelopmentsContent === 'string' && /<[a-z][\s\S]*>/i.test(recentStrategicDevelopmentsContent) ? (
+                    <div 
+                        className="text-base text-gray-700 leading-relaxed text-justify prose max-w-none"
+                        dangerouslySetInnerHTML={{ __html: recentStrategicDevelopmentsContent }}
+                    />
+                 ) : (
+                    <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">
+                    {Array.isArray(recentStrategicDevelopmentsContent) 
+                        ? recentStrategicDevelopmentsContent.map((d: any) => `${d.date}: ${d.event}`).join('\n\n')
+                        : typeof recentStrategicDevelopmentsContent === 'object' && recentStrategicDevelopmentsContent !== null
+                            ? JSON.stringify(recentStrategicDevelopmentsContent, null, 2) 
+                            : recentStrategicDevelopmentsContent as string
+                    }
+                    </p>
+                 )}
                </div>
              </div>
            </div>
+        )}
+
+        {report.imageUrl && (
+            <div className="mb-8">
+              <img 
+                src={report.imageUrl} 
+                alt={report.title} 
+                className="w-full h-auto rounded-lg shadow-sm border border-gray-200"
+              />
+            </div>
         )}
 
         <div className="mt-6 mb-3">
@@ -293,6 +314,9 @@ export default async function ReportDetailPage({ params }: Props) {
         
         {/* Key Market Players - Always Render Sections Loop */}
         {playersSections.map((section, index) => {
+             // Skip Recent Strategic Developments if it's already displayed above
+             if (section.title === 'Recent Strategic Developments' && recentStrategicDevelopmentsContent) return null;
+
              return (
              <div key={index} className="bg-slate-50 p-5 rounded-lg border border-slate-200 mb-4">
                 {section.title && section.title !== 'Overview' && !section.title.toLowerCase().includes('key market players') && <h5 className="font-bold text-lg text-gray-900 mb-3">{section.title}</h5>}
@@ -369,9 +393,9 @@ export default async function ReportDetailPage({ params }: Props) {
                 </ol>
               </nav>
 
-              <h1 className="hero-title text-left">
+              <h1 className="hero-title text-left inline">
                 {report.title}
-                {report.titleDescription && <span className="hero-subtitle block text-left mt-4 font-normal">{report.titleDescription}</span>}
+                {report.titleDescription && <span className="hero-subtitle inline font-normal ml-2"> - {report.titleDescription}</span>}
               </h1>
             </div>
 

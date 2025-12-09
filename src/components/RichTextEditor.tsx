@@ -21,17 +21,22 @@ interface RichTextEditorProps {
 export default function RichTextEditor({ value, onChange, label, id, readOnly }: RichTextEditorProps) {
   const modules = useMemo(() => ({
     toolbar: readOnly ? false : [
-      ['bold', 'italic', 'underline'],
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
       [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
       [{ 'align': [] }],
+      ['link'],
       ['clean']
     ],
   }), [readOnly]);
 
   const formats = [
-    'bold', 'italic', 'underline',
-    'list',
-    'align'
+    'header',
+    'bold', 'italic', 'underline', 'strike',
+    'list', 'indent',
+    'align',
+    'link'
   ];
 
   return (

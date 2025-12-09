@@ -46,8 +46,8 @@ export default function Footer({ dict, lang }: FooterProps) {
         <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm">{dict.footerText}</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link href={`/${lang}/privacy`} className="text-gray-400 hover:text-white text-sm transition-colors">{dict.privacyPolicy}</Link>
-            <Link href={`/${lang}/terms`} className="text-gray-400 hover:text-white text-sm transition-colors">{dict.termsOfService}</Link>
+            <Link href={`/${lang}/privacy-policy`} className="text-gray-400 hover:text-white text-sm transition-colors">{dict.privacyPolicy}</Link>
+            <Link href={`/${lang}/terms-conditions`} className="text-gray-400 hover:text-white text-sm transition-colors">{dict.termsOfService}</Link>
             <Link href="/sitemap.xml" className="text-gray-400 hover:text-white text-sm transition-colors">Sitemap</Link>
           </div>
         </div>

@@ -1,0 +1,75 @@
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\node_modules__pnpm_7a5b0db8._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__a8fc221b._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_02759e05._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Upload error: Error: Vercel Blob: This blob already exists, use `allowOverwrite: true` if you want to overwrite it. Or `addRandomSuffix: true` to generate a unique filename. Read more about this error in our documentation: https://vercel.link/blob-allow-overwrite
+    at async POST (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__a8fc221b._.js:230:22)
+    at async responseGenerator (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_02759e05._.js:14333:38)
+    at async handleResponse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_02759e05._.js:14395:32)
+    at async handler (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_02759e05._.js:14448:13)
+ POST /api/upload 500 in 2.9s (compile: 621ms, render: 2.3s)
+
+
+1/1
+
+Next.js 16.0.8
+Turbopack
+Runtime Error
+
+Invalid src prop (https://rfopstfrkjr3svwx.public.blob.vercel-storage.com/kosher-food-market.jpg) on `next/image`, hostname "rfopstfrkjr3svwx.public.blob.vercel-storage.com" is not configured under images in your `next.config.js`
+See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host
+Call Stack
+19
+
+Hide 18 ignore-listed frame(s)
+defaultLoader
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/src/shared/lib/image-loader.ts (86:17)
+<unknown>
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/src/shared/lib/get-img-props.ts (244:14)
+Array.map
+<anonymous>
+generateImgAttrs
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/src/shared/lib/get-img-props.ts (242:8)
+getImgProps
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/src/shared/lib/get-img-props.ts (721:25)
+<unknown>
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/src/client/image-component.tsx (402:64)
+Object.react_stack_bottom_frame
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (28016:20)
+renderWithHooks
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (7982:22)
+updateForwardRef
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (10057:19)
+beginWork
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (12473:18)
+runWithFiberInDEV
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (984:30)
+performUnitOfWork
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (18995:22)
+workLoopSync
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (18823:41)
+renderRootSync
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (18804:11)
+performWorkOnRoot
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (17912:35)
+performWorkOnRootViaSchedulerTask
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js (20382:7)
+MessagePort.performWorkUntilDeadline
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/dist/compiled/scheduler/cjs/scheduler.development.js (45:48)
+EditReportPage
+file:///C:/Users/User/Admin_Dashboard/tbi-admin-dashboard/.next/dev/static/chunks/src_ad23e9d9._.js (1429:358)
+ClientPageRoot
+node_modules/.pnpm/next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda/node_modules/next/src/client/components/client-page.tsx (83:12)
+1
+2
+Was this helpful?
+
+
+
+Application error: a client-side exception has occurred while loading localhost (see the browser console for more information).
