@@ -28,11 +28,15 @@ export default function FeaturedCategories({ categories, dict, lang }: FeaturedC
                 className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer group"
               >
                 <div className="mb-3 text-indigo-600">
-                  <svg className="w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="32" cy="32" r="24" stroke="currentColor" strokeWidth="2.5" fill="none"></circle>
-                    <rect x="28" y="18" width="8" height="28" rx="1" fill="currentColor"></rect>
-                    <rect x="18" y="28" width="28" height="8" rx="1" fill="currentColor"></rect>
-                  </svg>
+                  {category.icon && (category.icon.startsWith('http') || category.icon.startsWith('/')) ? (
+                    <img src={category.icon} alt={category.name} className="w-12 h-12 object-contain" />
+                  ) : (
+                    <svg className="w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="32" cy="32" r="24" stroke="currentColor" strokeWidth="2.5" fill="none"></circle>
+                      <rect x="28" y="18" width="8" height="28" rx="1" fill="currentColor"></rect>
+                      <rect x="18" y="28" width="28" height="8" rx="1" fill="currentColor"></rect>
+                    </svg>
+                  )}
                 </div>
                 <h3 className="font-semibold mb-2 group-hover:text-indigo-600 transition-colors">{category.name}</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">{category.description || 'Market analysis and insights.'}</p>

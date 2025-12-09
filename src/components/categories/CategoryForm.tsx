@@ -341,7 +341,11 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
                 <label htmlFor="icon" className="block text-sm font-medium text-gray-700">Icon</label>
                 {imagePreview && (
                     <div className="mt-4 relative w-32 h-32 border rounded-md overflow-hidden">
-                        <Image src={imagePreview} alt="Icon Preview" layout="fill" objectFit="cover" />
+                        <img 
+                            src={imagePreview} 
+                            alt="Icon Preview" 
+                            className="w-full h-full object-cover" 
+                        />
                     </div>
                 )}
                 {!isTranslationView && (

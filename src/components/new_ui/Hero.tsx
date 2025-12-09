@@ -20,7 +20,7 @@ export default function Hero({ dict, lang }: HeroProps) {
   }
 
   return (
-    <section className="hero-section min-h-[375px] h-auto flex items-center">
+    <section className="hero-section min-h-[100px] h-auto flex items-center">
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/90 via-indigo-700/95 to-purple-800/90"></div>
         <div className="hero-overlay-pattern"></div>
@@ -30,7 +30,7 @@ export default function Hero({ dict, lang }: HeroProps) {
         <div className="absolute bottom-32 right-1/3 w-24 h-24 bg-white/5 rounded-lg rotate-12 blur-xl"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/20 via-transparent to-transparent"></div>
       </div>
-      <div className="hero-container pt-20 pb-12">
+      <div className="hero-container pt-05 pb-6">
         <div className="text-center max-w-4xl mx-auto w-full">
           <h1 className="hero-title">{dict.heroTitle}</h1>
           <p className="hero-subtitle mb-6">{dict.heroSubtitle}</p>

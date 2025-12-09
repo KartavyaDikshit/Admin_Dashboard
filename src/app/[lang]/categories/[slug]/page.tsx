@@ -60,11 +60,15 @@ export default async function CategoryDetailPage({ params }: Props) {
           <div className="flex items-start space-x-6 flex-1 pb-6">
             <div className="flex-shrink-0">
               <div className="h-24 w-24 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center text-white">
-                <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="32" cy="32" r="24" stroke="currentColor" strokeWidth="2.5" fill="none"></circle>
-                  <rect x="28" y="18" width="8" height="28" rx="1" fill="currentColor"></rect>
-                  <rect x="18" y="28" width="28" height="8" rx="1" fill="currentColor"></rect>
-                </svg>
+                {category.icon && (category.icon.startsWith('http') || category.icon.startsWith('/')) ? (
+                  <img src={category.icon} alt={category.name} className="w-16 h-16 object-contain" />
+                ) : (
+                  <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="32" cy="32" r="24" stroke="currentColor" strokeWidth="2.5" fill="none"></circle>
+                    <rect x="28" y="18" width="8" height="28" rx="1" fill="currentColor"></rect>
+                    <rect x="18" y="28" width="28" height="8" rx="1" fill="currentColor"></rect>
+                  </svg>
+                )}
               </div>
             </div>
             <div className="flex-1">
