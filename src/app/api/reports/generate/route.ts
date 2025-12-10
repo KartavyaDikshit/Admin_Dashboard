@@ -29,20 +29,36 @@ async function generateSection(
   prompt: string,
   sectionTitle: string
 ): Promise<{ content: string; usage: OpenAI.CompletionUsage }> {
-  const fullPrompt = `Report Title: ${reportTitle}\n\n${prompt}`;
+  // Inject formatting and length instructions to override any restrictive DB prompts
+  const enhancedPrompt = `
+Report Title: ${reportTitle}
+
+${prompt}
+
+IMPORTANT INSTRUCTIONS:
+1. Ignore any constraints about word count (e.g., "under 300 words"). Write a detailed, comprehensive section.
+2. Format the output using HTML tags for structure and readability:
+   - Use <h3> for main headings.
+   - Use <h4> for sub-headings.
+   - Use <p> for paragraphs.
+   - Use <ul> and <li> for lists.
+   - Use <strong> for emphasis.
+   - Do NOT use Markdown (e.g., **, ##). Output raw HTML.
+3. Ensure the tone is professional and suitable for C-level executives.
+`;
 
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4o',
       messages: [
         {
           role: 'system',
-          content: `You are an expert market research analyst. Generate the "${sectionTitle}" section for a report titled "${reportTitle}".`,
+          content: `You are an expert market research analyst. Generate the "${sectionTitle}" section for a report titled "${reportTitle}". You must output valid HTML content (without <html> or <body> tags, just the inner content).`,
         },
-        { role: 'user', content: fullPrompt },
+        { role: 'user', content: enhancedPrompt },
       ],
-      temperature: 0.5,
-      max_tokens: 1024,
+      temperature: 0.7, // Slightly higher for more creative/longer output
+      max_tokens: 4096, // Increased from 1024
     });
 
     const content = response.choices[0]?.message?.content?.trim() ?? '';

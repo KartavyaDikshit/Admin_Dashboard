@@ -427,9 +427,13 @@ export default async function ReportDetailPage({ params }: Props) {
                 </ol>
               </nav>
 
-              <h1 className="hero-title text-left inline">
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white tracking-tight leading-tight text-left mb-0">
                 {report.title}
-                {report.titleDescription && <span className="hero-subtitle inline font-normal ml-2"> - {report.titleDescription}</span>}
+                {report.titleDescription && (
+                  <span className="font-normal text-indigo-200 inline leading-tight">
+                    : {report.titleDescription}
+                  </span>
+                )}
               </h1>
             </div>
 

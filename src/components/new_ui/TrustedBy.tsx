@@ -32,11 +32,11 @@ export default function TrustedBy({ dict }: TrustedByProps) {
           <div className="absolute left-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
           <div className="absolute right-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
 
-          <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused]">
+          <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused]" style={{ willChange: 'transform' }}>
             {/* First Copy */}
             <div className="flex items-center gap-12 px-6">
               {CLIENT_LOGOS.map((logo, index) => (
-                <div key={`logo-1-${index}`} className="relative w-32 h-16 flex items-center justify-center transition-all duration-300 hover:scale-110">
+                <div key={`logo-1-${index}`} className="relative w-32 h-16 flex items-center justify-center transition-all duration-300 hover:scale-110 transform-gpu">
                   <Image
                     src={`/images/clients/${logo}`}
                     alt={logo.replace('.jpg', '').replace(/-/g, ' ')}
@@ -51,7 +51,22 @@ export default function TrustedBy({ dict }: TrustedByProps) {
             {/* Second Copy for Infinite Loop */}
             <div className="flex items-center gap-12 px-6">
               {CLIENT_LOGOS.map((logo, index) => (
-                <div key={`logo-2-${index}`} className="relative w-32 h-16 flex items-center justify-center transition-all duration-300 hover:scale-110">
+                <div key={`logo-2-${index}`} className="relative w-32 h-16 flex items-center justify-center transition-all duration-300 hover:scale-110 transform-gpu">
+                  <Image
+                    src={`/images/clients/${logo}`}
+                    alt={logo.replace('.jpg', '').replace(/-/g, ' ')}
+                    fill
+                    className="object-contain"
+                    sizes="128px"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Third Copy for Wide Screens/Safety */}
+            <div className="flex items-center gap-12 px-6">
+              {CLIENT_LOGOS.map((logo, index) => (
+                <div key={`logo-3-${index}`} className="relative w-32 h-16 flex items-center justify-center transition-all duration-300 hover:scale-110 transform-gpu">
                   <Image
                     src={`/images/clients/${logo}`}
                     alt={logo.replace('.jpg', '').replace(/-/g, ' ')}

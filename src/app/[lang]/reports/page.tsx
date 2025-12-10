@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { getPaginatedReports, getCategories } from '@/lib/data';
 import { getDictionary } from '@/i18n/dictionaries';
-import Pagination from '@/components/ui/Pagination'; // Preserving pagination logic
-// We need to implement the exact filter UI from MHTML
+import Pagination from '@/components/ui/Pagination';
+import ReportFilter from '@/components/reports/ReportFilter';
 
 type Props = {
   params: Promise<{ lang: string }>;
@@ -43,28 +43,9 @@ export default async function ReportsPage({ params, searchParams }: Props) {
       </section>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-indigo-600/10 backdrop-blur-sm rounded-2xl p-6 border border-indigo-200/30 shadow-lg">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="relative flex-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-search absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" aria-hidden="true">
-                <path d="m21 21-4.34-4.34"></path>
-                <circle cx="11" cy="11" r="8"></circle>
-              </svg>
-              <input 
-                type="search" 
-                className="flex w-full rounded-md border px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pl-10 h-10 bg-white border-gray-300" 
-                placeholder={dict.searchPlaceholder} 
-                defaultValue={search}
-              />
-            </div>
-            <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border text-foreground hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 h-10 bg-white border-gray-300 min-w-[140px]" type="button" aria-haspopup="menu" aria-expanded="false" data-state="closed">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-funnel h-4 w-4 mr-2" aria-hidden="true">
-                <path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"></path>
-              </svg>
-              {dict.filterByCategory}
-            </button>
-          </div>
+        <ReportFilter categories={categories} dict={dict} />
 
+        <div className="mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {reports.map((report) => (
               <Link key={report.id} className="block h-full group" href={`/${lang}/reports/${report.slug}`}>

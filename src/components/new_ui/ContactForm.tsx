@@ -13,10 +13,30 @@ export default function ContactForm() {
     designation: '',
     description: ''
   });
+  const [countryCode, setCountryCode] = useState('+00');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const COUNTRY_CODES: Record<string, string> = {
+    'US': '+1',
+    'UK': '+44',
+    'CA': '+1',
+    'AU': '+61',
+    'DE': '+49',
+    'FR': '+33',
+    'IN': '+91',
+    'JP': '+81',
+    'CN': '+86',
+    // Add more as needed or use a library
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
+    
+    if (id === 'country') {
+        const code = COUNTRY_CODES[value] || '+00';
+        setCountryCode(code);
+    }
+
     setFormData(prev => ({ ...prev, [id]: value }));
   };
 
@@ -26,10 +46,19 @@ export default function ContactForm() {
     toast.loading('Submitting your request...');
 
     try {
+      // Combine code and phone for submission if needed, or send as is.
+      // Assuming API expects full phone in 'phone' field or separate.
+      // Here we append code to phone if not already there, or just send data.
+      // Let's prepend code to phone for the API submission
+      const payload = {
+          ...formData,
+          phone: `${countryCode} ${formData.phone}`
+      };
+
       const response = await fetch('/api/requests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       toast.dismiss();
@@ -44,6 +73,7 @@ export default function ContactForm() {
           designation: '',
           description: ''
         });
+        setCountryCode('+00');
       } else {
         const data = await response.json();
         toast.error(data.message || 'Failed to submit request.');
@@ -112,7 +142,7 @@ export default function ContactForm() {
                 type="text" 
                 className="flex h-9 rounded-md border border-input px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 bg-gray-100 w-20 text-center font-semibold" 
                 disabled 
-                placeholder="+00" 
+                value={countryCode}
             />
             <input 
                 type="tel" 

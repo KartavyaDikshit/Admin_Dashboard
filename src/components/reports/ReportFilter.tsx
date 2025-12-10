@@ -36,8 +36,6 @@ export default function ReportFilter({ categories, dict }: Props) {
 
   // URL update effect
   useEffect(() => {
-    // Only update if the value has actually changed from the URL (to avoid initial redundant push)
-    // But here we want to react to the debounced value changing
     const params = new URLSearchParams(window.location.search);
     const currentSearch = params.get('search') || '';
     
@@ -72,55 +70,44 @@ export default function ReportFilter({ categories, dict }: Props) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-10">
-      <div className="flex flex-col md:flex-row gap-4">
+    <div className="bg-indigo-600/10 backdrop-blur-sm rounded-2xl p-6 border border-indigo-200/30 shadow-lg mb-8">
+      <div className="flex items-center gap-3">
         {/* Search Input */}
-        <div className="flex-1 relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-          <input
-            type="text"
-            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
-            placeholder={dict.searchPlaceholder}
+        <div className="relative flex-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-search absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" aria-hidden="true">
+            <path d="m21 21-4.34-4.34"></path>
+            <circle cx="11" cy="11" r="8"></circle>
+          </svg>
+          <input 
+            type="search" 
+            className="flex w-full rounded-md border px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pl-10 h-10 bg-white border-gray-300" 
+            placeholder={dict.searchPlaceholder} 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
-        {/* Category Dropdown */}
-        <div className="w-full md:w-64 relative">
-           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-              </svg>
-           </div>
+        {/* Category Dropdown (styled as button) */}
+        <div className="relative">
           <select
-            className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg leading-5 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none transition-shadow"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border text-foreground hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[>svg]:px-3 h-10 bg-white border-gray-300 min-w-[140px] appearance-none"
             value={category}
             onChange={(e) => handleCategoryChange(e.target.value)}
           >
-            <option value="">{dict.allCategories}</option>
+            <option value="">{dict.filterByCategory}</option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.name}
               </option>
             ))}
           </select>
-          <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-            <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-funnel h-4 w-4 mr-2" aria-hidden="true">
+              <path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"></path>
             </svg>
           </div>
         </div>
       </div>
-      {isPending && (
-         <div className="absolute top-full left-0 w-full h-1 bg-indigo-100 overflow-hidden rounded-b-xl">
-            <div className="h-full bg-indigo-500 animate-progress"></div>
-         </div>
-      )}
     </div>
   );
 }

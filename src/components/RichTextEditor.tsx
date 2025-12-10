@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import 'react-quill-new/dist/quill.snow.css';
 
 // Dynamic import to avoid SSR issues as ReactQuill accesses the DOM
@@ -19,6 +19,8 @@ interface RichTextEditorProps {
 }
 
 export default function RichTextEditor({ value, onChange, label, id, readOnly }: RichTextEditorProps) {
+  const [isSourceMode, setIsSourceMode] = useState(false);
+
   const modules = useMemo(() => ({
     toolbar: readOnly ? false : [
       [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -39,20 +41,45 @@ export default function RichTextEditor({ value, onChange, label, id, readOnly }:
     'link'
   ];
 
+  const toggleSourceMode = () => {
+    setIsSourceMode(!isSourceMode);
+  };
+
   return (
     <div className="rich-text-editor mb-6">
-      {label && <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">{label}</label>}
+      <div className="flex justify-between items-center mb-1">
+        {label && <label htmlFor={id} className="block text-sm font-medium text-gray-700">{label}</label>}
+        {!readOnly && (
+          <button
+            type="button"
+            onClick={toggleSourceMode}
+            className="text-xs text-indigo-600 hover:text-indigo-800 font-medium underline"
+          >
+            {isSourceMode ? 'Switch to Editor' : 'View Source'}
+          </button>
+        )}
+      </div>
       <div className={`bg-white border rounded-md overflow-hidden ${readOnly ? 'bg-gray-50' : ''}`}>
-        <ReactQuill
-          id={id}
-          theme="snow"
-          value={value || ''}
-          onChange={onChange}
-          modules={modules}
-          formats={formats}
-          readOnly={readOnly}
-          className={`h-64 ${readOnly ? '' : 'mb-12'}`} // Height for the editor content
-        />
+        {isSourceMode ? (
+          <textarea
+            id={id}
+            value={value || ''}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-full h-64 p-4 font-mono text-sm resize-y focus:outline-none"
+            placeholder="Enter HTML here..."
+          />
+        ) : (
+          <ReactQuill
+            id={id}
+            theme="snow"
+            value={value || ''}
+            onChange={onChange}
+            modules={modules}
+            formats={formats}
+            readOnly={readOnly}
+            className={`h-64 ${readOnly ? '' : 'mb-12'}`} // Height for the editor content
+          />
+        )}
       </div>
     </div>
   );
