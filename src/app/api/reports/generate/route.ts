@@ -36,15 +36,17 @@ Report Title: ${reportTitle}
 ${prompt}
 
 IMPORTANT INSTRUCTIONS:
-1. Ignore any constraints about word count (e.g., "under 300 words"). Write a detailed, comprehensive section.
-2. Format the output using HTML tags for structure and readability:
+1. Ignore any constraints about word count (e.g., "under 300 words"). Write a detailed, comprehensive, and extensive section.
+2. EXPAND on every point. Provide deep analysis, specific examples, and theoretical backing for every claim.
+3. Aim for a very long, in-depth response. Do not summarize or be concise. Be verbose.
+4. Format the output using HTML tags for structure and readability:
    - Use <h3> for main headings.
    - Use <h4> for sub-headings.
    - Use <p> for paragraphs.
    - Use <ul> and <li> for lists.
    - Use <strong> for emphasis.
    - Do NOT use Markdown (e.g., **, ##). Output raw HTML.
-3. Ensure the tone is professional and suitable for C-level executives.
+5. Ensure the tone is professional and suitable for C-level executives.
 `;
 
   try {
@@ -82,7 +84,7 @@ IMPORTANT INSTRUCTIONS:
         totalCost: totalCost,
         success: true,
         responseTime: 0, // You could calculate this
-        requestData: fullPrompt,
+        requestData: enhancedPrompt,
         responseData: JSON.stringify(response),
       },
     });
@@ -109,7 +111,7 @@ IMPORTANT INSTRUCTIONS:
           success: false,
           errorMessage: error instanceof Error ? error.message : 'Unknown error',
           responseTime: 0,
-          requestData: fullPrompt,
+          requestData: enhancedPrompt,
           responseData: JSON.stringify(error instanceof Error ? { message: error.message, stack: error.stack } : { message: 'Unknown error' }),
         },
       });

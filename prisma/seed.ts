@@ -347,6 +347,73 @@ SEO and Professional Guidelines:
 •	Validate company names and developments against real news or press releases.
 •	Never cite or fabricate market research firm names or unverifiable sources.`;
 
+  const promptGenerateTocContent = `Generate a comprehensive and logical Table of Contents (TOC) for a full market research report on the {title}.
+
+Include major sections and relevant sub-sections (e.g., Executive Summary, Market Dynamics, Regional Analysis, Competitive Landscape, Methodology, etc.).
+Ensure the TOC is well-structured and reflects a professional report.
+Do not include page numbers or placeholder text like "Chapter 1".
+Format the TOC clearly, using indentation for sub-sections.`;
+
+  const promptSummarizeContent = `Summarize the following text concisely, retaining all key information and data points. The summary should be suitable for providing context to a large language model for generating subsequent sections of a market research report.
+
+Text to summarize:
+{text_to_summarize}`;
+
+  const promptTranslateContent = `You are an expert multilingual translator specializing in market research reports. Your task is to translate the following report, which is provided in multiple parts, into the 7 target languages listed below.
+
+**Target Languages:**
+1. Spanish
+2. French
+3. German
+4. Italian
+5. Portuguese
+6. Dutch
+7. Japanese
+
+**Report to Translate:**
+
+**Part 1: Market Research Summary**
+{market_research_summary}
+
+**Part 2: Market Dynamics**
+{market_dynamics}
+
+**Part 3: Regional Insights and Market Segmentation**
+{regional_insights_and_market_segmentation}
+
+**Part 4: Key Market Players and Strategic Developments**
+{key_market_players_and_strategic_developments}
+
+**Instructions for Translation:**
+
+1.  **Translate Each Part:** Translate each of the four parts of the report into all 7 target languages.
+2.  **Maintain Context and Tone:** Preserve the professional and analytical tone of the original report. Ensure that the translation is accurate and culturally appropriate for each target language.
+3.  **Handle Placeholders:** The report may contain placeholders like "{title}". Do not translate these placeholders.
+4.  **Token Optimization:** To optimize for token usage, I will provide the content for each part of the report in a single block.
+5.  **JSON Output:** For each language, provide the translation in a single JSON object with the following structure:
+
+\`\`\`json
+{
+  "language": "<language_name>",
+  "market_research_summary": "<translated_summary>",
+  "market_dynamics": "<translated_dynamics>",
+  "regional_insights_and_market_segmentation": "<translated_segmentation>",
+  "key_market_players_and_strategic_developments": "<translated_developments>"
+}
+\`\`\`
+
+**Example for Spanish:**
+
+\`\`\`json
+{
+  "language": "Spanish",
+  "market_research_summary": "El resumen de la investigación de mercado...",
+  "market_dynamics": "La dinámica del mercado...",
+  "regional_insights_and_market_segmentation": "Las perspectivas regionales y la segmentación del mercado...",
+  "key_market_players_and_strategic_developments": "Los principales actores del mercado y los desarrollos estratégicos..."
+}
+\`\`\``;
+
   await prisma.aiPromptTemplate.upsert({
     where: { name: 'prompt1' },
     update: { templateText: prompt1Content },
@@ -390,6 +457,42 @@ SEO and Professional Guidelines:
       name: 'prompt4',
       promptType: 'content_generation',
       templateText: prompt4Content,
+      version: 1,
+      createdBy: admin.id,
+    },
+  });
+
+  await prisma.aiPromptTemplate.upsert({
+    where: { name: 'prompt_generate_toc' },
+    update: { templateText: promptGenerateTocContent },
+    create: {
+      name: 'prompt_generate_toc',
+      promptType: 'content_generation',
+      templateText: promptGenerateTocContent,
+      version: 1,
+      createdBy: admin.id,
+    },
+  });
+
+  await prisma.aiPromptTemplate.upsert({
+    where: { name: 'prompt_summarize' },
+    update: { templateText: promptSummarizeContent },
+    create: {
+      name: 'prompt_summarize',
+      promptType: 'summarization',
+      templateText: promptSummarizeContent,
+      version: 1,
+      createdBy: admin.id,
+    },
+  });
+
+  await prisma.aiPromptTemplate.upsert({
+    where: { name: 'prompt_translate' },
+    update: { templateText: promptTranslateContent },
+    create: {
+      name: 'prompt_translate',
+      promptType: 'translation',
+      templateText: promptTranslateContent,
       version: 1,
       createdBy: admin.id,
     },
