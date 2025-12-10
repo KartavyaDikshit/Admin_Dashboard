@@ -56,6 +56,21 @@ const mapReport = (report: ReportWithRelations) => {
     regionalInsights: translation?.regionalInsights || report.regionalInsights,
     keyMarketPlayers: translation?.keyMarketPlayers || report.keyMarketPlayers,
     
+    // SEO Fields Mapping
+    metaTitle: translation?.metaTitle || report.metaTitle,
+    metaDescription: translation?.metaDescription || report.metaDescription,
+    canonicalUrl: translation?.canonicalUrl || report.canonicalUrl,
+    ogTitle: translation?.ogTitle || report.ogTitle,
+    ogDescription: translation?.ogDescription || report.ogDescription,
+    ogImage: translation?.ogImage || report.ogImage,
+    twitterTitle: translation?.twitterTitle || report.twitterTitle,
+    twitterDescription: translation?.twitterDescription || report.twitterDescription,
+    keywords: (translation?.keywords?.length ?? 0) > 0 ? translation!.keywords : report.keywords,
+    semanticKeywords: (translation?.semanticKeywords?.length ?? 0) > 0 ? translation!.semanticKeywords : report.semanticKeywords,
+    schemaMarkup: translation?.schemaMarkup || report.schemaMarkup,
+    breadcrumbData: translation?.breadcrumbData || report.breadcrumbData,
+    faqData: translation?.faqData || report.faqData,
+
     // Decimal fields
     singlePrice: serializeDecimal(report.singlePrice),
     multiPrice: serializeDecimal(report.multiPrice),

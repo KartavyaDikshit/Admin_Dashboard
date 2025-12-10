@@ -23,15 +23,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const canonicalUrl = report.canonicalUrl || `${siteUrl}/${lang}/reports/${slug}`;
+
   return {
-    title: report.title,
-    description: report.summary || report.description,
+    title: report.metaTitle || report.title,
+    description: report.metaDescription || report.summary || report.description,
+    keywords: report.keywords || [],
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
-      title: report.title,
-      description: report.summary || report.description,
+      title: report.ogTitle || report.metaTitle || report.title,
+      description: report.ogDescription || report.metaDescription || report.summary || report.description,
       type: 'article',
+      url: canonicalUrl,
       publishedTime: report.publishedDate.toISOString(),
-      images: report.imageUrl ? [report.imageUrl] : [],
+      images: report.ogImage ? [report.ogImage] : (report.imageUrl ? [report.imageUrl] : []),
+      siteName: 'The Brainy Insights',
+      locale: lang,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: report.twitterTitle || report.ogTitle || report.metaTitle || report.title,
+      description: report.twitterDescription || report.ogDescription || report.metaDescription || report.summary || report.description,
+      images: report.ogImage ? [report.ogImage] : (report.imageUrl ? [report.imageUrl] : []),
     },
   };
 }
@@ -369,6 +385,24 @@ export default async function ReportDetailPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {report.schemaMarkup && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(report.schemaMarkup) }}
+        />
+      )}
+      {report.breadcrumbData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(report.breadcrumbData) }}
+        />
+      )}
+      {report.faqData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(report.faqData) }}
+        />
+      )}
       <header className="hero-section">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/90 via-indigo-700/95 to-purple-800/90"></div>
