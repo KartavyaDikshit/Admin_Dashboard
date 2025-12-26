@@ -58,6 +58,18 @@ export function generateSKU(title: string, id?: string): string {
   return `${prefix}-${titlePart}-${year}-${randomPart}`
 }
 
+export function getMarketYears() {
+  const currentYear = new Date().getFullYear();
+  const forecastStartYear = currentYear;
+  const forecastEndYear = currentYear + 9; // 10-year period including the start year
+  return {
+    currentYear,
+    forecastStartYear,
+    forecastEndYear,
+    forecastPeriod: `${forecastStartYear}-${forecastEndYear}`
+  };
+}
+
 export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text
   return text.substring(0, maxLength) + '...'

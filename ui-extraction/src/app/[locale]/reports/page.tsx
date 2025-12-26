@@ -167,7 +167,7 @@ export default async function ReportsPage({ params }: ReportsPageProps) {
       title: "Electric Vehicle Market: Global Trends & Forecast 2025-2030",
       description: "In-depth analysis of electric vehicle market including battery technology, charging infrastructure, government incentives, and market penetration by region.",
       category: "Automotive",
-      coverImage: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVjdHJpYyUyMHZlaGljbGUlMjBjaGFyZ2luZ3xlbnwxfHx8fDE3NTc0Nzk5NjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      coverImage: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlGVjdHJpYyUyMHZlaGljbGUlMjBjaGFyZ2luZ3xlbnwxfHx8fDE3NTc0Nzk5NjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
       publishDate: "Jun 2024",
       pages: 340,
       rating: 4.8,

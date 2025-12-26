@@ -429,12 +429,12 @@ export default async function ReportDetailPage({ params }: Props) {
 
               <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white tracking-tight leading-tight text-left mb-0">
                 {report.title}
-                {report.titleDescription && (
-                  <span className="font-normal text-indigo-200 inline leading-tight">
-                    : {report.titleDescription}
-                  </span>
-                )}
               </h1>
+              {report.titleDescription && (
+                <p className="text-lg md:text-xl lg:text-2xl font-normal text-indigo-200 mt-2 leading-tight">
+                  {report.titleDescription.startsWith(':') ? report.titleDescription.substring(1).trim() : report.titleDescription}
+                </p>
+              )}
             </div>
 
             <div className="w-full lg:w-80 flex-shrink-0">
@@ -449,7 +449,7 @@ export default async function ReportDetailPage({ params }: Props) {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground flex items-center"><ClockIcon className="h-4 w-4 mr-2" />Published</span>
-                    <span className="font-medium text-gray-900">{new Date(report.publishedDate).toLocaleDateString(lang, { month: 'short', year: 'numeric' })}</span>
+                    <span className="font-medium text-gray-900" suppressHydrationWarning>{new Date(report.publishedDate).toLocaleDateString(lang, { month: 'short', year: 'numeric' })}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground flex items-center"><GlobeAltIcon className="h-4 w-4 mr-2" />Coverage</span>

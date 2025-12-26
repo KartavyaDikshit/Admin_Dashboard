@@ -78,9 +78,9 @@ describe('POST /api/reports/generate Prompt Check', () => {
     const messages = firstCallArgs.messages;
     const userMessage = messages.find((m: any) => m.role === 'user');
     
-    expect(userMessage.content).toContain('Ignore any constraints about word count');
-    expect(userMessage.content).toContain('Write a detailed, comprehensive, and extensive section.');
-    expect(userMessage.content).toContain('EXPAND on every point.');
-    expect(userMessage.content).toContain('Be verbose.');
+    expect(userMessage.content).toContain('**IGNORE** any constraints about word count');
+    expect(userMessage.content).toContain('write a **detailed, comprehensive, and extensive** section');
+    expect(userMessage.content).toContain('**EXPAND** on every point.');
+    expect(userMessage.content).toContain('**DATA SIMULATION**');
   });
 });

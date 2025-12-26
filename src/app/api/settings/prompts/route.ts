@@ -29,7 +29,7 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json();
     const { id, templateText } = body;
 
-    if (!id || !templateText) {
+    if (!id || templateText === undefined) {
          return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
     

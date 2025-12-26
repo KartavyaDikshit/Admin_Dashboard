@@ -1,0 +1,71 @@
+http://localhost:3000/admin/settings has 4 part prompt which the open ai api needs to take to generate 4 part report in ai content generation, right now the pipeline is not taking in the prompt from this admin panel fix that so that the admin can tinker with prompts and change it and the report generation will take in the new prompts for report generation the prompts can be found in /prompts folder read them for reference and also go through the schema for better understanding  as i Removed entire prompt 3 from the dashboard and tried generating a report. And the AI still generated the prompt 3 regional insights section.. 
+
+on the individual reports page the title and the title description should be in different line next line for description same formatting the title description should be one or two font sizes smaller 
+
+and this error:
+## Error Type
+Recoverable Error
+
+## Error Message
+Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <InnerLayoutRouter url="/en/report..." tree={[...]} params={{lang:"en", ...}} cacheNode={{lazyData:null, ...}} ...>
+      <SegmentViewNode type="page" pagePath="[lang]/rep...">
+        <SegmentTrieNode>
+        <ReportDetailPage>
+          <div className="min-h-scre...">
+            <script>
+            <script>
+            <script>
+            <header>
+            <div className="max-w-7xl ...">
+              <div className="flex flex-...">
+                <div>
+                <div className="hidden lg:...">
+                  <ReportSidebar prices={{...}} labels={{home:"Home", ...}}>
+                    <div className="w-80 stick...">
+                      <div className="bg-card te...">
+                        <div>
+                        <div className={"px-3 [&:..."}>
+                          <div className="grid gap-2...">
+                            <div className="flex items..." onClick={function onClick}>
+                              <div>
+                              <div className="flex-1 fle...">
++                               <span className="font-medium text-sm text-gray-900">
+-                               <strong>
+                                ...
+                            ...
+                          ...
+                      ...
+                ...
+      ...
+
+
+
+    at span (<anonymous>:null:null)
+    at ReportSidebar (file://C:/Users/User/Admin_Dashboard/tbi-admin-dashboard/.next/dev/static/chunks/_3249dceb._.js:109:356)
+    at ReportDetailPage (c:/Users/User/Admin_Dashboard/tbi-admin-dashboard/src/app/[lang]/reports/[slug]/page.tsx:484:14)
+
+## Code Frame
+  482 |           
+  483 |           <div className="hidden lg:block lg:w-80 flex-shrink-0">
+> 484 |              <ReportSidebar 
+      |              ^
+  485 |                 prices={{
+  486 |                    singleUser: report.singlePrice ? Number(report.singlePrice) : null,
+  487 |                    multiUser: report.multiPrice ? Number(report.multiPrice) : null,
+
+Next.js version: 16.0.8 (Turbopack)
+
+understand the user logic and requirement and intent and develop and end to end solution for the code base

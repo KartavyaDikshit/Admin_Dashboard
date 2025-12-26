@@ -1,0 +1,151 @@
+ ✓ Starting...
+   Using external babel configuration from C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\babel.config.js
+ ○ Compiling middleware ...
+ ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+ ✓ Ready in 5.6s
+ ○ Compiling /admin/login ...
+ ⨯ ./src/i18n/dictionaries.ts
+Error evaluating Node.js code
+SyntaxError: C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\src\i18n\dictionaries.ts: Unexpected token, expected "," (58:79)
+
+  56 |     tabSummary: 'Summary',
+  57 |     tabToc: 'Table of Contents',
+> 58 |     footerText: `© ${new Date().getFullYear()} TBI. All rights reserved.`, All rights reserved.',
+     |                                                                                ^
+  59 |     footerDesc: 'We provide top-notch market research reports and consulting services to help you make smarter business decisions. Stay ahead of the curve with our tailored insights.',
+  60 |     privacyPolicy: 'Privacy Policy',
+  61 |     termsOfService: 'Terms & Conditions',
+    [at constructor (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:137105)]
+    [at TypeScriptParserMixin.raise (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:194164)]
+    [at TypeScriptParserMixin.unexpected (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:194550)]
+    [at TypeScriptParserMixin.expect (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:199660)]
+    [at TypeScriptParserMixin.parseObjectLike (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:372365)]
+    [at TypeScriptParserMixin.parseExprAtom (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:361743)]
+    [at TypeScriptParserMixin.parseExprSubscripts (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:356364)]
+    [at TypeScriptParserMixin.parseUpdate (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:355963)]
+    [at TypeScriptParserMixin.parseMaybeUnary (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:355527)]
+    [at TypeScriptParserMixin.parseMaybeUnary (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:331837)]
+    [at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:352169)]
+    [at TypeScriptParserMixin.parseExprOps (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:352281)]
+    [at TypeScriptParserMixin.parseMaybeConditional (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:351760)]
+    [at TypeScriptParserMixin.parseMaybeAssign (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:350714)]
+    [at TypeScriptParserMixin.parseMaybeAssign (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:330620)]
+    [at C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:350260]
+    [at TypeScriptParserMixin.allowInAnd (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:383968)]
+    [at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:350239)]
+    [at TypeScriptParserMixin.parseObjectProperty (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:375017)]
+    [at TypeScriptParserMixin.parseObjPropValue (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:375659)]
+    [at TypeScriptParserMixin.parseObjPropValue (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:329702)]
+    [at TypeScriptParserMixin.parsePropertyDefinition (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:374146)]
+    [at TypeScriptParserMixin.parseObjectLike (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:372491)]
+    [at TypeScriptParserMixin.parseExprAtom (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:361743)]
+    [at TypeScriptParserMixin.parseExprSubscripts (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:356364)]
+    [at TypeScriptParserMixin.parseUpdate (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:355963)]
+    [at TypeScriptParserMixin.parseMaybeUnary (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:355527)]
+    [at TypeScriptParserMixin.parseMaybeUnary (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:331837)]
+    [at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:352169)]
+    [at TypeScriptParserMixin.parseExprOps (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:352281)]
+    [at TypeScriptParserMixin.parseMaybeConditional (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:351760)]
+    [at TypeScriptParserMixin.parseMaybeAssign (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:350714)]
+    [at TypeScriptParserMixin.parseMaybeAssign (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:330620)]
+    [at C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:350260]
+    [at TypeScriptParserMixin.allowInAnd (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:383926)]
+    [at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:350239)]
+    [at TypeScriptParserMixin.parseVar (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:402967)]
+    [at TypeScriptParserMixin.parseVarStatement (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:399366)]
+    [at TypeScriptParserMixin.parseVarStatement (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:323322)]
+    [at TypeScriptParserMixin.parseStatementContent (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:391398)]
+    [at TypeScriptParserMixin.parseStatementContent (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:324042)]
+    [at TypeScriptParserMixin.parseStatementLike (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:389494)]
+    [at TypeScriptParserMixin.parseModuleItem (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:389055)]
+    [at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:401400)]
+    [at TypeScriptParserMixin.parseBlockBody (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:401223)]
+    [at TypeScriptParserMixin.parseProgram (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:386857)]
+    [at TypeScriptParserMixin.parseTopLevel (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:386575)]
+    [at TypeScriptParserMixin.parse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:426834)]
+    [at TypeScriptParserMixin.parse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:337631)]
+    [at parse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:427389)]
+
+Import traces:
+  #1 [Server Component]:
+    ./src/i18n/dictionaries.ts
+    ./src/app/[lang]/layout.tsx
+
+  #2 [Server Component]:
+    ./src/i18n/dictionaries.ts
+    ./src/app/[lang]/page.tsx
+
+
+ ⨯ ./src/i18n/dictionaries.ts
+Error evaluating Node.js code
+SyntaxError: C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\src\i18n\dictionaries.ts: Unexpected token, expected "," (58:79)
+
+  56 |     tabSummary: 'Summary',
+  57 |     tabToc: 'Table of Contents',
+> 58 |     footerText: `© ${new Date().getFullYear()} TBI. All rights reserved.`, All rights reserved.',
+     |                                                                                ^
+  59 |     footerDesc: 'We provide top-notch market research reports and consulting services to help you make smarter business decisions. Stay ahead of the curve with our tailored insights.',
+  60 |     privacyPolicy: 'Privacy Policy',
+  61 |     termsOfService: 'Terms & Conditions',
+    [at constructor (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:137105)]
+    [at TypeScriptParserMixin.raise (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:194164)]
+    [at TypeScriptParserMixin.unexpected (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:194550)]
+    [at TypeScriptParserMixin.expect (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:199660)]
+    [at TypeScriptParserMixin.parseObjectLike (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:372365)]
+    [at TypeScriptParserMixin.parseExprAtom (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:361743)]
+    [at TypeScriptParserMixin.parseExprSubscripts (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:356364)]
+    [at TypeScriptParserMixin.parseUpdate (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:355963)]
+    [at TypeScriptParserMixin.parseMaybeUnary (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:355527)]
+    [at TypeScriptParserMixin.parseMaybeUnary (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:331837)]
+    [at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:352169)]
+    [at TypeScriptParserMixin.parseExprOps (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:352281)]
+    [at TypeScriptParserMixin.parseMaybeConditional (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:351760)]
+    [at TypeScriptParserMixin.parseMaybeAssign (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:350714)]
+    [at TypeScriptParserMixin.parseMaybeAssign (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:330620)]
+    [at C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:350260]
+    [at TypeScriptParserMixin.allowInAnd (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:383968)]
+    [at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:350239)]
+    [at TypeScriptParserMixin.parseObjectProperty (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:375017)]
+    [at TypeScriptParserMixin.parseObjPropValue (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:375659)]
+    [at TypeScriptParserMixin.parseObjPropValue (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:329702)]
+    [at TypeScriptParserMixin.parsePropertyDefinition (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:374146)]
+    [at TypeScriptParserMixin.parseObjectLike (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:372491)]
+    [at TypeScriptParserMixin.parseExprAtom (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:361743)]
+    [at TypeScriptParserMixin.parseExprSubscripts (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:356364)]
+    [at TypeScriptParserMixin.parseUpdate (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:355963)]
+    [at TypeScriptParserMixin.parseMaybeUnary (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:355527)]
+    [at TypeScriptParserMixin.parseMaybeUnary (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:331837)]
+    [at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:352169)]
+    [at TypeScriptParserMixin.parseExprOps (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:352281)]
+    [at TypeScriptParserMixin.parseMaybeConditional (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:351760)]
+    [at TypeScriptParserMixin.parseMaybeAssign (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:350714)]
+    [at TypeScriptParserMixin.parseMaybeAssign (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:330620)]
+    [at C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:350260]
+    [at TypeScriptParserMixin.allowInAnd (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:383926)]
+    [at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:350239)]
+    [at TypeScriptParserMixin.parseVar (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:402967)]
+    [at TypeScriptParserMixin.parseVarStatement (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:399366)]
+    [at TypeScriptParserMixin.parseVarStatement (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:323322)]
+    [at TypeScriptParserMixin.parseStatementContent (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:391398)]
+    [at TypeScriptParserMixin.parseStatementContent (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:324042)]
+    [at TypeScriptParserMixin.parseStatementLike (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:389494)]
+    [at TypeScriptParserMixin.parseModuleItem (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:389055)]
+    [at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:401400)]
+    [at TypeScriptParserMixin.parseBlockBody (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:401223)]
+    [at TypeScriptParserMixin.parseProgram (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:386857)]
+    [at TypeScriptParserMixin.parseTopLevel (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:386575)]
+    [at TypeScriptParserMixin.parse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:426834)]
+    [at TypeScriptParserMixin.parse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:337631)]
+    [at parse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\babel\bundle.js:191:427389)]
+
+Import traces:
+  #1 [Server Component]:
+    ./src/i18n/dictionaries.ts
+    ./src/app/[lang]/layout.tsx
+
+  #2 [Server Component]:
+    ./src/i18n/dictionaries.ts
+    ./src/app/[lang]/reports/[slug]/page.tsx
+
+
+ GET /en 500 in 9.1s (compile: 8.8s, proxy.ts: 15ms, render: 270ms)

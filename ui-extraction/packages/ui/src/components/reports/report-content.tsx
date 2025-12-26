@@ -54,7 +54,7 @@ interface ReportContentProps {
   reviews?: Review[];
   keyFindings?: string[];
   methodology?: string;
-  sampleImages?: Array<{
+  sampleImages?: Array<{ 
     title: string;
     image: string;
     alt: string;
@@ -68,9 +68,9 @@ interface ReportContentProps {
   reportSummaryText?: string;
 }
 
-// ============================================================================
+// ============================================================================ 
 // DATABASE-READY TYPES - This structure will come from your database later
-// ============================================================================
+// ============================================================================ 
 
 type SectionType = 
   | 'summary' 
@@ -89,7 +89,7 @@ interface PreviewSection {
   title: string;
   content: string;
   highlight?: string;
-  subsections?: Array<{
+  subsections?: Array<{ 
     label: string;
     value: string;
     description?: string;
@@ -107,9 +107,9 @@ interface ReportPreviewData {
   keyPlayers?: string[];
 }
 
-// ============================================================================
+// ============================================================================ 
 // SAMPLE DATA - Replace this with database query later
-// ============================================================================
+// ============================================================================ 
 
 const DEFAULT_PREVIEW_DATA: ReportPreviewData = {
   reportTitle: "Medical Isotopes Market Report",
@@ -205,9 +205,9 @@ const DEFAULT_PREVIEW_DATA: ReportPreviewData = {
   ]
 };
 
-// ============================================================================
+// ============================================================================ 
 // TEXT PARSER - Parses raw text into structured sections
-// ============================================================================
+// ============================================================================ 
 
 interface ParsedSection {
   id: string;
@@ -234,7 +234,7 @@ function parseReportSummaryText(text: string): ParsedSection[] {
     /www\./i,
     /^Check the geographical/i,
     /^Get an overview/i,
-    /^[\d\s]+$/  // Lines with only numbers and spaces
+    /^[ - -ÿḀ-ỿ]*$/  // Lines with only numbers and spaces
   ];
   
   for (let i = 0; i < lines.length; i++) {
@@ -361,9 +361,9 @@ function parseReportSummaryText(text: string): ParsedSection[] {
   return sections;
 }
 
-// ============================================================================
+// ============================================================================ 
 // DYNAMIC SECTION RENDERER - Renders parsed text sections
-// ============================================================================
+// ============================================================================ 
 
 const DynamicSectionRenderer = ({ section, reportTitle }: { section: ParsedSection; reportTitle?: string }) => {
   // Group headers - just titles without containers
@@ -496,9 +496,9 @@ const DynamicSectionRenderer = ({ section, reportTitle }: { section: ParsedSecti
   );
 };
 
-// ============================================================================
+// ============================================================================ 
 // PREVIEW SECTION RENDERER - Simple, clean design with unified styling
-// ============================================================================
+// ============================================================================ 
 
 const PreviewSectionRenderer = ({ section }: { section: PreviewSection }) => {
   // Special rendering for segments with subsections
@@ -580,7 +580,7 @@ export function ReportContent({
                 <div className="flex gap-4 items-center flex-wrap">
                   <button 
                     onClick={() => setShowTableOfContents(false)}
-                    className={`font-bold text-2xl transition-colors text-left ${
+                    className={`font-bold text-2xl transition-colors text-left ${ 
                       !showTableOfContents 
                         ? 'text-indigo-900' 
                         : 'text-gray-500 hover:text-indigo-700'
@@ -590,7 +590,7 @@ export function ReportContent({
                   </button>
                   <button 
                     onClick={() => setShowTableOfContents(true)}
-                    className={`font-bold text-2xl transition-colors border-l-2 border-gray-300 pl-4 ${
+                    className={`font-bold text-2xl transition-colors border-l-2 border-gray-300 pl-4 ${ 
                       showTableOfContents 
                         ? 'text-indigo-900' 
                         : 'text-gray-500 hover:text-indigo-700'

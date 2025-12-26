@@ -79,7 +79,8 @@ export const PROMPT_CONFIGS: Record<string, PromptConfig> = {
     id: 'prompt1',
     title: 'Market Research Summary',
     description: 'Generate authoritative market research summary under 300 words',
-    template: 'Generate authoritative market research summary on {title}. Focus on data-driven storytelling for C-level decision-makers. Under 300 words, paragraph format only. Structure: 1) Market opening with USD size 2025, forecasted 2034, CAGR 2) Market definition 3) Current momentum. Use clear, SEO-optimized language. Avoid filler phrases.',
+        template: 'Generate authoritative market research summary on {title}. Focus on data-driven storytelling for C-level decision-makers. Under 300 words, paragraph format only. Structure: 1) Market opening with USD size {currentYear}, forecasted {forecastEndYear}, CAGR 2) Market definition 3) Current momentum. Use clear, SEO-optimized language. Avoid filler phrases.', 
+    
     maxTokens: 400,
     estimatedInputTokens: 120,
     estimatedOutputTokens: 280,
@@ -109,7 +110,7 @@ export const PROMPT_CONFIGS: Record<string, PromptConfig> = {
     id: 'prompt4',
     title: 'Key Market Players & Strategic Developments',
     description: 'Generate key players list and recent developments in JSON format',
-    template: 'Create Key Players section for {title}. Context: {context}. Return a JSON object with keys: keyPlayers (array of strings), strategicDevelopments (string). Part 1: List top 10 verified companies (publicly traded/recognized). Part 2: Provide 1-2 real 2024 developments with format "[Month] 2024: [Company] [action] to [outcome]". Use credible company names only, no placeholders.',
+    template: 'Create Key Players section for {title}. Context: {context}. Return a JSON object with keys: keyPlayers (array of strings), strategicDevelopments (string). Part 1: List top 10 verified companies (publicly traded/recognized). Part 2: Provide 1-2 real {currentYear} developments with format "[Month] {currentYear}: [Company] [action] to [outcome]". Use credible company names only, no placeholders.',
     maxTokens: 450,
     estimatedInputTokens: 350,
     estimatedOutputTokens: 350,

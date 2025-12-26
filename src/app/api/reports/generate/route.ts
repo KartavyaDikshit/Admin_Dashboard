@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { prisma } from '@/lib/prisma';
-import { generateSlug, generateSKU } from '@/lib/utils';
+import { generateSlug, generateSKU, getMarketYears } from '@/lib/utils';
 import { calculateCost, openai } from '@/lib/openai'; // Import openai and calculateCost
 
 // Helper function to get prompt content from DB
@@ -26,27 +26,47 @@ async function getPrompt(promptName: string): Promise<string> {
 // Helper function to call OpenAI and log usage
 async function generateSection(
   reportTitle: string,
-  prompt: string,
+  rawPrompt: string,
   sectionTitle: string
 ): Promise<{ content: string; usage: OpenAI.CompletionUsage }> {
-  // Inject formatting and length instructions to override any restrictive DB prompts
-  const enhancedPrompt = `
-Report Title: ${reportTitle}
+  console.log(`Generating section '${sectionTitle}' with prompt length: ${rawPrompt.length}`);
 
-${prompt}
+  if (!rawPrompt || rawPrompt.trim() === '') {
+    console.log(`Skipping section '${sectionTitle}' because prompt is empty.`);
+    return {
+      content: '',
+      usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 } as OpenAI.CompletionUsage
+    };
+  }
 
-IMPORTANT INSTRUCTIONS:
-1. Ignore any constraints about word count (e.g., "under 300 words"). Write a detailed, comprehensive, and extensive section.
-2. EXPAND on every point. Provide deep analysis, specific examples, and theoretical backing for every claim.
-3. Aim for a very long, in-depth response. Do not summarize or be concise. Be verbose.
-4. Format the output using HTML tags for structure and readability:
-   - Use <h3> for main headings.
-   - Use <h4> for sub-headings.
-   - Use <p> for paragraphs.
-   - Use <ul> and <li> for lists.
-   - Use <strong> for emphasis.
-   - Do NOT use Markdown (e.g., **, ##). Output raw HTML.
-5. Ensure the tone is professional and suitable for C-level executives.
+  // 1. Replace placeholders in the prompt
+  const { currentYear, forecastStartYear, forecastEndYear, forecastPeriod } = getMarketYears();
+  const processedPrompt = rawPrompt
+    .replace(/{title}/g, reportTitle)
+    .replace(/{currentYear}/g, currentYear.toString())
+    .replace(/{forecastStartYear}/g, forecastStartYear.toString())
+    .replace(/{forecastEndYear}/g, forecastEndYear.toString())
+    .replace(/{forecastPeriod}/g, forecastPeriod);
+
+  // 2. Create the final user message.
+  // We prepend the Context but trust the prompt's internal instructions (which are editable in Admin)
+  // rather than overriding them with hardcoded "IMPORTANT INSTRUCTIONS".
+  const finalUserMessage = `
+Context:
+Report Title: "${reportTitle}"
+Section: "${sectionTitle}"
+
+Task:
+${processedPrompt}
+`;
+
+  const systemPrompt = `
+You are a Senior Market Research Analyst.
+Your goal is to generate high-quality, data-driven market research content based EXACTLY on the provided instructions.
+- Adopt a professional, authoritative, and C-level executive tone.
+- If the prompt asks for specific formatting (e.g., lists, specific headers), FOLLOW IT PRECISELY.
+- If the prompt asks for data/estimates and you don't have real-time access, use your training data to provide realistic, high-confidence estimates.
+- Do not output markdown code blocks (like \`\`\`html). Output raw content (HTML tags are okay if requested).
 `;
 
   try {
@@ -55,12 +75,14 @@ IMPORTANT INSTRUCTIONS:
       messages: [
         {
           role: 'system',
-          content: `You are an expert market research analyst. Generate the "${sectionTitle}" section for a report titled "${reportTitle}". You must output valid HTML content (without <html> or <body> tags, just the inner content).`,
+          content: systemPrompt,
         },
-        { role: 'user', content: enhancedPrompt },
+        { role: 'user', content: finalUserMessage },
       ],
-      temperature: 0.7, // Slightly higher for more creative/longer output
-      max_tokens: 4096, // Increased from 1024
+      temperature: 0.7, // Slightly reduced to stick closer to instructions/facts
+      presence_penalty: 0.0,
+      frequency_penalty: 0.0,
+      max_tokens: 4096,
     });
 
     const content = response.choices[0]?.message?.content?.trim() ?? '';
@@ -83,8 +105,8 @@ IMPORTANT INSTRUCTIONS:
         costPerToken: costPerToken,
         totalCost: totalCost,
         success: true,
-        responseTime: 0, // You could calculate this
-        requestData: enhancedPrompt,
+        responseTime: 0, 
+        requestData: finalUserMessage,
         responseData: JSON.stringify(response),
       },
     });
@@ -97,7 +119,7 @@ IMPORTANT INSTRUCTIONS:
     const failedOutputTokens = 0;
     const failedTotalTokens = 0;
     const failedTotalCost = calculateCost(failedInputTokens, failedOutputTokens);
-    const failedCostPerToken = 0; // Since totalTokens is 0
+    const failedCostPerToken = 0; 
 
     await prisma.apiUsageLog.create({
         data: {
@@ -111,7 +133,7 @@ IMPORTANT INSTRUCTIONS:
           success: false,
           errorMessage: error instanceof Error ? error.message : 'Unknown error',
           responseTime: 0,
-          requestData: enhancedPrompt,
+          requestData: 'Error in generation', // simpler log for error
           responseData: JSON.stringify(error instanceof Error ? { message: error.message, stack: error.stack } : { message: 'Unknown error' }),
         },
       });

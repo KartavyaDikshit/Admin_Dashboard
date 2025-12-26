@@ -22,16 +22,16 @@ Format Example:
 
 PART 2: Recent Strategic Developments
 Instructions:
-•	Provide a bullet list of 1–2 real, recent (2024 only) developments from companies listed above or other leading players in {title}.
+•	Provide a bullet list of 1–2 real, recent ({currentYear} only) developments from companies listed above or other leading players in {title}.
 •	Each item should follow this format:
-“[Month] 2024: [Company] introduced [Product/Partnership/Acquisition] to [Intent/Outcome].”
+“[Month] {currentYear}: [Company] introduced [Product/Partnership/Acquisition] to [Intent/Outcome].”
 •	Ensure developments are:
 o	Specific and relevant to the {title}
 o	Based on real-world events: product launches, partnerships, funding rounds, M&As, tech upgrades, regulatory wins, or expansions
 •	Avoid vague, unverified, or undated statements. No generic headlines like "Company expanded product portfolio."
 Format Example:
-• February 2024: Honeywell launched its next-gen building automation system to improve energy efficiency in smart commercial spaces.  
-• March 2024: Schneider Electric partnered with Microsoft to enhance cloud-based sustainability monitoring in industrial operations.  
+• February {currentYear}: Honeywell launched its next-gen building automation system to improve energy efficiency in smart commercial spaces.  
+• March {currentYear}: Schneider Electric partnered with Microsoft to enhance cloud-based sustainability monitoring in industrial operations.  
 SEO and Professional Guidelines:
 •	Integrate relevant {title} keywords (e.g., “Key players in the renewable energy storage market include…”).
 •	Avoid filler phrases like “many companies are involved.”

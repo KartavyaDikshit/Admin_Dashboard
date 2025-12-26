@@ -169,8 +169,8 @@ async function main() {
   // Create AI prompt templates
   const prompt1Content = `Generate an authoritative and insightful market research summary on the {title} with a strong focus on data-driven storytelling and strategic relevance. The content should be structured to meet the needs of C-level decision-makers, investors, and analysts, while being optimized for search engines. Make sure the word count remains under 300 words. Follow the structure below and remember to provide the content in paragraph format only, do not provide bullet point lists
 1.	Compelling Market Opening:
-	Begin with: “The {title} was valued at USD XX Billion in 2025…”
-	Clearly mention the market size in 2025, forecasted market size for 2034, and CAGR during the 2025–2034 period.
+	Begin with: “The {title} was valued at USD XX Billion in {currentYear}…”
+	Clearly mention the market size in {currentYear}, forecasted market size for {forecastEndYear}, and CAGR during the {forecastPeriod} period.
 	Ensure all values are precise and use up-to-date calculations or estimates from reliable data sources, avoid using numbers from market research companies.
 2.	Market Definition and Overview:
 	Provide a concise, SEO-optimized definition of the {title}.
@@ -188,7 +188,7 @@ Objective: Generate a compelling "Market Dynamics" section for the {title} repor
 ________________________________________
 🔹 A. Market Drivers
 •	List 2–4 key growth drivers that are accelerating the market’s expansion.
-•	Support each driver with quantitative data, market behavior, or recent industry developments (e.g., “As per WHO, digital health tool adoption grew by 68% from 2021 to 2024 globally.”).
+•	Support each driver with quantitative data, market behavior, or recent industry developments (e.g., “As per WHO, digital health tool adoption grew by 68% from 2021 to {currentYear} globally.”).
 •	Focus on relevant factors like:
 o	Technological innovations
 o	Regulatory tailwinds
@@ -231,7 +231,7 @@ ________________________________________
 📌 Prompt Structure and Instructions:
 🔷 Region Name
 •	Start with market sizing:
-“The Region name ({title}) market was valued at USD XX Billion in 2024 and is forecasted to reach USD XX Billion by 2034, registering a CAGR of XX.X% during the forecast period.”
+“The Region name ({title}) market was valued at USD XX Billion in {currentYear} and is forecasted to reach USD XX Billion by {forecastEndYear}, registering a CAGR of XX.X% during the forecast period.”
 •	Follow with region-specific drivers such as:
 o	Government regulations or funding (e.g., FDA approvals, Infrastructure Bill)
 o	High technology adoption rate
@@ -278,9 +278,9 @@ Example Format to Follow (for AI to replicate):
   • Sub-segment 3
 PART 2: Segment-Level Analysis (With Data)
 Based on the segmentation section generated, I would like you to create me the report title:
-Format: {title} Market Size By Primary Category 1(sub-segment list in comma separated format), By Primary Category 1(sub-segment list in comma separated format), Regions, Global Industry Analysis, Share, Growth, Trends, and Forecast 2025 to 2034
+Format: {title} Market Size By Primary Category 1(sub-segment list in comma separated format), By Primary Category 1(sub-segment list in comma separated format), Regions, Global Industry Analysis, Share, Growth, Trends, and Forecast {currentYear} to {forecastEndYear}
 Only generate for first 2 Primary Category skip others
-Example: Quantum Encryption Market Size by Component (Quantum Key Distribution (QKD) Systems, Quantum Random Number Generators, Others), Application (Government & Defence, Banking & Financial Services, Healthcare, Others), Regions, Global Industry Analysis, Share, Growth, Trends, and Forecast 2025 to 2034
+Example: Quantum Encryption Market Size by Component (Quantum Key Distribution (QKD) Systems, Quantum Random Number Generators, Others), Application (Government & Defence, Banking & Financial Services, Healthcare, Others), Regions, Global Industry Analysis, Share, Growth, Trends, and Forecast {currentYear} to {forecastEndYear}
 
 PART 3: Segment-Level Analysis (With Data)
 Instructions:
@@ -291,13 +291,13 @@ For maximum of 3 and minimum of 2 primary segment category defined above (e.g., 
 •	List the sub-segments in a short sentence form.
 2. Highlight the Key Segments:
 •	Identify:
-o	The largest sub-segment (by 2024 market share)
+o	The largest sub-segment (by {currentYear} market share)
 •	Begin with the line:
-“The [largest sub-segment], dominated the {title} market , with a market share of around xx% in 2024.”
+“The [largest sub-segment], dominated the {title} market , with a market share of around xx% in {currentYear}.”
 4. Explain the Growth Drivers (qualitative + data):
 •	Write in paragraph format.
 •	Provide key drivers that are fueling demand or adoption of the largest sub-segment.
-•	Include quantitative evidence or industry validation (e.g., “Rising demand from SMEs led to a 42% increase in deployment of cloud-based solutions in 2023”).
+•	Include quantitative evidence or industry validation (e.g., “Rising demand from SMEs led to a 42% increase in deployment of cloud-based solutions in {currentYear}”).
 •	Focus on technology adoption, regulations, user trends, cost dynamics, performance, and ease of implementation, depending on segment type.
 ________________________________________
 ✅ SEO and Writing Guidelines:
@@ -330,16 +330,16 @@ Format Example:
 
 PART 2: Recent Strategic Developments
 Instructions:
-•	Provide a bullet list of 1–2 real, recent (2024 only) developments from companies listed above or other leading players in {title}.
+•	Provide a bullet list of 1–2 real, recent ({currentYear} only) developments from companies listed above or other leading players in {title}.
 •	Each item should follow this format:
-“[Month] 2024: [Company] introduced [Product/Partnership/Acquisition] to [Intent/Outcome].”
+“[Month] {currentYear}: [Company] introduced [Product/Partnership/Acquisition] to [Intent/Outcome].”
 •	Ensure developments are:
 o	Specific and relevant to the {title}
 o	Based on real-world events: product launches, partnerships, funding rounds, M&As, tech upgrades, regulatory wins, or expansions
 •	Avoid vague, unverified, or undated statements. No generic headlines like "Company expanded product portfolio."
 Format Example:
-• February 2024: Honeywell launched its next-gen building automation system to improve energy efficiency in smart commercial spaces.  
-• March 2024: Schneider Electric partnered with Microsoft to enhance cloud-based sustainability monitoring in industrial operations.  
+• February {currentYear}: Honeywell launched its next-gen building automation system to improve energy efficiency in smart commercial spaces.  
+• March {currentYear}: Schneider Electric partnered with Microsoft to enhance cloud-based sustainability monitoring in industrial operations.  
 SEO and Professional Guidelines:
 •	Integrate relevant {title} keywords (e.g., “Key players in the renewable energy storage market include…”).
 •	Avoid filler phrases like “many companies are involved.”

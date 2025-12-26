@@ -4,7 +4,7 @@ Objective: Generate a compelling "Market Dynamics" section for the {title} repor
 ________________________________________
 🔹 A. Market Drivers
 •	List 2–4 key growth drivers that are accelerating the market’s expansion.
-•	Support each driver with quantitative data, market behavior, or recent industry developments (e.g., “As per WHO, digital health tool adoption grew by 68% from 2021 to 2024 globally.”).
+•	Support each driver with quantitative data, market behavior, or recent industry developments (e.g., “As per WHO, digital health tool adoption grew by 68% from 2021 to {currentYear} globally.”).
 •	Focus on relevant factors like:
 o	Technological innovations
 o	Regulatory tailwinds

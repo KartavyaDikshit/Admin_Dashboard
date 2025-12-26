@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { openai, calculateCost } from '@/lib/openai';
+import { getMarketYears } from '@/lib/utils';
 import OpenAI from 'openai';
 import { z } from 'zod';
 
@@ -41,6 +42,8 @@ export async function POST(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'Report not found' }, { status: 404 });
     }
 
+    const { currentYear, forecastPeriod } = getMarketYears();
+
     const prompt = `
       You are an expert in SEO and content strategy for market research reports.
       Generate comprehensive SEO metadata for a report with the following details:
@@ -49,6 +52,12 @@ export async function POST(request: NextRequest, context: RouteContext) {
       ${report.description ? `Report Description: "${report.description}"` : 'Report Description: (Not provided, generate based on title)'}
       ${report.summary ? `Report Summary: "${report.summary}"` : ''}
       Base Slug: "${report.slug}" (for canonical URL)
+      Current Year: ${currentYear}
+
+      IMPORTANT: 
+      1. Ensure all metadata is optimized for the year ${currentYear}. 
+      2. If you include years in the meta title or description (e.g., "Market Analysis ${currentYear}"), use ${currentYear} or future forecast years (e.g., ${forecastPeriod}). 
+      3. DO NOT use previous years like ${currentYear - 1} or ${currentYear - 2}.
 
       Please provide the output as a JSON object with the following keys. Ensure all fields are optimized for SEO and target relevant market research keywords.
       - metaTitle (String, max ~60 characters, based on title, including high-value keywords)

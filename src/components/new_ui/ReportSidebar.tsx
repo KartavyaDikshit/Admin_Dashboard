@@ -14,6 +14,7 @@ interface ReportSidebarProps {
 }
 
 export default function ReportSidebar({ prices, labels }: ReportSidebarProps) {
+  // Force rebuild for hydration fix
   const [licenseType, setLicenseType] = useState<'singleUser' | 'multiUser' | 'corporate'>('singleUser');
 
   const selectedPrice = prices[licenseType];
@@ -37,7 +38,7 @@ export default function ReportSidebar({ prices, labels }: ReportSidebarProps) {
                 {licenseType === 'singleUser' && <div className="h-2 w-2 rounded-full bg-current" />}
               </div>
               <div className="flex-1 flex justify-between items-center">
-                <span className="font-medium text-sm text-gray-900">Single User</span>
+                <strong className="font-medium text-sm text-gray-900">{labels.singleUser || 'Single User'}</strong>
                 <span className="text-lg font-bold text-indigo-600">${prices.singleUser?.toLocaleString()}</span>
               </div>
             </div>
@@ -52,8 +53,8 @@ export default function ReportSidebar({ prices, labels }: ReportSidebarProps) {
               </div>
               <div className="flex-1 flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-sm text-gray-900">Multi-User</span>
-                  <span className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 font-medium w-fit whitespace-nowrap border-transparent bg-indigo-100 text-indigo-800 text-xs">Most Popular</span>
+                  <strong className="font-medium text-sm text-gray-900">{labels.multiUser || 'Multi-User'}</strong>
+                  <span className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 font-medium w-fit whitespace-nowrap border-transparent bg-indigo-100 text-indigo-800 text-xs">{labels.mostPopular || 'Most Popular'}</span>
                 </div>
                 <span className="text-lg font-bold text-indigo-600">${prices.multiUser?.toLocaleString()}</span>
               </div>
@@ -68,7 +69,7 @@ export default function ReportSidebar({ prices, labels }: ReportSidebarProps) {
                 {licenseType === 'corporate' && <div className="h-2 w-2 rounded-full bg-current" />}
               </div>
               <div className="flex-1 flex justify-between items-center">
-                <span className="font-medium text-sm text-gray-900">Corporate</span>
+                <strong className="font-medium text-sm text-gray-900">{labels.corporate || 'Corporate'}</strong>
                 <span className="text-lg font-bold text-indigo-600">${prices.corporate?.toLocaleString()}</span>
               </div>
             </div>

@@ -37,8 +37,7 @@ export class TokenOptimizer {
                 line.includes('billion') || 
                 line.includes('CAGR') || 
                 line.includes('%') || 
-                line.includes('2024') || 
-                line.includes('2025') || 
+                /\b20\d{2}\b/.test(line) || 
                 line.includes('market share') 
             ) 
             .join(' '); 
