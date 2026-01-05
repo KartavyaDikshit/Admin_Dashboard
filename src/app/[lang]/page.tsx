@@ -22,7 +22,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <TrustedBy dict={dict} />
       <FeaturedCategories categories={categories} dict={dict} lang={lang} />
       <FeaturedReports reports={reports} dict={dict} lang={lang} />
-      <Testimonials testimonials={testimonials} />
+      <Testimonials testimonials={testimonials} dict={dict} />
     </div>
   );
 }

@@ -238,39 +238,39 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
         <div className="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border bg-white shadow-sm">
           <div className="px-3 [&:last-child]:pb-6 !pt-4 !pb-4 space-y-2">
             <button 
-              onClick={() => openModal('Request Sample PDF')}
+              onClick={() => openModal(labels.requestSample || 'Request Sample PDF')}
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 w-full justify-start bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm h-9 transition-all"
             >
               <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
-              Request Sample PDF
+              {labels.requestSample || 'Request Sample PDF'}
             </button>
             <button 
-              onClick={() => openModal('Request Customization')}
+              onClick={() => openModal(labels.requestCustomization || 'Request Customization')}
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 w-full justify-start bg-purple-600 hover:bg-purple-700 text-white font-medium text-sm h-9 transition-all"
             >
               <DocumentTextIcon className="h-4 w-4 mr-2" />
-              Request Customization
+              {labels.requestCustomization || 'Request Customization'}
             </button>
             <button 
-              onClick={() => openModal('Talk to Analyst')}
+              onClick={() => openModal(labels.talkToAnalyst || 'Talk to Analyst')}
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 w-full justify-start bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm h-9 transition-all"
             >
               <PhoneIcon className="h-4 w-4 mr-2" />
-              Talk to Analyst
+              {labels.talkToAnalyst || 'Talk to Analyst'}
             </button>
             <button 
-              onClick={() => openModal('Schedule Consultation')}
+              onClick={() => openModal(labels.scheduleConsultation || 'Schedule Consultation')}
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 w-full justify-start bg-green-600 hover:bg-green-700 text-white font-medium text-sm h-9 transition-all"
             >
               <CalendarIcon className="h-4 w-4 mr-2" />
-              Schedule Consultation
+              {labels.scheduleConsultation || 'Schedule Consultation'}
             </button>
             <button 
-              onClick={() => openModal('Custom Pricing')}
+              onClick={() => openModal(labels.customPricing || 'Custom Pricing')}
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 w-full justify-start bg-amber-600 hover:bg-amber-700 text-white font-medium text-sm h-9 transition-all"
             >
               <CurrencyDollarIcon className="h-4 w-4 mr-2" />
-              Custom Pricing
+              {labels.customPricing || 'Custom Pricing'}
             </button>
           </div>
         </div>
@@ -321,12 +321,12 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                   /* PURCHASE FLOW */
                   <div className="space-y-6">
                      <div className="border-b pb-4">
-                        <h3 className="text-2xl font-bold text-gray-900">Secure Checkout</h3>
+                        <h3 className="text-2xl font-bold text-gray-900">{labels.secureCheckout || 'Secure Checkout'}</h3>
                         <p className="text-sm text-gray-500 mt-1">Complete your purchase securely.</p>
                      </div>
 
                      <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 space-y-1">
-                        <p className="text-sm text-gray-500 font-medium uppercase text-xs">Order Summary</p>
+                        <p className="text-sm text-gray-500 font-medium uppercase text-xs">{labels.orderSummary || 'Order Summary'}</p>
                         <p className="font-semibold text-gray-900 line-clamp-1">{reportTitle}</p>
                         <div className="flex justify-between items-center mt-2">
                            <span className="text-indigo-600 font-medium bg-indigo-50 px-2 py-0.5 rounded text-sm capitalize">
@@ -338,12 +338,12 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                      
                      {/* Contact Info Form - needed for order */}
                      <div className="space-y-3">
-                        <h4 className="text-sm font-bold text-gray-900 uppercase">1. Contact Information</h4>
+                        <h4 className="text-sm font-bold text-gray-900 uppercase">1. {labels.contactInformation || 'Contact Information'}</h4>
                         <div className="grid grid-cols-2 gap-3">
                              <input
                                 type="text"
                                 name="name"
-                                placeholder="Full Name"
+                                placeholder={labels.fullName || "Full Name"}
                                 value={formData.name}
                                 onChange={handleInputChange}
                                 className="col-span-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5"
@@ -351,7 +351,7 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                              <input
                                 type="email"
                                 name="email"
-                                placeholder="Email Address *"
+                                placeholder={(labels.emailAddress || "Email Address") + " *"}
                                 required
                                 value={formData.email}
                                 onChange={handleInputChange}
@@ -360,7 +360,7 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                              <input
                                 type="text"
                                 name="company"
-                                placeholder="Company (Optional)"
+                                placeholder={labels.companyOptional || "Company (Optional)"}
                                 value={formData.company}
                                 onChange={handleInputChange}
                                 className="col-span-2 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5"
@@ -369,7 +369,7 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                      </div>
 
                      <div className="space-y-3">
-                        <h4 className="text-sm font-bold text-gray-900 uppercase">2. Payment Method</h4>
+                        <h4 className="text-sm font-bold text-gray-900 uppercase">2. {labels.paymentMethod || 'Payment Method'}</h4>
                         <div className="flex gap-3">
                             <div 
                                 onClick={() => setPaymentMethod('paypal')}
@@ -381,7 +381,7 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                                 onClick={() => setPaymentMethod('ccavenue')}
                                 className={`flex-1 border rounded-lg p-3 cursor-pointer flex items-center justify-center gap-2 transition-all ${paymentMethod === 'ccavenue' ? 'border-indigo-600 bg-indigo-50 ring-1 ring-indigo-600' : 'hover:border-gray-300'}`}
                             >
-                                <span className="font-semibold text-gray-700">Credit/Debit Card</span>
+                                <span className="font-semibold text-gray-700">{labels.creditDebitCard || 'Credit/Debit Card'}</span>
                             </div>
                         </div>
                      </div>
@@ -401,7 +401,7 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                             <div className="text-center p-4 bg-gray-50 rounded-lg border border-dashed border-gray-300">
                                 <p className="text-gray-500 text-sm mb-3">Secure Credit/Debit Card payment via CCAvenue.</p>
                                 <button className="w-full bg-indigo-600 text-white font-bold py-3 rounded-md hover:bg-indigo-700 transition-colors" disabled>
-                                    Proceed to Payment (Coming Soon)
+                                    {labels.proceedToPaymentSoon || 'Proceed to Payment (Coming Soon)'}
                                 </button>
                             </div>
                         )}
@@ -409,7 +409,7 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                      
                      <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
                         <ShieldCheckIcon className="h-4 w-4" />
-                        <span>256-bit SSL Secure Payment</span>
+                        <span>{labels.secureSslPayment || '256-bit SSL Secure Payment'}</span>
                      </div>
                   </div>
                 ) : (
@@ -417,13 +417,13 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                   <>
                     <div className="mb-6">
                         <h3 className="text-2xl font-bold text-gray-900">{requestType}</h3>
-                        <p className="text-sm text-indigo-600 font-medium mt-1">Report: {reportTitle}</p>
+                        <p className="text-sm text-indigo-600 font-medium mt-1">{labels.reportPrefix || 'Report:'} {reportTitle}</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label htmlFor="name" className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Full Name</label>
+                                <label htmlFor="name" className="block text-xs font-bold text-gray-500 uppercase tracking-wider">{labels.fullName || 'Full Name'}</label>
                                 <input
                                     type="text"
                                     id="name"
@@ -436,7 +436,7 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                                 />
                             </div>
                             <div>
-                                <label htmlFor="company" className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Company Name</label>
+                                <label htmlFor="company" className="block text-xs font-bold text-gray-500 uppercase tracking-wider">{labels.companyName || 'Company Name'}</label>
                                 <input
                                     type="text"
                                     id="company"
@@ -450,7 +450,7 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                         </div>
 
                         <div>
-                            <label htmlFor="email" className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Email Address <span className="text-red-500">*</span></label>
+                            <label htmlFor="email" className="block text-xs font-bold text-gray-500 uppercase tracking-wider">{labels.emailAddress || 'Email Address'} <span className="text-red-500">*</span></label>
                             <input
                                 type="email"
                                 id="email"
@@ -464,7 +464,7 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                         </div>
 
                         <div>
-                            <label htmlFor="phone" className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Phone Number</label>
+                            <label htmlFor="phone" className="block text-xs font-bold text-gray-500 uppercase tracking-wider">{labels.phoneNumber || 'Phone Number'}</label>
                             <input
                                 type="tel"
                                 id="phone"
@@ -477,7 +477,7 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                         </div>
 
                         <div>
-                            <label htmlFor="description" className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Specific Requirements</label>
+                            <label htmlFor="description" className="block text-xs font-bold text-gray-500 uppercase tracking-wider">{labels.specificRequirements || 'Specific Requirements'}</label>
                             <textarea
                                 id="description"
                                 name="description"

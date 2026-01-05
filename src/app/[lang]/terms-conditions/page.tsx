@@ -24,8 +24,8 @@ export default async function TermsConditionsPage({ params }: { params: Promise<
         </div>
         <div className="hero-container">
           <div className="text-center">
-            <h1 className="hero-title">Terms and Conditions</h1>
-            <p className="hero-subtitle">Please read these terms and conditions carefully before using our service.</p>
+            <h1 className="hero-title">{dict.termsOfService}</h1>
+            <p className="hero-subtitle">{dict.termsOfServiceDesc || 'Please read these terms and conditions carefully before using our service.'}</p>
           </div>
         </div>
       </section>
@@ -35,7 +35,7 @@ export default async function TermsConditionsPage({ params }: { params: Promise<
           
           <div className="p-8 sm:p-12 space-y-8 text-gray-700 leading-relaxed text-justify">
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4 border-b pb-2">Welcome to The Brainy Insights!</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 border-b pb-2 uppercase">{dict.welcomeMessage || 'Welcome to The Brainy Insights!'}</h2>
               <p className="mb-4">
                 These terms and conditions outline the rules and regulations for the use of The Brainy Insight's Website, located at https://www.thebrainyinsights.com/.
               </p>
@@ -51,7 +51,7 @@ export default async function TermsConditionsPage({ params }: { params: Promise<
             </section>
 
             <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Cookies</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 uppercase">{dict.cookies || 'Cookies'}</h3>
               <p className="mb-4">
                 We employ the use of cookies. By accessing The Brainy Insights, you agreed to use cookies in agreement with the The Brainy Insights's Privacy Policy.
               </p>
@@ -61,7 +61,7 @@ export default async function TermsConditionsPage({ params }: { params: Promise<
             </section>
 
             <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">License</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 uppercase">{dict.license || 'License'}</h3>
               <p className="mb-4">
                 Unless otherwise stated, The Brainy Insights and/or its licensors own the intellectual property rights for all material on The Brainy Insights. All intellectual property rights are reserved. You may access this from The Brainy Insights for your own personal use subjected to restrictions set in these terms and conditions.
               </p>
@@ -76,138 +76,49 @@ export default async function TermsConditionsPage({ params }: { params: Promise<
             </section>
 
             <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Products and Services</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 uppercase">{dict.productsAndServices || 'Products and Services'}</h3>
               <p>
                 The Brainy Insights holds all the rights to change, modify, and discontinue any of its products or services without prior notice.
               </p>
             </section>
 
             <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Delivery of the Products</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 uppercase">{dict.deliveryOfProducts || 'Delivery of the Products'}</h3>
               <p>
                 The delivery of purchase reports through The Brainy Insights will be done within 3 working days. However, the delivery duration may increase as per the client requirements.
               </p>
             </section>
 
             <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Liability</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 uppercase">{dict.liability || 'Liability'}</h3>
               <p>
                 If any of our product, service, or information leads to monetary or statuary loss or damage to the user, The Brainy Insights is not liable and cannot be hold accountable.
               </p>
             </section>
 
             <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Payments</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 uppercase">{dict.payments || 'Payments'}</h3>
               <p>
                 The Brainy Insights uses several third-party payment gateways in order to process the payments. All users purchasing products from our website thus approve to process payments through such third-party gateways.
               </p>
             </section>
 
             <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Refund and Cancellation Policy</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 uppercase">{dict.refundPolicy || 'Refund and Cancellation Policy'}</h3>
               <p>
                 Considering the nature of the product, The Brainy Insights does not have a refund policy and no refunds will be provided to the users purchasing our products and services. Also, order once placed cannot be cancelled.
               </p>
             </section>
 
             <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Warranty</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 uppercase">{dict.warranty || 'Warranty'}</h3>
               <p>
                 The Brainy Insights do not provide any warranty or gurantee of any of its products and services.
               </p>
             </section>
 
             <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Hyperlinking to our Content</h3>
-              <p className="mb-4">The following organizations may link to our Website without prior written approval:</p>
-              <ul className="list-disc pl-6 space-y-2 mb-4">
-                <li>Government agencies;</li>
-                <li>Search engines;</li>
-                <li>News organizations;</li>
-                <li>Online directory distributors may link to our Website in the same manner as they hyperlink to the Websites of other listed businesses; and</li>
-                <li>System wide Accredited Businesses except soliciting non-profit organizations, charity shopping malls, and charity fundraising groups which may not hyperlink to our Web site.</li>
-              </ul>
-              <p className="mb-4">
-                These organizations may link to our home page, to publications or to other Website information so long as the link: (a) is not in any way deceptive; (b) does not falsely imply sponsorship, endorsement or approval of the linking party and its products and/or services; and (c) fits within the context of the linking party’s site.
-              </p>
-              
-              <p className="mb-4">We may consider and approve other link requests from the following types of organizations:</p>
-              <ul className="list-disc pl-6 space-y-2 mb-4">
-                <li>commonly-known consumer and/or business information sources;</li>
-                <li>dot.com community sites;</li>
-                <li>associations or other groups representing charities;</li>
-                <li>online directory distributors;</li>
-                <li>internet portals;</li>
-                <li>accounting, law and consulting firms; and</li>
-                <li>educational institutions and trade associations.</li>
-              </ul>
-              
-              <p className="mb-4">
-                We will approve link requests from these organizations if we decide that: (a) the link would not make us look unfavourable to ourselves or to our accredited businesses; (b) the organization does not have any negative records with us; (c) the benefit to us from the visibility of the hyperlink compensates the absence of The Brainy Insights; and (d) the link is in the context of general resource information.
-              </p>
-              <p className="mb-4">
-                These organizations may link to our home page so long as the link: (a) is not in any way deceptive; (b) does not falsely imply sponsorship, endorsement or approval of the linking party and its products or services; and (c) fits within the context of the linking party’s site.
-              </p>
-              <p className="mb-4">
-                If you are one of the organizations listed in paragraph 2 above and are interested in linking to our website, you must inform us by sending an e-mail to The Brainy Insights. Please include your name, your organization name, contact information as well as the URL of your site, a list of any URLs from which you intend to link to our Website, and a list of the URLs on our site to which you would like to link. Wait 2-3 weeks for a response.
-              </p>
-              
-              <p className="mb-4">Approved organizations may hyperlink to our Website as follows:</p>
-              <ul className="list-disc pl-6 space-y-2 mb-4">
-                <li>By use of our corporate name; or</li>
-                <li>By use of the uniform resource locator being linked to; or</li>
-                <li>By use of any other description of our Website being linked to that makes sense within the context and format of content on the linking party’s site.</li>
-              </ul>
-              <p>
-                No use of The Brainy Insight's logo or other artwork will be allowed for linking absent a trademark license agreement.
-              </p>
-            </section>
-
-            <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">iFrames</h3>
-              <p>
-                Without prior approval and written permission, you may not create frames around our Webpages that alter in any way the visual presentation or appearance of our Website.
-              </p>
-            </section>
-
-            <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Content Liability</h3>
-              <p>
-                We shall not be hold responsible for any content that appears on your Website. You agree to protect and defend us against all claims that is rising on your Website. No link(s) should appear on any Website that may be interpreted as libelous, obscene or criminal, or which infringes, otherwise violates, or advocates the infringement or other violation of, any third party rights.
-              </p>
-            </section>
-
-            <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Your Privacy</h3>
-              <p>Please read Privacy Policy</p>
-            </section>
-
-            <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Reservation of Rights</h3>
-              <p>
-                We reserve the right to request that you remove all links or any particular link to our Website. You approve to immediately remove all links to our Website upon request. We also reserve the right to amen these terms and conditions and it’s linking policy at any time. By continuously linking to our Website, you agree to be bound to and follow these linking terms and conditions.
-              </p>
-            </section>
-
-            <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Removal of links from our website</h3>
-              <p className="mb-4">
-                If you find any link on our Website that is offensive for any reason, you are free to contact and inform us any moment. We will consider requests to remove links but we are not obligated to or so or to respond to you directly.
-              </p>
-              <p>
-                We do not ensure that the information on this website is correct, we do not warrant its completeness or accuracy; nor do we promise to ensure that the website remains available or that the material on the website is kept up to date.
-              </p>
-            </section>
-
-            <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Trademarks</h3>
-              <p>
-                All our service marks, trademarks, trade names, logos, on and in products and services are proprietary of their respective owners and protected under the trademark and copyright law.
-              </p>
-            </section>
-
-            <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Disclaimer</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 uppercase">{dict.disclaimer || 'Disclaimer'}</h3>
               <p className="mb-4">
                 To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions relating to our website and the use of this website. Nothing in this disclaimer will:
               </p>

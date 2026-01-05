@@ -47,10 +47,10 @@ export default function Footer({ dict, lang }: FooterProps) {
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold mb-4">Request Callback</h4>
-            <p className="text-gray-400 text-sm mb-4">Our experts are ready to help you make informed business decisions.</p>
+            <h4 className="font-semibold mb-4">{dict.requestCallbackTitle || 'Request Callback'}</h4>
+            <p className="text-gray-400 text-sm mb-4">{dict.requestCallbackDesc || 'Our experts are ready to help you make informed business decisions.'}</p>
             <Link href={`/${lang}/contact`} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
-              Request a Callback
+              {dict.requestCallbackButton || 'Request a Callback'}
             </Link>
           </div>
         </div>

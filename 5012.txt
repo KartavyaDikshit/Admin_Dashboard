@@ -1,0 +1,61 @@
+
+Choose Your License
+Utilisateur unique
+$4,700
+Multi-utilisateur
+Le plus populaire
+$6,899
+Entreprise
+$8,499
+Buy Now - $4,700
+Visa, Mastercard, PayPal
+Request Sample PDFRequest CustomizationTalk to AnalystSchedule ConsultationCustom Pricing
+some of these text do not have all the language translations and still shows in English
+in the hero section:
+Report Details
+Pages
+120+
+Published
+janv. 2026
+Coverage
+Global
+Format
+PDF, Excel
+ID
+TBI-61709
+this part also does not have translations 
+then on the header where categories reports press releases and all tabs are there those texts are also not translated 
+no the footer this text:
+Request Callback
+Our experts are ready to help you make informed business decisions.
+
+Request a Callback
+is still in English and not in all the translated languages 
+Privacy Policy
+We are committed to respecting the privacy rights of our customers.
+this page does not have all the translations 
+similarly:
+Terms and Conditions
+page is not translated 
+in the services page there is a lot of text still in English 
+Get Expert Guidance
+Ready to leverage our expertise? Our specialists are here to help you with customized research solutions tailored to your needs.
+
+Request Callback
+even this part is not translated and link the request call back button to contact us form 
+
+about page does not have translation either contact page does not have translation either 
+
+on the home page :
+What Our Clients Say
+Trusted by industry leaders worldwide for data-driven insights.
+
+this part has no translations 
+
+in the categories page:
+Need a Custom Report?
+Can't find what you're looking for? Request a customized market research report tailored to your specific needs.
+has no translation or even Browse Categories has none 
+
+
+understand the user requirements and intent and develop end to end solution for the project scope refer to the project schema and files for better understanding 

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getDictionary } from '@/i18n/dictionaries';
 
 export default async function Services({ params }: { params: Promise<{ lang: string }> }) {
@@ -30,8 +31,8 @@ export default async function Services({ params }: { params: Promise<{ lang: str
       <section className="py-16 bg-white">
         <div className="container mx-auto max-w-7xl px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Comprehensive Market Research Solutions</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">From strategic consulting to detailed market intelligence, we provide the insights you need to make informed business decisions.</p>
+            <h2 className="text-3xl font-bold mb-4">{dict.comprehensiveSolutionsTitle || 'Comprehensive Market Research Solutions'}</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">{dict.comprehensiveSolutionsDesc || 'From strategic consulting to detailed market intelligence, we provide the insights you need to make informed business decisions.'}</p>
           </div>
           <div className="space-y-6">
             <div className="bg-white rounded-xl border p-6 hover:shadow-lg transition-shadow">
@@ -69,12 +70,12 @@ export default async function Services({ params }: { params: Promise<{ lang: str
           </div>
           <div className="mt-16 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-8 border">
             <div className="text-center">
-              <h3 className="text-2xl font-semibold mb-4 text-gray-900">Get Expert Guidance</h3>
-              <p className="text-gray-600 mb-8 max-w-2xl mx-auto">Ready to leverage our expertise? Our specialists are here to help you with customized research solutions tailored to your needs.</p>
+              <h3 className="text-2xl font-semibold mb-4 text-gray-900">{dict.getExpertGuidanceTitle || 'Get Expert Guidance'}</h3>
+              <p className="text-gray-600 mb-8 max-w-2xl mx-auto">{dict.getExpertGuidanceDesc || 'Ready to leverage our expertise? Our specialists are here to help you with customized research solutions tailored to your needs.'}</p>
               <div className="flex justify-center">
-                <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-primary/90 h-9 has-[>svg]:px-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-3">
-                  Request Callback
-                </button>
+                <Link href={`/${lang}/contact`} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-bold transition-all h-11 px-8 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg">
+                  {dict.requestCallback || 'Request Callback'}
+                </Link>
               </div>
             </div>
           </div>

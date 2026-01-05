@@ -40,7 +40,7 @@ export default async function CategoriesPage({ params }: { params: Promise<{ lan
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto max-w-7xl px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Browse Categories</h2>
+            <h2 className="text-3xl font-bold mb-4">{dict.browseCategories || 'Browse Categories'}</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">{dict.featuredCategoriesDesc}</p>
           </div>
           <div className="bg-indigo-600/10 backdrop-blur-sm rounded-2xl p-6 border border-indigo-200/30 shadow-lg mb-12">
@@ -50,7 +50,7 @@ export default async function CategoriesPage({ params }: { params: Promise<{ lan
                   <path d="m21 21-4.34-4.34"></path>
                   <circle cx="11" cy="11" r="8"></circle>
                 </svg>
-                <input className="flex w-full rounded-md border px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pl-10 h-10 bg-white border-gray-300" placeholder="Search categories..." type="search" />
+                <input className="flex w-full rounded-md border px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pl-10 h-10 bg-white border-gray-300" placeholder={dict.searchCategories || "Search categories..."} type="search" />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -80,11 +80,11 @@ export default async function CategoriesPage({ params }: { params: Promise<{ lan
           
           <div className="mt-12 text-center">
             <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-8">
-              <h3 className="text-2xl font-semibold text-gray-900 mb-4">Need a Custom Report?</h3>
-              <p className="text-gray-600 mb-6 max-w-2xl mx-auto">Can't find what you're looking for? Request a customized market research report tailored to your specific needs.</p>
-              <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-primary/90 h-10 rounded-md has-[>svg]:px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-6 text-lg">
+              <h3 className="text-2xl font-semibold text-gray-900 mb-4">{dict.needCustomReportTitle || 'Need a Custom Report?'}</h3>
+              <p className="text-gray-600 mb-6 max-w-2xl mx-auto">{dict.needCustomReportDesc || "Can't find what you're looking for? Request a customized market research report tailored to your specific needs."}</p>
+              <Link href={`/${lang}/contact`} className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-bold transition-all h-12 rounded-md bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-6 text-lg shadow-md hover:shadow-lg">
                 {dict.requestCustomization}
-              </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -19,8 +19,8 @@ export default async function PressReleases({ params }: { params: Promise<{ lang
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-8">
-            <h1 className="hero-title">Press Releases</h1>
-            <p className="hero-subtitle">Latest news and updates from The Brainy Insights.</p>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">{dict.pressReleases || 'Press Releases'}</h1>
+            <p className="text-xl md:text-2xl text-indigo-100 max-w-4xl mx-auto leading-relaxed">{dict.pressReleasesSubtitle || 'Latest news and updates from The Brainy Insights.'}</p>
           </div>
           <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-indigo-300 mx-auto rounded-full"></div>
         </div>
@@ -63,7 +63,7 @@ export default async function PressReleases({ params }: { params: Promise<{ lang
                       {pr.description}
                     </p>
                     <span className="inline-flex items-center text-indigo-600 font-semibold hover:text-indigo-700 transition-colors">
-                      Read Full Release <ArrowRightIcon className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      {dict.readFullRelease || 'Read Full Release'} <ArrowRightIcon className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </span>
                   </div>
                 </div>

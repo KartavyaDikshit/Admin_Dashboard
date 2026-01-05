@@ -2,9 +2,10 @@
 
 interface TestimonialsProps {
   testimonials: any[]
+  dict: any
 }
 
-export default function Testimonials({ testimonials }: TestimonialsProps) {
+export default function Testimonials({ testimonials, dict }: TestimonialsProps) {
   // Fallback/Static testimonials if DB is empty or for layout matching
   // The user wants it to MATCH MHTML exactly. MHTML has 3 cards.
   // I will map the DB testimonials to this structure.
@@ -46,8 +47,8 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto max-w-7xl px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">What Our Clients Say</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">Trusted by industry leaders worldwide for data-driven insights.</p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">{dict.clientsTestimonialsTitle || 'What Our Clients Say'}</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">{dict.clientsTestimonialsDesc || 'Trusted by industry leaders worldwide for data-driven insights.'}</p>
         </div>
         <div className="relative">
           <div className="flex justify-center items-center mb-4">

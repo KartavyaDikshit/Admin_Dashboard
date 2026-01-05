@@ -51,12 +51,12 @@ export default function Header({ dict, lang }: HeaderProps) {
           </div>
         </Link>
         <nav className="hidden md:flex items-center space-x-8">
-          <Link href={`/${lang}/categories`} className="text-sm hover:text-indigo-600 transition-colors font-medium">Categories</Link>
-          <Link href={`/${lang}/reports`} className="text-sm hover:text-indigo-600 transition-colors font-medium">Reports</Link>
-          <Link href={`/${lang}/press-releases`} className="text-sm hover:text-indigo-600 transition-colors font-medium">Press Releases</Link>
-          <Link href={`/${lang}/services`} className="text-sm hover:text-indigo-600 transition-colors font-medium">Services</Link>
-          <Link href={`/${lang}/about`} className="text-sm hover:text-indigo-600 transition-colors font-medium">About</Link>
-          <Link href={`/${lang}/contact`} className="text-sm hover:text-indigo-600 transition-colors font-medium">Contact</Link>
+          <Link href={`/${lang}/categories`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.categoriesLabel || 'Categories'}</Link>
+          <Link href={`/${lang}/reports`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.reports || 'Reports'}</Link>
+          <Link href={`/${lang}/press-releases`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.pressReleases || 'Press Releases'}</Link>
+          <Link href={`/${lang}/services`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.services || 'Services'}</Link>
+          <Link href={`/${lang}/about`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.aboutUs || 'About'}</Link>
+          <Link href={`/${lang}/contact`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.contactUs || 'Contact'}</Link>
         </nav>
         <div className="flex items-center space-x-4">
           <div className="relative">

@@ -24,8 +24,8 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
         </div>
         <div className="hero-container">
           <div className="text-center">
-            <h1 className="hero-title">Privacy Policy</h1>
-            <p className="hero-subtitle">We are committed to respecting the privacy rights of our customers.</p>
+            <h1 className="hero-title">{dict.privacyPolicy}</h1>
+            <p className="hero-subtitle">{dict.privacyPolicyDesc || 'We are committed to respecting the privacy rights of our customers.'}</p>
           </div>
         </div>
       </section>
@@ -35,7 +35,7 @@ export default async function PrivacyPolicyPage({ params }: { params: Promise<{ 
           
           <div className="p-8 sm:p-12 space-y-8 text-gray-700 leading-relaxed text-justify">
             <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4 border-b pb-2">INTRODUCTION</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 border-b pb-2 uppercase">{dict.introduction || 'INTRODUCTION'}</h2>
               <p className="mb-4">
                 The Brainy Insights LLP (“us,” “we,” or “Company”) is committed to respecting the privacy rights of its customers, visitors, and other users of the Company Website (the “Site”). We created this Website Privacy Policy (this “Policy”) to give you confidence as you visit and use the Site, and to demonstrate our commitment to fair information practices and the protection of privacy. This Policy is only applicable to the Site, and not to any other websites that you may be able to access from the Site, each of which may have data collection and use practices and policies that differ materially from this Policy.
               </p>

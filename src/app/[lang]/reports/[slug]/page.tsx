@@ -367,7 +367,7 @@ export default async function ReportDetailPage({ params }: Props) {
         </div>
         <div className="space-y-2">
           <h4 className="font-bold text-xl text-gray-900">{dict.tocFallbackTitle || "Table of Contents Not Available"}</h4>
-          <p className="text-gray-600 max-w-md mx-auto">Get a detailed chapter breakdown and page-by-page content structure delivered to your inbox.</p>
+          <p className="text-gray-600 max-w-md mx-auto">{dict.tocFallbackDesc || "Get a detailed chapter breakdown and page-by-page content structure delivered to your inbox."}</p>
         </div>
         <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-base transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-md hover:shadow-lg h-12 px-8 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold">
           <DocumentTextIcon className="h-5 w-5" />
@@ -434,27 +434,27 @@ export default async function ReportDetailPage({ params }: Props) {
             <div className="w-full lg:w-80 flex-shrink-0">
               <div className="text-card-foreground flex flex-col gap-6 rounded-xl border bg-white/95 backdrop-blur-sm shadow-xl">
                 <div className="grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 pt-6 [.border-b]:pb-6">
-                  <h4 className="text-lg font-semibold">Report Details</h4>
+                  <h4 className="text-lg font-semibold">{dict.reportDetails || 'Report Details'}</h4>
                 </div>
                 <div className="px-3 [&:last-child]:pb-6 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground flex items-center"><DocumentTextIcon className="h-4 w-4 mr-2" />Pages</span>
+                    <span className="text-sm text-muted-foreground flex items-center"><DocumentTextIcon className="h-4 w-4 mr-2" />{dict.pages || 'Pages'}</span>
                     <span className="font-medium text-gray-900">120+</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground flex items-center"><ClockIcon className="h-4 w-4 mr-2" />Published</span>
+                    <span className="text-sm text-muted-foreground flex items-center"><ClockIcon className="h-4 w-4 mr-2" />{dict.published || 'Published'}</span>
                     <span className="font-medium text-gray-900" suppressHydrationWarning>{new Date(report.publishedDate).toLocaleDateString(lang, { month: 'short', year: 'numeric' })}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground flex items-center"><GlobeAltIcon className="h-4 w-4 mr-2" />Coverage</span>
-                    <span className="font-medium text-gray-900">Global</span>
+                    <span className="text-sm text-muted-foreground flex items-center"><GlobeAltIcon className="h-4 w-4 mr-2" />{dict.coverage || 'Coverage'}</span>
+                    <span className="font-medium text-gray-900">{dict.global || 'Global'}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground flex items-center"><UserGroupIcon className="h-4 w-4 mr-2" />Format</span>
-                    <span className="font-medium text-gray-900">PDF, Excel</span>
+                    <span className="text-sm text-muted-foreground flex items-center"><UserGroupIcon className="h-4 w-4 mr-2" />{dict.format || 'Format'}</span>
+                    <span className="font-medium text-gray-900">{dict.pdfExcel || 'PDF, Excel'}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground flex items-center">ID</span>
+                    <span className="text-sm text-muted-foreground flex items-center">{dict.reportId || 'ID'}</span>
                     <span className="font-medium text-gray-900">{report.reportId || report.sku}</span>
                   </div>
                 </div>
