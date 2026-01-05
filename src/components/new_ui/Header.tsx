@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
+import Image from 'next/image'
+
 interface HeaderProps {
   dict: any
   lang: string
@@ -37,10 +39,16 @@ export default function Header({ dict, lang }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto max-w-7xl flex h-16 items-center justify-between px-4">
         <Link href={`/${lang}`} className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-          <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center">
-            <span className="text-white font-bold text-sm">BI</span>
+          <div className="relative h-12 w-48 py-1 px-2">
+            <Image 
+              src="/logo.png" 
+              alt="The Brainy Insights" 
+              fill 
+              className="object-contain"
+              priority
+              unoptimized
+            />
           </div>
-          <span className="font-semibold text-lg">The Brainy Insights</span>
         </Link>
         <nav className="hidden md:flex items-center space-x-8">
           <Link href={`/${lang}/categories`} className="text-sm hover:text-indigo-600 transition-colors font-medium">Categories</Link>

@@ -49,7 +49,9 @@ export default function Footer({ dict, lang }: FooterProps) {
           <div>
             <h4 className="font-semibold mb-4">Request Callback</h4>
             <p className="text-gray-400 text-sm mb-4">Our experts are ready to help you make informed business decisions.</p>
-            <button data-slot="button" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive text-primary-foreground h-9 px-4 py-2 has-[>svg]:px-3 bg-indigo-600 hover:bg-indigo-700 w-full">Request a Callback</button>
+            <Link href={`/${lang}/contact`} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+              Request a Callback
+            </Link>
           </div>
         </div>
         <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">

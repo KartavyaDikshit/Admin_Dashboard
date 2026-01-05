@@ -1,0 +1,14 @@
+import { MetadataRoute } from 'next';
+
+const baseUrl = process.env.NEXTAUTH_URL || 'https://thebrainyinsights.com';
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: {
+      userAgent: '*',
+      allow: '/',
+      disallow: ['/admin/', '/api/', '/_next/', '/static/'],
+    },
+    sitemap: `${baseUrl}/sitemap.xml`,
+  };
+}
