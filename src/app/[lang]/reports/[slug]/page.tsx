@@ -57,104 +57,92 @@ const parseContent = (text: string | null, markers: string[]) => {
   
   const isHtml = /<[a-z][\s\S]*>/i.test(text);
 
-  // Escape special characters properly in regex
-  // Escape and sort by length desc to match longest first
-  const escapedMarkers = markers
-      .map(m => m.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+'))
-      .sort((a, b) => b.length - a.length);
-  
-  const markerGroup = escapedMarkers.join('|');
-  
   if (isHtml) {
-      // HTML Parsing Strategy
+      // HTML Parsing Strategy: Generic Header Split
+      // We look for h1-h6 tags and use them as natural delimiters.
+      // This is much more robust than matching specific markers, as it respects the AI's structural intent.
       
-      // Regex Breakdown:
-      // ((?:<[^>]+>\\s*)*)     : Group 1: Opening tags
-      // (?:
-      //   ([#*]+)\\s*          : Group 2: Explicit Markdown Header (e.g. "####")
-      //   |
-      //   (?<=^|>)\\s*([#*\\s]*) : Group 3: Contextual Header (start of block)
-      // )
-      // (${markerGroup})       : Group 4: The Marker Title
-      // ((?:\\s*<\\/[^>]+>)*)  : Group 5: Closing tags
-      // \\s*                   : Optional whitespace
-      
-      const htmlRegex = new RegExp(`((?:<[^>]+>\\s*)*)(?:([#*]+)\\s*|(?<=^|>)\\s*([#*\\s]*))(${markerGroup})((?:\\s*<\\/[^>]+>)*)\\s*`, 'gi');
-      
-      const SPLITTER = '###SECTION_SPLIT###';
-      
-      // Replace found headers with splitter, keeping only the title
-      const processedText = text.replace(htmlRegex, (match, openTags, hardPrefix, softPrefix, title, closeTags) => {
-          return `${SPLITTER}${title}${SPLITTER}`;
-      });
-      
-      const parts = processedText.split(SPLITTER);
       const sections: { title: string; content: string }[] = [];
       
-      let currentTitle = 'Overview';
-      // Handle content before first marker
-      if (parts[0] && parts[0].trim()) {
-          sections.push({ title: currentTitle, content: parts[0].trim() });
-      }
+      // Regex to match headers: <h[1-6] ...> Title </h[1-6]>
+      // Captures: 1: Heading Level (1-6), 2: Attributes (ignored), 3: Title Text
+      const headerRegex = /<h([1-6])([^>]*)>(.*?)<\/h\1>/gi;
       
-      // Iterate pairs: [title, content, title, content...]
-      for (let i = 1; i < parts.length; i += 2) {
-          const title = parts[i];
-          const content = parts[i+1];
+      let match;
+      let lastIndex = 0;
+      let currentTitle = 'Overview'; // Default title for pre-header content
+      
+      // Find all headers
+      while ((match = headerRegex.exec(text)) !== null) {
+          const headerFull = match[0];
+          const titleText = match[3].replace(/<[^>]+>/g, '').trim(); // Strip internal tags from title if any
+          const matchIndex = match.index;
           
-          if (title && content && content.trim()) {
-              sections.push({ title: title.trim(), content: content.trim() });
+          // Content between last match (or start) and this header
+          const content = text.substring(lastIndex, matchIndex).trim();
+          
+          if (content) {
+              sections.push({ title: currentTitle, content });
           }
+          
+          // Update for next iteration
+          currentTitle = titleText;
+          // Clean the title: remove "A. ", "1. ", "Part 1:" etc if present, for cleaner UI
+          currentTitle = currentTitle.replace(/^(?:[A-Z0-9]+\.|Part\s*\d+[:.]?)\s*/i, '');
+          
+          lastIndex = headerRegex.lastIndex;
       }
       
-      if (sections.length === 0 && text.trim().length > 0) {
-         return [{ title: 'Overview', content: text }];
+      // Push remaining content after the last header
+      const remainingContent = text.substring(lastIndex).trim();
+      if (remainingContent) {
+          sections.push({ title: currentTitle, content: remainingContent });
       }
+      
+      // If no headers were found but it's HTML, treat whole as one block
+      if (sections.length === 0 && text.trim().length > 0) {
+          return [{ title: 'Overview', content: text }];
+      }
+      
       return sections;
 
   } else {
       // Robust Plain Text Parsing Strategy using Split
       // This handles "Market Dynamics#### A. Market Drivers" and "**A. Market Drivers**"
       
-      // Regex to find Headers
-      // captures: full match includes surrounding #, *, whitespace
-      // We look for: [Prefix Symbols (#*)] + [Space] + [Marker] + [Space] + [Suffix Symbols (* only) + Colon]
-      // Using split ensures we capture the "in-between" content reliably
-      const regex = new RegExp(`([#*]*\\s*(?:${markerGroup})\\s*[*]*:?)`, 'gi');
+      // Escape special characters properly in regex
+      const escapedMarkers = markers
+        .map(m => m.replace(/[.*+?^${}()|[\\]/g, '\\$&').replace(/\s+/g, '\\s+'))
+        .sort((a, b) => b.length - a.length);
+  
+      const markerGroup = escapedMarkers.join('|');
       
-      const parts = text.split(regex);
+      const SPLITTER = '###SECTION_SPLIT###';
+      // Match: (newlines/start) + (optional #/PART prefix) + (Marker) + (optional colon) + (newline/end)
+      const textRegex = new RegExp(`(?:^|[\\r\\n]+|\\s+)(?:[#*\\s]*|PART\\s*\\d+[:.]?\\s*)(${markerGroup})(?:[:]*)(?:$|[\\r\\n]+|\\s+)`, 'gi');
+      
+      const processedText = text.replace(textRegex, (match) => {
+          let cleanTitle = match.replace(/[#*:]/g, '').trim();
+          cleanTitle = cleanTitle.replace(/^PART\\s*\\d+[:.]?\\s*/i, '');
+          const matchedMarker = markers.find(m => cleanTitle.toLowerCase().includes(m.toLowerCase()));
+          return `${SPLITTER}${matchedMarker || cleanTitle}${SPLITTER}`;
+      });
+
+      const parts = processedText.split(SPLITTER);
       const sections: { title: string; content: string }[] = [];
       
-      // parts[0] is text before first match
       if (parts[0] && parts[0].trim()) {
          sections.push({ title: 'Overview', content: parts[0].trim() });
       }
       
-      // parts array will look like: [preamble, captured_header, content, captured_header, content, ...]
       for (let i = 1; i < parts.length; i += 2) {
-          const header = parts[i];
+          const title = parts[i];
           const content = parts[i + 1];
-          
-          if (!header) continue;
-
-          // Clean the title (remove #, *, :)
-          const title = header.replace(/[#*:]/g, '').trim();
-          
-          // Verify it's a real title match (basic check)
-          if (!title) continue;
-
-          // Boundary Check logic (replicated for safety, though split handles most cases)
-          // If the match was partial inside a word, split would still happen, 
-          // but we might want to validate if needed. 
-          // However, for split strategy, we trust the regex.
-          
-          // Handle content (if undef, empty string)
-          const cleanContent = content ? content.trim() : '';
-          
-          // Logic: "Market Dynamics" might have empty content if followed immediately by "A. Market Drivers"
-          sections.push({ title, content: cleanContent });
+          if (title && content) {
+             sections.push({ title: title.trim(), content: content.trim() });
+          }
       }
-      
+
       if (sections.length === 0 && text.trim().length > 0) {
           return [{ title: 'Overview', content: text }];
       }
@@ -172,23 +160,23 @@ export default async function ReportDetailPage({ params }: Props) {
     notFound();
   }
 
-  // Markers for Market Dynamics
-  // Expanded to include generic headers without prefixes (e.g. "Market Drivers") for reports like Laser Driver Chip Market
+  // Markers used for fallback text parsing
   const dynamicsMarkers = [
       'Market Dynamics', 
-      'A. Market Drivers', 'B. Market Restraints', 'C. Market Opportunities', 
-      'Market Drivers', 'Market Restraints', 'Market Opportunities',
+      'Market Drivers', 'Market Restraints', 'Market Opportunities', 
       'Market Trends', 'Conclusion',
       'Regional Insights'
   ];
   const dynamicsSections = parseContent(report.marketDynamics, dynamicsMarkers);
   
-  // Markers for Key Market Players
   const playersMarkers = ['Key Market Players', 'Recent Strategic Developments', 'Company Profiles', 'Key Players'];
   const playersSections = parseContent(report.keyMarketPlayers, playersMarkers);
   
   // Extract Recent Strategic Developments from parsed sections if not in DB
-  const parsedRecentDev = playersSections.find(s => s.title === 'Recent Strategic Developments');
+  const parsedRecentDev = playersSections.find(s => 
+      s.title.toLowerCase().includes('strategic development') || 
+      s.title.toLowerCase().includes('recent development')
+  );
   const recentStrategicDevelopmentsContent = report.recentStrategicDevelopments || (parsedRecentDev ? parsedRecentDev.content : null);
 
   const stats = extractMarketStats(report.marketResearchSummary || report.summary || report.description);
@@ -278,19 +266,21 @@ export default async function ReportDetailPage({ params }: Props) {
           <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Market Dynamics</h3>
         </div>
         
-        {/* Market Dynamics - Always Render Sections Loop */}
+        {/* Market Dynamics */}
         {dynamicsSections.map((section, index) => {
-            // Skip rendering if the title is just "Market Dynamics" or "Regional Insights" as they are main headers
-            if (['Market Dynamics', 'Regional Insights'].includes(section.title)) return null;
+            // Hide if it matches the main header we just displayed or Overview if empty
+            if (['Market Dynamics', 'Regional Insights'].includes(section.title)) {
+                // If it's effectively empty, skip
+                if (!section.content || section.content.trim().length === 0) return null;
+            }
             
             return (
             <div key={index} className="mb-4">
-              {/* We don't show "Overview" title if it's just the intro text */}
-              {section.title !== 'Overview' && (
-                  <h6 className="font-semibold text-base text-gray-900 mb-2">{section.title.replace(/^Market\s+/, '')}</h6>
+              {/* Show title if it's not "Overview" and not "Market Dynamics" (redundant) */}
+              {section.title !== 'Overview' && section.title !== 'Market Dynamics' && (
+                  <h6 className="font-semibold text-base text-gray-900 mb-2">{section.title}</h6>
               )}
               <div className={section.title === 'Overview' ? "bg-white p-0" : "bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400"}>
-                {/* Render content as HTML if it contains tags, otherwise text */}
                 {/<[a-z][\s\S]*>/i.test(section.content) ? (
                     <div 
                         className="text-base text-gray-700 leading-relaxed text-justify prose max-w-none"
@@ -328,14 +318,18 @@ export default async function ReportDetailPage({ params }: Props) {
           <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Key Market Players</h3>
         </div>
         
-        {/* Key Market Players - Always Render Sections Loop */}
+        {/* Key Market Players */}
         {playersSections.map((section, index) => {
              // Skip Recent Strategic Developments if it's already displayed above
-             if (section.title === 'Recent Strategic Developments' && recentStrategicDevelopmentsContent) return null;
+             if ((section.title.toLowerCase().includes('strategic development') || section.title.toLowerCase().includes('recent development')) && recentStrategicDevelopmentsContent) return null;
 
              return (
              <div key={index} className="bg-slate-50 p-5 rounded-lg border border-slate-200 mb-4">
-                {section.title && section.title !== 'Overview' && !section.title.toLowerCase().includes('key market players') && <h5 className="font-bold text-lg text-gray-900 mb-3">{section.title}</h5>}
+                {/* Show title if not Overview. We allow "Key Market Players" title here as it might be a subsection or the main list */}
+                {section.title && section.title !== 'Overview' && (
+                    <h5 className="font-bold text-lg text-gray-900 mb-3">{section.title}</h5>
+                )}
+                
                 {/<[a-z][\s\S]*>/i.test(section.content) ? (
                     <div 
                         className="text-base text-gray-700 leading-relaxed text-justify prose max-w-none"
