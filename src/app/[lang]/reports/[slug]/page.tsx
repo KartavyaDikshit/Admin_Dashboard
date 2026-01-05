@@ -483,6 +483,8 @@ export default async function ReportDetailPage({ params }: Props) {
                    currency: report.currency || 'USD'
                 }}
                 labels={dict}
+                reportId={report.id}
+                reportTitle={report.title}
              />
           </div>
           

@@ -15,7 +15,8 @@ import {
   ChartBarIcon,
   GlobeAltIcon,
   CpuChipIcon,
-  NewspaperIcon
+  NewspaperIcon,
+  PencilSquareIcon
 } from '@heroicons/react/24/outline'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
@@ -89,6 +90,7 @@ export default function Sidebar({ open, userRole }: SidebarProps) {
     { name: 'Categories', href: '/admin/categories', icon: FolderIcon, current: false, badge: categoriesCount !== undefined ? categoriesCount.toLocaleString() : undefined },
     { name: 'Orders', href: '/admin/orders', icon: ShoppingCartIcon, current: false, badge: ordersCount !== undefined ? ordersCount.toLocaleString() : undefined },
     { name: 'Requests', href: '/admin/requests', icon: ChatBubbleLeftRightIcon, current: false, badge: requestsCount !== undefined ? requestsCount.toLocaleString() : undefined },
+    { name: 'Customization', href: '/admin/customization', icon: PencilSquareIcon, current: false },
     { name: 'Translations', href: '/admin/translations', icon: GlobeAltIcon, current: false },
     { name: 'Users', href: '/admin/users', icon: UserGroupIcon, current: false },
     { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon, current: false },

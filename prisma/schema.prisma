@@ -248,6 +248,7 @@ model Report {
   enquiries    Enquiry[]
   reviews      ReportReview[]
   translations ReportTranslation[]
+  customizationRequests CustomizationRequest[]
 
   @@map("reports")
 }
@@ -733,4 +734,24 @@ model PressReleaseTranslation {
 
   @@unique([pressReleaseId, locale])
   @@map("press_release_translations")
+}
+
+model CustomizationRequest {
+  id           String   @id @default(uuid()) @db.Uuid
+  reportId     String   @map("report_id") @db.Uuid
+  reportTitle  String   @map("report_title") @db.VarChar(500)
+  requestType  String   @map("request_type") @db.VarChar(100)
+  name         String?  @db.VarChar(100)
+  description  String?  @db.Text
+  email        String   @db.VarChar(255)
+  phone        String?  @db.VarChar(50)
+  company      String?  @db.VarChar(200)
+  status       String   @default("NEW") @db.VarChar(50)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  report Report @relation(fields: [reportId], references: [id])
+
+  @@map("customization_requests")
 }
