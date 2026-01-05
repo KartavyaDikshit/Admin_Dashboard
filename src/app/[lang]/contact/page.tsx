@@ -1,7 +1,26 @@
 import { getDictionary } from '@/i18n/dictionaries';
 import ContactForm from '@/components/new_ui/ContactForm';
+import { Metadata } from 'next';
 
-export default async function Contact({ params }: { params: Promise<{ lang: string }> }) {
+type Props = {
+  params: Promise<{ lang: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = getDictionary(lang);
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+
+  return {
+    title: dict.contactTitle || 'Contact Us | The Brainy Insights',
+    description: dict.contactText || 'Get in touch with our expert research consultants for your market research needs.',
+    alternates: {
+      canonical: `${siteUrl}/${lang}/contact`,
+    },
+  };
+}
+
+export default async function Contact({ params }: Props) {
   const { lang } = await params;
   const dict = getDictionary(lang);
 

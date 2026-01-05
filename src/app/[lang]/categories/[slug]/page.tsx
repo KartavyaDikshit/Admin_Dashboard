@@ -3,6 +3,7 @@ import { getCategory, getReports } from '@/lib/data';
 import { getDictionary } from '@/i18n/dictionaries';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import { generateBreadcrumbSchema } from '@/lib/utils';
 
 type Props = {
   params: Promise<{ lang: string; slug: string }>;
@@ -16,9 +17,38 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Category Not Found' };
   }
 
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const canonicalUrl = category.canonicalUrl || `${siteUrl}/${lang}/categories/${slug}`;
+  const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
+
+  const languages: Record<string, string> = {};
+  locales.forEach(l => {
+    languages[l] = `${siteUrl}/${l}/categories/${slug}`;
+  });
+
   return {
-    title: category.name,
-    description: category.description,
+    title: category.metaTitle || category.name,
+    description: (category.metaDescription || category.description) ?? undefined,
+    keywords: category.seoKeywords || [],
+    alternates: {
+      canonical: canonicalUrl,
+      languages: languages,
+    },
+    openGraph: {
+      title: category.ogTitle || category.metaTitle || category.name,
+      description: (category.ogDescription || category.metaDescription || category.description) ?? undefined,
+      type: 'website',
+      url: canonicalUrl,
+      images: category.ogImage ? [category.ogImage] : [],
+      siteName: 'The Brainy Insights',
+      locale: lang,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: category.ogTitle || category.metaTitle || category.name,
+      description: (category.ogDescription || category.metaDescription || category.description) ?? undefined,
+      images: category.ogImage ? [category.ogImage] : [],
+    },
   };
 }
 
@@ -31,10 +61,21 @@ export default async function CategoryDetailPage({ params }: Props) {
     notFound();
   }
 
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: dict.home || 'Home', item: `${siteUrl}/${lang}` },
+    { name: dict.categoriesLabel || 'Categories', item: `${siteUrl}/${lang}/categories` },
+    { name: category.name, item: `${siteUrl}/${lang}/categories/${slug}` }
+  ]);
+
   const reports = await getReports(lang, category.id);
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 h-[323.75px]">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/90 via-indigo-700/95 to-purple-800/90"></div>

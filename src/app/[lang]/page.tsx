@@ -5,8 +5,27 @@ import TrustedBy from '@/components/new_ui/TrustedBy';
 import FeaturedCategories from '@/components/new_ui/FeaturedCategories';
 import FeaturedReports from '@/components/new_ui/FeaturedReports';
 import Testimonials from '@/components/new_ui/Testimonials';
+import { Metadata } from 'next';
 
-export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
+type Props = {
+  params: Promise<{ lang: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = getDictionary(lang) as any;
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+
+  return {
+    title: dict.homeTitle || 'Global Market Research Reports & Consulting',
+    description: dict.homeDescription || 'The Brainy Insights provides comprehensive market research reports, industry analysis, and consulting services to help businesses grow globally.',
+    alternates: {
+      canonical: `${siteUrl}/${lang}`,
+    },
+  };
+}
+
+export default async function Home({ params }: Props) {
   const { lang } = await params;
   const dict = getDictionary(lang);
   

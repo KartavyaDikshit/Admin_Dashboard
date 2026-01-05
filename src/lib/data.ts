@@ -355,6 +355,37 @@ export const getReport = cache(async (slug: string, locale: string) => {
   }
 });
 
+export const getReportWithAllTranslations = cache(async (slug: string) => {
+  try {
+    const report = await prisma.report.findUnique({
+      where: { slug },
+      include: {
+        translations: true,
+      },
+    });
+
+    if (!report) {
+      // Try finding by slug in translations
+      const translation = await prisma.reportTranslation.findFirst({
+        where: { slug },
+        include: {
+          report: {
+            include: {
+              translations: true
+            }
+          }
+        }
+      });
+      return translation?.report || null;
+    }
+
+    return report;
+  } catch (error) {
+    console.error('Error fetching report with all translations:', error);
+    return null;
+  }
+});
+
 const mapPressRelease = (pr: PressReleaseWithRelations) => {
     const translation = pr.translations?.[0];
     return {

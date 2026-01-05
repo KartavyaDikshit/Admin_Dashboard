@@ -1,20 +1,51 @@
 import Link from 'next/link';
 import { getCategories } from '@/lib/data';
 import { getDictionary } from '@/i18n/dictionaries';
+import { Metadata } from 'next';
+import { generateBreadcrumbSchema } from '@/lib/utils';
 
-export default async function CategoriesPage({ params }: { params: Promise<{ lang: string }> }) {
+type Props = {
+  params: Promise<{ lang: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = getDictionary(lang);
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
+
+  const languages: Record<string, string> = {};
+  locales.forEach(l => {
+    languages[l] = `${siteUrl}/${l}/categories`;
+  });
+
+  return {
+    title: dict.categories || 'Market Research Categories',
+    description: dict.featuredCategoriesDesc || 'Explore market research reports by industry category.',
+    alternates: {
+      canonical: `${siteUrl}/${lang}/categories`,
+      languages: languages,
+    },
+  };
+}
+
+export default async function CategoriesPage({ params }: Props) {
   const { lang } = await params;
   const dict = getDictionary(lang);
   const categories = await getCategories(lang);
 
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: dict.home || 'Home', item: `${siteUrl}/${lang}` },
+    { name: dict.categories || 'Categories', item: `${siteUrl}/${lang}/categories` }
+  ]);
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-         {/* Header is global Layout, so this section is redundant if Layout handles it. 
-             However, the MHTML includes header code. Since Layout wraps this page, I assume Layout handles Header/Footer.
-             I will focus on the Page Content.
-         */}
-      </header>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
       <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 py-20">
         <div className="absolute inset-0">

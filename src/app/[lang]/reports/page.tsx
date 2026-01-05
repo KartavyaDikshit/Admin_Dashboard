@@ -3,11 +3,34 @@ import { getPaginatedReports, getCategories } from '@/lib/data';
 import { getDictionary } from '@/i18n/dictionaries';
 import Pagination from '@/components/ui/Pagination';
 import ReportFilter from '@/components/reports/ReportFilter';
+import { Metadata } from 'next';
+import { generateBreadcrumbSchema } from '@/lib/utils';
 
 type Props = {
   params: Promise<{ lang: string }>;
   searchParams: Promise<{ page?: string; search?: string; category?: string }>;
 };
+
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = getDictionary(lang);
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
+
+  const languages: Record<string, string> = {};
+  locales.forEach(l => {
+    languages[l] = `${siteUrl}/${l}/reports`;
+  });
+
+  return {
+    title: dict.reports || 'Market Research Reports',
+    description: dict.reportsHeroSubtitle || 'Browse our extensive collection of market research reports across various industries.',
+    alternates: {
+      canonical: `${siteUrl}/${lang}/reports`,
+      languages: languages,
+    },
+  };
+}
 
 export default async function ReportsPage({ params, searchParams }: Props) {
   const { lang } = await params;
@@ -19,11 +42,21 @@ export default async function ReportsPage({ params, searchParams }: Props) {
   const categoryId = resolvedSearchParams.category || '';
   const limit = 9;
 
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: dict.home || 'Home', item: `${siteUrl}/${lang}` },
+    { name: dict.reports || 'Reports', item: `${siteUrl}/${lang}/reports` }
+  ]);
+
   const { reports, totalPages } = await getPaginatedReports(lang, page, limit, search, categoryId);
   const categories = await getCategories(lang);
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <section className="hero-section" style={{height: '323.75px'}}>
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/90 via-indigo-700/95 to-purple-800/90"></div>

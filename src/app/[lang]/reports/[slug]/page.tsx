@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { getReport } from '@/lib/data';
+import { getReport, getReportWithAllTranslations } from '@/lib/data';
 import { getDictionary } from '@/i18n/dictionaries';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { formatDate, extractMarketStats } from '@/lib/utils';
+import { formatDate, extractMarketStats, generateBreadcrumbSchema } from '@/lib/utils';
 import ReportTabs from '@/components/new_ui/ReportTabs';
 import ReportSidebar from '@/components/new_ui/ReportSidebar';
 import { DocumentTextIcon, ClockIcon, GlobeAltIcon, UserGroupIcon } from '@heroicons/react/24/outline';
@@ -25,6 +25,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
   const canonicalUrl = report.canonicalUrl || `${siteUrl}/${lang}/reports/${slug}`;
+  
+  // Fetch all translations for hreflang
+  const fullReport = await getReportWithAllTranslations(slug);
+  const languages: Record<string, string> = {};
+  
+  if (fullReport) {
+      // Add default (main slug)
+      languages['en'] = `${siteUrl}/en/reports/${fullReport.slug}`;
+      // Add translations
+      fullReport.translations.forEach((t: any) => {
+          languages[t.locale] = `${siteUrl}/${t.locale}/reports/${t.slug}`;
+      });
+  }
 
   return {
     title: report.metaTitle || report.title,
@@ -32,6 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     keywords: report.keywords || [],
     alternates: {
       canonical: canonicalUrl,
+      languages: languages,
     },
     openGraph: {
       title: report.ogTitle || report.metaTitle || report.title,
@@ -159,6 +173,13 @@ export default async function ReportDetailPage({ params }: Props) {
   if (!report) {
     notFound();
   }
+
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: dict.home || 'Home', item: `${siteUrl}/${lang}` },
+    { name: dict.reports || 'Reports', item: `${siteUrl}/${lang}/reports` },
+    { name: report.title, item: `${siteUrl}/${lang}/reports/${slug}` }
+  ]);
 
   // Markers used for fallback text parsing
   const dynamicsMarkers = [
@@ -379,6 +400,10 @@ export default async function ReportDetailPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {report.schemaMarkup && (
         <script
           type="application/ld+json"

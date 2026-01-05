@@ -5,6 +5,14 @@ import { getDictionary } from '@/i18n/dictionaries';
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
+
+  // Construct hreflang alternates
+  const languageAlternates: Record<string, string> = {};
+  locales.forEach(locale => {
+    languageAlternates[locale] = `${baseUrl}/${locale}`;
+  });
   
   return {
     title: {
@@ -12,10 +20,16 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       default: 'Global Market Research Reports & Consulting | The Brainy Insights',
     },
     description: 'The Brainy Insights offers top-notch market research reports and consulting services. Gain actionable insights and competitive analysis for your business.',
+    metadataBase: new URL(baseUrl),
+    alternates: {
+      canonical: `${baseUrl}/${lang}`,
+      languages: languageAlternates,
+    },
     openGraph: {
       type: 'website',
       locale: lang,
       siteName: 'The Brainy Insights',
+      url: `${baseUrl}/${lang}`,
       images: [
         {
             url: '/og-image.jpg', // Assuming you'd have a default OG image
@@ -24,6 +38,11 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
             alt: 'The Brainy Insights',
         }
       ]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@thebrainyinsight',
+      creator: '@thebrainyinsight',
     },
     keywords: ['market research', 'consulting services', 'global market reports', 'industry analysis', 'business intelligence'],
   };

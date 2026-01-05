@@ -1,7 +1,26 @@
 import Link from 'next/link';
 import { getDictionary } from '@/i18n/dictionaries';
+import { Metadata } from 'next';
 
-export default async function About({ params }: { params: Promise<{ lang: string }> }) {
+type Props = {
+  params: Promise<{ lang: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = getDictionary(lang);
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+
+  return {
+    title: dict.aboutTitle || 'About The Brainy Insights',
+    description: dict.aboutValuesIntro || 'Learn about our values, research methodology, and how we help clients with expert market insights.',
+    alternates: {
+      canonical: `${siteUrl}/${lang}/about`,
+    },
+  };
+}
+
+export default async function About({ params }: Props) {
   const { lang } = await params;
   const dict = getDictionary(lang);
 
