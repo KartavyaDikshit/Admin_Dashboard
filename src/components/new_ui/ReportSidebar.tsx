@@ -9,9 +9,11 @@ import {
   CalendarIcon, 
   CurrencyDollarIcon,
   XMarkIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 interface ReportSidebarProps {
   prices: {
@@ -42,6 +44,9 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  
+  // Payment State
+  const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'ccavenue'>('paypal');
 
   const openModal = (type: string) => {
     setRequestType(type);
@@ -51,7 +56,6 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
 
   const closeModal = () => {
     setIsModalOpen(false);
-    // Reset status after a delay to avoid flicker during closing animation if any
     setTimeout(() => {
         if (submitStatus === 'success') {
             setSubmitStatus('idle');
@@ -94,8 +98,72 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
     }
   };
 
+  // PayPal Handlers
+  const createOrder = async () => {
+    // Validate form data slightly if needed, though PayPal handles a lot.
+    // We strictly need user email for our DB.
+    if (!formData.email) {
+        alert("Please enter your email address first.");
+        return ""; // Cancel
+    }
+
+    try {
+        const response = await fetch('/api/orders/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                reportId,
+                licenseType,
+                userEmail: formData.email,
+                userName: formData.name
+            })
+        });
+        const orderData = await response.json();
+        
+        if (orderData.error) {
+            console.error("Error creating order:", orderData.error);
+            alert("Could not initiate payment. Please try again.");
+            return "";
+        }
+        
+        return orderData.orderID;
+    } catch (err) {
+        console.error("Payment Error:", err);
+        return "";
+    }
+  };
+
+  const onApprove = async (data: any) => {
+      try {
+          const response = await fetch('/api/orders/capture', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                orderID: data.orderID
+            })
+        });
+        const details = await response.json();
+        
+        if (details.status === 'COMPLETED') {
+            setSubmitStatus('success');
+            // We reuse the success state of the modal but maybe we want a specific message for payment
+        } else {
+            alert("Payment not completed. Please contact support.");
+        }
+      } catch (err) {
+          console.error("Capture Error:", err);
+          alert("Error finalizing payment. Please contact support.");
+      }
+  };
+
+  const initialOptions = {
+    clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "test", // Fallback to avoid crash if env missing
+    currency: prices.currency || "USD",
+    intent: "capture",
+  };
+
   return (
-    <>
+    <PayPalScriptProvider options={initialOptions}>
       <div className="w-80 sticky top-[58px] space-y-6">
         {/* License Card */}
         <div className="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border bg-white shadow-sm">
@@ -152,7 +220,10 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
 
             </div>
 
-            <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 h-9 px-4 w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold shadow-lg hover:shadow-xl transition-all text-lg py-6">
+            <button 
+              onClick={() => openModal('Purchase Report')}
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 h-9 px-4 w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold shadow-lg hover:shadow-xl transition-all text-lg py-6"
+            >
               Buy Now - ${selectedPrice?.toLocaleString()}
             </button>
 
@@ -210,8 +281,8 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
           <div className="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity" onClick={closeModal}></div>
           
-          <div className="relative w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-8 text-left shadow-2xl transition-all sm:w-full border border-gray-100">
-            <div className="absolute right-6 top-6">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto transform rounded-2xl bg-white p-8 text-left shadow-2xl transition-all sm:w-full border border-gray-100 flex flex-col [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div className="absolute right-6 top-6 z-10">
               <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 transition-colors">
                 <XMarkIcon className="h-7 w-7" />
               </button>
@@ -224,7 +295,10 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">Thank You!</h3>
                     <p className="text-gray-600 mb-8 px-4">
-                        Your request for <strong>{requestType}</strong> has been submitted. Our team will reach out to you soon.
+                        {requestType === 'Purchase Report' 
+                           ? `Your payment for "${reportTitle}" was successful. You will receive a confirmation email shortly.`
+                           : `Your request for ${requestType} has been submitted. Our team will reach out to you soon.`
+                        }
                     </p>
                     
                     <div className="flex flex-col gap-3">
@@ -243,7 +317,104 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                     </div>
                 </div>
             ) : (
-                <>
+                requestType === 'Purchase Report' ? (
+                  /* PURCHASE FLOW */
+                  <div className="space-y-6">
+                     <div className="border-b pb-4">
+                        <h3 className="text-2xl font-bold text-gray-900">Secure Checkout</h3>
+                        <p className="text-sm text-gray-500 mt-1">Complete your purchase securely.</p>
+                     </div>
+
+                     <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 space-y-1">
+                        <p className="text-sm text-gray-500 font-medium uppercase text-xs">Order Summary</p>
+                        <p className="font-semibold text-gray-900 line-clamp-1">{reportTitle}</p>
+                        <div className="flex justify-between items-center mt-2">
+                           <span className="text-indigo-600 font-medium bg-indigo-50 px-2 py-0.5 rounded text-sm capitalize">
+                             {licenseType.replace(/([A-Z])/g, ' $1').trim()} License
+                           </span>
+                           <span className="text-xl font-bold text-gray-900">${selectedPrice?.toLocaleString()}</span>
+                        </div>
+                     </div>
+                     
+                     {/* Contact Info Form - needed for order */}
+                     <div className="space-y-3">
+                        <h4 className="text-sm font-bold text-gray-900 uppercase">1. Contact Information</h4>
+                        <div className="grid grid-cols-2 gap-3">
+                             <input
+                                type="text"
+                                name="name"
+                                placeholder="Full Name"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                className="col-span-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5"
+                             />
+                             <input
+                                type="email"
+                                name="email"
+                                placeholder="Email Address *"
+                                required
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                className={`col-span-1 w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5 ${!formData.email && 'border-red-300'}`}
+                             />
+                             <input
+                                type="text"
+                                name="company"
+                                placeholder="Company (Optional)"
+                                value={formData.company}
+                                onChange={handleInputChange}
+                                className="col-span-2 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5"
+                             />
+                        </div>
+                     </div>
+
+                     <div className="space-y-3">
+                        <h4 className="text-sm font-bold text-gray-900 uppercase">2. Payment Method</h4>
+                        <div className="flex gap-3">
+                            <div 
+                                onClick={() => setPaymentMethod('paypal')}
+                                className={`flex-1 border rounded-lg p-3 cursor-pointer flex items-center justify-center gap-2 transition-all ${paymentMethod === 'paypal' ? 'border-indigo-600 bg-indigo-50 ring-1 ring-indigo-600' : 'hover:border-gray-300'}`}
+                            >
+                                <span className="font-semibold text-gray-700">PayPal</span>
+                            </div>
+                            <div 
+                                onClick={() => setPaymentMethod('ccavenue')}
+                                className={`flex-1 border rounded-lg p-3 cursor-pointer flex items-center justify-center gap-2 transition-all ${paymentMethod === 'ccavenue' ? 'border-indigo-600 bg-indigo-50 ring-1 ring-indigo-600' : 'hover:border-gray-300'}`}
+                            >
+                                <span className="font-semibold text-gray-700">Credit/Debit Card</span>
+                            </div>
+                        </div>
+                     </div>
+
+                     <div className="pt-2">
+                        {paymentMethod === 'paypal' ? (
+                            <div className={`transition-opacity ${!formData.email ? 'opacity-50 pointer-events-none' : ''}`}>
+                                {!formData.email && <p className="text-xs text-red-500 mb-2 text-center">Please enter your email to proceed</p>}
+                                <PayPalButtons 
+                                    style={{ layout: "vertical", shape: "rect" }}
+                                    createOrder={createOrder}
+                                    onApprove={onApprove}
+                                    forceReRender={[selectedPrice, licenseType, formData.email]}
+                                />
+                            </div>
+                        ) : (
+                            <div className="text-center p-4 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                <p className="text-gray-500 text-sm mb-3">Secure Credit/Debit Card payment via CCAvenue.</p>
+                                <button className="w-full bg-indigo-600 text-white font-bold py-3 rounded-md hover:bg-indigo-700 transition-colors" disabled>
+                                    Proceed to Payment (Coming Soon)
+                                </button>
+                            </div>
+                        )}
+                     </div>
+                     
+                     <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
+                        <ShieldCheckIcon className="h-4 w-4" />
+                        <span>256-bit SSL Secure Payment</span>
+                     </div>
+                  </div>
+                ) : (
+                  /* OTHER FORMS (Customization, Sample, etc) */
+                  <>
                     <div className="mb-6">
                         <h3 className="text-2xl font-bold text-gray-900">{requestType}</h3>
                         <p className="text-sm text-indigo-600 font-medium mt-1">Report: {reportTitle}</p>
@@ -332,11 +503,12 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
                             </button>
                         </div>
                     </form>
-                </>
+                  </>
+                )
             )}
           </div>
         </div>
       )}
-    </>
+    </PayPalScriptProvider>
   );
 }
