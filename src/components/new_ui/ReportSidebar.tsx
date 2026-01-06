@@ -12,6 +12,7 @@ import {
   CheckCircleIcon,
   ShieldCheckIcon
 } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
@@ -24,10 +25,12 @@ interface ReportSidebarProps {
   };
   labels: any;
   reportId?: string;
+  reportDbId?: string;
   reportTitle?: string;
+  lang: string;
 }
 
-export default function ReportSidebar({ prices, labels, reportId, reportTitle }: ReportSidebarProps) {
+export default function ReportSidebar({ prices, labels, reportId, reportDbId, reportTitle, lang }: ReportSidebarProps) {
   const [licenseType, setLicenseType] = useState<'singleUser' | 'multiUser' | 'corporate'>('singleUser');
   const selectedPrice = prices[licenseType];
   const router = useRouter();
@@ -78,7 +81,7 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          reportId,
+          reportId: reportDbId, // Use DB ID for relation
           reportTitle,
           requestType,
           ...formData
@@ -112,7 +115,7 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                reportId,
+                reportId: reportDbId, // Pass the UUID here
                 licenseType,
                 userEmail: formData.email,
                 userName: formData.name
@@ -237,41 +240,41 @@ export default function ReportSidebar({ prices, labels, reportId, reportTitle }:
         {/* Action Buttons Card */}
         <div className="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border bg-white shadow-sm">
           <div className="px-3 [&:last-child]:pb-6 !pt-4 !pb-4 space-y-2">
-            <button 
-              onClick={() => openModal(labels.requestSample || 'Request Sample PDF')}
+            <Link 
+              href={`/${lang}/enquiry/request-sample/${reportId}`}
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 w-full justify-start bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm h-9 transition-all"
             >
               <ArrowDownTrayIcon className="h-4 w-4 mr-2" />
               {labels.requestSample || 'Request Sample PDF'}
-            </button>
-            <button 
-              onClick={() => openModal(labels.requestCustomization || 'Request Customization')}
+            </Link>
+            <Link 
+              href={`/${lang}/enquiry/request-customization/${reportId}`}
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 w-full justify-start bg-purple-600 hover:bg-purple-700 text-white font-medium text-sm h-9 transition-all"
             >
               <DocumentTextIcon className="h-4 w-4 mr-2" />
               {labels.requestCustomization || 'Request Customization'}
-            </button>
-            <button 
-              onClick={() => openModal(labels.talkToAnalyst || 'Talk to Analyst')}
+            </Link>
+            <Link 
+              href={`/${lang}/enquiry/talk-to-analyst/${reportId}`}
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 w-full justify-start bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm h-9 transition-all"
             >
               <PhoneIcon className="h-4 w-4 mr-2" />
               {labels.talkToAnalyst || 'Talk to Analyst'}
-            </button>
-            <button 
-              onClick={() => openModal(labels.scheduleConsultation || 'Schedule Consultation')}
+            </Link>
+            <Link 
+              href={`/${lang}/enquiry/schedule-consultation/${reportId}`}
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 w-full justify-start bg-green-600 hover:bg-green-700 text-white font-medium text-sm h-9 transition-all"
             >
               <CalendarIcon className="h-4 w-4 mr-2" />
               {labels.scheduleConsultation || 'Schedule Consultation'}
-            </button>
-            <button 
-              onClick={() => openModal(labels.customPricing || 'Custom Pricing')}
+            </Link>
+            <Link 
+              href={`/${lang}/enquiry/custom-pricing/${reportId}`}
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 w-full justify-start bg-amber-600 hover:bg-amber-700 text-white font-medium text-sm h-9 transition-all"
             >
               <CurrencyDollarIcon className="h-4 w-4 mr-2" />
               {labels.customPricing || 'Custom Pricing'}
-            </button>
+            </Link>
           </div>
         </div>
       </div>

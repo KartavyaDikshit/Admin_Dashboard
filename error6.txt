@@ -1,0 +1,35 @@
+ GET /en/reports/smart-pills-market-61709 200 in 1475ms (compile: 28ms, proxy.ts: 9ms, render: 1437ms)
+prisma:error
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.findUnique()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__fc4a9fef._.js:196:166
+
+  193     });
+  194 }
+  195 // 1. Fetch Report Details for Pricing
+→ 196 const report = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.findUnique(
+Inconsistent column data: Error creating UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `T` at 1
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__fc4a9fef._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\node_modules__pnpm_9e58a07f._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Error creating PayPal order: Error [PrismaClientKnownRequestError]:
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.findUnique()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__fc4a9fef._.js:196:166
+
+  193     });
+  194 }
+  195 // 1. Fetch Report Details for Pricing
+→ 196 const report = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.findUnique(
+Inconsistent column data: Error creating UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `T` at 1
+    at <unknown> (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__fc4a9fef._.js:196:166)
+    at async POST (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__fc4a9fef._.js:196:24) {
+  code: 'P2023',
+  clientVersion: '5.22.0',
+  meta: [Object]
+}
+ POST /api/orders/create 500 in 1209ms (compile: 386ms, render: 823ms)

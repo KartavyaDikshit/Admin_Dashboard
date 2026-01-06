@@ -8,7 +8,7 @@ export default function Footer({ lang }: { lang: string }) {
   return (
     <footer className="bg-gray-900 text-gray-300 py-16">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12">
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-2 mb-6 relative w-48 h-12">
@@ -36,30 +36,14 @@ export default function Footer({ lang }: { lang: string }) {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Company */}
           <div>
-            <h4 className="text-white font-semibold mb-6 text-lg border-b border-gray-700 pb-2 inline-block">{dict.quickLinks}</h4>
+            <h4 className="text-white font-semibold mb-6 text-lg border-b border-gray-700 pb-2 inline-block">Company</h4>
             <ul className="space-y-3">
-              <li><Link href={`/${lang}`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.home}</Link></li>
-              <li><Link href={`/${lang}/categories`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.categories}</Link></li>
               <li><Link href={`/${lang}/about`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.aboutUs}</Link></li>
               <li><Link href={`/${lang}/services`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.services}</Link></li>
+              <li><Link href={`/${lang}/press-releases`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.pressReleases}</Link></li>
               <li><Link href={`/${lang}/contact`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.contactUs}</Link></li>
-              <li className="pt-2">
-                <Link href={`/${lang}/contact`} className="inline-flex items-center justify-center px-4 py-2 text-sm font-bold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition-colors shadow-sm">
-                  Request Callback
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Legal & Support */}
-          <div>
-            <h4 className="text-white font-semibold mb-6 text-lg border-b border-gray-700 pb-2 inline-block">Support</h4>
-            <ul className="space-y-3">
-              <li><Link href={`/${lang}/contact`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.faqs}</Link></li>
-              <li><Link href={`/${lang}/privacy-policy`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.privacyPolicy}</Link></li>
-              <li><Link href={`/${lang}/terms-conditions`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.termsOfService}</Link></li>
             </ul>
           </div>
 
@@ -87,9 +71,22 @@ export default function Footer({ lang }: { lang: string }) {
         </div>
         
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-          <p>{dict.footerText}</p>
-          <div className="mt-4 md:mt-0">
-             {/* Optional small links or credits */}
+          <div className="flex items-center gap-4">
+            <Link href={`/${lang}`} className="relative w-32 h-8">
+                <Image 
+                  src="/logo.png" 
+                  alt="The Brainy Insights" 
+                  fill 
+                  className="object-contain brightness-0 invert opacity-50 hover:opacity-100 transition-opacity"
+                  unoptimized
+                />
+            </Link>
+            <p>{dict.footerText}</p>
+          </div>
+          <div className="mt-4 md:mt-0 flex gap-6">
+             <Link href={`/${lang}/privacy-policy`} className="hover:text-white transition-colors">{dict.privacyPolicy}</Link>
+             <Link href={`/${lang}/terms-conditions`} className="hover:text-white transition-colors">{dict.termsOfService}</Link>
+             <Link href="/sitemap.xml" className="hover:text-white transition-colors">Sitemap</Link>
           </div>
         </div>
       </div>

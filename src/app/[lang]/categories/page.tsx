@@ -75,35 +75,28 @@ export default async function CategoriesPage({ params }: Props) {
             <p className="text-gray-600 max-w-2xl mx-auto">{dict.featuredCategoriesDesc}</p>
           </div>
           <div className="bg-indigo-600/10 backdrop-blur-sm rounded-2xl p-6 border border-indigo-200/30 shadow-lg mb-12">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="relative flex-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-search absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" aria-hidden="true">
-                  <path d="m21 21-4.34-4.34"></path>
-                  <circle cx="11" cy="11" r="8"></circle>
-                </svg>
-                <input className="flex w-full rounded-md border px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pl-10 h-10 bg-white border-gray-300" placeholder={dict.searchCategories || "Search categories..."} type="search" />
-              </div>
-            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {categories.map((category) => (
                 <Link 
                   key={category.id} 
                   href={`/${lang}/categories/${category.slug}`}
-                  className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                  className="bg-white rounded-xl border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group flex flex-col"
                 >
-                  <div className="mb-3 text-indigo-600">
+                  <div className="relative h-40 w-full overflow-hidden rounded-t-xl bg-indigo-50 flex items-center justify-center">
                     {category.icon && (category.icon.startsWith('http') || category.icon.startsWith('/')) ? (
-                      <img src={category.icon} alt={category.name} className="w-12 h-12 object-contain" />
+                      <img src={category.icon} alt={category.name} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" />
                     ) : (
-                      <svg className="w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg className="w-16 h-16 text-indigo-400" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="32" cy="32" r="24" stroke="currentColor" strokeWidth="2.5" fill="none"></circle>
                         <rect x="28" y="18" width="8" height="28" rx="1" fill="currentColor"></rect>
                         <rect x="18" y="28" width="28" height="8" rx="1" fill="currentColor"></rect>
                       </svg>
                     )}
                   </div>
-                  <h3 className="font-semibold mb-2 group-hover:text-indigo-600 transition-colors">{category.name}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">{category.description || 'Market insights.'}</p>
+                  <div className="p-6 text-center flex-1 flex flex-col items-center">
+                      <h3 className="font-semibold mb-2 group-hover:text-indigo-600 transition-colors text-lg">{category.name}</h3>
+                      <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">{category.description || 'Market insights.'}</p>
+                  </div>
                 </Link>
               ))}
             </div>

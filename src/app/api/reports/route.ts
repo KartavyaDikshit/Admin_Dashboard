@@ -56,9 +56,10 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status')
     const featured = searchParams.get('featured')
     const aiGenerated = searchParams.get('aiGenerated')
+    const isExport = searchParams.get('export') === 'true'
 
-    const skip = (page - 1) * limit
-    
+    const skip = isExport ? undefined : (page - 1) * limit
+    const take = isExport ? undefined : limit
 
     const locale = searchParams.get('locale')
 
@@ -108,6 +109,27 @@ export async function GET(request: NextRequest) {
         methodology: true,
         keyFindings: true,
         executiveSummary: true,
+        marketResearchSummary: true,
+        marketDynamics: true,
+        regionalInsights: true,
+        keyMarketPlayers: true,
+        recentStrategicDevelopments: true,
+        imageUrl: true,
+        imageAlt: true,
+        keywords: true,
+        trendingKeywords: true,
+        longTailKeywords: true,
+        canonicalUrl: true,
+        ogTitle: true,
+        ogDescription: true,
+        ogImage: true,
+        twitterTitle: true,
+        twitterDescription: true,
+        schemaMarkup: true,
+        viewCount: true,
+        downloadCount: true,
+        enquiryCount: true,
+        updatedAt: true,
         reportType: true,
         researchMethod: true,
         metaTitle: true,
@@ -166,8 +188,6 @@ export async function GET(request: NextRequest) {
         }
       },
       orderBy: [
-        { featured: 'desc' },
-        { priority: 'desc' },
         { createdAt: 'desc' }
       ]
     })
@@ -199,24 +219,40 @@ interface CategoryWithTranslations {
         methodology: translated?.methodology || report.methodology,
         keyFindings: translated?.keyFindings || report.keyFindings,
         executiveSummary: translated?.executiveSummary || report.executiveSummary,
-        keywords: translated?.keywords || [],
-        semanticKeywords: translated?.semanticKeywords || [],
-        localizedKeywords: translated?.localizedKeywords || [],
-        culturalKeywords: translated?.culturalKeywords || [],
-        longTailKeywords: translated?.longTailKeywords || [],
-        localCompetitorKeywords: translated?.localCompetitorKeywords || [],
+        marketResearchSummary: translated?.marketResearchSummary || report.marketResearchSummary,
+        marketDynamics: translated?.marketDynamics || report.marketDynamics,
+        regionalInsights: translated?.regionalInsights || report.regionalInsights,
+        keyMarketPlayers: translated?.keyMarketPlayers || report.keyMarketPlayers,
+        recentStrategicDevelopments: translated?.recentStrategicDevelopments || report.recentStrategicDevelopments,
+        imageUrl: report.imageUrl,
+        imageAlt: report.imageAlt,
+        keywords: translated?.keywords || report.keywords || [],
+        semanticKeywords: translated?.semanticKeywords || report.semanticKeywords || [],
+        localizedKeywords: translated?.localizedKeywords || report.localizedKeywords || [],
+        culturalKeywords: translated?.culturalKeywords || report.culturalKeywords || [],
+        longTailKeywords: translated?.longTailKeywords || report.longTailKeywords || [],
+        trendingKeywords: report.trendingKeywords || [],
+        localCompetitorKeywords: translated?.localCompetitorKeywords || report.localCompetitorKeywords || [],
         metaTitle: translated?.metaTitle || report.metaTitle,
         metaDescription: translated?.metaDescription || report.metaDescription,
-        canonicalUrl: translated?.canonicalUrl || undefined,
-        ogTitle: translated?.ogTitle || undefined,
-        ogDescription: translated?.ogDescription || undefined,
-        ogImage: translated?.ogImage || undefined,
-        twitterTitle: translated?.twitterTitle || undefined,
-        twitterDescription: translated?.twitterDescription || undefined,
-        schemaMarkup: translated?.schemaMarkup || undefined,
-        breadcrumbData: translated?.breadcrumbData || undefined,
-        faqData: translated?.faqData || undefined,
-        localBusinessSchema: translated?.localBusinessSchema || undefined,
+        canonicalUrl: translated?.canonicalUrl || report.canonicalUrl,
+        ogTitle: translated?.ogTitle || report.ogTitle,
+        ogDescription: translated?.ogDescription || report.ogDescription,
+        ogImage: translated?.ogImage || report.ogImage,
+        twitterTitle: translated?.twitterTitle || report.twitterTitle,
+        twitterDescription: translated?.twitterDescription || report.twitterDescription,
+        schemaMarkup: translated?.schemaMarkup || report.schemaMarkup,
+        breadcrumbData: translated?.breadcrumbData || report.breadcrumbData,
+        faqData: translated?.faqData || report.faqData,
+        localBusinessSchema: translated?.localBusinessSchema || report.localBusinessSchema,
+        viewCount: report.viewCount,
+        downloadCount: report.downloadCount,
+        enquiryCount: report.enquiryCount,
+        updatedAt: report.updatedAt,
+        reportType: report.reportType,
+        researchMethod: report.researchMethod,
+        baseYear: report.baseYear,
+        forecastPeriod: report.forecastPeriod,
       };
 
       // Apply category translations

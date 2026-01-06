@@ -1,91 +1,87 @@
-# Project: TBI Admin Dashboard
+# Project Context: TBI Admin Dashboard (Market Research Platform)
 
-## Project Overview
+## Overview
+This is a Next.js web application designed for managing and selling market research reports. It functions as both a Content Management System (CMS) for internal admins and an E-commerce platform for users.
 
-This is a Next.js project bootstrapped with `create-next-app`. It serves as an admin dashboard for an AI pipeline that generates reports. The project uses TypeScript, Tailwind CSS, and Prisma for database management with a PostgreSQL database. Authentication is handled by NextAuth.js. The application is designed to manage content, users, orders, and other aspects of the AI report generation pipeline.
+**Key Features:**
+*   **Report Management:** CRUD operations for market research reports, including categories and press releases.
+*   **E-commerce:** Order processing, payment integration (PayPal mentioned in dependencies), and user management.
+*   **Localization:** Extensive support for multi-language content (Reports, Blogs, Categories) with dedicated translation workflows.
+*   **AI Integration:** Built-in capabilities for AI-assisted content generation and translation (using OpenAI/GPT models).
+*   **Admin Dashboard:** A dedicated interface (`/admin`) for managing content, users, and orders.
 
-### Key Technologies
-
-*   **Framework:** Next.js 15.5.3
+## Tech Stack
+*   **Framework:** Next.js 16 (App Router)
 *   **Language:** TypeScript
-*   **Styling:** Tailwind CSS
-*   **Database:** PostgreSQL
-*   **ORM:** Prisma
-*   **Authentication:** NextAuth.js
-*   **API:** OpenAI
-*   **UI Components:** Recharts for charts
+*   **UI Library:** React 19
+*   **Styling:** Tailwind CSS (v4)
+*   **Database:** PostgreSQL (via Prisma ORM)
+*   **Authentication:** NextAuth.js (v4)
+*   **Forms:** React Hook Form + Zod validation
+*   **Testing:** Jest + React Testing Library
 
-## Building and Running
+## Architecture
+*   **Routing:** Uses the Next.js App Router.
+    *   `src/app/[lang]`: Handles public-facing pages with internationalization.
+    *   `src/app/admin`: Contains the admin dashboard routes.
+    *   `src/app/api`: Backend API endpoints.
+*   **Data Access:** Prisma Client is used for all database interactions.
+    *   Schema located at `prisma/schema.prisma`.
+*   **Internationalization:** Dynamic routing `[lang]` is used to serve localized content.
 
-### Prerequisites
+## Key Commands
 
-*   Node.js
-*   pnpm (or npm/yarn)
-*   PostgreSQL database
-
-### Installation
-
-1.  Clone the repository.
-2.  Install dependencies:
-    ```bash
-    pnpm install
-    ```
-3.  Set up your environment variables by creating a `.env` file. A sample `.env.example` file should be created with the following content:
-    ```
-    DATABASE_URL="postgresql://tbi_user:karta123@localhost:5432/tbi_db"
-    NEXTAUTH_URL="http://localhost:3000"
-    OPENAI_API_KEY="your-openai-api-key"
-    ```
-4.  Generate Prisma client:
-    ```bash
-    pnpm db:generate
-    ```
-5.  Run database migrations:
-    ```bash
-    pnpm db:migrate
-    ```
-6. Seed the database (optional):
-   ```bash
-   pnpm seed
-   ```
-
-### Running the application
-
-To run the development server:
-
+### Development
 ```bash
-pnpm dev
+# Start the development server
+npm run dev
+
+# Run linting
+npm run lint
+
+# Run type checking
+npm run type-check
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Database (Prisma)
+```bash
+# Push schema changes to the database (prototyping)
+npm run db:push
 
-### Available Scripts
+# Create a migration from schema changes
+npm run db:migrate
 
-*   `pnpm dev`: Starts the development server.
-*   `pnpm build`: Creates a production build.
-*   `pnpm start`: Starts the production server.
-*   `pnpm lint`: Lints the code.
-*   `pnpm test`: Runs API tests using Jest.
-*   `pnpm test:watch`: Runs tests in watch mode.
-*   `pnpm test:coverage`: Generates a test coverage report.
-*   `pnpm db:generate`: Generates the Prisma client.
-*   `pnpm db:push`: Pushes the Prisma schema to the database.
-*   `pnpm db:migrate`: Runs database migrations.
-*   `pnpm db:studio`: Opens the Prisma Studio.
-*   `pnpm seed`: Seeds the database.
-*   `pnpm build:analyze`: Analyzes the bundle size.
-*   `pnpm type-check`: Checks for TypeScript errors.
+# Generate Prisma Client (run after schema changes)
+npm run db:generate
+
+# Seed the database
+npm run seed
+
+# Open Prisma Studio (GUI for database)
+npm run db:studio
+```
+
+### Build & Test
+```bash
+# Build the application for production
+npm run build
+
+# Run unit tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+```
+
+## Database Models (Core)
+*   **Report:** The central content unit (Market Research Reports).
+*   **Category:** Classification for reports.
+*   **Order / OrderItem:** E-commerce transactions.
+*   **TranslationJob / ReportTranslation:** Handles the localization workflow for reports.
+*   **User / Admin:** User roles and authentication.
 
 ## Development Conventions
-
-*   **Authentication:** Authentication is handled by NextAuth.js with a credentials provider. The `Admin` model is used for authentication. The session is managed with JWT.
-*   **Database:** The database schema is managed with Prisma. Migrations are located in the `prisma/migrations` directory.
-*   **API Routes:** API routes are located in the `src/app/api` directory.
-*   **Components:** Reusable components are located in the `src/components` directory.
-*   **Types:** TypeScript types are defined in the `src/types` directory.
-*   **Styling:** Tailwind CSS is used for styling.
-*   **Linting:** ESLint is used for linting.
-*   **Testing:** Jest is used for testing. API tests are located in `src/__tests__/api` and component tests in `src/__tests__/components`.
-*   **Build-time type errors**: The project is configured to ignore TypeScript errors during the build process (`ignoreBuildErrors: true` in `next.config.mjs`). It is recommended to use `pnpm type-check` to check for type errors before committing code.
-
-This `GEMINI.md` file provides a comprehensive overview of the project, including its purpose, technologies, and development conventions. It should be a useful resource for future interactions.
+*   **Strict Typing:** Maintain strict TypeScript types. Use Zod schemas for runtime validation, especially for API inputs and forms.
+*   **Component Structure:** Components should be small, focused, and located in `src/components`.
+*   **Styling:** Use Tailwind CSS utility classes. Avoid custom CSS files unless necessary (`globals.css`).
+*   **Testing:** Write unit tests for utility functions and critical components using Jest.

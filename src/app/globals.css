@@ -131,6 +131,40 @@ body {
   .prose ol { @apply list-decimal list-inside mb-4; }
   .prose p { @apply mb-4; }
   .prose blockquote { @apply border-l-4 border-gray-300 pl-4 italic my-4; }
+
+  /* Quill Rich Text Editor Support */
+  .ql-indent-1 { @apply ml-6; }
+  .ql-indent-2 { @apply ml-12; }
+  .ql-indent-3 { @apply ml-18; }
+  .ql-indent-4 { @apply ml-24; }
+  .ql-indent-5 { @apply ml-30; }
+  .ql-indent-6 { @apply ml-36; }
+  
+  /* Fix for flat lists from Quill */
+  li[data-list="bullet"] {
+    list-style-type: disc !important;
+  }
+  .ql-indent-1[data-list="bullet"] {
+    list-style-type: circle !important;
+  }
+  .ql-indent-2[data-list="bullet"] {
+    list-style-type: square !important;
+  }
+
+  li[data-list="ordered"] {
+    list-style-type: decimal !important;
+  }
+  .ql-indent-1[data-list="ordered"] {
+    list-style-type: lower-alpha !important;
+  }
+  .ql-indent-2[data-list="ordered"] {
+    list-style-type: lower-roman !important;
+  }
+
+  /* Hide Quill UI elements if present */
+  span.ql-ui {
+    display: none;
+  }
 }
 
 @layer utilities {

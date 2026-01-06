@@ -16,7 +16,6 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   
   return {
     title: {
-      template: '%s | The Brainy Insights',
       default: 'Global Market Research Reports & Consulting | The Brainy Insights',
     },
     description: 'The Brainy Insights offers top-notch market research reports and consulting services. Gain actionable insights and competitive analysis for your business.',

@@ -17,6 +17,7 @@ const reportUpdateSchema = z.object({
     (val) => (val === "" ? null : val),
     z.string().nullable().optional()
   ),
+  imageAlt: z.string().nullable().optional(),
   categoryIds: z.array(z.string().uuid()).optional(),
   // SEO Fields
   metaTitle: z.string().nullable().optional(),

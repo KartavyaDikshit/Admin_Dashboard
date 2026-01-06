@@ -40,7 +40,7 @@ export default async function ReportsPage({ params, searchParams }: Props) {
   const page = Number(resolvedSearchParams.page) || 1;
   const search = resolvedSearchParams.search || '';
   const categoryId = resolvedSearchParams.category || '';
-  const limit = 9;
+  const limit = 10;
 
   const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -85,15 +85,23 @@ export default async function ReportsPage({ params, searchParams }: Props) {
                 <div className="text-card-foreground rounded-xl border border-gray-200 bg-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden h-full flex flex-col sm:flex-row">
                   {/* Image Section */}
                   <div className="relative w-full sm:w-48 h-32 sm:h-auto bg-gray-100 shrink-0">
-                    <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white">
-                       <svg className="w-8 h-8" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="8" y="12" width="48" height="32" rx="2" stroke="currentColor" strokeWidth="2.5" fill="none"></rect>
-                        <rect x="12" y="16" width="40" height="24" fill="currentColor" opacity="0.1"></rect>
-                        <line x1="20" y1="48" x2="44" y2="48" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"></line>
-                        <line x1="28" y1="44" x2="28" y2="48" stroke="currentColor" strokeWidth="2.5"></line>
-                        <line x1="36" y1="44" x2="36" y2="48" stroke="currentColor" strokeWidth="2.5"></line>
-                      </svg>
-                    </div>
+                    {report.categories?.[0]?.icon ? (
+                      <img 
+                        src={report.categories[0].icon} 
+                        alt={report.categories[0].name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white">
+                         <svg className="w-8 h-8" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect x="8" y="12" width="48" height="32" rx="2" stroke="currentColor" strokeWidth="2.5" fill="none"></rect>
+                          <rect x="12" y="16" width="40" height="24" fill="currentColor" opacity="0.1"></rect>
+                          <line x1="20" y1="48" x2="44" y2="48" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"></line>
+                          <line x1="28" y1="44" x2="28" y2="48" stroke="currentColor" strokeWidth="2.5"></line>
+                          <line x1="36" y1="44" x2="36" y2="48" stroke="currentColor" strokeWidth="2.5"></line>
+                        </svg>
+                      </div>
+                    )}
                     <div className="absolute top-2 left-2">
                        <span className="inline-flex items-center rounded-md bg-white/90 backdrop-blur-sm px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
                          {report.categories?.[0]?.name || 'Report'}

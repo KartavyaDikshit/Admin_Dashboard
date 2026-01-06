@@ -233,6 +233,11 @@ export default async function ReportDetailPage({ params }: Props) {
           </div>
           )}
         </div>
+        
+        <div className="mt-6 mb-3">
+          <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Market Introduction</h3>
+        </div>
+        
         <div>
           <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
             {report.marketResearchSummary && /<[a-z][\s\S]*>/i.test(report.marketResearchSummary) ? (
@@ -250,7 +255,9 @@ export default async function ReportDetailPage({ params }: Props) {
         
         {recentStrategicDevelopmentsContent && (
            <div>
-             <h5 className="font-bold text-lg text-gray-900 mb-3">Recent Strategic Developments</h5>
+             <div className="mt-6 mb-3">
+               <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Recent Strategic Developments</h3>
+             </div>
              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
                <div className="space-y-3">
                  {typeof recentStrategicDevelopmentsContent === 'string' && /<[a-z][\s\S]*>/i.test(recentStrategicDevelopmentsContent) ? (
@@ -277,8 +284,8 @@ export default async function ReportDetailPage({ params }: Props) {
             <div className="mb-8">
               <img 
                 src={report.imageUrl} 
-                alt={report.title} 
-                className="w-full h-auto rounded-lg shadow-sm border border-gray-200"
+                alt={report.imageAlt || report.title} 
+                className="w-1/2 h-auto mx-auto block rounded-lg shadow-sm border border-gray-200"
               />
             </div>
         )}
@@ -297,8 +304,11 @@ export default async function ReportDetailPage({ params }: Props) {
             
             return (
             <div key={index} className="mb-4">
-              {/* Show title if it's not "Overview" and not "Market Dynamics" (redundant) */}
-              {section.title !== 'Overview' && section.title !== 'Market Dynamics' && (
+              {/* Show title if it's not "Overview" and not redundant main headers */}
+              {section.title !== 'Overview' && 
+               section.title !== 'Market Dynamics' && 
+               section.title !== 'Regional Segment Analysis' && 
+               section.title !== 'Regional Segmentation Analysis' && (
                   <h6 className="font-semibold text-base text-gray-900 mb-2">{section.title}</h6>
               )}
               <div className={section.title === 'Overview' ? "bg-white p-0" : "bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400"}>
@@ -318,7 +328,7 @@ export default async function ReportDetailPage({ params }: Props) {
         {report.regionalInsights && (
           <>
             <div className="mt-6 mb-3">
-              <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Regional Insights</h3>
+              <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Regional Segment Analysis</h3>
             </div>
             <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
                 {/<[a-z][\s\S]*>/i.test(report.regionalInsights) ? (
@@ -327,9 +337,18 @@ export default async function ReportDetailPage({ params }: Props) {
                      dangerouslySetInnerHTML={{ __html: report.regionalInsights }}
                    />
                 ) : (
-                    <p className="text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">
-                      {report.regionalInsights.replace(/^[#*\s]*Regional Insights.*[\r\n]*/i, '')}
-                    </p>
+                    <div className="text-base text-gray-700 leading-relaxed text-justify">
+                      {report.regionalInsights.replace(/^[#*\s]*Regional Insights.*[\r\n]*/i, '').split('\n').map((line, i) => {
+                          const trimmed = line.trim();
+                          if (!trimmed) return <div key={i} className="h-2"></div>;
+                          // Check if it's a "By ..." header (e.g., By Technology, By End-User)
+                          if (trimmed.match(/^By\s+[A-Z]/)) {
+                             return <h5 key={i} className="font-bold text-gray-900 mt-4 mb-2">{trimmed}</h5>;
+                          }
+                          // Indent others as list items
+                          return <div key={i} className="pl-4 mb-1 relative before:content-['•'] before:absolute before:left-0 before:text-gray-400">{trimmed}</div>;
+                      })}
+                    </div>
                 )}
             </div>
           </>
@@ -346,8 +365,8 @@ export default async function ReportDetailPage({ params }: Props) {
 
              return (
              <div key={index} className="bg-slate-50 p-5 rounded-lg border border-slate-200 mb-4">
-                {/* Show title if not Overview. We allow "Key Market Players" title here as it might be a subsection or the main list */}
-                {section.title && section.title !== 'Overview' && (
+                {/* Show title if not Overview and not duplicate of main header. */}
+                {section.title && section.title !== 'Overview' && section.title !== 'Key Market Players' && (
                     <h5 className="font-bold text-lg text-gray-900 mb-3">{section.title}</h5>
                 )}
                 
@@ -508,8 +527,10 @@ export default async function ReportDetailPage({ params }: Props) {
                    currency: report.currency || 'USD'
                 }}
                 labels={dict}
-                reportId={report.id}
+                reportId={report.reportId || report.sku || undefined} // Use reportId (TBI-XXXX) preferred
+                reportDbId={report.id}
                 reportTitle={report.title}
+                lang={lang}
              />
           </div>
           

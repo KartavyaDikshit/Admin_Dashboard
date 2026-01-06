@@ -51,12 +51,12 @@ export default function Header({ dict, lang }: HeaderProps) {
           </div>
         </Link>
         <nav className="hidden md:flex items-center space-x-8">
-          <Link href={`/${lang}/categories`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.categoriesLabel || 'Categories'}</Link>
+          <Link href={`/${lang}`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.home || 'Home'}</Link>
+          <Link href={`/${lang}/categories`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.categories || 'Industries'}</Link>
           <Link href={`/${lang}/reports`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.reports || 'Reports'}</Link>
-          <Link href={`/${lang}/press-releases`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.pressReleases || 'Press Releases'}</Link>
           <Link href={`/${lang}/services`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.services || 'Services'}</Link>
-          <Link href={`/${lang}/about`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.aboutUs || 'About'}</Link>
-          <Link href={`/${lang}/contact`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.contactUs || 'Contact'}</Link>
+          <Link href={`/${lang}/about`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.aboutUs || 'About Us'}</Link>
+          <Link href={`/${lang}/contact`} className="text-sm hover:text-indigo-600 transition-colors font-medium">{dict.contactUs || 'Contact Us'}</Link>
         </nav>
         <div className="flex items-center space-x-4">
           <div className="relative">
@@ -114,12 +114,12 @@ export default function Header({ dict, lang }: HeaderProps) {
       {isMenuOpen && (
         <div className="md:hidden border-t border-gray-100 bg-white">
           <div className="space-y-1 px-4 py-4">
-            <Link href={`/${lang}/categories`} onClick={() => setIsMenuOpen(false)} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600">Categories</Link>
-            <Link href={`/${lang}/reports`} onClick={() => setIsMenuOpen(false)} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600">Reports</Link>
-            <Link href={`/${lang}/press-releases`} onClick={() => setIsMenuOpen(false)} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600">Press Releases</Link>
-            <Link href={`/${lang}/services`} onClick={() => setIsMenuOpen(false)} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600">Services</Link>
-            <Link href={`/${lang}/about`} onClick={() => setIsMenuOpen(false)} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600">About</Link>
-            <Link href={`/${lang}/contact`} onClick={() => setIsMenuOpen(false)} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600">Contact</Link>
+            <Link href={`/${lang}`} onClick={() => setIsMenuOpen(false)} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600">{dict.home || 'Home'}</Link>
+            <Link href={`/${lang}/categories`} onClick={() => setIsMenuOpen(false)} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600">{dict.categories || 'Industries'}</Link>
+            <Link href={`/${lang}/reports`} onClick={() => setIsMenuOpen(false)} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600">{dict.reports || 'Reports'}</Link>
+            <Link href={`/${lang}/services`} onClick={() => setIsMenuOpen(false)} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600">{dict.services || 'Services'}</Link>
+            <Link href={`/${lang}/about`} onClick={() => setIsMenuOpen(false)} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600">{dict.aboutUs || 'About Us'}</Link>
+            <Link href={`/${lang}/contact`} onClick={() => setIsMenuOpen(false)} className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600">{dict.contactUs || 'Contact Us'}</Link>
           </div>
         </div>
       )}

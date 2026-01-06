@@ -5,6 +5,8 @@ import { toast } from 'sonner';
 import Link from 'next/link';
 import { formatDateTime, cn } from '@/lib/utils';
 import { Report as ReportType, Category as CategoryType } from '@prisma/client';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import * as XLSX from 'xlsx';
 
 type ReportWithRelations = ReportType & {
   categories: CategoryType[];
@@ -15,20 +17,36 @@ type ReportWithRelations = ReportType & {
   };
 };
 
-interface ReportListProps {
-  searchParams: {
-    page?: string;
-    limit?: string;
-    search?: string;
-  };
-}
-
-export default function ReportList({ searchParams }: ReportListProps) {
+export default function ReportList() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [reports, setReports] = useState<ReportWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 1 });
+  const [categories, setCategories] = useState<CategoryType[]>([]);
+  const [exporting, setExporting] = useState(false);
 
-  const queryParams = useMemo(() => new URLSearchParams(searchParams), [searchParams]);
+  // Convert searchParams object to URLSearchParams for easier manipulation
+  const queryParams = useMemo(() => {
+    return new URLSearchParams(searchParams.toString());
+  }, [searchParams]);
+
+  useEffect(() => {
+    // Fetch categories for filter
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories?limit=100'); // Assuming endpoint exists and returns all/many
+        const data = await response.json();
+        if (response.ok) {
+          setCategories(data.categories || data); // Adjust based on API response structure
+        }
+      } catch (error) {
+        console.error('Failed to fetch categories', error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -52,6 +70,24 @@ export default function ReportList({ searchParams }: ReportListProps) {
     fetchReports();
   }, [queryParams]);
 
+  const updateFilters = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value && value !== 'all') {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+    // Reset page to 1 on filter change
+    if (key !== 'page') {
+      params.set('page', '1');
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    updateFilters('page', newPage.toString());
+  };
+
   const deleteReport = async (reportId: string) => {
     if (!confirm('Are you sure you want to delete this report?')) return;
 
@@ -72,13 +108,141 @@ export default function ReportList({ searchParams }: ReportListProps) {
     }
   };
 
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('export', 'true');
+      
+      const response = await fetch(`/api/reports?${params.toString()}`);
+      if (!response.ok) throw new Error('Failed to fetch reports for export');
+      
+      const data = await response.json();
+      const reportsToExport = data.reports || [];
+
+      if (reportsToExport.length === 0) {
+        toast.info('No reports to export');
+        return;
+      }
+
+      // Flatten data for Excel
+      const flattenedData = reportsToExport.map((r: any) => ({
+        ID: r.id,
+        SKU: r.sku,
+        ReportID: r.reportId,
+        Title: r.title,
+        TitleDescription: r.titleDescription,
+        Slug: r.slug,
+        Status: r.status,
+        Featured: r.featured ? 'Yes' : 'No',
+        PublishedDate: r.publishedDate ? new Date(r.publishedDate).toISOString().split('T')[0] : '',
+        Pages: r.pages,
+        SingleUserPrice: r.singlePrice,
+        MultiUserPrice: r.multiPrice,
+        CorporatePrice: r.corporatePrice,
+        EnterprisePrice: r.enterprisePrice,
+        Currency: r.currency,
+        Categories: r.categories.map((c: any) => c.name).join(', '),
+        Description: r.description,
+        Summary: r.summary,
+        TableOfContents: r.tableOfContents,
+        Methodology: r.methodology,
+        ExecutiveSummary: r.executiveSummary,
+        MarketResearchSummary: r.marketResearchSummary,
+        MarketDynamics: r.marketDynamics,
+        RegionalInsights: r.regionalInsights,
+        KeyMarketPlayers: r.keyMarketPlayers,
+        RecentStrategicDevelopments: typeof r.recentStrategicDevelopments === 'object' ? JSON.stringify(r.recentStrategicDevelopments) : r.recentStrategicDevelopments,
+        ListOfFigures: r.listOfFigures,
+        KeyFindings: Array.isArray(r.keyFindings) ? r.keyFindings.join(', ') : r.keyFindings,
+        ReportType: r.reportType,
+        ResearchMethod: r.researchMethod,
+        BaseYear: r.baseYear,
+        ForecastPeriod: r.forecastPeriod,
+        ImageURL: r.imageUrl,
+        ImageAlt: r.imageAlt,
+        MetaTitle: r.metaTitle,
+        MetaDescription: r.metaDescription,
+        CanonicalURL: r.canonicalUrl,
+        OGTitle: r.ogTitle,
+        OGDescription: r.ogDescription,
+        OGImage: r.ogImage,
+        TwitterTitle: r.twitterTitle,
+        TwitterDescription: r.twitterDescription,
+        Keywords: Array.isArray(r.keywords) ? r.keywords.join(', ') : '',
+        SchemaMarkup: typeof r.schemaMarkup === 'object' ? JSON.stringify(r.schemaMarkup) : r.schemaMarkup,
+        Priority: r.priority,
+        ViewCount: r.viewCount ? r.viewCount.toString() : '0',
+        DownloadCount: r.downloadCount ? r.downloadCount.toString() : '0',
+        EnquiryCount: r.enquiryCount ? r.enquiryCount.toString() : '0',
+        CreatedAt: r.createdAt ? new Date(r.createdAt).toISOString() : '',
+        UpdatedAt: r.updatedAt ? new Date(r.updatedAt).toISOString() : '',
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(flattenedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Reports");
+      XLSX.writeFile(workbook, `Reports_Export_${new Date().toISOString().split('T')[0]}.xlsx`);
+      
+      toast.success('Export completed');
+    } catch (error) {
+      console.error(error);
+      toast.error('Export failed');
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">Reports ({pagination.total})</h1>
-        <Link href="/admin/ai-generation" className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-          Create AI Report
-        </Link>
+        <div className="flex gap-2">
+           <button 
+             onClick={handleExport} 
+             disabled={exporting}
+             className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
+           >
+             {exporting ? 'Exporting...' : 'Export Excel'}
+           </button>
+           <Link href="/admin/ai-generation" className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+             Create AI Report
+           </Link>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap gap-4 bg-white p-4 rounded-md shadow">
+        <select 
+          className="border rounded p-2 text-sm"
+          value={searchParams.get('status') || 'all'}
+          onChange={(e) => updateFilters('status', e.target.value)}
+        >
+          <option value="all">All Status</option>
+          <option value="PUBLISHED">Published</option>
+          <option value="DRAFT">Draft</option>
+        </select>
+
+        <select 
+            className="border rounded p-2 text-sm"
+            value={searchParams.get('featured') || 'all'}
+            onChange={(e) => updateFilters('featured', e.target.value)}
+        >
+            <option value="all">All Types</option>
+            <option value="true">Featured</option>
+            <option value="false">Standard</option>
+        </select>
+
+        <select 
+          className="border rounded p-2 text-sm max-w-xs"
+          value={searchParams.get('categoryId') || 'all'}
+          onChange={(e) => updateFilters('categoryId', e.target.value)}
+        >
+          <option value="all">All Categories</option>
+          {categories.map(cat => (
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
+          ))}
+        </select>
       </div>
 
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
@@ -168,6 +332,29 @@ export default function ReportList({ searchParams }: ReportListProps) {
           </ul>
         )}
       </div>
+
+      {/* Pagination */}
+      {pagination.totalPages > 1 && (
+        <div className="flex justify-center items-center space-x-2 mt-4">
+          <button
+            onClick={() => handlePageChange(pagination.page - 1)}
+            disabled={pagination.page <= 1}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="text-sm text-gray-700">
+            Page {pagination.page} of {pagination.totalPages}
+          </span>
+          <button
+            onClick={() => handlePageChange(pagination.page + 1)}
+            disabled={pagination.page >= pagination.totalPages}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -441,10 +441,11 @@ export default function EditReportPage() {
                     <h2 className="text-xl font-semibold mb-4">Image</h2>
                     {imagePreview && (
                         <div className="mt-2 relative w-full h-48 border rounded-md overflow-hidden">
-                        <Image src={imagePreview} alt="Image Preview" layout="fill" objectFit="cover" />
+                        <img src={imagePreview} alt="Image Preview" className="w-full h-full object-cover" />
                         </div>
                     )}
                     {viewLocale === 'en' && (
+                        <>
                         <div className="mt-4">
                         <label htmlFor="imageUpload" className="block text-sm font-medium text-gray-700 mb-1">Upload New Image</label>
                         <input
@@ -464,6 +465,18 @@ export default function EditReportPage() {
                             </button>
                         )}
                         </div>
+                        <div className="mt-4">
+                          <label htmlFor="imageAlt" className="block text-sm font-medium text-gray-700 mb-1">Image Alt Tag</label>
+                          <input
+                            type="text"
+                            id="imageAlt"
+                            name="imageAlt"
+                            value={formatInputValue(report.imageAlt)}
+                            onChange={handleInputChange}
+                            className="w-full p-2 border rounded-md"
+                          />
+                        </div>
+                        </>
                     )}
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-md">

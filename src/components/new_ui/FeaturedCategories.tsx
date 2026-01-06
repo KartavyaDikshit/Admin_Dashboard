@@ -25,21 +25,23 @@ export default function FeaturedCategories({ categories, dict, lang }: FeaturedC
               <Link 
                 key={category.id} 
                 href={`/${lang}/categories/${category.slug}`}
-                className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                className="bg-white rounded-xl border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group flex flex-col"
               >
-                <div className="mb-3 text-indigo-600">
+                <div className="relative h-40 w-full overflow-hidden rounded-t-xl bg-indigo-50 flex items-center justify-center">
                   {category.icon && (category.icon.startsWith('http') || category.icon.startsWith('/')) ? (
-                    <img src={category.icon} alt={category.name} className="w-12 h-12 object-contain" />
+                    <img src={category.icon} alt={category.name} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" />
                   ) : (
-                    <svg className="w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg className="w-16 h-16 text-indigo-400" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="32" cy="32" r="24" stroke="currentColor" strokeWidth="2.5" fill="none"></circle>
                       <rect x="28" y="18" width="8" height="28" rx="1" fill="currentColor"></rect>
                       <rect x="18" y="28" width="28" height="8" rx="1" fill="currentColor"></rect>
                     </svg>
                   )}
                 </div>
-                <h3 className="font-semibold mb-2 group-hover:text-indigo-600 transition-colors">{category.name}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{category.description || 'Market analysis and insights.'}</p>
+                <div className="p-6 text-center flex-1 flex flex-col items-center">
+                    <h3 className="font-semibold mb-2 group-hover:text-indigo-600 transition-colors text-lg">{category.name}</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">{category.description || 'Market analysis and insights.'}</p>
+                </div>
               </Link>
             ))}
           </div>

@@ -1,0 +1,37 @@
+on the home page in the hero section increase the vertical padding before the text: "Buy Customer Insight Reports With Confidence"
+on the categories page remove the search bar feature 
+in the individual reports page reduce the image size by half and center it with the report content, under the cagr and market size add in a title: "Market Introduction" with the same formatting as "Market Dynamics" with a line underneath it similarly add this title formatting to "Recent Strategic Developments" heading as well,
+in its "Key Market Players" section text: "Key Market Players" is repeated as a heading in the content, it has a title called: "Regional Insights" change it to "Regional Segment Analysis" and in its content text: "Regional Insights"  is repeated as well remove that, in the "Regional Insights" there is a segmentation section where the content: "By Technology
+Mammography
+Breast MRI
+Breast Ultrasound
+Tomosynthesis
+By End-User
+Hospitals
+Diagnostic Centers
+Outpatient Surgical Centers
+By Application
+Screening
+Diagnostic" is all numbered together when there are sub nested lists in it handle that sub bullet point indentation on the ui 
+"Request Sample PDFRequest CustomizationTalk to AnalystSchedule ConsultationCustom Pricing" all of these buttons lead to a pop up instead I need a new page with url structure as: "https://www.thebrainyinsights.com/enquiry/request-customization/14822" where the last 5 digits are the report id and in its form I need the following fields: full anme business email country and then its automatic country code and phone number company designation and then description, when the form is submitted thank you page with url: "https://www.thebrainyinsights.com/thank-you/request-customization/14822" with the last 5 digits being that of that report 
+on the admin dashboard in the reports section the pagination is till 25 add in a page number scroller at the bottom when the number of reports exceed that to view more reports, then in the same admin dashboard reports section add in a filter by option with: "Published", "Draft", "Featured" and then also filter by categories each report will be in only one category, next add in an export as excel option which will export the selected reports and also add in select all reports option to it when exported export all the report fields all the columns seo image and everything into an excel,
+on the admin dashboard there is a search bar which does not work search the reports and categories with it 
+on the admin dashboard in the reports section sort the reports by newest first no matter the state: published/draft
+on the home page in the header the tab sequence should be: Home | Industries | Reports | Services | About Us | Contact Us here Industries is Categories replace that
+on the footer remove these links: "Products
+Reports
+Categories
+Tailored Insights
+Services"
+and on the footer instead of the text "TheBrainyInsights" replace it with the logo: ""C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\public\logo.png""
+on the footer under company column update it to: About Us, Services, Press Release, and Contact Us links
+on the individual report edit in the admin dashboard in the image upload section add in another field for "alt tag" right under it
+for category image on the home page as well as categories page the image now is displayed in a corner with a as a circle instead change it to a banner style with suitable padding and centering 
+when a report is added to a category show that category image in the report cards on reports page as well as home page 
+for seo purposes implement 2 sitemaps one for the static webpages and another one for dynamic(with limit 1000 links)
+in the press-releases pages in the press release card in the description preview <p> tag is visible on the ui fix that
+on the reports page 9 reports are showed on the ui with pagination make it 10 reports per page
+in the contact us page hero section remove the "headquarters" block 
+on the buy now option of the individual reports when the form is filled save these details in the orders tab right away in case the payment fails in the gateway
+right now all the seo meta title description and all tags are in the body tag move them to head tag ALL seo tags and components
+understand the user intent and develop an end to end solution for the same,for the codebase go through the schema and codebase to learn more about the working before developing a perfect optimised solution 

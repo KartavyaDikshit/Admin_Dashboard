@@ -1,0 +1,47 @@
+these are the tasks still not implemented:
+Public Interface Enhancements
+   * Home Page:
+       *  vertical padding in the Hero section -decrease it by 1/3rd 
+Header:
+       * Rearrange navigation tabs to: Home | Industries | Reports | Services | About Us | Contact Us
+       * Rename "Categories" to "Industries".
+not done:
+   * Footer:
+       * Updated "Company" column links to: About Us, Services, Press Releases, Contact Us.
+       * Removed "Products", "Tailored Insights" links.
+       * Ensured Logo is displayed.
+http://localhost:3000/en/categories/aerospace-and-defence here the report card is wrong use the same report card used in reports page as well as homepage 
+in Regional Segment Analysis
+         indent list items, fixing the "numbered together" issue is still not solved it shows like this on the ui:
+"Market Segmentation
+Segmentation Structure
+By Technology
+Solar Energy
+Wind Energy
+Hydropower
+Biomass
+Geothermal Energy
+By End-Use
+Residential
+Commercial
+Industrial
+Utility
+By Component
+Hardware
+Software
+Services" all numbered sequentially not nested it is in the following format:
+"</p><h3>Market Segmentation</h3><h4>Segmentation Structure</h4><ol><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>By Technology</li><li data-list="bullet" class="ql-indent-1"><span class="ql-ui" contenteditable="false"></span>Solar Energy</li><li data-list="bullet" class="ql-indent-1"><span class="ql-ui" contenteditable="false"></span>Wind Energy</li><li data-list="bullet" class="ql-indent-1"><span class="ql-ui" contenteditable="false"></span>Hydropower</li><li data-list="bullet" class="ql-indent-1"><span class="ql-ui" contenteditable="false"></span>Biomass</li><li data-list="bullet" class="ql-indent-1"><span class="ql-ui" contenteditable="false"></span>Geothermal Energy</li><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>By End-Use</li><li data-list="bullet" class="ql-indent-1"><span class="ql-ui" contenteditable="false"></span>Residential</li><li data-list="bullet" class="ql-indent-1"><span class="ql-ui" contenteditable="false"></span>Commercial</li><li data-list="bullet" class="ql-indent-1"><span class="ql-ui" contenteditable="false"></span>Industrial</li><li data-list="bullet" class="ql-indent-1"><span class="ql-ui" contenteditable="false"></span>Utility</li><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>By Component</li><li data-list="bullet" class="ql-indent-1"><span class="ql-ui" contenteditable="false"></span>Hardware</li><li data-list="bullet" class="ql-indent-1"><span class="ql-ui" contenteditable="false"></span>Software</li><li data-list="bullet" class="ql-indent-1"><span class="ql-ui" contenteditable="false"></span>Services</li></ol><h4>Segment-Level Analysis</h4>"
+image preview in admin dashboard for individual report is not working 
+in the admin/reports none of the filters are working there is no updation in the order
+"Request Sample PDFRequest CustomizationTalk to AnalystSchedule ConsultationCustom Pricing" all of these forms submitions are going to requests instead of customisation in the admin dashboard fix that
+this is not done       * Removed redundant headings in "Key Market Players".
+
+in the admin dashboard in the orders tab none of the orders are openable to see the form submition or status:
+" GET /admin/orders/358b84f8-2f41-4803-95e0-a54ffebd7a7a 404 in 86ms (compile: 20ms, proxy.ts: 8ms, render: 59ms)
+ GET /admin/orders/358b84f8-2f41-4803-95e0-a54ffebd7a7a 404 in 156ms (compile: 23ms, proxy.ts: 8ms, render: 124ms)
+"
+
+the search bar on the admin dashboard does not search and return results for categories or reports 
+for seo:
+<title>2026 Renewable Energy Market Analysis &amp; Forecast | The Brainy Insights</title> remove "The Brainy Insights" from this tag and move all the seo meta tags and others to the <head> tag
+understand the user intent and develop an end to end solution for the same,for the codebase go through the schema and codebase to learn more about the working before developing a perfect optimised solution 

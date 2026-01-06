@@ -187,6 +187,7 @@ model Report {
   keyMarketPlayers      String? @map("key_market_players") @db.Text
 
   imageUrl             String?       @map("image_url") @db.VarChar(500)
+  imageAlt             String?       @map("image_alt") @db.VarChar(255)
   marketData           Json?         @map("market_data")
   competitiveLandscape Json?         @map("competitive_landscape")
   marketSegmentation   Json?         @map("market_segmentation")

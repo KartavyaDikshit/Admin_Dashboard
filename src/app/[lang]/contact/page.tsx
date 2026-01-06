@@ -29,19 +29,13 @@ export default async function Contact({ params }: Props) {
       <section className="hero-section">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="hero-container py-24 lg:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center text-left">
-            <div>
-              <h1 className="hero-title text-left mb-6">{dict.contactTitle || 'Get Expert Market Research Insights'}</h1>
-              <p className="hero-subtitle text-left mb-8 mx-0">{dict.contactText}</p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a href="#contact-form" className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-bold transition-all h-11 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 px-8 py-3 shadow-md hover:shadow-lg">
-                  {dict.requestCallback || 'Request Callback'}
-                </a>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-2xl w-full h-64 flex items-center justify-center"><span className="text-white text-lg font-semibold">{dict.headquarters || 'Professional Business Office'}</span></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#4f46e5]/20 to-transparent rounded-lg"></div>
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="hero-title mb-6">{dict.contactTitle || 'Get Expert Market Research Insights'}</h1>
+            <p className="hero-subtitle mb-8 mx-auto">{dict.contactText}</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="#contact-form" className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-bold transition-all h-11 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 px-8 py-3 shadow-md hover:shadow-lg">
+                {dict.requestCallback || 'Request Callback'}
+              </a>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface FooterProps {
   dict: any
@@ -11,7 +12,15 @@ export default function Footer({ dict, lang }: FooterProps) {
       <div className="container mx-auto max-w-7xl px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">TheBrainyInsights</h3>
+            <div className="relative h-12 w-48 mb-4">
+              <Image 
+                src="/logo.png" 
+                alt="The Brainy Insights" 
+                fill 
+                className="object-contain brightness-0 invert"
+                unoptimized
+              />
+            </div>
             <p className="text-gray-400 mb-4">{dict.footerDesc}</p>
             <div className="flex space-x-4">
               <a href="https://www.linkedin.com/company/thebrainyinsights" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
@@ -29,21 +38,15 @@ export default function Footer({ dict, lang }: FooterProps) {
             </div>
           </div>
           <div>
-            <h4 className="font-semibold mb-4">Products</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li><Link href={`/${lang}/reports`} className="hover:text-white transition-colors">{dict.reports}</Link></li>
-              <li><Link href={`/${lang}/categories`} className="hover:text-white transition-colors">{dict.categoriesLabel}</Link></li>
-              <li><Link href={`/${lang}/services`} className="hover:text-white transition-colors">{dict.service2Title}</Link></li>
-              <li><Link href={`/${lang}/services`} className="hover:text-white transition-colors">{dict.services}</Link></li>
-            </ul>
+            {/* Empty column to replace Products */}
           </div>
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><Link href={`/${lang}/about`} className="hover:text-white transition-colors">{dict.aboutUs}</Link></li>
-              <li><Link href={`/${lang}/contact`} className="hover:text-white transition-colors">{dict.contactUs}</Link></li>
-              <li><Link href={`/${lang}/clients`} className="hover:text-white transition-colors">Our Clients</Link></li>
-              <li><Link href={`/${lang}/reports`} className="hover:text-white transition-colors">{dict.featuredReportsTitle}</Link></li>
+              <li><Link href={`/${lang}/about`} className="hover:text-white transition-colors">{dict.aboutUs || 'About Us'}</Link></li>
+              <li><Link href={`/${lang}/services`} className="hover:text-white transition-colors">{dict.services || 'Services'}</Link></li>
+              <li><Link href={`/${lang}/press-releases`} className="hover:text-white transition-colors">{dict.pressReleases || 'Press Releases'}</Link></li>
+              <li><Link href={`/${lang}/contact`} className="hover:text-white transition-colors">{dict.contactUs || 'Contact Us'}</Link></li>
             </ul>
           </div>
           <div>

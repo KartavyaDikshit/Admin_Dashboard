@@ -60,7 +60,7 @@ export default async function PressReleases({ params }: { params: Promise<{ lang
                       {pr.title}
                     </h2>
                     <p className="text-gray-600 mb-6 line-clamp-3 leading-relaxed">
-                      {pr.description}
+                      {pr.description ? pr.description.replace(/<[^>]*>?/gm, '') : ''}
                     </p>
                     <span className="inline-flex items-center text-indigo-600 font-semibold hover:text-indigo-700 transition-colors">
                       {dict.readFullRelease || 'Read Full Release'} <ArrowRightIcon className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
