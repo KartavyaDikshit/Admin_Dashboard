@@ -7,7 +7,7 @@ import { Metadata } from 'next';
 import { formatDate, extractMarketStats, generateBreadcrumbSchema } from '@/lib/utils';
 import ReportTabs from '@/components/new_ui/ReportTabs';
 import ReportSidebar from '@/components/new_ui/ReportSidebar';
-import { DocumentTextIcon, ClockIcon, GlobeAltIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import { DocumentTextIcon, ClockIcon, GlobeAltIcon, UserGroupIcon, TagIcon } from '@heroicons/react/24/outline';
 
 type Props = {
   params: Promise<{ lang: string; slug: string }>;
@@ -285,7 +285,7 @@ export default async function ReportDetailPage({ params }: Props) {
               <img 
                 src={report.imageUrl} 
                 alt={report.imageAlt || report.title} 
-                className="w-1/2 h-auto mx-auto block rounded-lg shadow-sm border border-gray-200"
+                className="w-3/4 h-auto mx-auto block rounded-lg shadow-sm border border-gray-200"
               />
             </div>
         )}
@@ -328,7 +328,7 @@ export default async function ReportDetailPage({ params }: Props) {
         {report.regionalInsights && (
           <>
             <div className="mt-6 mb-3">
-              <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Regional Segment Analysis</h3>
+              <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Segment Analysis</h3>
             </div>
             <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
                 {/<[a-z][\s\S]*>/i.test(report.regionalInsights) ? (
@@ -409,10 +409,13 @@ export default async function ReportDetailPage({ params }: Props) {
           <h4 className="font-bold text-xl text-gray-900">{dict.tocFallbackTitle || "Table of Contents Not Available"}</h4>
           <p className="text-gray-600 max-w-md mx-auto">{dict.tocFallbackDesc || "Get a detailed chapter breakdown and page-by-page content structure delivered to your inbox."}</p>
         </div>
-        <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-base transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-md hover:shadow-lg h-12 px-8 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold">
+        <Link 
+          href={`/${lang}/enquiry/request-toc/${report.reportId || report.sku || report.id}`}
+          className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-base transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-md hover:shadow-lg h-12 px-8 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold"
+        >
           <DocumentTextIcon className="h-5 w-5" />
           {dict.tocFallbackButton || "Request Table of Contents"}
-        </button>
+        </Link>
       </div>
     </div>
   );
@@ -498,7 +501,7 @@ export default async function ReportDetailPage({ params }: Props) {
                     <span className="font-medium text-gray-900">{dict.pdfExcel || 'PDF, Excel'}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground flex items-center">{dict.reportId || 'ID'}</span>
+                    <span className="text-sm text-muted-foreground flex items-center"><TagIcon className="h-4 w-4 mr-2" />{dict.reportId || 'ID'}</span>
                     <span className="font-medium text-gray-900">{report.reportId || report.sku}</span>
                   </div>
                 </div>
@@ -536,12 +539,18 @@ export default async function ReportDetailPage({ params }: Props) {
           
           <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-4 pb-8 safe-area-pb">
              <div className="flex gap-3">
-                <button className="flex-1 bg-white border-2 border-indigo-600 text-indigo-600 py-3 px-4 rounded-lg font-bold shadow-sm text-sm">
+                <Link 
+                  href={`/${lang}/enquiry/request-sample/${report.reportId || report.sku || report.id}`}
+                  className="flex-1 bg-white border-2 border-indigo-600 text-indigo-600 py-3 px-4 rounded-lg font-bold shadow-sm text-sm text-center flex items-center justify-center"
+                >
                    Request Sample
-                </button>
-                <button className="flex-[2] bg-gradient-to-r from-orange-500 to-red-600 text-white py-3 px-4 rounded-lg font-bold shadow-lg text-sm">
+                </Link>
+                <Link 
+                   href={`/${lang}/buy-now/${report.reportId || report.sku || report.id}/single`}
+                   className="flex-[2] bg-gradient-to-r from-orange-500 to-red-600 text-white py-3 px-4 rounded-lg font-bold shadow-lg text-sm text-center flex items-center justify-center"
+                >
                    {dict.buyNow} - ${report.singlePrice?.toLocaleString()}
-                </button>
+                </Link>
              </div>
           </div>
         </div>

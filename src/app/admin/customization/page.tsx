@@ -20,6 +20,8 @@ interface CustomizationRequest {
 export default function AdminCustomizationPage() {
   const [requests, setRequests] = useState<CustomizationRequest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   useEffect(() => {
     fetchRequests();
@@ -42,14 +44,31 @@ export default function AdminCustomizationPage() {
     }
   };
 
+  const filteredRequests = requests.filter(request => {
+    if (!startDate && !endDate) return true;
+    const requestDate = new Date(request.createdAt);
+    // Reset time for accurate date comparison
+    requestDate.setHours(0, 0, 0, 0);
+
+    let start = startDate ? new Date(startDate) : null;
+    if (start) start.setHours(0, 0, 0, 0);
+
+    let end = endDate ? new Date(endDate) : null;
+    if (end) end.setHours(23, 59, 59, 999); // End of the day
+
+    if (start && requestDate < start) return false;
+    if (end && requestDate > end) return false;
+    return true;
+  });
+
   const handleExport = () => {
-    if (requests.length === 0) {
+    if (filteredRequests.length === 0) {
       toast.info('No data to export');
       return;
     }
 
     const headers = ['Date', 'Report Title', 'Request Type', 'Name', 'Email', 'Company', 'Phone', 'Description'];
-    const rows = requests.map(r => [
+    const rows = filteredRequests.map(r => [
       `"${new Date(r.createdAt).toLocaleString()}"`,
       `"${(r.reportTitle || '').split('"').join('""')}"`,
       `"${r.requestType}"`,
@@ -77,15 +96,34 @@ export default function AdminCustomizationPage() {
 
   return (
     <AdminLayout>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
         <h1 className="text-3xl font-bold text-gray-900">Customization Requests</h1>
-        <button 
-          onClick={handleExport}
-          className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
-        >
-          <svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
-          Export to Excel
-        </button>
+        <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
+                <input 
+                    type="date" 
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="border rounded px-3 py-2 text-sm"
+                    placeholder="Start Date"
+                />
+                <span className="text-gray-500">-</span>
+                <input 
+                    type="date" 
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="border rounded px-3 py-2 text-sm"
+                    placeholder="End Date"
+                />
+            </div>
+            <button 
+            onClick={handleExport}
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
+            >
+            <svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+            Export to Excel
+            </button>
+        </div>
       </div>
 
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
@@ -117,14 +155,14 @@ export default function AdminCustomizationPage() {
                     Loading...
                   </td>
                 </tr>
-              ) : requests.length === 0 ? (
+              ) : filteredRequests.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                     No requests found.
                   </td>
                 </tr>
               ) : (
-                requests.map((request) => (
+                filteredRequests.map((request) => (
                   <tr key={request.id}>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm whitespace-nowrap">
                        {new Date(request.createdAt).toLocaleDateString()}

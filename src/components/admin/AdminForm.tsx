@@ -88,12 +88,13 @@ export function AdminForm({ adminId }: AdminFormProps) {
             onChange={(e) => setFormData({ ...formData, role: e.target.value as AdminRole })}
             className="form-control"
           >
-            {Object.values(AdminRole).map((role) => (
-              <option key={role} value={role}>
-                {role}
-              </option>
-            ))}
+            <option value={AdminRole.SUPERADMIN}>Superadmin - Access to everything</option>
+            <option value={AdminRole.MANAGER}>Manager - Access to Orders, Requests, Customization</option>
+            <option value={AdminRole.EDITOR}>Editor - Access to Reports, Press Releases, Testimonials</option>
           </select>
+          <p className="mt-1 text-xs text-gray-500 italic">
+            Defining the role determines which sections of the admin panel this user can access.
+          </p>
         </div>
         <div className="flex justify-end">
           <button type="button" onClick={() => router.push('/admin/users')} className="btn btn-secondary mr-2">

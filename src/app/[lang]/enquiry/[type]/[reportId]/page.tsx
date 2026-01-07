@@ -45,7 +45,7 @@ export default async function EnquiryPage({ params }: Props) {
   
   const report = await prisma.report.findFirst({
     where: whereCondition,
-    select: { title: true, id: true, reportId: true }
+    select: { title: true, id: true, reportId: true, slug: true }
   });
 
   if (!report) {
@@ -59,8 +59,10 @@ export default async function EnquiryPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <EnquiryPageForm 
-        reportId={report.id} // Use UUID for DB link
+        reportId={report.id} // UUID for DB
+        reportFriendlyId={report.reportId || report.id} // Friendly ID for URL (fallback to UUID)
         reportTitle={report.title}
+        reportSlug={report.slug}
         enquiryType={type}
         lang={lang}
       />

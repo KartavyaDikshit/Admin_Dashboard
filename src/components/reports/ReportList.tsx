@@ -7,6 +7,7 @@ import { formatDateTime, cn } from '@/lib/utils';
 import { Report as ReportType, Category as CategoryType } from '@prisma/client';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import * as XLSX from 'xlsx';
+import { useSession } from 'next-auth/react';
 
 type ReportWithRelations = ReportType & {
   categories: CategoryType[];
@@ -21,11 +22,14 @@ export default function ReportList() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { data: session } = useSession();
+  const userRole = session?.user?.role;
   const [reports, setReports] = useState<ReportWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 1 });
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [exporting, setExporting] = useState(false);
+  const [selectedReports, setSelectedReports] = useState<string[]>([]);
 
   // Convert searchParams object to URLSearchParams for easier manipulation
   const queryParams = useMemo(() => {
@@ -51,6 +55,7 @@ export default function ReportList() {
   useEffect(() => {
     const fetchReports = async () => {
         setLoading(true);
+        setSelectedReports([]); // Clear selection on fetch
         try {
           const response = await fetch(`/api/reports?${queryParams.toString()}`);
           const data = await response.json();
@@ -99,6 +104,7 @@ export default function ReportList() {
       if (response.ok) {
         toast.success('Report deleted');
         setReports(prev => prev.filter(r => r.id !== reportId));
+        setSelectedReports(prev => prev.filter(id => id !== reportId));
       } else {
         const data = await response.json();
         toast.error(data.error || 'Failed to delete report');
@@ -106,6 +112,59 @@ export default function ReportList() {
     } catch {
       toast.error('An error occurred while deleting the report.');
     }
+  };
+
+  const deleteSelected = async () => {
+    if (selectedReports.length === 0) return;
+    if (!confirm(`Are you sure you want to delete ${selectedReports.length} reports? This action cannot be undone.`)) return;
+
+    let successCount = 0;
+    let failCount = 0;
+
+    // Ideally, use a bulk delete API. For now, we loop.
+    // If we had a bulk delete endpoint: await fetch('/api/reports/bulk-delete', { body: JSON.stringify({ ids: selectedReports }) })
+    // Iterating for safety if API doesn't support bulk
+    for (const reportId of selectedReports) {
+        try {
+            const response = await fetch(`/api/reports/${reportId}`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                successCount++;
+            } else {
+                failCount++;
+            }
+        } catch (error) {
+            console.error(error);
+            failCount++;
+        }
+    }
+
+    if (successCount > 0) {
+        toast.success(`${successCount} reports deleted successfully.`);
+        setReports(prev => prev.filter(r => !selectedReports.includes(r.id)));
+        setSelectedReports([]);
+    }
+    
+    if (failCount > 0) {
+        toast.error(`Failed to delete ${failCount} reports.`);
+    }
+  };
+
+  const toggleSelectAll = () => {
+      if (selectedReports.length === reports.length) {
+          setSelectedReports([]);
+      } else {
+          setSelectedReports(reports.map(r => r.id));
+      }
+  };
+
+  const toggleSelect = (id: string) => {
+      if (selectedReports.includes(id)) {
+          setSelectedReports(prev => prev.filter(rId => rId !== id));
+      } else {
+          setSelectedReports(prev => [...prev, id]);
+      }
   };
 
   const handleExport = async () => {
@@ -198,7 +257,15 @@ export default function ReportList() {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">Reports ({pagination.total})</h1>
         <div className="flex gap-2">
-           <button 
+           {selectedReports.length > 0 && userRole === 'SUPERADMIN' && (
+               <button 
+                 onClick={deleteSelected}
+                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+               >
+                 Delete Selected ({selectedReports.length})
+               </button>
+           )}
+           <button  
              onClick={handleExport} 
              disabled={exporting}
              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
@@ -253,10 +320,28 @@ export default function ReportList() {
             <p className="text-gray-500">No reports found.</p>
           </div>
         ) : (
-          <ul className="divide-y divide-gray-200">
+          <div className="flex flex-col">
+            <div className="px-4 py-3 border-b bg-gray-50 flex items-center">
+                 <input 
+                    type="checkbox" 
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                    checked={reports.length > 0 && selectedReports.length === reports.length}
+                    onChange={toggleSelectAll}
+                 />
+                 <span className="ml-2 text-sm text-gray-700">Select All</span>
+            </div>
+            <ul className="divide-y divide-gray-200">
             {reports.map((report) => (
               <li key={report.id} className="px-4 py-4 hover:bg-gray-50">
                 <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0">
+                      <input 
+                        type="checkbox" 
+                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                        checked={selectedReports.includes(report.id)}
+                        onChange={() => toggleSelect(report.id)}
+                      />
+                  </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between">
                       <div className="flex-1 min-w-0">
@@ -317,9 +402,11 @@ export default function ReportList() {
                         <Link href={`/admin/reports/${report.id}/edit`} className="text-xs text-indigo-600 hover:text-indigo-900 font-medium">
                           Edit
                         </Link>
-                        <button onClick={() => deleteReport(report.id)} className="text-xs text-red-600 hover:text-red-900 font-medium">
-                          Delete
-                        </button>
+                        {userRole === 'SUPERADMIN' && (
+                          <button onClick={() => deleteReport(report.id)} className="text-xs text-red-600 hover:text-red-900 font-medium">
+                            Delete
+                          </button>
+                        )}
                       </div>
                       <div className="text-xs text-gray-500">
                         Created {report.createdAt ? formatDateTime(new Date(report.createdAt)) : 'N/A'}
@@ -329,7 +416,8 @@ export default function ReportList() {
                 </div>
               </li>
             ))}
-          </ul>
+            </ul>
+          </div>
         )}
       </div>
 

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import AdminLayout from '@/components/layout/AdminLayout';
 import { formatDateTime } from '@/lib/utils';
 import { toast } from 'sonner';
+import { useSession } from 'next-auth/react';
 
 interface PressRelease {
   id: string;
@@ -16,6 +17,8 @@ interface PressRelease {
 }
 
 export default function PressReleaseList() {
+  const { data: session } = useSession();
+  const userRole = session?.user?.role;
   const [items, setItems] = useState<PressRelease[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -80,7 +83,9 @@ export default function PressReleaseList() {
                     <div className="flex space-x-4 items-center">
                         <a href={`/en/press-releases/${item.slug}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-900">View</a>
                         <Link href={`/admin/press-releases/${item.id}/edit`} className="text-gray-600 hover:text-gray-900">Edit</Link>
-                        <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-900">Delete</button>
+                        {userRole === 'SUPERADMIN' && (
+                          <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-900">Delete</button>
+                        )}
                     </div>
                 </div>
                 </li>

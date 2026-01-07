@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-interface ContactFormProps {
-  dict?: any;
-}
+import { useRouter, useParams } from 'next/navigation';
 
 export default function ContactForm({ dict = {} }: ContactFormProps) {
+  const router = useRouter();
+  const params = useParams();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -63,16 +63,7 @@ export default function ContactForm({ dict = {} }: ContactFormProps) {
       toast.dismiss();
       if (response.ok) {
         toast.success(dict.requestSuccess || 'Request submitted successfully! We will contact you soon.');
-        setFormData({
-          fullName: '',
-          email: '',
-          country: '',
-          phone: '',
-          company: '',
-          designation: '',
-          description: ''
-        });
-        setCountryCode('+00');
+        router.push(`/${params.lang}/thank-you/contact`);
       } else {
         const data = await response.json();
         toast.error(data.message || 'Failed to submit request.');

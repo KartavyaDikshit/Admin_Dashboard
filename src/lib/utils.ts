@@ -82,8 +82,8 @@ export function extractMarketStats(text: string | null | undefined) {
   const cleanText = text.replace(/<[^>]*>?/gm, ' ');
 
   // Extract CAGR
-  // Matches: "CAGR of 7.5%", "CAGR of 7.5 %", "7.5% CAGR", "CAGR: 7.5%", "7.5% (CAGR)", "(CAGR) of 7.5%"
-  const cagrMatch = cleanText.match(/(?:CAGR of|CAGR:|CAGR|\(CAGR\) of)\s*([\d\.,]+)\s*%/i) || 
+  // Matches: "CAGR of 7.5%", "CAGR of approximately 7.5%", "7.5% CAGR", "CAGR: 7.5%", "7.5% (CAGR)", "(CAGR) of 7.5%"
+  const cagrMatch = cleanText.match(/(?:CAGR of|CAGR:|CAGR|\(CAGR\) of)\s*(?:approximately|approx\.|around|about)?\s*([\d\.,]+)\s*%/i) || 
                     cleanText.match(/([\d\.,]+)\s*%\s*(?:CAGR|\(CAGR\))/i);
   const cagr = cagrMatch ? `${cagrMatch[1]}%` : null;
 

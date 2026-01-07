@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useSession } from 'next-auth/react';
 
 interface Testimonial {
   id: string;
@@ -20,6 +21,8 @@ interface Testimonial {
 
 export default function TestimonialList() {
   const router = useRouter();
+  const { data: session } = useSession();
+  const userRole = session?.user?.role;
   const { data: testimonials, isLoading, isError, refetch } = useQuery<Testimonial[]>({ queryKey: ['testimonials'], queryFn: async () => {
     const response = await axios.get('/api/testimonials');
     return response.data;
@@ -90,11 +93,13 @@ export default function TestimonialList() {
                 >
                   Edit
                 </button>
-                <button type="button" className="text-xs text-red-600 hover:text-red-900 font-medium"
-                  onClick={() => handleDelete(testimonial.id)}
-                >
-                  Delete
-                </button>
+                {userRole === 'SUPERADMIN' && (
+                  <button type="button" className="text-xs text-red-600 hover:text-red-900 font-medium"
+                    onClick={() => handleDelete(testimonial.id)}
+                  >
+                    Delete
+                  </button>
+                )}
               </td>
             </tr>
           ))}

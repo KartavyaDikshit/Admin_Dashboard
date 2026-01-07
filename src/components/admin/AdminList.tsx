@@ -4,11 +4,14 @@ import { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Admin } from '@prisma/client';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 export function AdminList() {
   const router = useRouter();
+  const { data: session } = useSession();
   const [admins, setAdmins] = useState<Admin[]>([]);
   const [loading, setLoading] = useState(true);
+  const userRole = session?.user?.role;
 
   async function fetchAdmins() {
     try {
@@ -68,9 +71,11 @@ export function AdminList() {
                 <button onClick={() => router.push(`/admin/users/edit/${admin.id}`)} className="btn btn-outline mr-2">
                   Edit
                 </button>
-                <button onClick={() => handleDelete(admin.id)} className="btn btn-secondary">
-                  Delete
-                </button>
+                {userRole === 'SUPERADMIN' && (
+                  <button onClick={() => handleDelete(admin.id)} className="btn btn-secondary">
+                    Delete
+                  </button>
+                )}
               </TableCell>
             </TableRow>
           ))}

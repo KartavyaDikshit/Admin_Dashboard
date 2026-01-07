@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { formatDateTime, cn } from '@/lib/utils';
 import { Category as CategoryType } from '@prisma/client';
+import { useSession } from 'next-auth/react';
 
 type CategoryWithCounts = CategoryType & {
   _count: {
@@ -22,6 +23,8 @@ interface CategoryListProps {
 }
 
 export default function CategoryList({ searchParams }: CategoryListProps) {
+  const { data: session } = useSession();
+  const userRole = session?.user?.role;
   const [categories, setCategories] = useState<CategoryWithCounts[]>([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({ page: 1, limit: 100, total: 0, totalPages: 1 });
@@ -172,12 +175,14 @@ export default function CategoryList({ searchParams }: CategoryListProps) {
                         >
                           {translatingId === category.id ? 'Translating...' : 'Translate'}
                         </button>
-                        <button
-                          onClick={() => deleteCategory(category.id)}
-                          className="text-xs text-red-600 hover:text-red-900 font-medium"
-                        >
-                          Delete
-                        </button>
+                        {userRole === 'SUPERADMIN' && (
+                          <button
+                            onClick={() => deleteCategory(category.id)}
+                            className="text-xs text-red-600 hover:text-red-900 font-medium"
+                          >
+                            Delete
+                          </button>
+                        )}
                       </div>
                       
                       <div className="text-xs text-gray-500">

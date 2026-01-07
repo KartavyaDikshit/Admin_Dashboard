@@ -3,10 +3,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import Link from 'next/link';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 interface EnquiryPageFormProps {
   reportId: string;
+  reportFriendlyId: string;
   reportTitle: string;
+  reportSlug: string;
   enquiryType: string;
   lang: string;
 }
@@ -25,7 +29,7 @@ const COUNTRIES = [
   { name: 'Other', code: '' }
 ];
 
-export default function EnquiryPageForm({ reportId, reportTitle, enquiryType, lang }: EnquiryPageFormProps) {
+export default function EnquiryPageForm({ reportId, reportFriendlyId, reportTitle, reportSlug, enquiryType, lang }: EnquiryPageFormProps) {
   const router = useRouter();
   const [formData, setFormData] = useState({
     fullName: '',
@@ -85,7 +89,7 @@ ${formData.description}
 
       if (res.ok) {
         toast.success('Request submitted successfully!');
-        router.push(`/${lang}/thank-you/${enquiryType}/${reportId}`);
+        router.push(`/${lang}/thank-you/${enquiryType}/${reportFriendlyId}`);
       } else {
         toast.error('Failed to submit request. Please try again.');
       }
@@ -100,7 +104,13 @@ ${formData.description}
   const typeLabel = enquiryType.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
   return (
-    <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto">
+      <Link href={`/${lang}/reports/${reportSlug}`} className="inline-flex items-center text-indigo-600 hover:text-indigo-800 mb-4 font-medium transition-colors">
+        <ArrowLeftIcon className="h-4 w-4 mr-2" />
+        Back to Report
+      </Link>
+      
+      <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
       <div className="mb-8 text-center">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">{typeLabel}</h1>
         <p className="text-gray-600">
@@ -212,6 +222,7 @@ ${formData.description}
           {isSubmitting ? 'Submitting...' : 'Submit Request'}
         </button>
       </form>
+      </div>
     </div>
   );
 }

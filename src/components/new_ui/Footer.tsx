@@ -62,7 +62,7 @@ export default function Footer({ dict, lang }: FooterProps) {
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link href={`/${lang}/privacy-policy`} className="text-gray-400 hover:text-white text-sm transition-colors">{dict.privacyPolicy}</Link>
             <Link href={`/${lang}/terms-conditions`} className="text-gray-400 hover:text-white text-sm transition-colors">{dict.termsOfService}</Link>
-            <Link href="/sitemap.xml" className="text-gray-400 hover:text-white text-sm transition-colors">Sitemap</Link>
+            {/* <Link href="/sitemap.xml" className="text-gray-400 hover:text-white text-sm transition-colors">Sitemap</Link> */}
           </div>
         </div>
       </div>

@@ -98,11 +98,20 @@ export default function Sidebar({ open, userRole }: SidebarProps) {
   ]
 
   const filteredNavigation = navigation.filter(item => {
-    // Add role-based filtering logic here
-    if (userRole === 'EDITOR' && ['Users', 'Settings'].includes(item.name)) {
-      return false
+    if (userRole === 'SUPERADMIN') return true;
+
+    if (item.name === 'Dashboard') return true;
+
+    if (userRole === 'MANAGER') {
+      return ['Orders', 'Requests', 'Customization'].includes(item.name);
     }
-    return true
+
+    if (userRole === 'EDITOR') {
+      return ['Reports', 'Press Releases', 'Testimonials'].includes(item.name);
+    }
+
+    // Default for other roles or no role (maybe allow minimal access or none)
+    return false;
   })
 
   return (

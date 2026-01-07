@@ -86,7 +86,6 @@ export default function Footer({ lang }: { lang: string }) {
           <div className="mt-4 md:mt-0 flex gap-6">
              <Link href={`/${lang}/privacy-policy`} className="hover:text-white transition-colors">{dict.privacyPolicy}</Link>
              <Link href={`/${lang}/terms-conditions`} className="hover:text-white transition-colors">{dict.termsOfService}</Link>
-             <Link href="/sitemap.xml" className="hover:text-white transition-colors">Sitemap</Link>
           </div>
         </div>
       </div>
