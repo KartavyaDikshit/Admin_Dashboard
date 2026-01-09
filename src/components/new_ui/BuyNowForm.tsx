@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import { ShieldCheckIcon } from '@heroicons/react/24/outline';
+import { ShieldCheckIcon, BuildingLibraryIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 import { toast } from 'sonner';
 
 interface BuyNowFormProps {
@@ -23,11 +23,24 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
     name: '',
     email: '',
     company: '',
-    phone: ''
+    phone: '',
+    country: ''
   });
-  const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'ccavenue'>('paypal');
+  const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'ccavenue' | 'wire'>('paypal');
   const [ccAvenueData, setCcAvenueData] = useState<{ encRequest: string, access_code: string, merchant_id: string, url: string } | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+      // Auto-detect country
+      fetch('https://ipapi.co/json/')
+        .then(res => res.json())
+        .then(data => {
+            if (data.country_name) {
+                setFormData(prev => ({ ...prev, country: data.country_name }));
+            }
+        })
+        .catch(err => console.error("Error fetching country:", err));
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -46,11 +59,12 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 reportId: reportDbId,
-                licenseType: licenseType.toUpperCase(), // Enum format
+                licenseType: licenseType.toUpperCase(),
                 userEmail: formData.email,
                 userName: formData.name,
                 userPhone: formData.phone,
-                userCompany: formData.company
+                userCompany: formData.company,
+                userCountry: formData.country
             })
         });
         const orderData = await response.json();
@@ -108,7 +122,8 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
           userEmail: formData.email,
           userName: formData.name,
           userPhone: formData.phone,
-          userCompany: formData.company
+          userCompany: formData.company,
+          userCountry: formData.country
         })
       });
 
@@ -139,6 +154,43 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
       toast.error("An error occurred. Please try again.");
       setLoading(false);
     }
+  };
+
+  const handleWireTransfer = async () => {
+      if (!formData.email) {
+          toast.error("Please enter your email address.");
+          return;
+      }
+
+      setLoading(true);
+      try {
+          const response = await fetch('/api/orders/wire-transfer', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  reportId: reportDbId,
+                  licenseType: licenseType,
+                  userEmail: formData.email,
+                  userName: formData.name,
+                  userPhone: formData.phone,
+                  userCompany: formData.company,
+                  userCountry: formData.country
+              })
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+              router.push(`/${lang}/thank-you/wire-transfer/${reportFriendlyId}`);
+          } else {
+              toast.error(data.error || "Failed to process wire transfer request.");
+          }
+      } catch (err) {
+          console.error("Wire Transfer Error:", err);
+          toast.error("An error occurred. Please try again.");
+      } finally {
+          setLoading(false);
+      }
   };
 
   const initialOptions = {
@@ -199,6 +251,18 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
                         placeholder="+1 (555) 000-0000"
                     />
                  </div>
+
+                 <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                    <input
+                        type="text"
+                        name="country"
+                        value={formData.country}
+                        onChange={handleInputChange}
+                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-3"
+                        placeholder="United States"
+                    />
+                 </div>
                  
                  <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Company (Optional)</label>
@@ -216,24 +280,32 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
 
          <div className="space-y-4">
             <h4 className="text-lg font-bold text-gray-900 border-b pb-2">2. Payment Method</h4>
-            <div className="flex gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div 
                     onClick={() => setPaymentMethod('paypal')}
-                    className={`flex-1 border-2 rounded-xl p-4 cursor-pointer flex items-center justify-center gap-2 transition-all ${paymentMethod === 'paypal' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 hover:border-indigo-300'}`}
+                    className={`border-2 rounded-xl p-4 cursor-pointer flex flex-col items-center justify-center gap-2 transition-all h-24 ${paymentMethod === 'paypal' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 hover:border-indigo-300'}`}
                 >
-                    <span className="font-bold text-gray-800">PayPal</span>
+                    <span className="font-bold text-gray-800 text-center">PayPal</span>
                 </div>
                 <div 
                     onClick={() => setPaymentMethod('ccavenue')}
-                    className={`flex-1 border-2 rounded-xl p-4 cursor-pointer flex items-center justify-center gap-2 transition-all ${paymentMethod === 'ccavenue' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 hover:border-indigo-300'}`}
+                    className={`border-2 rounded-xl p-4 cursor-pointer flex flex-col items-center justify-center gap-2 transition-all h-24 ${paymentMethod === 'ccavenue' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 hover:border-indigo-300'}`}
                 >
-                    <span className="font-bold text-gray-800">Credit / Debit Card</span>
+                    <CreditCardIcon className="h-6 w-6 text-gray-700"/>
+                    <span className="font-bold text-gray-800 text-center text-sm">Credit / Debit Card</span>
+                </div>
+                <div 
+                    onClick={() => setPaymentMethod('wire')}
+                    className={`border-2 rounded-xl p-4 cursor-pointer flex flex-col items-center justify-center gap-2 transition-all h-24 ${paymentMethod === 'wire' ? 'border-indigo-600 bg-indigo-50' : 'border-gray-200 hover:border-indigo-300'}`}
+                >
+                    <BuildingLibraryIcon className="h-6 w-6 text-gray-700"/>
+                    <span className="font-bold text-gray-800 text-center text-sm">Wire Transfer</span>
                 </div>
             </div>
          </div>
 
          <div className="pt-2">
-            {paymentMethod === 'paypal' ? (
+            {paymentMethod === 'paypal' && (
                 <div className={`transition-opacity ${!formData.email ? 'opacity-50 pointer-events-none' : ''}`}>
                     {!formData.email && <p className="text-sm text-amber-600 mb-3 text-center bg-amber-50 p-2 rounded border border-amber-200">Please enter your email above to proceed with payment</p>}
                     <PayPalButtons 
@@ -243,7 +315,9 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
                         forceReRender={[price, licenseType]}
                     />
                 </div>
-            ) : (
+            )}
+
+            {paymentMethod === 'ccavenue' && (
                 <div className="text-center p-8 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
                     <p className="text-gray-500 font-medium mb-4">Secure Credit/Debit Card payment gateway.</p>
                     <button 
@@ -252,6 +326,21 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
                       className="w-full bg-indigo-600 text-white font-bold py-4 rounded-lg hover:bg-indigo-700 transition-colors shadow-lg disabled:opacity-50"
                     >
                       {loading ? 'Processing...' : 'Proceed to Payment'}
+                    </button>
+                    {!formData.email && <p className="text-sm text-red-500 mt-2">Email is required</p>}
+                </div>
+            )}
+
+            {paymentMethod === 'wire' && (
+                <div className="text-center p-8 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+                    <p className="text-gray-500 font-medium mb-4">You will receive an invoice with bank details via email.</p>
+                    <button 
+                      onClick={handleWireTransfer}
+                      disabled={loading || !formData.email}
+                      className="w-full bg-slate-800 text-white font-bold py-4 rounded-lg hover:bg-slate-900 transition-colors shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+                    >
+                      <BuildingLibraryIcon className="h-5 w-5"/>
+                      {loading ? 'Processing...' : 'Request Wire Transfer'}
                     </button>
                     {!formData.email && <p className="text-sm text-red-500 mt-2">Email is required</p>}
                 </div>

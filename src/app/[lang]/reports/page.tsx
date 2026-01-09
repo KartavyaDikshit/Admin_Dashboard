@@ -23,12 +23,26 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   });
 
   return {
-    title: dict.reports || 'Market Research Reports',
+    title: dict.reports || 'Market Research Reports | The Brainy Insights',
     description: dict.reportsHeroSubtitle || 'Browse our extensive collection of market research reports across various industries.',
+    keywords: ['market research reports', 'industry analysis', 'market trends', 'strategic insights'],
     alternates: {
       canonical: `${siteUrl}/${lang}/reports`,
       languages: languages,
     },
+    openGraph: {
+      title: dict.reports || 'Market Research Reports | The Brainy Insights',
+      description: dict.reportsHeroSubtitle || 'Browse our extensive collection of market research reports across various industries.',
+      url: `${siteUrl}/${lang}/reports`,
+      siteName: 'The Brainy Insights',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: dict.reports || 'Market Research Reports | The Brainy Insights',
+      description: dict.reportsHeroSubtitle || 'Browse our extensive collection of market research reports.',
+      site: '@thebrainyinsight',
+    }
   };
 }
 

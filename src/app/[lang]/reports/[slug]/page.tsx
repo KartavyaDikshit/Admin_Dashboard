@@ -39,10 +39,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       });
   }
 
+  // Combine all keywords for better SEO
+  const allKeywords = [
+    ...(report.keywords || []),
+    ...(report.semanticKeywords || []),
+    ...(report.competitorKeywords || []),
+    ...(report.trendingKeywords || []),
+    ...(report.longTailKeywords || []),
+    ...(report.industryTags || [])
+  ].filter((v, i, a) => a.indexOf(v) === i);
+
   return {
     title: report.metaTitle || report.title,
     description: report.metaDescription || report.summary || report.description,
-    keywords: report.keywords || [],
+    keywords: allKeywords,
     authors: [{ name: 'The Brainy Insights' }],
     publisher: 'The Brainy Insights',
     robots: {
@@ -66,7 +76,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'article',
       url: canonicalUrl,
       publishedTime: report.publishedDate.toISOString(),
-      images: report.ogImage ? [report.ogImage] : (report.imageUrl ? [report.imageUrl] : []),
+      modifiedTime: report.updatedAt.toISOString(),
+      images: [
+        {
+          url: report.ogImage || report.imageUrl || '/logo.png',
+          width: 1200,
+          height: 630,
+          alt: report.title,
+        }
+      ],
       siteName: 'The Brainy Insights',
       locale: lang,
     },
@@ -74,8 +92,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title: report.twitterTitle || report.ogTitle || report.metaTitle || report.title,
       description: report.twitterDescription || report.ogDescription || report.metaDescription || report.summary || report.description,
-      images: report.ogImage ? [report.ogImage] : (report.imageUrl ? [report.imageUrl] : []),
+      images: [report.ogImage || report.imageUrl || '/logo.png'],
+      site: '@thebrainyinsight',
+      creator: '@thebrainyinsight',
     },
+    other: {
+      'article:publisher': 'https://www.facebook.com/thebrainyinsights',
+      'article:section': report.industryTags?.[0] || 'Market Research',
+      'report-id': report.reportId || report.sku || '',
+    }
   };
 }
 

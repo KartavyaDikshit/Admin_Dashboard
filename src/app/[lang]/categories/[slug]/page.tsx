@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: (category.ogDescription || category.metaDescription || category.description) ?? undefined,
       type: 'website',
       url: canonicalUrl,
-      images: category.ogImage ? [category.ogImage] : [],
+      images: category.ogImage ? [{ url: category.ogImage }] : [],
       siteName: 'The Brainy Insights',
       locale: lang,
     },
@@ -48,7 +48,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: category.ogTitle || category.metaTitle || category.name,
       description: (category.ogDescription || category.metaDescription || category.description) ?? undefined,
       images: category.ogImage ? [category.ogImage] : [],
+      site: '@thebrainyinsight',
     },
+    other: {
+      'category-slug': slug,
+    }
   };
 }
 

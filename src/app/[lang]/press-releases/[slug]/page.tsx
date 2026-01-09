@@ -18,9 +18,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Press Release Not Found' };
   }
 
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const canonicalUrl = `${siteUrl}/${lang}/press-releases/${slug}`;
+
   return {
     title: pressRelease.title,
-    description: pressRelease.description,
+    description: pressRelease.description.substring(0, 160),
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: pressRelease.title,
+      description: pressRelease.description.substring(0, 160),
+      url: canonicalUrl,
+      type: 'article',
+      siteName: 'The Brainy Insights',
+      publishedTime: pressRelease.publishedAt?.toISOString() || pressRelease.createdAt.toISOString(),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: pressRelease.title,
+      description: pressRelease.description.substring(0, 160),
+      site: '@thebrainyinsight',
+    }
   };
 }
 
@@ -33,8 +53,19 @@ export default async function PressReleaseDetail({ params }: Props) {
     notFound();
   }
 
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: dict.home || 'Home', item: `${siteUrl}/${lang}` },
+    { name: 'Press Releases', item: `${siteUrl}/${lang}/press-releases` },
+    { name: pressRelease.title, item: `${siteUrl}/${lang}/press-releases/${slug}` }
+  ]);
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <section className="hero-section py-20">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/90 via-indigo-700/95 to-purple-800/90"></div>

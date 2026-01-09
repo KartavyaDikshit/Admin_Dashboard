@@ -14,6 +14,14 @@ export default async function ThankYouPage({ params }: Props) {
   
   const typeLabel = type.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
+  let message = `Your request for ${typeLabel} has been received. Our team will contact you shortly.`;
+  
+  if (type === 'wire-transfer') {
+      message = "Thank you for choosing Wire Transfer. Our team will contact you shortly with the wire transfer confirmation and bank details to complete your purchase.";
+  } else if (type === 'purchase') {
+      message = "Your payment was successful! You will receive an email with the report download link shortly.";
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -23,7 +31,7 @@ export default async function ThankYouPage({ params }: Props) {
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Thank You!</h2>
           <p className="text-gray-600 mb-6">
-            Your request for <span className="font-semibold">{typeLabel}</span> has been received. Our team will contact you shortly.
+            {message}
           </p>
           <div className="space-y-3">
             <Link 

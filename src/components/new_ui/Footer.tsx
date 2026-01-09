@@ -47,6 +47,7 @@ export default function Footer({ dict, lang }: FooterProps) {
               <li><Link href={`/${lang}/services`} className="hover:text-white transition-colors">{dict.services || 'Services'}</Link></li>
               <li><Link href={`/${lang}/press-releases`} className="hover:text-white transition-colors">{dict.pressReleases || 'Press Releases'}</Link></li>
               <li><Link href={`/${lang}/contact`} className="hover:text-white transition-colors">{dict.contactUs || 'Contact Us'}</Link></li>
+              <li><Link href={`/${lang}/faqs`} className="hover:text-white transition-colors">{dict.faqs || 'FAQs'}</Link></li>
             </ul>
           </div>
           <div>

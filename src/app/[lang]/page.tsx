@@ -17,10 +17,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
 
   return {
-    title: dict.homeTitle || 'Global Market Research Reports & Consulting',
+    title: dict.homeTitle || 'Global Market Research Reports & Consulting | The Brainy Insights',
     description: dict.homeDescription || 'The Brainy Insights provides comprehensive market research reports, industry analysis, and consulting services to help businesses grow globally.',
+    keywords: ['market research', 'consulting services', 'global market reports', 'industry analysis', 'business intelligence', 'market forecasting'],
     alternates: {
       canonical: `${siteUrl}/${lang}`,
+    },
+    openGraph: {
+      title: dict.homeTitle || 'Global Market Research Reports & Consulting | The Brainy Insights',
+      description: dict.homeDescription || 'The Brainy Insights provides comprehensive market research reports, industry analysis, and consulting services.',
+      url: `${siteUrl}/${lang}`,
+      siteName: 'The Brainy Insights',
+      images: [
+        {
+          url: '/og-image.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'The Brainy Insights',
+        }
+      ],
+      locale: lang,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: dict.homeTitle || 'Global Market Research Reports & Consulting | The Brainy Insights',
+      description: dict.homeDescription || 'The Brainy Insights provides comprehensive market research reports.',
+      images: ['/og-image.jpg'],
+      site: '@thebrainyinsight',
     },
   };
 }
@@ -28,7 +52,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Home({ params }: Props) {
   const { lang } = await params;
   const dict = getDictionary(lang);
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
   
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "The Brainy Insights",
+    "url": siteUrl,
+    "logo": `${siteUrl}/logo.png`,
+    "sameAs": [
+      "https://www.linkedin.com/company/thebrainyinsights",
+      "https://www.facebook.com/thebrainyinsights",
+      "https://twitter.com/thebrainyinsight"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+1-315-215-1633",
+      "contactType": "sales",
+      "email": "sales@thebrainyinsights.com"
+    }
+  };
+
   const [categories, reports, testimonials] = await Promise.all([
     getFeaturedCategories(lang),
     getFeaturedReports(lang),
@@ -37,6 +81,10 @@ export default async function Home({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
       <Hero dict={dict} lang={lang} />
       <TrustedBy dict={dict} />
       <FeaturedCategories categories={categories} dict={dict} lang={lang} />

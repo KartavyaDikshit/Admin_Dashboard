@@ -3,9 +3,31 @@ import { prisma } from '@/lib/prisma';
 
 const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
 const baseUrl = process.env.NEXTAUTH_URL || 'https://thebrainyinsights.com';
+const ITEMS_PER_SITEMAP = 1000;
 
 export async function generateSitemaps() {
-  return [{ id: 'static' }, { id: 'dynamic' }];
+  // Calculate total items to determine how many sitemaps we need
+  const [reportCount, categoryCount, prCount] = await Promise.all([
+    prisma.report.count({ where: { status: 'PUBLISHED' } }),
+    prisma.category.count({ where: { status: 'PUBLISHED' } }),
+    prisma.pressRelease.count({ where: { published: true } })
+  ]);
+
+  const totalItems = (reportCount + categoryCount + prCount) * locales.length;
+  const totalChunks = Math.ceil(totalItems / ITEMS_PER_SITEMAP);
+
+  const sitemaps = [{ id: 'static' }];
+  
+  for (let i = 0; i < totalChunks; i++) {
+    sitemaps.push({ id: `dynamic-${i}` });
+  }
+
+  // If no dynamic items, ensure at least one dynamic sitemap is generated (though empty) or just return static
+  if (sitemaps.length === 1 && totalItems > 0) {
+      sitemaps.push({ id: 'dynamic-0' });
+  }
+
+  return sitemaps;
 }
 
 export default async function sitemap({ id }: { id: string | Promise<string> }): Promise<MetadataRoute.Sitemap> {
@@ -25,6 +47,8 @@ export default async function sitemap({ id }: { id: string | Promise<string> }):
       '/press-releases',
       '/privacy-policy',
       '/terms-conditions',
+      '/research-methodology', // Added new page
+      '/faqs', // Added new page
     ];
 
     for (const locale of locales) {
@@ -37,79 +61,123 @@ export default async function sitemap({ id }: { id: string | Promise<string> }):
         });
       }
     }
-  } else if (sitemapId === 'dynamic') {
-    console.log('Generating dynamic sitemap entries...');
-    // Calculate limit per entity type to stay under ~1000 links total
-    // We have 7 locales. Max 1000 links / 7 ~= 142 items total.
-    // Let's allocate: 100 Reports, 20 Categories, 20 PRs.
+  } else if (sitemapId.startsWith('dynamic-')) {
+    const chunkIndex = parseInt(sitemapId.split('-')[1], 10);
+    const offset = chunkIndex * ITEMS_PER_SITEMAP;
     
-    try {
-      const reports = await prisma.report.findMany({
-        where: { status: 'PUBLISHED' },
-        select: { slug: true, updatedAt: true },
-        orderBy: { updatedAt: 'desc' },
-        take: 100,
-      });
-      console.log(`Found ${reports.length} reports`);
-
-      for (const locale of locales) {
-        for (const report of reports) {
-          sitemapEntries.push({
-            url: `${baseUrl}/${locale}/reports/${report.slug}`,
-            lastModified: report.updatedAt,
-            changeFrequency: 'weekly',
-            priority: 0.7,
-          });
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching reports for sitemap:', error);
-    }
+    // We need to distribute the skip/take logic across the different entities.
+    // This is a bit complex because we are flattening multiple tables * locales into one list.
+    // Simplified strategy: We will fetch chunks of entities and then map them to locales.
+    // Each entity produces N entries (where N = locales.length).
+    // So we effectively can handle ITEMS_PER_SITEMAP / 7 entities per chunk.
+    
+    const entitiesPerChunk = Math.floor(ITEMS_PER_SITEMAP / locales.length);
+    const entityOffset = chunkIndex * entitiesPerChunk;
+    
+    console.log(`Generating dynamic sitemap chunk ${chunkIndex}. Entity Offset: ${entityOffset}, Limit: ${entitiesPerChunk}`);
 
     try {
-      const categories = await prisma.category.findMany({
-        where: { status: 'PUBLISHED' },
-        select: { slug: true, updatedAt: true },
-        orderBy: { updatedAt: 'desc' },
-        take: 20,
-      });
-      console.log(`Found ${categories.length} categories`);
-
-      for (const locale of locales) {
-        for (const category of categories) {
-          sitemapEntries.push({
-            url: `${baseUrl}/${locale}/categories/${category.slug}`,
-            lastModified: category.updatedAt,
-            changeFrequency: 'weekly',
-            priority: 0.6,
+      // 1. Reports
+      const reportCount = await prisma.report.count({ where: { status: 'PUBLISHED' } });
+      
+      if (entityOffset < reportCount) {
+          const reports = await prisma.report.findMany({
+            where: { status: 'PUBLISHED' },
+            select: { slug: true, updatedAt: true },
+            orderBy: { updatedAt: 'desc' },
+            skip: entityOffset,
+            take: entitiesPerChunk,
           });
-        }
+
+          for (const locale of locales) {
+            for (const report of reports) {
+              sitemapEntries.push({
+                url: `${baseUrl}/${locale}/reports/${report.slug}`,
+                lastModified: report.updatedAt,
+                changeFrequency: 'weekly',
+                priority: 0.7,
+              });
+            }
+          }
       }
-    } catch (error) {
-      console.error('Error fetching categories for sitemap:', error);
-    }
 
-    try {
-      const pressReleases = await prisma.pressRelease.findMany({
-        where: { published: true },
-        select: { slug: true, updatedAt: true },
-        orderBy: { updatedAt: 'desc' },
-        take: 20,
-      });
-      console.log(`Found ${pressReleases.length} press releases`);
+      // Calculate remaining slots and offset for Categories
+      // If we filled the chunk with reports, we stop.
+      // If we exhausted reports, we move to categories.
+      
+      // Effective items pushed so far = reports.length * locales.length.
+      // This simple logic assumes we just paginate through types sequentially based on the global entity index.
+      
+      let currentEntityIndex = entityOffset;
+      let itemsRemaining = entitiesPerChunk; // Target entities to fetch
+      
+      // Adjust based on what we fetched from reports
+      if (currentEntityIndex < reportCount) {
+          // We fetched some reports.
+          // If we fetched the full 'take' amount, we are done for this chunk.
+          // If we fetched less, it means we ran out of reports and need to fill with categories.
+           const fetchedReportsCount = Math.min(itemsRemaining, Math.max(0, reportCount - currentEntityIndex));
+           itemsRemaining -= fetchedReportsCount;
+           currentEntityIndex += fetchedReportsCount; // Move the global index pointer
+      } else {
+          // We are past reports, so the "report part" of this chunk is 0
+      }
 
-      for (const locale of locales) {
-        for (const pr of pressReleases) {
-          sitemapEntries.push({
-            url: `${baseUrl}/${locale}/press-releases/${pr.slug}`,
-            lastModified: pr.updatedAt,
-            changeFrequency: 'weekly',
-            priority: 0.5,
+      // 2. Categories
+      const categoryCount = await prisma.category.count({ where: { status: 'PUBLISHED' } });
+      const categoryOffset = Math.max(0, currentEntityIndex - reportCount); // Offset relative to Category table
+
+      if (itemsRemaining > 0 && categoryOffset < categoryCount) {
+           const categories = await prisma.category.findMany({
+            where: { status: 'PUBLISHED' },
+            select: { slug: true, updatedAt: true },
+            orderBy: { updatedAt: 'desc' },
+            skip: categoryOffset,
+            take: itemsRemaining,
           });
-        }
+
+          for (const locale of locales) {
+            for (const category of categories) {
+              sitemapEntries.push({
+                url: `${baseUrl}/${locale}/categories/${category.slug}`,
+                lastModified: category.updatedAt,
+                changeFrequency: 'weekly',
+                priority: 0.6,
+              });
+            }
+          }
+          
+          itemsRemaining -= categories.length;
+          currentEntityIndex += categories.length;
       }
+
+      // 3. Press Releases
+      const prCount = await prisma.pressRelease.count({ where: { published: true } });
+      const prOffset = Math.max(0, currentEntityIndex - reportCount - categoryCount);
+
+      if (itemsRemaining > 0 && prOffset < prCount) {
+          const pressReleases = await prisma.pressRelease.findMany({
+            where: { published: true },
+            select: { slug: true, updatedAt: true },
+            orderBy: { updatedAt: 'desc' },
+            skip: prOffset,
+            take: itemsRemaining,
+          });
+
+          for (const locale of locales) {
+            for (const pr of pressReleases) {
+              sitemapEntries.push({
+                url: `${baseUrl}/${locale}/press-releases/${pr.slug}`,
+                lastModified: pr.updatedAt,
+                changeFrequency: 'weekly',
+                priority: 0.5,
+              });
+            }
+          }
+      }
+
     } catch (error) {
-      console.error('Error fetching press releases for sitemap:', error);
+      console.error('Error fetching data for sitemap:', error);
     }
   }
 

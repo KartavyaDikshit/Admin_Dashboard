@@ -44,6 +44,7 @@ export default function Footer({ lang }: { lang: string }) {
               <li><Link href={`/${lang}/services`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.services}</Link></li>
               <li><Link href={`/${lang}/press-releases`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.pressReleases}</Link></li>
               <li><Link href={`/${lang}/contact`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.contactUs}</Link></li>
+              <li><Link href={`/${lang}/faqs`} className="hover:text-white hover:translate-x-1 transition-all inline-block">{dict.faqs || 'FAQs'}</Link></li>
             </ul>
           </div>
 

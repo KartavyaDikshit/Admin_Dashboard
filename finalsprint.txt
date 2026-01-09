@@ -1,0 +1,352 @@
+in the individual reports page the meta tags are not in the head 
+for seo purposes when i view page source a lot of meta tags and seo tags are not present in the header and are in other tags make sure ALL the seo meta tags and more are in the head tag of the webpage 
+for all the webpages this webapp has 
+now look at the dynamic sitemap logic implement the following logic:
+when 1000 links are made in one dynamic.xml the next 1000 links are supposed to be in the dynamic2.xml this needs to be auto scalable for seo and indexing purposes auto increment 
+"http://localhost:3000/en/buy-now/TBI-87125/singleUser" here in this form add in auto country code detector 
+in the same form add in another button called "Wire-Transfer" which when clicked on will save the form details into the orders with a tracker as well for payment and when wire transfer is clicked on redirect it to a tank you page with content saying that our team will contact you for the wiretransfer confirmation and details 
+"http://localhost:3000/en/about" here bring up the "About The Brainy Insights" content to the top right under the hero section and update the content with:
+"About Brainy Insights
+
+Brainy Insights is a global market research and consulting firm committed to delivering accurate, actionable, and data-driven insights that empower organizations to make confident strategic decisions. By integrating advanced data analytics, industry expertise, and a rigorous research framework, we help businesses enhance market intelligence, optimize performance, and unlock sustainable growth opportunities.
+
+Our core strength lies in our robust forecasting, estimation, and analytical models, which are designed to deliver high-quality and reliable outputs within accelerated timelines. We focus on transforming complex datasets into clear, meaningful insights that support business planning, investment decisions, product development, and market entry strategies.
+
+Brainy Insights offers a comprehensive portfolio of syndicated and customized market research reports. Our syndicated research repository spans a wide range of industries, sectors, and sub-segments, providing in-depth coverage across global, regional, and country-level markets. These reports are designed to reflect evolving market dynamics, emerging technologies, and competitive developments.
+
+In addition to syndicated studies, we specialize in customized research solutions tailored to the specific needs of our clients. Whether organizations are planning geographic expansion, launching new products, assessing competitive positioning, or evaluating emerging opportunities, our bespoke research offerings are precisely aligned with client objectives and business challenges.
+
+Our market research reports are developed through a comprehensive blend of primary and secondary research methodologies. Each report includes a detailed market overview, market sizing and forecasting, competitive landscape analysis, profiling of key players, evaluation of major trends, growth drivers, restraints, opportunities, and assessment of the current and future market scenario.
+
+Brainy Insights is supported by a dedicated team of highly experienced analysts, domain specialists, and consultants. Our experts continuously track industry developments, regulatory changes, technological advancements, and macroeconomic indicators. By systematically analyzing and interpreting these factors, we deliver up-to-date insights and forward-looking forecasts that help clients stay competitive in dynamic global markets.
+
+Our Vision
+To be a trusted global provider of market intelligence, delivering insights that enable confident decisions and sustainable growth.
+
+Our Mission
+To deliver accurate, timely, and actionable market research through advanced analytics, domain expertise, and a client-focused approach.
+
+
+
+Our Core Values
+
+Integrity & Transparency
+We conduct research with honesty, ethical rigor, and full transparency in data sourcing and analysis.
+
+Accuracy & Quality Excellence
+We prioritize precision, validation, and consistency to ensure dependable, decision-ready insights.
+
+Client-Centricity
+We tailor every solution to our clients’ objectives, ensuring relevance, impact, and measurable value.
+
+Expertise & Domain Knowledge
+Our analysts bring deep industry understanding and continuously updated market intelligence.
+
+Innovation & Analytical Rigor
+We leverage advanced tools, methodologies, and forward-thinking analytics to stay ahead of market shifts.
+
+Timeliness & Responsiveness
+We respect our clients’ timelines and deliver high-quality outputs within accelerated schedules.
+
+Accountability & Ownership
+We take full responsibility for our work, outcomes, and long-term client relationships.
+
+Confidentiality & Data Security
+We safeguard client information and proprietary data with strict security and compliance standards.
+
+Continuous Learning
+We foster a culture of learning to adapt quickly to evolving industries and technologies.
+
+
+"
+apply necessary formatting as required 
+after that create a webpage called "Research Methodology" and link that webpage to the about us page in after this section: "Research Methodology
+This research combines primary interviews with 500+ industry experts, secondary data analysis from 200+ sources, and proprietary market modeling to provide comprehensive insights into the AI market landscape.
+
+" call that link Read more
+and the "Research Methodology" webpage content is:
+"Research Methodology – The Brainy Insights
+
+Research plays a critical role in enabling efficient and effective marketing strategies. In today’s highly competitive business environment, organizations require timely and accurate information across all industry verticals—covering customer preferences, market demand, competitive dynamics, industry trends, and distribution channels. As businesses operate in an ever-changing marketplace, this information must be continuously updated to support informed decision-making.
+
+Brainy Insights adopts scientific and systematic research methodologies to deliver actionable market insights and comprehensive industry analysis that drive business success. Our approach involves in-depth market evaluation at a granular level, supported by advanced statistical tools that ensure accuracy, reliability, and precision in data analysis.
+Our research reports integrate both quantitative and qualitative dimensions of market analysis. Qualitative research is fundamental to understanding customer needs, preferences, usage behavior, and consumption patterns across specific industries. It helps marketers and investors gain deeper insight into customer perceptions, evaluate product concepts and designs, assess service offerings, define marketing challenges, and identify emerging opportunities.
+
+Quantitative research focuses on structured data collection through surveys, interviews, email interactions, and pilot studies. This approach validates hypotheses developed during qualitative research, identifies empirical data patterns using statistical techniques, and supports accurate market estimation and forecasting.
+
+Brainy Insights delivers comprehensive research and analysis based on factual insights obtained through interviews with CXOs, industry experts, and global specialists, complemented by secondary data from trusted sources. Our analysts and industry specialists design analytical frameworks and statistical models that convert raw data into actionable intelligence.
+
+
+Market Research Process
+
+Data Procurement
+This phase involves the systematic collection of market data and related information through multiple sources and research procedures. The process includes extensive research using purchased databases, primary research initiatives, and secondary research sources.
+
+Purchased Databases
+Purchased databases play a critical role in estimating market size and understanding competitive landscapes. These include organizational databases such as D&B Hoovers and Bloomberg for financial and competitive analysis, industry databases such as Statista and Factiva for market insights, and data obtained from third-party vendors covering import-export statistics, business trade information, and demographic-based product usage rates.
+
+Primary Research
+Primary research strengthens and validates all findings presented in our reports. It includes telephonic interviews, email interactions, face-to-face discussions, and structured surveys with raw material suppliers, manufacturers, distributors, consultants, and industry experts. These engagements provide insights into market size, growth patterns, customer behavior, and competitive dynamics.
+
+Surveys are designed internally by our analyst team and conducted across relevant industry stakeholders such as doctors, pharmacists, surgeons, nurses, engineers, or technical experts depending on the domain. This enables 360-degree market analysis, identification of key target audiences, and formulation of effective market strategies.
+
+Secondary Research
+Secondary research involves data collection from non-profit organizations such as the World Bank and WHO, company filings, investor presentations, annual reports, government publications, blogs, articles, white papers, and statistical databases. Product mapping techniques are applied to estimate segment-wise revenues and overall market size. Supply-side and demand-side data across the value chain are also analyzed.
+
+Supply-Side Analysis
+Supply-side analysis includes estimating penetration rates, evaluating pricing structures, assessing internal and external substitutes, and analyzing year-on-year sales trends through expert interviews.
+
+Demand-Side Analysis
+Demand-side analysis focuses on evaluating product penetration levels, usage rates, historical growth trends, and evolving industry dynamics to assess market potential.
+
+In-House Library
+The Brainy Insights maintains a robust in-house repository of qualitative and quantitative data across multiple industries. This includes historical databases, internal audit reports, and archived research materials, which are updated regularly to reflect changing market conditions.
+
+Market Estimation & Forecasting
+In scenarios where limited or no raw data is available, our analysts apply advanced estimation techniques such as demographic and psychographic segmentation, evaluation of micro- and macro-economic indicators, and assessment of industry-specific performance metrics.
+
+Data Synthesis
+This stage involves consolidating and mapping data obtained from multiple sources, identifying inconsistencies, and ensuring data coherence. Scientific synthesis techniques enable contextual interpretation and strategic alignment.
+
+Data Screening
+Data screening involves scrutinizing primary research data to detect errors, missing values, and inconsistencies. Repeated quality checks and validation cycles ensure data accuracy and reliability before integration.
+
+Data Integration
+Post screening, data from multiple studies and internal databases are integrated using top-down and bottom-up approaches to develop a comprehensive market perspective.
+
+Market Deduction & Formulation
+At this stage, data points are allocated to appropriate market segments. Expert judgment and analytical modeling are used to finalize market sizing, supported by interpolation and extrapolation techniques for trend analysis and forecasting.
+
+Data Validation & Market Feedback
+Validation is a critical step involving interviews and expert panel discussions with CXOs, VPs, purchasing managers, technical experts, end-users, investment bankers, and industry consultants. Findings are revalidated across major geographic regions to ensure accuracy and global relevance.
+
+"
+update the content in "https://tbi-beta.vercel.app/en/terms-conditions"
+with :
+"Terms and Conditions
+Welcome to The Brainy Insights
+These Terms and Conditions govern your use of the website operated by The Brainy Insights, accessible at https://brainyinsights.com/ (the “Website”).
+By accessing or using this Website, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you must not continue to use The Brainy Insights Website.
+
+Definitions and Interpretation
+The following terminology applies to these Terms and Conditions, the Privacy Policy, Disclaimer, and all related agreements:
+“Client,” “You,” “Your” refers to the individual accessing or using this Website and complying with the Company’s terms.
+“The Company,” “We,” “Us,” “Our,” “Ourselves” refers to The Brainy Insights.
+“Party,” “Parties” refers collectively to the Client and the Company.
+All terms refer to the offer, acceptance, and consideration of payment necessary to provide our services in the most appropriate manner to meet the Client’s needs, in accordance with applicable laws of the Netherlands. Words used in the singular or plural, or any gender references, shall be deemed interchangeable.
+
+Cookies
+We use cookies to enhance user experience. By accessing The Brainy Insights Website, you consent to the use of cookies in accordance with our Privacy Policy.
+Cookies help us retrieve user details, enable website functionality, and improve usability. Some affiliate or third-party partners may also use cookies.
+
+Intellectual Property Rights
+Unless otherwise stated, The Brainy Insights and/or its licensors own all intellectual property rights for the content published on this Website. All rights are reserved.
+You may access content from The Brainy Insights for personal use only, subject to the restrictions outlined below.
+You must not:
+Republish material from The Brainy Insights
+Sell, rent, or sub-license material
+Reproduce, duplicate, or copy material
+Redistribute content
+This Agreement becomes effective from the date you access the Website.
+
+Products and Services
+The Brainy Insights reserves the right to modify, update, suspend, or discontinue any product or service at its sole discretion without prior notice.
+
+Delivery of Products
+Purchased reports and products will generally be delivered within three (3) working days. Delivery timelines may vary depending on client-specific requirements or customization.
+
+Limitation of Liability
+The Brainy Insights shall not be held liable for any direct, indirect, incidental, consequential, monetary, or statutory loss or damage arising from the use of our products, services, or information.
+
+Payments
+Payments made on The Brainy Insights Website are processed through third-party payment gateways. By purchasing from our Website, you agree to the processing of payments through these third-party service providers.
+
+Refund and Cancellation Policy
+Due to the nature of our products and services, all sales are final.
+No refunds or cancellations will be provided once an order has been placed.
+
+Warranty Disclaimer
+The Brainy Insights does not provide any warranties or guarantees, express or implied, regarding its products or services.
+
+Hyperlinking to Our Content
+The following organizations may link to our Website without prior written approval:
+Government agencies
+Search engines
+News organizations
+Online directory distributors
+System-wide accredited businesses (excluding soliciting non-profits, charity malls, or fundraising groups)
+Such links must:
+Not be misleading or deceptive
+Not falsely imply sponsorship or endorsement
+Be appropriate within the context of the linking site
+
+Other Link Requests
+We may review and approve link requests from:
+Consumer or business information sources
+Online communities
+Associations and charities
+Internet portals
+Professional service firms
+Educational institutions and trade associations
+Approval is subject to our discretion based on reputation, relevance, and mutual benefit.
+Interested organizations must email The Brainy Insights with relevant details. Please allow 2–3 weeks for a response.
+Approved organizations may link using:
+Our corporate name
+The Website URL
+A contextually appropriate description
+Use of our logo or artwork is prohibited without a written trademark license agreement.
+
+iFrames
+Without prior written consent, you may not create frames around our Website that alter its visual appearance or presentation.
+
+Content Liability
+We are not responsible for content appearing on external websites linking to us. You agree to indemnify and defend us against any claims arising from your Website.
+No links should appear on websites containing unlawful, defamatory, obscene, or infringing content.
+
+Privacy
+Please refer to our Privacy Policy for information on how we collect, use, and protect your data.
+
+Reservation of Rights
+We reserve the right to request removal of any link to our Website at any time. You agree to comply immediately upon request.
+We also reserve the right to amend these Terms and Conditions and our linking policy at any time. Continued use of the Website constitutes acceptance of any changes.
+
+Removal of Links from Our Website
+If you find any link on our Website objectionable, you may notify us. While we will consider such requests, we are not obligated to remove links or respond directly.
+
+Accuracy of Information
+We do not guarantee the accuracy, completeness, or timeliness of information on this Website. We do not warrant uninterrupted availability or that content will always be up to date.
+
+Trademarks
+All trademarks, service marks, logos, and trade names displayed on the Website are the property of their respective owners and are protected under applicable intellectual property laws.
+
+Disclaimer
+To the maximum extent permitted by law, we exclude all representations, warranties, and conditions related to the Website and its use.
+Nothing in this disclaimer shall:
+Limit liability for death or personal injury
+Limit liability for fraud or fraudulent misrepresentation
+Exclude liabilities not permitted under applicable law
+These limitations apply to all liabilities arising in contract, tort, or statutory duty.
+As long as the Website and its services are provided free of charge, we shall not be liable for any loss or damage of any nature.
+
+"
+update the content of "https://tbi-beta.vercel.app/en/privacy-policy"
+with the new content:
+"Privacy Policy 
+
+INTRODUCTION
+Brainy Insights Private Limited (“Company,” “we,” “us,” or “our”) is committed to protecting the privacy and personal information of its customers, website visitors, and users (collectively, “users”). This Website Privacy Policy (“Policy”) is designed to inform users about how we collect, use, store, and protect personal information when accessing or using our website (the “Site”).
+This Policy applies solely to information collected through the Site and does not extend to any third-party websites that may be accessed through links on our Site. Such third-party websites operate under their own privacy policies and data handling practices, which may differ materially from this Policy.
+
+GENERAL DATA PROTECTION REGULATION (GDPR)
+This Policy is compliant with the General Data Protection Regulation (GDPR), which governs the protection and privacy of personal data of users accessing our website from the European Union. Users may contact us at sales@thebrainyinsights.com for any queries or concerns related to GDPR compliance.
+
+USER PERSONAL DATA AND COMPANY RESPONSIBILITIES
+This Privacy Policy explains how personal information provided by users is collected, used, processed, shared, and safeguarded. It also outlines the choices available to users regarding the management of their personal data and highlights user rights under the EU GDPR.
+
+PERSONAL DATA COLLECTED BY THE COMPANY
+When users choose to access our services or interact with our website, they may be required to provide certain personal information, including but not limited to:
+Name
+Email address
+Phone number
+Physical address
+In the event of a purchase, users may be required to submit financial information such as credit or debit card details. Please note that we do not store or retain any financial information. Such data is processed securely by authorized third-party payment processors solely for the purpose of completing transactions.
+For users located in the European Union, explicit consent is obtained before processing payment-related data. Users may withdraw their consent at any time by contacting us at payments@thebrainyinsights.com.
+
+PERSONAL DATA STORAGE AND USE
+The personal data collected through the Site is used for the following purposes:
+To fulfill user requests and inquiries
+To process and complete payments
+To provide updates related to purchased products or services
+To communicate information about new products, services, or promotional offers that may be of interest to users
+All user data is stored on secure servers located in the United States. We do not share personal information with third parties without user consent, except where disclosure is required to comply with applicable laws, regulations, or legal processes.
+
+NON-PERSONAL DATA COLLECTION
+We may collect non-personal information such as IP addresses, browser type, device information, and geographic location. This data helps us analyze website traffic, evaluate marketing effectiveness, and improve overall user experience.
+Additionally, with user consent, we use browser cookies and similar technologies to enhance website functionality and personalize the browsing experience.
+
+INFORMATION COLLECTED
+To provide efficient and high-quality services, we collect personal information including name, email address, phone number, and address. We may also automatically collect technical data such as IP address, browser details, and approximate location, which may not directly identify individual users. Cookies are used only with user consent to improve site performance and usability.
+
+INFORMATION SHARING
+We do not sell, trade, or disclose user personal information to any third party. All information collected is used strictly for internal business purposes, including service delivery, transaction processing, and customer support related to product purchases.
+
+"
+then finally create another webpage called FAQs with the following content and add the faq webpage link to the footer the content is
+"Report Related FAQs
+1. I’m visiting this website for the first time. How can I trust your service quality?
+We encourage you to explore our website to review the depth and relevance of our content. You may also contact our sales team at sales@thebrainyinsights.com to request free sample copies of reports you are interested in and schedule a product review call with our analysts.
+2. Are samples available for all studies published by The Brainy Insights?
+Yes. Upon receiving your inquiry, our sales team will share a sample copy of the requested study. For upcoming reports, a demo sample is provided. These samples offer an overview of the report structure, methodology, and representative market insights to help validate data quality prior to purchase.
+3. What should I do if I have additional questions or customization requirements?
+Our syndicated studies are designed to serve a broad audience. However, if you require specific customizations or have additional queries, please submit your request via the inquiry form available alongside the report description page or email us at sales@thebrainyinsights.com.
+4. How do I ensure my requirements are clearly understood by the research team?
+Your customization request—shared via email or discussion with our team—is forwarded to our research analysts. After assessing feasibility, the team designs a client-centric study aligned with your objectives. A follow-up call may also be scheduled to discuss requirements and propose optimal solutions.
+5. What is the pricing and delivery timeline for a customized report?
+Pricing and timelines are communicated by our sales representative after finalizing the scope and deliverables. The Brainy Insights offers up to 10% free customization on all reports. Please contact our sales team for further details.
+6. How frequently does The Brainy Insights update its studies?
+Reports are typically updated every 6 to 12 months, depending on market dynamics and demand. For the latest update status of any report, please reach out to our sales team.
+7. What if the report I’m looking for is not listed in your catalogue?
+The Brainy Insights maintains an extensive internal database of market intelligence and industry updates, not all of which are listed publicly. If you cannot find a specific study, please contact our sales team to schedule an analyst discussion or submit your requirements.
+8. What pre-purchase services do you offer?
+At The Brainy Insights, we focus on delivering targeted, client-centric research. Our pre-sale offerings include:
+Free product review call with the report author or analyst
+Customized research support for due diligence
+Targeted purchase options to maximize value
+9. What formats are reports delivered in?
+Reports are delivered in PDF and spreadsheet formats. Presentation (PPT) formats can also be provided upon special request.
+10. Are discounts available?
+We support students, academicians, NGOs, startups, and early-stage businesses through special pricing and flexible payment options. Please contact our sales team at sales@thebrainyinsights.com to learn more.
+
+Ordering and Delivery
+1. How can I purchase a report?
+A “Buy Now” option is available on the right side of each report description page.
+Purchase Process:
+Select the desired report
+Complete payment via online checkout or wire transfer
+Receive the invoice (purchase contract required for wire transfers)
+Report dispatched within 2–48 hours
+2. How soon will I receive the report?
+Reports are delivered within 2 to 48 hours after payment confirmation. Delays may occur due to time zone differences. Orders placed on weekends or holidays are processed on the next business day.
+3. How will I receive the report?
+The report will be sent electronically to your registered email address. To ensure smooth delivery, please whitelist @thebrainyinsights.com and mark our emails as “Not Spam” if needed.
+4. What ordering methods are available?
+Authorized buyers may place orders through:
+Email Ordering:
+Send requirements, billing details, delivery address, and preferred payment method to sales@thebrainyinsights.com. Our team will respond within one business day.
+
+License Type and Purchase Options
+1. What do single-user, multi-user, and enterprise licenses mean?
+Licenses define report access and distribution rights:
+Single User License: Access for one individual only
+Multi User License: Access for 2–5 users within the same organization
+Enterprise License: Company-wide access, including subsidiaries or group entities
+2. Can I purchase individual chapters or segments?
+We generally do not sell individual chapters, as this may compromise the holistic understanding of the market. However, in select cases, specific sections may be provided based on requirements. Please contact our sales team for details.
+
+Payments and Invoicing
+1. What payment methods are accepted?
+We accept major credit cards for online payments. Alternate arrangements such as bank wire transfers or invoicing can be made by contacting our sales team.
+2. Is the online payment process secure?
+Yes. Payment security is a top priority. All transactions are processed through trusted payment gateways, and we do not store any card or payment details.
+3. Will I receive an invoice?
+An electronic invoice is sent immediately after purchase. Pro-forma invoices are also available upon request to assist with internal approvals.
+4. What are the payment terms?
+All payments are non-refundable, in line with industry standards. As reports are based on knowledge transfer, refunds cannot be issued once content has been accessed. To avoid discrepancies, we provide extensive pre-purchase support.
+5. I’m facing issues while making a payment. What should I do?
+Payment issues are uncommon but may occur due to billing address mismatches or bank verification errors. If the problem persists, please contact our sales team for immediate assistance.
+6. Why am I seeing a “Payment Declined” message?
+This may occur due to:
+Billing address mismatch
+Insufficient card limit
+Bank-initiated security blocks for high-value transactions
+Please contact your bank to authorize the transaction or update your billing details.
+
+Post-Sale Queries
+1. Can I speak with the analyst after purchasing a report?
+Yes. Every purchase includes 30 minutes of complimentary analyst access to address report-related questions and provide expert insights.
+2. The report doesn’t fully meet my needs. How can The Brainy Insights help?
+While our reports are comprehensive, specific needs may vary. We recommend sharing customization requirements prior to purchase. If additional needs arise post-purchase, you may request post-sale customization.
+3. Is post-sale customization chargeable?
+We offer up to 10% free customization on syndicated reports. Additional customization, if required, will be evaluated by our research team and quoted with timelines accordingly.
+
+"
