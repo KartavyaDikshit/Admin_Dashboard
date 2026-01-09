@@ -89,6 +89,12 @@ export async function POST(request: Request) {
     requestPayPal.prefer('return=representation');
     requestPayPal.requestBody({
       intent: 'CAPTURE',
+      application_context: {
+        return_url: 'https://www.brainyinsights.com/en',
+        cancel_url: 'https://www.brainyinsights.com/en',
+        brand_name: 'The Brainy Insights',
+        user_action: 'PAY_NOW',
+      },
       purchase_units: [
         {
           reference_id: newOrder.id, // Use our DB Order ID as reference

@@ -1,0 +1,132 @@
+  554         status: 401
+  555     });
+  556 }
+→ 557 await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete(
+Foreign key constraint violated: `order_items_report_id_fkey (index)`
+    at <unknown> (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:157)
+    at async DELETE (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:9)
+    at async responseGenerator (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js:15485:38)
+    at async handleResponse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js:15547:32)
+    at async handler (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js:15600:13) {
+  code: 'P2003',
+  clientVersion: '5.22.0',
+  meta: [Object]
+}
+ DELETE /api/reports/1cd311d6-cda6-4860-9f46-ea30c3e2a352 500 in 401ms (compile: 8ms, render: 393ms)
+prisma:error
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:157
+
+  554         status: 401
+  555     });
+  556 }
+→ 557 await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete(
+Foreign key constraint violated: `order_items_report_id_fkey (index)`
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Delete report error: Error [PrismaClientKnownRequestError]:
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:157
+
+  554         status: 401
+  555     });
+  556 }
+→ 557 await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete(
+Foreign key constraint violated: `order_items_report_id_fkey (index)`
+    at <unknown> (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:157)
+    at async DELETE (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:9)
+    at async responseGenerator (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js:15485:38)
+    at async handleResponse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js:15547:32)
+    at async handler (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js:15600:13) {
+  code: 'P2003',
+  clientVersion: '5.22.0',
+  meta: [Object]
+}
+ DELETE /api/reports/91effe26-cada-409c-9f00-23ab593603bc 500 in 600ms (compile: 8ms, render: 592ms)
+ GET /api/auth/session 200 in 108ms (compile: 48ms, render: 60ms)
+ GET /api/reports?countOnly=true 200 in 361ms (compile: 18ms, render: 343ms)
+ GET /api/requests?countOnly=true 200 in 618ms (compile: 13ms, render: 605ms)
+ GET /api/categories?countOnly=true 200 in 650ms (compile: 14ms, render: 636ms)
+prisma:error
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:157
+
+  554         status: 401
+  555     });
+  556 }
+→ 557 await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete(
+Foreign key constraint violated: `order_items_report_id_fkey (index)`
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Delete report error: Error [PrismaClientKnownRequestError]:
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:157
+
+  554         status: 401
+  555     });
+  556 }
+→ 557 await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete(
+Foreign key constraint violated: `order_items_report_id_fkey (index)`
+    at <unknown> (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:157)
+    at async DELETE (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:9)
+    at async responseGenerator (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js:15485:38)
+    at async handleResponse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js:15547:32)
+    at async handler (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js:15600:13) {
+  code: 'P2003',
+  clientVersion: '5.22.0',
+  meta: [Object]
+}
+ DELETE /api/reports/2632a2c2-f16e-418c-b6e4-d7805cd9087c 500 in 724ms (compile: 18ms, render: 707ms)
+ GET /api/orders?countOnly=true 200 in 1194ms (compile: 47ms, render: 1147ms)
+prisma:error
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:157
+
+  554         status: 401
+  555     });
+  556 }
+→ 557 await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete(
+Foreign key constraint violated: `customization_requests_report_id_fkey (index)`
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\node_modules\.pnpm\next@16.0.8_@babel+core@7.2_f788e792261c06c30e856bfc1bc59dda\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+Delete report error: Error [PrismaClientKnownRequestError]:
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete()` invocation in
+C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:157
+
+  554         status: 401
+  555     });
+  556 }
+→ 557 await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].report.delete(
+Foreign key constraint violated: `customization_requests_report_id_fkey (index)`
+    at <unknown> (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:157)
+    at async DELETE (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\[root-of-the-server]__0d2f8d52._.js:557:9)
+    at async responseGenerator (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js:15485:38)
+    at async handleResponse (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js:15547:32)
+    at async handler (C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\.next\dev\server\chunks\0ba9e_next_f2bb4248._.js:15600:13) {
+  code: 'P2003',
+  clientVersion: '5.22.0',
+  meta: [Object]
+}
+ DELETE /api/reports/5c2b0f63-378e-402c-a176-05de0c74b183 500 in 351ms (compile: 26ms, render: 325ms)
+ GET /api/press-releases?countOnly=true 200 in 1453ms (compile: 33ms, render: 1420ms)

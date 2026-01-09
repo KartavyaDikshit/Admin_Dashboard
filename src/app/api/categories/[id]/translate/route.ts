@@ -110,12 +110,8 @@ async function translateAndStoreCategory(category: Category, language: string): 
   }
 }
 
-interface RouteContext {
-  params: { id: string };
-}
-
-export async function POST(request: NextRequest, context: RouteContext) {
-  const { params } = context;
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
