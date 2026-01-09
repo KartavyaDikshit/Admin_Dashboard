@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 // import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -17,6 +18,9 @@ export const metadata: Metadata = {
   title: "AI Pipeline Admin Dashboard",
   description: "Token-optimized sequential AI report generation with GPT-4o mini",
   keywords: ["AI", "Pipeline", "Token Optimization", "GPT-4o mini", "Report Generation"],
+  verification: {
+    google: "-a-fjg9Wj3dXNQcvPx4v418rK52VsWdjL87OdUWNotU",
+  },
 };
 
 export default function RootLayout({
@@ -29,6 +33,20 @@ export default function RootLayout({
       <body
         className={`antialiased`}
       >
+        {/* Google tag (gtag.js) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-V78VZDBEHZ"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-V78VZDBEHZ');
+          `}
+        </Script>
         {children}
       </body>
     </html>
