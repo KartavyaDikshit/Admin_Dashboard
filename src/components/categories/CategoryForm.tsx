@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import { upload } from '@vercel/blob/client';
 
 const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
 
@@ -100,24 +101,22 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
     if (!selectedFile) return;
     setIsUploading(true);
     const toastId = toast.loading('Uploading icon...');
-    const formData = new FormData();
-    formData.append('file', selectedFile);
 
     try {
-      const response = await fetch('/api/upload', { method: 'POST', body: formData });
+      const newBlob = await upload(selectedFile.name, selectedFile, {
+        access: 'public',
+        handleUploadUrl: '/api/upload/client',
+      });
+
       toast.dismiss(toastId);
-      if (response.ok) {
-        const data = await response.json();
-        setValue('icon', data.url, { shouldValidate: true });
-        setImagePreview(data.url);
-        setSelectedFile(null);
-        toast.success('Icon uploaded successfully!');
-      } else {
-        toast.error((await response.json()).error || 'Failed to upload icon.');
-      }
-    } catch {
+      setValue('icon', newBlob.url, { shouldValidate: true });
+      setImagePreview(newBlob.url);
+      setSelectedFile(null);
+      toast.success('Icon uploaded successfully!');
+    } catch (error) {
+      console.error(error);
       toast.dismiss(toastId);
-      toast.error('An unexpected error occurred during icon upload.');
+      toast.error('Failed to upload icon. Please check the file size and try again.');
     } finally {
       setIsUploading(false);
     }

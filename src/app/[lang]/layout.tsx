@@ -1,7 +1,13 @@
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 import Header from '@/components/new_ui/Header';
 import Footer from '@/components/new_ui/Footer';
 import { getDictionary } from '@/i18n/dictionaries';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#ffffff',
+};
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
@@ -17,6 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: {
       default: 'Global Market Research Reports & Consulting | The Brainy Insights',
+      template: '%s | The Brainy Insights'
     },
     description: 'The Brainy Insights offers top-notch market research reports and consulting services. Gain actionable insights and competitive analysis for your business.',
     metadataBase: new URL(baseUrl),
@@ -24,11 +31,24 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       canonical: `${baseUrl}/${lang}`,
       languages: languageAlternates,
     },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     openGraph: {
       type: 'website',
       locale: lang,
       siteName: 'The Brainy Insights',
       url: `${baseUrl}/${lang}`,
+      title: 'Global Market Research Reports & Consulting | The Brainy Insights',
+      description: 'The Brainy Insights offers top-notch market research reports and consulting services. Gain actionable insights and competitive analysis for your business.',
       images: [
         {
             url: '/og-image.jpg', // Assuming you'd have a default OG image
@@ -42,6 +62,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       card: 'summary_large_image',
       site: '@thebrainyinsight',
       creator: '@thebrainyinsight',
+      title: 'Global Market Research Reports & Consulting | The Brainy Insights',
+      description: 'The Brainy Insights offers top-notch market research reports and consulting services.',
     },
     keywords: ['market research', 'consulting services', 'global market reports', 'industry analysis', 'business intelligence'],
   };

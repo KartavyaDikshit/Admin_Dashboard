@@ -10,6 +10,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
+import { upload } from '@vercel/blob/client';
 
 import RichTextEditor from '@/components/RichTextEditor';
 
@@ -154,28 +155,20 @@ export default function EditReportPage() {
     setIsUploading(true);
     toast.loading('Uploading image...');
 
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-
     try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
+      const newBlob = await upload(selectedFile.name, selectedFile, {
+        access: 'public',
+        handleUploadUrl: '/api/upload/client',
       });
 
       toast.dismiss();
-      if (response.ok) {
-        const data = await response.json();
-        setReport(prev => ({ ...prev, imageUrl: data.url }));
-        toast.success('Image uploaded successfully!');
-        setSelectedFile(null); // Clear selected file after upload
-      } else {
-        const data = await response.json();
-        toast.error(data.error || 'Failed to upload image.');
-      }
-    } catch {
+      setReport(prev => ({ ...prev, imageUrl: newBlob.url }));
+      toast.success('Image uploaded successfully!');
+      setSelectedFile(null); // Clear selected file after upload
+    } catch (error) {
+      console.error(error);
       toast.dismiss();
-      toast.error('An unexpected error occurred during image upload.');
+      toast.error('Failed to upload image. Please check file size and try again.');
     } finally {
       setIsUploading(false);
     }

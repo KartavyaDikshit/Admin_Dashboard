@@ -101,7 +101,7 @@ ${formData.description}
     }
   };
 
-  const typeLabel = enquiryType.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  const typeLabel = enquiryType.split('-').map(w => w.toLowerCase() === 'toc' ? 'TOC' : w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
   return (
     <div className="max-w-2xl mx-auto">

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
-import client from '@/lib/paypal';
-import paypal from '@paypal/checkout-server-sdk';
 import { prisma } from '@/lib/prisma';
+import { encrypt, CCAVENUE_CONFIG } from '@/lib/ccavenue';
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +10,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing reportId or licenseType' }, { status: 400 });
     }
 
-    // 1. Fetch Report Details for Pricing
+    // 1. Fetch Report
     const report = await prisma.report.findUnique({
       where: { id: reportId },
       select: {
@@ -21,7 +20,6 @@ export async function POST(request: Request) {
         multiPrice: true,
         corporatePrice: true,
         currency: true,
-        sku: true,
       },
     });
 
@@ -53,13 +51,8 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Invalid license type' }, { status: 400 });
     }
 
-    if (!amount || isNaN(amount)) {
-      return NextResponse.json({ error: 'Price not available for this license type' }, { status: 400 });
-    }
-
-    // 3. Create Order in Database (Pending) - FIRST
+    // 3. Create Order in DB (Pending)
     const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-
     const newOrder = await prisma.order.create({
       data: {
         orderNumber,
@@ -72,7 +65,7 @@ export async function POST(request: Request) {
         currency: report.currency || 'USD',
         status: 'PENDING',
         paymentStatus: 'PENDING',
-        paymentProvider: 'PAYPAL',
+        paymentProvider: 'CCAVENUE',
         items: {
           create: {
             reportId: report.id,
@@ -84,49 +77,48 @@ export async function POST(request: Request) {
       },
     });
 
-    // 4. Create PayPal Request
-    const requestPayPal = new paypal.orders.OrdersCreateRequest();
-    requestPayPal.prefer('return=representation');
-    requestPayPal.requestBody({
-      intent: 'CAPTURE',
-      purchase_units: [
-        {
-          reference_id: newOrder.id, // Use our DB Order ID as reference
-          description: `License: ${licenseType} - ${report.title.substring(0, 100)}...`,
-          amount: {
-            currency_code: report.currency || 'USD',
-            value: amount.toFixed(2),
-          },
-        },
-      ],
+    // 4. Prepare CC Avenue Data
+    // Ensure the redirect URL is correct. Assuming localhost for now, but should be domain.
+    // If running locally, CC Avenue callback might fail if it can't reach localhost.
+    // But usually CC Avenue posts to the URL provided.
+    // We will use relative path or configured base URL.
+    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    const redirectUrl = `${baseUrl}/api/orders/ccavenue/handle`;
+    const cancelUrl = `${baseUrl}/api/orders/ccavenue/handle`; // Handle cancellation same way or different
+
+    const dataParams = [
+      `merchant_id=${CCAVENUE_CONFIG.merchant_id}`,
+      `order_id=${newOrder.orderNumber}`,
+      `currency=${report.currency || 'USD'}`,
+      `amount=${amount.toFixed(2)}`,
+      `redirect_url=${redirectUrl}`,
+      `cancel_url=${cancelUrl}`,
+      `language=EN`,
+      `billing_name=${userName || ''}`,
+      `billing_address=${''}`,
+      `billing_city=${''}`,
+      `billing_state=${''}`,
+      `billing_zip=${''}`,
+      `billing_country=${''}`,
+      `billing_tel=${userPhone || ''}`,
+      `billing_email=${userEmail || ''}`,
+      // Extra params if needed
+      `merchant_param1=${newOrder.id}`, // Store DB UUID here
+    ];
+
+    const dataString = dataParams.join('&');
+    const encRequest = encrypt(dataString);
+
+    return NextResponse.json({
+      merchant_id: CCAVENUE_CONFIG.merchant_id,
+      access_code: CCAVENUE_CONFIG.access_code,
+      encRequest,
+      orderId: newOrder.id,
+      url: CCAVENUE_CONFIG.url
     });
 
-    let orderID = '';
-    try {
-      const response = await client().execute(requestPayPal);
-      orderID = response.result.id;
-
-      // 5. Update Order with PayPal Transaction ID
-      await prisma.order.update({
-        where: { id: newOrder.id },
-        data: { transactionId: orderID },
-      });
-
-    } catch (paypalError: any) {
-      console.error('PayPal Order Creation Failed:', paypalError);
-      // Return the DB order ID anyway so we have the record, but indicate payment initialization failed
-      // The frontend can try to re-initiate or we can handle it.
-      // For now, fail the request but the order is saved.
-      return NextResponse.json({ 
-        error: 'Payment initialization failed', 
-        details: paypalError.message,
-        dbOrderId: newOrder.id 
-      }, { status: 500 });
-    }
-
-    return NextResponse.json({ orderID, dbOrderId: newOrder.id });
   } catch (error: any) {
-    console.error('Error creating order:', error);
+    console.error('Error initiating CC Avenue:', error);
     return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
   }
 }

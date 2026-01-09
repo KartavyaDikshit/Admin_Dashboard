@@ -43,6 +43,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: report.metaTitle || report.title,
     description: report.metaDescription || report.summary || report.description,
     keywords: report.keywords || [],
+    authors: [{ name: 'The Brainy Insights' }],
+    publisher: 'The Brainy Insights',
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
     alternates: {
       canonical: canonicalUrl,
       languages: languages,

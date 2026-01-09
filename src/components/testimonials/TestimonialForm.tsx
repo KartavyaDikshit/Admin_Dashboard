@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { Testimonial } from '@prisma/client';
 import React, { useState } from "react";
 import Image from 'next/image';
+import { upload } from '@vercel/blob/client';
 
 const formSchema = z.object({
   author: z.string().min(2, { message: 'Author must be at least 2 characters.' }),
@@ -111,21 +112,21 @@ export default function TestimonialForm({ initialData }: TestimonialFormProps) {
     if (!file) return;
 
     setIsUploading(true);
-    const formData = new FormData();
-    formData.append('image', file);
+    const toastId = toast.loading('Uploading image...');
 
     try {
-      const response = await axios.post('/api/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      const newBlob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload/client',
       });
-      const imageUrl = response.data.imageUrl;
-      setValue('image', imageUrl);
+      
+      toast.dismiss(toastId);
+      setValue('image', newBlob.url);
       toast.success('Image uploaded successfully!');
     } catch (error) {
+      toast.dismiss(toastId);
       console.error('Error uploading image:', error);
-      toast.error('Failed to upload image.');
+      toast.error('Failed to upload image. Please check file size.');
     } finally {
       setIsUploading(false);
     }

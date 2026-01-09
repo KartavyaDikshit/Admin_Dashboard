@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
@@ -18,6 +18,7 @@ interface BuyNowFormProps {
 
 export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, price, currency, licenseType, lang }: BuyNowFormProps) {
   const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -25,6 +26,8 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
     phone: ''
   });
   const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'ccavenue'>('paypal');
+  const [ccAvenueData, setCcAvenueData] = useState<{ encRequest: string, access_code: string, merchant_id: string, url: string } | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -88,6 +91,56 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
       }
   };
 
+  const initiateCCAvenuePayment = async () => {
+    if (!formData.email) {
+      toast.error("Please enter your email address.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch('/api/orders/ccavenue/initiate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reportId: reportDbId,
+          licenseType: licenseType.toUpperCase(),
+          userEmail: formData.email,
+          userName: formData.name,
+          userPhone: formData.phone,
+          userCompany: formData.company
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        toast.error("Failed to initiate payment: " + data.error);
+        setLoading(false);
+        return;
+      }
+
+      setCcAvenueData({
+        encRequest: data.encRequest,
+        access_code: data.access_code,
+        merchant_id: data.merchant_id,
+        url: data.url
+      });
+
+      // Give state a moment to update then submit
+      setTimeout(() => {
+        if (formRef.current) {
+          formRef.current.submit();
+        }
+      }, 100);
+
+    } catch (err) {
+      console.error("CC Avenue Error:", err);
+      toast.error("An error occurred. Please try again.");
+      setLoading(false);
+    }
+  };
+
   const initialOptions = {
     clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "test",
     currency: currency || "USD",
@@ -97,6 +150,15 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
   return (
     <PayPalScriptProvider options={initialOptions}>
        <div className="space-y-8">
+         {/* Hidden Form for CC Avenue */}
+         {ccAvenueData && (
+           <form ref={formRef} method="post" action={ccAvenueData.url} className="hidden">
+             <input type="hidden" name="encRequest" value={ccAvenueData.encRequest} />
+             <input type="hidden" name="access_code" value={ccAvenueData.access_code} />
+             <input type="hidden" name="merchant_id" value={ccAvenueData.merchant_id} />
+           </form>
+         )}
+
          {/* Contact Info Form */}
          <div className="space-y-4">
             <h4 className="text-lg font-bold text-gray-900 border-b pb-2">1. Contact Information</h4>
@@ -178,15 +240,20 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
                         style={{ layout: "vertical", shape: "rect", height: 48 }}
                         createOrder={createOrder}
                         onApprove={onApprove}
-                        forceReRender={[price, licenseType, formData.email]}
+                        forceReRender={[price, licenseType]}
                     />
                 </div>
             ) : (
                 <div className="text-center p-8 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
                     <p className="text-gray-500 font-medium mb-4">Secure Credit/Debit Card payment gateway.</p>
-                    <button className="w-full bg-indigo-600 text-white font-bold py-4 rounded-lg hover:bg-indigo-700 transition-colors shadow-lg" disabled>
-                        Proceed to Payment (Coming Soon)
+                    <button 
+                      onClick={initiateCCAvenuePayment}
+                      disabled={loading || !formData.email}
+                      className="w-full bg-indigo-600 text-white font-bold py-4 rounded-lg hover:bg-indigo-700 transition-colors shadow-lg disabled:opacity-50"
+                    >
+                      {loading ? 'Processing...' : 'Proceed to Payment'}
                     </button>
+                    {!formData.email && <p className="text-sm text-red-500 mt-2">Email is required</p>}
                 </div>
             )}
          </div>
