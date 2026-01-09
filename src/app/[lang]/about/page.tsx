@@ -32,15 +32,15 @@ export default async function About({ params }: Props) {
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-indigo-500 opacity-20 blur-3xl"></div>
         <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-purple-500 opacity-20 blur-3xl"></div>
         
-        <div className="relative max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center gap-12">
-            <div className="lg:w-1/2 text-left">
+        <div className="relative max-w-7xl mx-auto px-6 text-center">
+            <div className="max-w-3xl mx-auto">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight">
                     Empowering <br/><span className="text-indigo-300">Strategic Decisions</span>
                 </h1>
-                <p className="text-xl text-indigo-100 mb-8 max-w-lg">
+                <p className="text-xl text-indigo-100 mb-8 mx-auto">
                     We provide accurate, actionable, and data-driven insights that help organizations optimize performance and unlock sustainable growth.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link href={`/${lang}/services`} className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-white text-indigo-900 rounded-lg font-bold hover:bg-indigo-50 transition-all shadow-lg text-lg">
                     Our Services
                   </Link>
@@ -49,10 +49,15 @@ export default async function About({ params }: Props) {
                   </Link>
                 </div>
             </div>
-            
-            <div className="lg:w-1/2 bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 shadow-2xl">
-                <h2 className="text-2xl font-bold text-white mb-4 border-b border-indigo-500/50 pb-2">About Brainy Insights</h2>
-                <div className="space-y-4 text-indigo-50 text-base leading-relaxed text-justify">
+        </div>
+      </section>
+
+      {/* Expanded About Content */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+            <div className="mb-16">
+               <h2 className="text-3xl font-bold text-gray-900 mb-6 border-b pb-4">About Brainy Insights</h2>
+                <div className="prose max-w-none text-gray-700 leading-relaxed text-justify space-y-4">
                     <p>
                         Brainy Insights is a global market research and consulting firm committed to delivering accurate, actionable, and data-driven insights that empower organizations to make confident strategic decisions. By integrating advanced data analytics, industry expertise, and a rigorous research framework, we help businesses enhance market intelligence, optimize performance, and unlock sustainable growth opportunities.
                     </p>
@@ -60,16 +65,11 @@ export default async function About({ params }: Props) {
                         Our core strength lies in our robust forecasting, estimation, and analytical models, which are designed to deliver high-quality and reliable outputs within accelerated timelines. We focus on transforming complex datasets into clear, meaningful insights that support business planning, investment decisions, product development, and market entry strategies.
                     </p>
                     <p>
-                        Brainy Insights offers a comprehensive portfolio of syndicated and customized market research reports. Our syndicated research repository spans a wide range of industries, sectors, and sub-segments, providing in-depth coverage across global, regional, and country-level markets.
+                        Brainy Insights offers a comprehensive portfolio of syndicated and customized market research reports. Our syndicated research repository spans a wide range of industries, sectors, and sub-segments, providing in-depth coverage across global, regional, and country-level markets. These reports are designed to reflect evolving market dynamics, emerging technologies, and competitive developments.
                     </p>
                 </div>
             </div>
-        </div>
-      </section>
 
-      {/* Expanded About Content */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
             <div className="grid md:grid-cols-2 gap-12 items-start">
                 <div className="prose max-w-none text-gray-700 leading-relaxed text-justify">
                     <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Expertise</h3>

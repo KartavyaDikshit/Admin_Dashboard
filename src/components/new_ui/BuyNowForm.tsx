@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { ShieldCheckIcon, BuildingLibraryIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 import { toast } from 'sonner';
+import { countries } from '@/lib/countries';
 
 interface BuyNowFormProps {
   reportDbId: string;
@@ -24,7 +25,8 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
     email: '',
     company: '',
     phone: '',
-    country: ''
+    country: '',
+    phoneCode: '+1'
   });
   const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'ccavenue' | 'wire'>('paypal');
   const [ccAvenueData, setCcAvenueData] = useState<{ encRequest: string, access_code: string, merchant_id: string, url: string } | null>(null);
@@ -36,15 +38,34 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
         .then(res => res.json())
         .then(data => {
             if (data.country_name) {
-                setFormData(prev => ({ ...prev, country: data.country_name }));
+                const foundCountry = countries.find(c => c.name.toLowerCase() === data.country_name.toLowerCase() || c.code === data.country_code);
+                if (foundCountry) {
+                    setFormData(prev => ({ 
+                        ...prev, 
+                        country: foundCountry.name,
+                        phoneCode: foundCountry.dialCode
+                    }));
+                } else {
+                    setFormData(prev => ({ ...prev, country: data.country_name }));
+                }
             }
         })
         .catch(err => console.error("Error fetching country:", err));
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    if (name === 'country') {
+        const selectedCountry = countries.find(c => c.name === value);
+        setFormData(prev => ({
+            ...prev,
+            country: value,
+            phoneCode: selectedCountry ? selectedCountry.dialCode : prev.phoneCode
+        }));
+    } else {
+        setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const createOrder = async () => {
@@ -54,6 +75,7 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
     }
 
     try {
+        const fullPhone = `${formData.phoneCode} ${formData.phone}`;
         const response = await fetch('/api/orders/create', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -62,7 +84,7 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
                 licenseType: licenseType.toUpperCase(),
                 userEmail: formData.email,
                 userName: formData.name,
-                userPhone: formData.phone,
+                userPhone: fullPhone,
                 userCompany: formData.company,
                 userCountry: formData.country
             })
@@ -113,6 +135,7 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
 
     setLoading(true);
     try {
+      const fullPhone = `${formData.phoneCode} ${formData.phone}`;
       const response = await fetch('/api/orders/ccavenue/initiate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -121,7 +144,7 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
           licenseType: licenseType.toUpperCase(),
           userEmail: formData.email,
           userName: formData.name,
-          userPhone: formData.phone,
+          userPhone: fullPhone,
           userCompany: formData.company,
           userCountry: formData.country
         })
@@ -164,6 +187,7 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
 
       setLoading(true);
       try {
+          const fullPhone = `${formData.phoneCode} ${formData.phone}`;
           const response = await fetch('/api/orders/wire-transfer', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -172,7 +196,7 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
                   licenseType: licenseType,
                   userEmail: formData.email,
                   userName: formData.name,
-                  userPhone: formData.phone,
+                  userPhone: fullPhone,
                   userCompany: formData.company,
                   userCountry: formData.country
               })
@@ -215,19 +239,7 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
          <div className="space-y-4">
             <h4 className="text-lg font-bold text-gray-900 border-b pb-2">1. Contact Information</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email Address <span className="text-red-500">*</span></label>
-                    <input
-                        type="email"
-                        name="email"
-                        required
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className={`w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-3 ${!formData.email && 'border-indigo-200'}`}
-                        placeholder="john@example.com"
-                    />
-                 </div>
-                 
+                 {/* Row 1: Full Name and Email */}
                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                     <input
@@ -241,29 +253,54 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
                  </div>
 
                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Email Address <span className="text-red-500">*</span></label>
                     <input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
+                        type="email"
+                        name="email"
+                        required
+                        value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-3"
-                        placeholder="+1 (555) 000-0000"
+                        className={`w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-3 ${!formData.email && 'border-indigo-200'}`}
+                        placeholder="john@example.com"
                     />
                  </div>
 
+                 {/* Row 2: Country Dropdown and Phone */}
                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
-                    <input
-                        type="text"
+                    <select
                         name="country"
                         value={formData.country}
                         onChange={handleInputChange}
-                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-3"
-                        placeholder="United States"
-                    />
+                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-3 bg-white"
+                    >
+                        <option value="">Select Country</option>
+                        {countries.map((c) => (
+                            <option key={c.code} value={c.name}>
+                                {c.name}
+                            </option>
+                        ))}
+                    </select>
+                 </div>
+
+                 <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                    <div className="flex">
+                        <div className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg">
+                            {formData.phoneCode}
+                        </div>
+                        <input
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-0 border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                            placeholder="123-456-7890"
+                        />
+                    </div>
                  </div>
                  
+                 {/* Row 3: Company */}
                  <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Company (Optional)</label>
                     <input

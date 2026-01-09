@@ -3,12 +3,12 @@ import { cache } from 'react';
 import { Prisma, Report, Category, ReportTranslation, CategoryTranslation, PressRelease, PressReleaseTranslation, ContentStatus, TranslationStatus } from '@prisma/client'; // Import needed types
 
 // Define custom types for relations
-type ReportWithRelations = Report & {
+export type ReportWithRelations = Report & {
   translations: ReportTranslation[];
   categories: CategoryWithRelations[]; // Categories are always included in this context, and mapCategory returns CategoryWithRelations
 };
 
-type CategoryWithRelations = Category & {
+export type CategoryWithRelations = Category & {
   translations: CategoryTranslation[];
 };
 

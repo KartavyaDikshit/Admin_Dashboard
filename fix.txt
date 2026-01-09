@@ -1,0 +1,76 @@
+The Diagnosis: Why Your Meta Tags are "Missing"
+Your meta.txt file reveals exactly what is happening:
+
+The Metadata Exists: Your title ("Digital Laboratory Market...") and description are being generated. They appear at the very end of your file (Source 131) inside a JavaScript bundle (Next.js Flight Payload).
+
+The Problem: They are not in the <head> of the initial HTML (Lines 1-10).
+
+The Cause: This is caused by Streaming Metadata in Next.js App Router. Your page is streaming the response to the browser before the metadata has finished generating. As a result, Next.js inserts the metadata later via JavaScript (which Google can usually read, but many SEO tools and "View Source" cannot).
+
+Roadmap to Fix This
+Follow these steps in your GitHub project (Admin_Dashboard) to force the metadata into the <head>.
+
+Step 1: Check Your Root Layout (src/app/layout.tsx)
+You must not have a manual <head> tag in your root layout when using App Router. Next.js manages this automatically.
+
+Action: Open src/app/layout.tsx (or src/app/[lang]/layout.tsx).
+
+Verify: It should look like this (HTML and Body only):
+
+TypeScript
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+Fix: If you see a <head> tag written manually, remove it.
+
+Step 2: Isolate Client Logic (page.tsx vs component.tsx)
+A common cause for metadata failing to hoist to the <head> is marking the entire page as a Client Component.
+
+Action: Check src/app/[lang]/reports/[slug]/page.tsx.
+
+Check: Does this file have "use client" at the top?
+
+Fix:
+
+Remove "use client" from page.tsx.
+
+Keep your generateMetadata function in page.tsx.
+
+Move all UI code (hooks, useState, useEffect, interactivity) into a separate component (e.g., ReportView.tsx).
+
+Import that client component into your now-server-side page.tsx.
+
+Example Structure:
+
+TypeScript
+
+// src/app/[lang]/reports/[slug]/page.tsx
+// ❌ NO "use client" here!
+
+import { Metadata } from 'next';
+import ReportView from '@/components/ReportView'; // Move UI here
+
+export async function generateMetadata({ params }): Promise<Metadata> {
+  // Fetch your data here
+  const data = await fetchReport(params.slug);
+  return {
+    title: data.title,
+    description: data.summary,
+  };
+}
+
+export default async function Page({ params }) {
+  const data = await fetchReport(params.slug);
+  return <ReportView data={data} />; // Pass data to client component
+}
+Step 3: Fix "Streaming" causing Empty Head
+If your metadata fetch is slow, Next.js sends the HTML shell immediately (with an empty head) and streams the rest. To fix this for SEO tools that don't wait:
+
+Action: Ensure your generateMetadata awaits data before the page renders.
+
+Optimization: If you are fetching data in both generateMetadata and the Page component, ensure you use React.cache or the fetch API (which Next.js memoizes automatically) to avoid double API calls.

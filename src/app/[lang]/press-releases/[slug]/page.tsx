@@ -3,7 +3,7 @@ import { getDictionary } from '@/i18n/dictionaries';
 import { getPressRelease } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { CalendarIcon } from '@heroicons/react/24/outline';
-import { formatDate } from '@/lib/utils';
+import { formatDate, generateBreadcrumbSchema } from '@/lib/utils';
 import { Metadata } from 'next';
 
 type Props = {
