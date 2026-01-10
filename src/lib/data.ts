@@ -100,7 +100,12 @@ const mapReport = (report: ReportWithRelations) => {
       ...t,
       createdAt: t.createdAt.toISOString(),
       updatedAt: t.updatedAt.toISOString(),
-    }))
+    })),
+    // Original English Content (Fallback for extraction)
+    originalTitle: report.title,
+    originalDescription: report.description,
+    originalSummary: report.summary,
+    originalMarketResearchSummary: report.marketResearchSummary
   };
 };
 

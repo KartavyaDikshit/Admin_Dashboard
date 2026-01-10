@@ -14,6 +14,7 @@ interface CustomizationRequest {
   email: string;
   phone: string | null;
   company: string | null;
+  sourceUrl: string | null;
   createdAt: string;
 }
 
@@ -146,18 +147,21 @@ export default function AdminCustomizationPage() {
                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Description
                 </th>
+                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Source URL
+                </th>
               </tr>
             </thead>
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={5} className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+                  <td colSpan={6} className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                     Loading...
                   </td>
                 </tr>
               ) : filteredRequests.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+                  <td colSpan={6} className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                     No requests found.
                   </td>
                 </tr>
@@ -183,6 +187,9 @@ export default function AdminCustomizationPage() {
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm max-w-xs">
                        <p className="truncate" title={request.description || ''}>{request.description}</p>
+                    </td>
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm max-w-xs truncate" title={request.sourceUrl || ''}>
+                       {request.sourceUrl}
                     </td>
                   </tr>
                 ))

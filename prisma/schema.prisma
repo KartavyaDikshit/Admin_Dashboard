@@ -747,6 +747,7 @@ model CustomizationRequest {
   email        String   @db.VarChar(255)
   phone        String?  @db.VarChar(50)
   company      String?  @db.VarChar(200)
+  sourceUrl    String?  @map("source_url") @db.VarChar(500)
   status       String   @default("NEW") @db.VarChar(50)
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")

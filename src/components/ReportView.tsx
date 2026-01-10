@@ -135,6 +135,12 @@ export default function ReportView({ report, lang, dict }: ReportViewProps) {
   const recentStrategicDevelopmentsContent = report.recentStrategicDevelopments || (parsedRecentDev ? parsedRecentDev.content : null);
 
   const stats = extractMarketStats(report.marketResearchSummary || report.summary || report.description);
+  const fallbackStats = extractMarketStats(report.originalMarketResearchSummary || report.originalSummary || report.originalDescription);
+  
+  const finalStats = {
+      cagr: stats.cagr || fallbackStats.cagr,
+      marketSize: stats.marketSize || fallbackStats.marketSize
+  };
 
   const SummaryContent = (
     <div className="space-y-8">
@@ -142,25 +148,25 @@ export default function ReportView({ report, lang, dict }: ReportViewProps) {
         <div className="space-y-4">
           <h3 className="font-bold text-2xl text-gray-900">{report.title}</h3>
           
-          {(stats.cagr || stats.marketSize) && (
+          {(finalStats.cagr || finalStats.marketSize) && (
           <div className="grid grid-cols-2 gap-4">
-            {stats.cagr && (
+            {finalStats.cagr && (
             <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-5 rounded-lg border border-green-200 shadow-sm">
               <div className="flex items-center gap-2 mb-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chart-column h-5 w-5 text-green-600" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
                 <h5 className="font-semibold text-gray-700 text-sm">CAGR</h5>
               </div>
-              <p className="text-green-900 font-bold text-2xl">{stats.cagr}</p>
+              <p className="text-green-900 font-bold text-2xl">{finalStats.cagr}</p>
               <p className="text-green-700 text-xs mt-1">Compound Annual Growth Rate</p>
             </div>
             )}
-            {stats.marketSize && (
+            {finalStats.marketSize && (
             <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-5 rounded-lg border border-indigo-200 shadow-sm">
               <div className="flex items-center gap-2 mb-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trending-up h-5 w-5 text-indigo-600" aria-hidden="true"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
                 <h5 className="font-semibold text-gray-700 text-sm">Market Size</h5>
               </div>
-              <p className="text-indigo-900 font-bold text-2xl">{stats.marketSize}</p>
+              <p className="text-indigo-900 font-bold text-2xl">{finalStats.marketSize}</p>
               <p className="text-indigo-700 text-xs mt-1">Current Market Valuation</p>
             </div>
             )}
@@ -385,9 +391,9 @@ export default function ReportView({ report, lang, dict }: ReportViewProps) {
                   {report.title}
                 </h1>
                 {report.titleDescription && (
-                  <p className="text-lg md:text-xl lg:text-2xl font-normal text-indigo-200 mt-2 leading-tight">
+                  <h2 className="text-lg md:text-xl lg:text-2xl font-normal text-indigo-200 mt-2 leading-tight">
                     {report.titleDescription.startsWith(':') ? report.titleDescription.substring(1).trim() : report.titleDescription}
-                  </p>
+                  </h2>
                 )}
               </div>
 

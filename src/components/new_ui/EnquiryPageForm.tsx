@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import Recaptcha from '@/components/ui/Recaptcha';
 
 interface EnquiryPageFormProps {
   reportId: string;
@@ -42,6 +43,7 @@ export default function EnquiryPageForm({ reportId, reportFriendlyId, reportTitl
     description: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const country = e.target.value;
@@ -60,6 +62,12 @@ export default function EnquiryPageForm({ reportId, reportFriendlyId, reportTitl
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && !captchaToken) {
+        toast.error('Please complete the ReCAPTCHA verification.');
+        return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -79,6 +87,8 @@ ${formData.description}
         phone: `${formData.phoneCode} ${formData.phoneNumber}`,
         company: formData.company,
         description: descriptionWithExtras,
+        captchaToken,
+        sourceUrl: window.location.href
       };
 
       const res = await fetch('/api/customization', {
@@ -213,6 +223,8 @@ ${formData.description}
             placeholder="Please provide details about your request..."
           ></textarea>
         </div>
+
+        <Recaptcha onChange={setCaptchaToken} />
 
         <button
           type="submit"

@@ -75,10 +75,10 @@ export default async function Contact({ params }: Props) {
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">{dict.phone || 'Phone Support'}</h3>
                 <p className="text-gray-600 mb-6">{dict.phoneSupportDesc || 'Speak directly with our research consultants for immediate assistance and project discussions.'}</p>
                 <div className="space-y-2 mb-6">
-                  <p className="font-semibold text-indigo-600">+1-315-215-1633</p>
-                  <p className="text-sm text-gray-500">{dict.phoneHours || 'Monday - Friday, 9 AM - 6 PM EST'}</p>
+                  <p className="font-semibold text-indigo-600">+91-9370600191</p>
+                  <p className="text-sm text-gray-500">{dict.phoneHours || 'Monday - Friday, 9 AM - 6 PM IST'}</p>
                 </div>
-                <a href="tel:+13152151633" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-bold transition-all h-11 px-4 py-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">{dict.callNow || 'Call Now'}</a>
+                <a href="tel:+919370600191" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-bold transition-all h-11 px-4 py-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">{dict.callNow || 'Call Now'}</a>
               </div>
             </div>
             <div data-slot="card" className="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border text-center group hover:shadow-lg transition-all duration-300">
@@ -108,19 +108,19 @@ export default async function Contact({ params }: Props) {
                 <h2 className="text-3xl font-bold text-gray-900">{dict.address || 'Visit Our Office'}</h2>
               </div>
               <div className="space-y-4 text-gray-600">
-                <div><p className="text-lg font-semibold text-gray-900 mb-2">TheBrainyInsights</p><p>450 Lexington Avenue</p><p>Suite 1200</p><p>New York, NY 10017</p></div>
-                <div className="pt-4"><p className="text-sm text-gray-500 mb-2">Office Hours:</p><p className="text-sm">Monday - Friday: 9:00 AM - 6:00 PM EST</p></div>
-                <div className="pt-4"><a href="https://www.google.com/maps/search/?api=1&query=450+Lexington+Avenue+Suite+1200+New+York,+NY+10017" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-indigo-600 hover:text-indigo-700 font-semibold transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-navigation h-4 w-4 mr-2" aria-hidden="true"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>Get Directions</a></div>
+                <div><p className="text-lg font-semibold text-gray-900 mb-2">Brainy Insights Pvt. Ltd</p><p>Solitaire Business Hub Balewadi highstreet</p><p>Baner, Pune, Maharashtra 411045</p><p>Office Number 1311</p></div>
+                <div className="pt-4"><p className="text-sm text-gray-500 mb-2">Office Hours:</p><p className="text-sm">Monday - Friday: 9:00 AM - 6:00 PM IST</p></div>
+                <div className="pt-4"><a href="https://www.google.com/maps/search/?api=1&query=Solitaire+Business+Hub+Balewadi+highstreet,+Baner,+Pune,+Maharashtra+411045" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-indigo-600 hover:text-indigo-700 font-semibold transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-navigation h-4 w-4 mr-2" aria-hidden="true"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>Get Directions</a></div>
               </div>
             </div>
             <div data-slot="card" className="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border overflow-hidden">
               <div data-slot="card-content" className="p-0">
-                <a href="https://www.google.com/maps/search/?api=1&query=450+Lexington+Avenue+Suite+1200+New+York,+NY+10017" target="_blank" rel="noopener noreferrer" className="block bg-gray-100 h-64 cursor-pointer relative group transition-all duration-300 hover:bg-gray-200">
+                <a href="https://www.google.com/maps/search/?api=1&query=Solitaire+Business+Hub+Balewadi+highstreet,+Baner,+Pune,+Maharashtra+411045" target="_blank" rel="noopener noreferrer" className="block bg-gray-100 h-64 cursor-pointer relative group transition-all duration-300 hover:bg-gray-200">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin h-12 w-12 text-indigo-600 mx-auto mb-2 group-hover:scale-110 transition-transform duration-300" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
                       <p className="text-gray-700 font-semibold">Click to Open Map</p>
-                      <p className="text-sm text-gray-500 mt-1">450 Lexington Ave, NYC</p>
+                      <p className="text-sm text-gray-500 mt-1">Pune, Maharashtra</p>
                     </div>
                   </div>
                   <div className="absolute inset-0 opacity-10">

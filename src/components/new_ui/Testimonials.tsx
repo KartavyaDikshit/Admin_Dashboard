@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 interface TestimonialsProps {
   testimonials: any[]
   dict: any
@@ -10,6 +12,8 @@ export default function Testimonials({ testimonials, dict }: TestimonialsProps) 
   // The user wants it to MATCH MHTML exactly. MHTML has 3 cards.
   // I will map the DB testimonials to this structure.
   
+  const [startIndex, setStartIndex] = useState(0);
+
   const displayTestimonials = testimonials.length > 0 ? testimonials : [
     {
       id: '1',
@@ -40,8 +44,36 @@ export default function Testimonials({ testimonials, dict }: TestimonialsProps) 
       initials: "LA",
       colorFrom: "from-indigo-500",
       colorTo: "to-purple-600"
+    },
+    {
+      id: '4',
+      content: "Exceptional depth in their healthcare market research. The granular data helped us identify niche opportunities we would have missed.",
+      author: "Sarah Chen",
+      position: "Strategy Director",
+      company: "MediCare Solutions",
+      initials: "SC",
+      colorFrom: "from-blue-500",
+      colorTo: "to-cyan-600"
     }
   ];
+
+  const itemsPerPage = 3;
+  const totalPages = Math.ceil(displayTestimonials.length / itemsPerPage);
+  
+  const handlePrev = () => {
+     setStartIndex((prev) => (prev - 1 + displayTestimonials.length) % displayTestimonials.length);
+  };
+
+  const handleNext = () => {
+     setStartIndex((prev) => (prev + 1) % displayTestimonials.length);
+  };
+
+  // Create a circular list for infinite scroll effect
+  const visibleTestimonials = [];
+  for (let i = 0; i < itemsPerPage; i++) {
+     const index = (startIndex + i) % displayTestimonials.length;
+     visibleTestimonials.push(displayTestimonials[index]);
+  }
 
   return (
     <section className="py-16 bg-gray-50">
@@ -52,24 +84,38 @@ export default function Testimonials({ testimonials, dict }: TestimonialsProps) 
         </div>
         <div className="relative">
           <div className="flex justify-center items-center mb-4">
-            <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 mr-3 hover:bg-indigo-50">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-left h-3 w-3">
+            <button 
+                onClick={handlePrev}
+                className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all outline-none hover:bg-indigo-50 h-8 w-8 rounded-full border border-gray-200 shadow-sm"
+                aria-label="Previous testimonials"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-left h-4 w-4 text-gray-600">
                 <path d="m15 18-6-6 6-6"></path>
               </svg>
             </button>
-            <div className="flex space-x-1.5">
-              <button className="w-1.5 h-1.5 rounded-full transition-colors bg-indigo-600"></button>
-              <button className="w-1.5 h-1.5 rounded-full transition-colors bg-gray-300"></button>
+            <div className="flex space-x-1.5 mx-3">
+              {Array.from({ length: displayTestimonials.length }).map((_, idx) => (
+                  <button 
+                    key={idx}
+                    onClick={() => setStartIndex(idx)} 
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${idx === startIndex ? 'bg-indigo-600' : 'bg-gray-300'}`}
+                    aria-label={`Go to testimonial slide ${idx + 1}`}
+                  ></button>
+              ))}
             </div>
-            <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:text-accent-foreground dark:hover:bg-accent/50 h-8 rounded-md gap-1.5 px-3 ml-3 hover:bg-indigo-50">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-right h-3 w-3">
+            <button 
+                onClick={handleNext}
+                className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all outline-none hover:bg-indigo-50 h-8 w-8 rounded-full border border-gray-200 shadow-sm"
+                aria-label="Next testimonials"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-right h-4 w-4 text-gray-600">
                 <path d="m9 18 6-6-6-6"></path>
               </svg>
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 min-h-[220px]">
-            {displayTestimonials.map((t, i) => (
-              <div key={t.id} className="bg-white text-card-foreground flex flex-col gap-6 rounded-xl border h-full hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+            {visibleTestimonials.map((t, i) => (
+              <div key={`${t.id}-${i}`} className="bg-white text-card-foreground flex flex-col gap-6 rounded-xl border h-full hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                 <div className="p-3 h-full flex flex-col">
                   <div className="mb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-quote h-4 w-4 text-indigo-600 opacity-20">
@@ -89,9 +135,17 @@ export default function Testimonials({ testimonials, dict }: TestimonialsProps) 
                   </blockquote>
                   <div className="flex items-center mt-auto">
                     <div className="flex-shrink-0">
-                      <div className={`h-6 w-6 rounded-full bg-gradient-to-br ${t.colorFrom || 'from-indigo-500'} ${t.colorTo || 'to-purple-600'} flex items-center justify-center text-white font-semibold text-[10px]`}>
-                        {t.initials || t.author.split(' ').map((n: string) => n[0]).join('')}
-                      </div>
+                      {t.image ? (
+                          <img 
+                            src={t.image} 
+                            alt={t.author} 
+                            className="h-8 w-8 rounded-full object-cover border border-gray-200" 
+                          />
+                      ) : (
+                          <div className={`h-6 w-6 rounded-full bg-gradient-to-br ${t.colorFrom || 'from-indigo-500'} ${t.colorTo || 'to-purple-600'} flex items-center justify-center text-white font-semibold text-[10px]`}>
+                            {t.initials || t.author.split(' ').map((n: string) => n[0]).join('')}
+                          </div>
+                      )}
                     </div>
                     <div className="ml-2">
                       <p className="text-[10px] font-semibold text-gray-900">{t.author}</p>

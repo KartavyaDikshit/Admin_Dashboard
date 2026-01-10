@@ -24,7 +24,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { fullName, email, country, phone, company, designation, description, reportId, enquiryType } = body;
+    const { fullName, email, country, phone, company, designation, description, reportId, enquiryType, sourceUrl } = body;
 
     // Split fullName into firstName and lastName
     const nameParts = fullName ? fullName.trim().split(' ') : [''];
@@ -44,6 +44,7 @@ export async function POST(request: Request) {
         enquiryType: enquiryType || 'Contact Form',
         reportId: reportId || undefined,
         status: 'NEW',
+        source: sourceUrl,
       },
     });
 

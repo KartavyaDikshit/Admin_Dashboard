@@ -64,10 +64,10 @@ export async function POST(request: NextRequest, context: RouteContext) {
       - metaDescription (String, max ~160 characters, based on description/summary or title, compelling and keyword-rich)
       - keywords (Array of Strings, list of primary and secondary keywords relevant to this market report)
       - semanticKeywords (Array of Strings, LSI keywords and related terms)
-      - canonicalUrl (String, derived from base slug, e.g., "https://yourdomain.com/reports/base-slug")
+      - canonicalUrl (String, derived from base slug, e.g., "https://www.brainyinsights.com/reports/base-slug")
       - ogTitle (String, for Open Graph, similar to metaTitle)
       - ogDescription (String, for Open Graph, similar to metaDescription)
-      - ogImage (String, a placeholder URL like "https://yourdomain.com/og-report-image.jpg")
+      - ogImage (String, a placeholder URL like "https://www.brainyinsights.com/og-report-image.jpg")
       - twitterTitle (String, similar to ogTitle)
       - twitterDescription (String, similar to ogDescription)
       - schemaMarkup (JSON object for Report or Article schema, include title, description, and placeholder image)
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
       const generatedSeoData = JSON.parse(generatedContentString);
 
       // Sanitize canonical URL to match expected format
-      const canonicalUrl = `https://yourdomain.com/reports/${report.slug}`; // Assuming a fixed domain
+      const canonicalUrl = `https://www.brainyinsights.com/reports/${report.slug}`; // Assuming a fixed domain
 
       // Update the report in the database
       const updatedReport = await prisma.report.update({

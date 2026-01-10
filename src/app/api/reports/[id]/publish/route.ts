@@ -8,6 +8,8 @@ import OpenAI from 'openai';
 import { generateSlug } from '@/lib/utils';
 import { calculateCost, openai } from '@/lib/openai'; // Import openai and calculateCost
 
+export const maxDuration = 300; // 5 minutes timeout for Vercel Pro
+
 const TARGET_LANGUAGES = ['de', 'fr', 'it', 'ja', 'ko', 'es']; // 7 languages
 
 interface RecentStrategicDevelopment {

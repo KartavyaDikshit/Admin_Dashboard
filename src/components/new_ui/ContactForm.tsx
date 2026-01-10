@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
+import Recaptcha from '@/components/ui/Recaptcha';
 
 import { useRouter, useParams } from 'next/navigation';
 
@@ -19,6 +20,7 @@ export default function ContactForm({ dict = {} }: ContactFormProps) {
   });
   const [countryCode, setCountryCode] = useState('+00');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   const COUNTRY_CODES: Record<string, string> = {
     'US': '+1',
@@ -45,13 +47,24 @@ export default function ContactForm({ dict = {} }: ContactFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Only require captcha if key is configured (handled by component returning null if no key, but we check state)
+    // If site key exists, captchaToken should be set.
+    // Ideally we check if env var exists.
+    if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && !captchaToken) {
+        toast.error('Please complete the ReCAPTCHA verification.');
+        return;
+    }
+
     setIsSubmitting(true);
     toast.loading(dict.submitting || 'Submitting your request...');
 
     try {
       const payload = {
           ...formData,
-          phone: `${countryCode} ${formData.phone}`
+          phone: `${countryCode} ${formData.phone}`,
+          captchaToken, // Send token to backend if needed for verification
+          sourceUrl: window.location.href
       };
 
       const response = await fetch('/api/requests', {
@@ -179,6 +192,9 @@ export default function ContactForm({ dict = {} }: ContactFormProps) {
             onChange={handleChange}
         ></textarea>
       </div>
+      
+      <Recaptcha onChange={setCaptchaToken} />
+
       <button 
         className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-bold transition-all disabled:pointer-events-none disabled:opacity-50 h-11 rounded-md px-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg" 
         type="submit"

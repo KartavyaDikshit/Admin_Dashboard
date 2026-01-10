@@ -349,6 +349,10 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
                         style={{ layout: "vertical", shape: "rect", height: 48 }}
                         createOrder={createOrder}
                         onApprove={onApprove}
+                        onCancel={() => {
+                            toast.error("Payment cancelled.");
+                            router.push(`/${lang}/order-failed?reason=cancelled`);
+                        }}
                         forceReRender={[price, licenseType]}
                     />
                 </div>

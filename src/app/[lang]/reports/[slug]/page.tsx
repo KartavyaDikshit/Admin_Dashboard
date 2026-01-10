@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ].filter((v, i, a) => a.indexOf(v) === i);
 
   return {
-    title: report.metaTitle || report.title,
+    title: report.metaTitle ? report.metaTitle.replace(/ \| The Brainy Insights$/, '') : report.title,
     description: report.metaDescription || report.summary || report.description,
     keywords: allKeywords,
     authors: [{ name: 'The Brainy Insights' }],

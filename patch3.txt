@@ -1,0 +1,52 @@
+https://www.brainyinsights.com/en/reports/micro-electric-vehicle-market-92876 here in the individual reports page the cagr and market size values are being extracted and populated on the ui but this is only in /en locale in the other languages it is not showing this part at all 
+en de fr it ja ko es 
+in the individual reports page the title description under the title should be in h2 tag on the ui page 
+after domain deployment in the admin dashboard while generating ai reports or publishing the report in all the languages throws internal server error but still does the task and saves the report in the draft handle this 
+update no index to robots.txt as we are still testing the  website on prod right now 
+"<title>Cocktail Syrups Market Analysis 2026 | Trends &amp; Insights | The Brainy Insights</title>" this is the meta title which is being generated change it to "<title>Cocktail Syrups Market Analysis 2026 | Trends &amp; Insights</title>" everywhere 
+in the admin dashboard in the individual reports edit section there is a generate seo button which populates the seo fields like canonical url it has a placeholder value of: "https://yourdomain.com/reports/cocktail-syrups-market-86073" update it to the final domain being "www.brainyinsights.com" 
+similarly in the Schema Markup JSON it has this right now: "{"name":"Cocktail Syrups Market Analysis 2026","@type":"Report","image":"https://yourdomain.com/og-report-image.jpg","@context":"https://schema.org","description":"A comprehensive analysis of the Cocktail Syrups Market for 2026, including trends, growth forecasts, and industry insights."}"
+update the url here as well similarly for Breadcrumb Data (JSON) : "{"@type":"BreadcrumbList","@context":"https://schema.org","itemListElement":[{"item":"https://yourdomain.com/","name":"Home","@type":"ListItem","position":1},{"item":"https://yourdomain.com/reports/","name":"Market Research Reports","@type":"ListItem","position":2},{"item":"https://yourdomain.com/reports/cocktail-syrups-market-86073","name":"Cocktail Syrups Market","@type":"ListItem","position":3}]}" update the url 
+"https://www.brainyinsights.com/en/contact" in this page update the phone number to "+91-9370600191"
+as well as the address to: "Brainy Insights Pvt. Ltd
+Solitaire Business Hub Balewadi highstreet, Baner, Pune, Maharashtra 411045 Office Number 1311" and subsequently update the map link next to it which shows directions on how to get there 
+remove the sign in option from the header of the website and replace it with "sales@thebrainyinsights.com" email and "+91-9370600191" this phone number here is the header file : "C:\Users\User\Admin_Dashboard\tbi-admin-dashboard\src\components\new_ui\Header.tsx"
+add in reCAPTCHA feature for all the form submitions 
+when cc avenue is clicked to pay in the buy now section and when the payment is cancelled from the portal it throws the following error: "404: NOT_FOUND
+Code: DEPLOYMENT_NOT_FOUND
+ID: fra1::cdk8m-1768049885461-f6ef3e9d86ba
+
+This deployment cannot be found. For more information and troubleshooting, see our documentation.
+" handle the reroute of the same and if the payment is successful show a thank you page for the payment made 
+and paypal option is still not working it works and the paypal window is opened in the local host but not on the production add in a similar thank you page for the same as well as its redirect if the payment is cancelled 
+in the admin dashboard when i want to update a category with an already available image it tries to post and throws the following error: "## Error Type
+Console Error
+
+## Error Message
+Vercel Blob: This blob already exists, use `allowOverwrite: true` if you want to overwrite it. Or `addRandomSuffix: true` to generate a unique filename. Read more about this error in our documentation: https://vercel.link/blob-allow-overwrite
+
+
+    at async handleImageUpload (file://C:/Users/User/Admin_Dashboard/tbi-admin-dashboard/.next/dev/static/chunks/src_0aa4eb46._.js:842:29)
+
+Next.js version: 16.0.8 (Turbopack)
+onUploadCompleted provided but no callbackUrl could be determined. Please provide a callbackUrl in onBeforeGenerateToken or set the VERCEL_BLOB_CALLBACK_URL environment variable.
+ POST /api/upload/client 200 in 26ms (compile: 8ms, render: 18ms)"
+ 
+"https://www.brainyinsights.com/en" here on the home page under the section : "What Our Clients Say
+Trusted by industry leaders worldwide for data-driven insights." the testimonials are being populated all together and not following pagination limit to 3 and when the arrow slider above is clicked move the testimonials one to the left and similarly to the right if that direction arrow is clicked 
+also in the testimonials card the image which is uploaded from the admin dashboard is not being rendered next to the name  
+
+"https://www.brainyinsights.com/sitemap/dynamic-0.xml" as well as "https://www.brainyinsights.com/sitemap/static.xml" both show the urls as "<loc>https://tbi-admin-dashboard.vercel.app/en/categories/food-and-beverages</loc>
+<lastmod>2026-01-09T19:52:47.555Z</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.6</priority>
+</url>
+<url>
+<loc>https://tbi-admin-dashboard.vercel.app/en/categories/machinery-and-equipment</loc>
+<lastmod>2026-01-09T19:03:45.742Z</lastmod>" update them to the production domain 
+
+"https://www.brainyinsights.com/admin/customization" here add in the url from which the form was submitted "Date	Type	Report	Contact	Description" and url from which the request has come from this is mainly to see from which locale and region the request has come from it should show the url with the locale hence
+
+"https://www.brainyinsights.com/admin/orders" here in the individual orders page mention from what gateway the order was placed paypal cc avenue or wiretransfer 
+
+understand the user intent and develop an end to end solution for the same,for the codebase go through the schema and codebase to learn more about the working before developing a perfect optimised solution 
