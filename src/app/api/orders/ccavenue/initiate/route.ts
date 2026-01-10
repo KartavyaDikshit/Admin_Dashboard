@@ -82,7 +82,10 @@ export async function POST(request: Request) {
     // If running locally, CC Avenue callback might fail if it can't reach localhost.
     // But usually CC Avenue posts to the URL provided.
     // We will use relative path or configured base URL.
-    const baseUrl = process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com';
+    // In production, force the live domain to avoid Vercel preview URL issues.
+    const isProduction = process.env.NODE_ENV === 'production';
+    const baseUrl = isProduction ? 'https://www.brainyinsights.com' : (process.env.NEXTAUTH_URL || 'http://localhost:3000');
+    
     const redirectUrl = `${baseUrl}/api/orders/ccavenue/handle`;
     const cancelUrl = `${baseUrl}/api/orders/ccavenue/handle`; // Handle cancellation same way or different
 

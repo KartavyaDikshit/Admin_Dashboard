@@ -14,9 +14,9 @@ import "./globals.css";
 // });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXTAUTH_URL || 'http://localhost:3000'),
-  title: "AI Pipeline Admin Dashboard",
-  description: "Token-optimized sequential AI report generation with GPT-4o mini",
+  metadataBase: new URL(process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com'),
+  title: 'The Brainy Insights - Market Research Reports & Consulting',
+  description: 'The Brainy Insights provides comprehensive market research reports, industry analysis, and consulting services to help businesses grow globally.',
   keywords: ["AI", "Pipeline", "Token Optimization", "GPT-4o mini", "Report Generation"],
   verification: {
     google: "-a-fjg9Wj3dXNQcvPx4v418rK52VsWdjL87OdUWNotU",
