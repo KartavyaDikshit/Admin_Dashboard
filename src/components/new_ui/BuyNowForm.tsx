@@ -91,15 +91,16 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
         });
         const orderData = await response.json();
         
-        if (orderData.error) {
-            console.error("Error creating order:", orderData.error);
-            toast.error("Could not initiate payment. Please try again.");
+        if (!response.ok || orderData.error) {
+            console.error("Error creating order:", orderData.error, orderData.details);
+            toast.error(`Could not initiate payment: ${orderData.error}`);
             return "";
         }
         
         return orderData.orderID;
     } catch (err) {
-        console.error("Payment Error:", err);
+        console.error("Payment Initiation Error:", err);
+        toast.error("An unexpected error occurred. Please try again.");
         return "";
     }
   };

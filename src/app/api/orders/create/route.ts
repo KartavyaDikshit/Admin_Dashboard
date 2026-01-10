@@ -85,13 +85,16 @@ export async function POST(request: Request) {
     });
 
     // 4. Create PayPal Request
+    const isProduction = process.env.NODE_ENV === 'production';
+    const baseUrl = isProduction ? 'https://www.brainyinsights.com' : (process.env.NEXTAUTH_URL || 'http://localhost:3000');
+
     const requestPayPal = new paypal.orders.OrdersCreateRequest();
     requestPayPal.prefer('return=representation');
     requestPayPal.requestBody({
       intent: 'CAPTURE',
       application_context: {
-        return_url: 'https://www.brainyinsights.com/en',
-        cancel_url: 'https://www.brainyinsights.com/en',
+        return_url: `${baseUrl}/en`, // Ideally a thank you or processing page
+        cancel_url: `${baseUrl}/en/order-failed?reason=cancelled`,
         brand_name: 'The Brainy Insights',
         user_action: 'PAY_NOW',
       },

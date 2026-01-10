@@ -62,13 +62,13 @@ export async function POST(request: Request) {
        const report = order?.items[0]?.report;
        const reportFriendlyId = report?.reportId || report?.id || 'unknown';
        
-       return NextResponse.redirect(new URL(`/en/thank-you/purchase/${reportFriendlyId}`, request.url));
+       return NextResponse.redirect(new URL(`/en/thank-you/purchase/${reportFriendlyId}`, request.url), 303);
     } else {
-       return NextResponse.redirect(new URL(`/en/order-failed?reason=${orderStatus}`, request.url));
+       return NextResponse.redirect(new URL(`/en/order-failed?reason=${orderStatus}`, request.url), 303);
     }
 
   } catch (error) {
     console.error("CC Avenue Callback Error:", error);
-    return NextResponse.redirect(new URL('/?error=callback_error', request.url));
+    return NextResponse.redirect(new URL('/?error=callback_error', request.url), 303);
   }
 }
