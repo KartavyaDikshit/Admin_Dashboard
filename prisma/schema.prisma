@@ -106,12 +106,12 @@ enum EnquiryStatus {
 // Models
 model Category {
   id        String @id @default(uuid()) @db.Uuid
-  shortcode String @unique @db.VarChar(20)
+  shortcode String @unique @db.VarChar(50)
   slug      String @unique @db.VarChar(150)
   name      String @default("Untitled") @db.VarChar(300)
   description String? @db.Text
 
-  icon             String?       @db.VarChar(100)
+  icon             String?       @db.VarChar(500)
   featured         Boolean       @default(false)
   sortOrder        Int           @default(0) @map("sort_order")
   seoKeywords      String[]      @default([]) @map("seo_keywords")

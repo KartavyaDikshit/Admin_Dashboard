@@ -8,8 +8,8 @@ import { generateSlug } from '@/lib/utils';
 const categoryUpdateSchema = z.object({
   name: z.string().min(1, 'Name is required').max(300, 'Name must be 300 characters or less'),
   description: z.string().nullable().optional(),
-  shortcode: z.string().min(2).max(20),
-  icon: z.string().max(100, 'Icon path must be 100 characters or less').nullable().optional(),
+  shortcode: z.string().min(2).max(50),
+  icon: z.string().max(500, 'Icon path must be 500 characters or less').nullable().optional(),
   featured: z.boolean().default(false),
   sortOrder: z.number().int().default(0),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED', 'ACTIVE']).default('PUBLISHED'),
