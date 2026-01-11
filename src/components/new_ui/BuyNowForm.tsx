@@ -43,7 +43,7 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
                     setFormData(prev => ({ 
                         ...prev, 
                         country: foundCountry.name,
-                        phoneCode: foundCountry.dialCode
+                        phoneCode: foundCountry.code
                     }));
                 } else {
                     setFormData(prev => ({ ...prev, country: data.country_name }));
@@ -61,7 +61,7 @@ export default function BuyNowForm({ reportDbId, reportTitle, reportFriendlyId, 
         setFormData(prev => ({
             ...prev,
             country: value,
-            phoneCode: selectedCountry ? selectedCountry.dialCode : prev.phoneCode
+            phoneCode: selectedCountry ? selectedCountry.code : prev.phoneCode
         }));
     } else {
         setFormData(prev => ({ ...prev, [name]: value }));

@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Recaptcha from '@/components/ui/Recaptcha';
+import { countries } from '@/lib/countries';
 
 interface EnquiryPageFormProps {
   reportId: string;
@@ -15,20 +16,6 @@ interface EnquiryPageFormProps {
   enquiryType: string;
   lang: string;
 }
-
-const COUNTRIES = [
-  { name: 'United States', code: '+1' },
-  { name: 'United Kingdom', code: '+44' },
-  { name: 'Canada', code: '+1' },
-  { name: 'India', code: '+91' },
-  { name: 'Germany', code: '+49' },
-  { name: 'France', code: '+33' },
-  { name: 'Japan', code: '+81' },
-  { name: 'China', code: '+86' },
-  { name: 'Australia', code: '+61' },
-  { name: 'Singapore', code: '+65' },
-  { name: 'Other', code: '' }
-];
 
 export default function EnquiryPageForm({ reportId, reportFriendlyId, reportTitle, reportSlug, enquiryType, lang }: EnquiryPageFormProps) {
   const router = useRouter();
@@ -47,7 +34,7 @@ export default function EnquiryPageForm({ reportId, reportFriendlyId, reportTitl
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const country = e.target.value;
-    const found = COUNTRIES.find(c => c.name === country);
+    const found = countries.find(c => c.name === country);
     setFormData(prev => ({
       ...prev,
       country,
@@ -164,7 +151,7 @@ ${formData.description}
               onChange={handleCountryChange}
               className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
             >
-              {COUNTRIES.map(c => (
+              {countries.map(c => (
                 <option key={c.name} value={c.name}>{c.name}</option>
               ))}
             </select>
@@ -172,7 +159,7 @@ ${formData.description}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
             <div className="flex">
-              <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+              <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm w-16 justify-center">
                 {formData.phoneCode}
               </span>
               <input

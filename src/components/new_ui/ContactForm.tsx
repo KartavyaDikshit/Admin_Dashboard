@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import Recaptcha from '@/components/ui/Recaptcha';
+import { countries } from '@/lib/countries';
 
 import { useRouter, useParams } from 'next/navigation';
 
@@ -26,23 +27,12 @@ export default function ContactForm({ dict = {} }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
-  const COUNTRY_CODES: Record<string, string> = {
-    'US': '+1',
-    'UK': '+44',
-    'CA': '+1',
-    'AU': '+61',
-    'DE': '+49',
-    'FR': '+33',
-    'IN': '+91',
-    'JP': '+81',
-    'CN': '+86',
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     
     if (id === 'country') {
-        const code = COUNTRY_CODES[value] || '+00';
+        const found = countries.find(c => c.iso === value);
+        const code = found ? found.code : '+00';
         setCountryCode(code);
     }
 
@@ -130,15 +120,9 @@ export default function ContactForm({ dict = {} }: ContactFormProps) {
             onChange={handleChange}
         >
             <option value="">{dict.selectCountry || 'Select a country'}</option>
-            <option value="US">United States</option>
-            <option value="UK">United Kingdom</option>
-            <option value="CA">Canada</option>
-            <option value="AU">Australia</option>
-            <option value="DE">Germany</option>
-            <option value="FR">France</option>
-            <option value="IN">India</option>
-            <option value="JP">Japan</option>
-            <option value="CN">China</option>
+            {countries.map((c) => (
+                <option key={c.iso} value={c.iso}>{c.name}</option>
+            ))}
         </select>
       </div>
       <div className="space-y-2">
