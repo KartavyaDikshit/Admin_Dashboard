@@ -111,7 +111,7 @@ export default async function OrderDetailsPage({ params }: PageProps) {
               </div>
               <div className="sm:grid sm:grid-cols-3 sm:gap-4">
                 <dt className="text-sm font-medium text-gray-500">Country</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{order.country || 'N/A'}</dd>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{order.country || order.user?.country || 'N/A'}</dd>
               </div>
             </dl>
           </div>
@@ -137,7 +137,7 @@ export default async function OrderDetailsPage({ params }: PageProps) {
                 <tr key={item.id}>
                   <td className="px-6 py-4">
                     <div className="text-sm font-medium text-gray-900">{item.report.title}</div>
-                    <div className="text-sm text-gray-500">SKU: {item.report.sku}</div>
+                    <div className="text-sm text-gray-500">Report ID: {item.report.reportId || item.report.sku}</div>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500">{item.licenseType}</td>
                   <td className="px-6 py-4 text-sm text-gray-500">{formatCurrency(Number(item.price), order.currency)}</td>

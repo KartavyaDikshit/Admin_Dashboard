@@ -51,6 +51,13 @@ export default async function sitemap({ id }: { id: string | Promise<string> }):
       '/faqs', // Added new page
     ];
 
+    // Fetch all categories for the static sitemap
+    const categories = await prisma.category.findMany({
+      where: { status: 'PUBLISHED' },
+      select: { slug: true, updatedAt: true },
+      orderBy: { updatedAt: 'desc' },
+    });
+
     for (const locale of locales) {
       for (const route of staticRoutes) {
         sitemapEntries.push({
@@ -58,6 +65,16 @@ export default async function sitemap({ id }: { id: string | Promise<string> }):
           lastModified: new Date(),
           changeFrequency: 'daily',
           priority: route === '' ? 1 : 0.8,
+        });
+      }
+
+      // Add categories to static sitemap
+      for (const category of categories) {
+        sitemapEntries.push({
+          url: `${baseUrl}/${locale}/categories/${category.slug}`,
+          lastModified: category.updatedAt,
+          changeFrequency: 'weekly',
+          priority: 0.6,
         });
       }
     }
@@ -123,37 +140,11 @@ export default async function sitemap({ id }: { id: string | Promise<string> }):
           // We are past reports, so the "report part" of this chunk is 0
       }
 
-      // 2. Categories
-      const categoryCount = await prisma.category.count({ where: { status: 'PUBLISHED' } });
-      const categoryOffset = Math.max(0, currentEntityIndex - reportCount); // Offset relative to Category table
-
-      if (itemsRemaining > 0 && categoryOffset < categoryCount) {
-           const categories = await prisma.category.findMany({
-            where: { status: 'PUBLISHED' },
-            select: { slug: true, updatedAt: true },
-            orderBy: { updatedAt: 'desc' },
-            skip: categoryOffset,
-            take: itemsRemaining,
-          });
-
-          for (const locale of locales) {
-            for (const category of categories) {
-              sitemapEntries.push({
-                url: `${baseUrl}/${locale}/categories/${category.slug}`,
-                lastModified: category.updatedAt,
-                changeFrequency: 'weekly',
-                priority: 0.6,
-              });
-            }
-          }
-          
-          itemsRemaining -= categories.length;
-          currentEntityIndex += categories.length;
-      }
-
-      // 3. Press Releases
+      // 2. Press Releases (shifted up since Categories are gone)
       const prCount = await prisma.pressRelease.count({ where: { published: true } });
-      const prOffset = Math.max(0, currentEntityIndex - reportCount - categoryCount);
+      // Offset relative to PR table: (Current Index - Reports Count)
+      // If we are still processing reports (currentEntityIndex < reportCount), prOffset is negative, handled by max(0)
+      const prOffset = Math.max(0, currentEntityIndex - reportCount);
 
       if (itemsRemaining > 0 && prOffset < prCount) {
           const pressReleases = await prisma.pressRelease.findMany({

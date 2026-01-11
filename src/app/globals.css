@@ -191,6 +191,14 @@ body {
   animation: marquee 160s linear infinite;
 }
 
+.animate-marquee-fast {
+  animation: marquee 60s linear infinite;
+}
+
+.group:hover .animate-marquee-fast {
+  animation-play-state: paused;
+}
+
 /* Hero Effects */
 @keyframes gradient-shift {
   0% { background-position: 0% 50%; }

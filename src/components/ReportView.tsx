@@ -223,7 +223,7 @@ export default function ReportView({ report, lang, dict }: ReportViewProps) {
         {report.imageUrl && (
             <div className="mb-8">
               <img 
-                src={report.imageUrl} 
+                src={`/upload/${report.slug}.jpg`} 
                 alt={report.imageAlt || report.title}
                 className="w-3/4 h-auto mx-auto block rounded-lg shadow-sm border border-gray-200"
               />

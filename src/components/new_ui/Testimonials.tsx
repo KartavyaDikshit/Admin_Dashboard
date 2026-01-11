@@ -1,19 +1,11 @@
 'use client'
 
-import { useState } from 'react'
-
 interface TestimonialsProps {
   testimonials: any[]
   dict: any
 }
 
 export default function Testimonials({ testimonials, dict }: TestimonialsProps) {
-  // Fallback/Static testimonials if DB is empty or for layout matching
-  // The user wants it to MATCH MHTML exactly. MHTML has 3 cards.
-  // I will map the DB testimonials to this structure.
-  
-  const [startIndex, setStartIndex] = useState(0);
-
   const displayTestimonials = testimonials.length > 0 ? testimonials : [
     {
       id: '1',
@@ -57,105 +49,67 @@ export default function Testimonials({ testimonials, dict }: TestimonialsProps) 
     }
   ];
 
-  const itemsPerPage = 3;
-  const totalPages = Math.ceil(displayTestimonials.length / itemsPerPage);
-  
-  const handlePrev = () => {
-     setStartIndex((prev) => (prev - 1 + displayTestimonials.length) % displayTestimonials.length);
-  };
-
-  const handleNext = () => {
-     setStartIndex((prev) => (prev + 1) % displayTestimonials.length);
-  };
-
-  // Create a circular list for infinite scroll effect
-  const visibleTestimonials = [];
-  for (let i = 0; i < itemsPerPage; i++) {
-     const index = (startIndex + i) % displayTestimonials.length;
-     visibleTestimonials.push(displayTestimonials[index]);
-  }
-
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-gray-50 overflow-hidden">
       <div className="container mx-auto max-w-7xl px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">{dict.clientsTestimonialsTitle || 'What Our Clients Say'}</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">{dict.clientsTestimonialsDesc || 'Trusted by industry leaders worldwide for data-driven insights.'}</p>
         </div>
-        <div className="relative">
-          <div className="flex justify-center items-center mb-4">
-            <button 
-                onClick={handlePrev}
-                className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all outline-none hover:bg-indigo-50 h-8 w-8 rounded-full border border-gray-200 shadow-sm"
-                aria-label="Previous testimonials"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-left h-4 w-4 text-gray-600">
-                <path d="m15 18-6-6 6-6"></path>
-              </svg>
-            </button>
-            <div className="flex space-x-1.5 mx-3">
-              {Array.from({ length: displayTestimonials.length }).map((_, idx) => (
-                  <button 
-                    key={idx}
-                    onClick={() => setStartIndex(idx)} 
-                    className={`w-1.5 h-1.5 rounded-full transition-colors ${idx === startIndex ? 'bg-indigo-600' : 'bg-gray-300'}`}
-                    aria-label={`Go to testimonial slide ${idx + 1}`}
-                  ></button>
-              ))}
-            </div>
-            <button 
-                onClick={handleNext}
-                className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all outline-none hover:bg-indigo-50 h-8 w-8 rounded-full border border-gray-200 shadow-sm"
-                aria-label="Next testimonials"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-right h-4 w-4 text-gray-600">
-                <path d="m9 18 6-6-6-6"></path>
-              </svg>
-            </button>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 min-h-[220px]">
-            {visibleTestimonials.map((t, i) => (
-              <div key={`${t.id}-${i}`} className="bg-white text-card-foreground flex flex-col gap-6 rounded-xl border h-full hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                <div className="p-3 h-full flex flex-col">
-                  <div className="mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-quote h-4 w-4 text-indigo-600 opacity-20">
-                      <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
-                      <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
-                    </svg>
-                  </div>
-                  <div className="flex items-center mb-2">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <svg key={star} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-star h-2.5 w-2.5 text-yellow-400 fill-current">
-                        <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path>
-                      </svg>
-                    ))}
-                  </div>
-                  <blockquote className="text-gray-700 mb-3 flex-grow leading-relaxed text-xs">
-                    “{t.content}”
-                  </blockquote>
-                  <div className="flex items-center mt-auto">
-                    <div className="flex-shrink-0">
-                      {t.image ? (
-                          <img 
-                            src={t.image} 
-                            alt={t.author} 
-                            className="h-8 w-8 rounded-full object-cover border border-gray-200" 
-                          />
-                      ) : (
-                          <div className={`h-6 w-6 rounded-full bg-gradient-to-br ${t.colorFrom || 'from-indigo-500'} ${t.colorTo || 'to-purple-600'} flex items-center justify-center text-white font-semibold text-[10px]`}>
-                            {t.initials || t.author.split(' ').map((n: string) => n[0]).join('')}
-                          </div>
-                      )}
+        
+        <div className="relative w-full overflow-hidden group">
+           {/* Gradient Masks */}
+          <div className="absolute left-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-r from-gray-50 to-transparent pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-l from-gray-50 to-transparent pointer-events-none"></div>
+
+          <div className="flex w-max animate-marquee-fast group-hover:[animation-play-state:paused]" style={{ willChange: 'transform' }}>
+             {/* Duplicate 3 times for smooth loop */}
+             {[1, 2, 3].map((setIndex) => (
+                <div key={`set-${setIndex}`} className="flex gap-6 px-3">
+                  {displayTestimonials.map((t, i) => (
+                    <div key={`${setIndex}-${t.id}-${i}`} className="w-[400px] flex-shrink-0 bg-white text-card-foreground flex flex-col gap-6 rounded-xl border hover:shadow-lg transition-all duration-300 transform">
+                        <div className="p-6 h-full flex flex-col">
+                        <div className="mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-quote h-6 w-6 text-indigo-600 opacity-20">
+                            <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+                            <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+                            </svg>
+                        </div>
+                        <div className="flex items-center mb-4">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                            <svg key={star} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-star h-4 w-4 text-yellow-400 fill-current">
+                                <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path>
+                            </svg>
+                            ))}
+                        </div>
+                        <blockquote className="text-gray-700 mb-6 flex-grow leading-relaxed text-sm">
+                            “{t.content}”
+                        </blockquote>
+                        <div className="flex items-center mt-auto">
+                            <div className="flex-shrink-0">
+                            {t.image ? (
+                                <img 
+                                    src={t.image} 
+                                    alt={t.author} 
+                                    className="h-10 w-10 rounded-full object-cover border border-gray-200" 
+                                />
+                            ) : (
+                                <div className={`h-10 w-10 rounded-full bg-gradient-to-br ${t.colorFrom || 'from-indigo-500'} ${t.colorTo || 'to-purple-600'} flex items-center justify-center text-white font-semibold text-xs`}>
+                                    {t.initials || t.author.split(' ').map((n: string) => n[0]).join('')}
+                                </div>
+                            )}
+                            </div>
+                            <div className="ml-3">
+                            <p className="text-sm font-semibold text-gray-900">{t.author}</p>
+                            <p className="text-xs text-gray-600">{t.position}</p>
+                            <p className="text-xs text-indigo-600 font-medium">{t.company}</p>
+                            </div>
+                        </div>
+                        </div>
                     </div>
-                    <div className="ml-2">
-                      <p className="text-[10px] font-semibold text-gray-900">{t.author}</p>
-                      <p className="text-[10px] text-gray-600">{t.position}</p>
-                      <p className="text-[10px] text-indigo-600 font-medium">{t.company}</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              </div>
-            ))}
+             ))}
           </div>
         </div>
       </div>
