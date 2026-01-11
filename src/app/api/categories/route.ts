@@ -7,10 +7,10 @@ import { generateSlug } from '@/lib/utils';
 import '@/lib/json-bigint';
 
 const categoryCreateSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1, 'Name is required').max(300, 'Name must be 300 characters or less'),
   description: z.string().optional(),
   shortcode: z.string().min(2).max(20),
-  icon: z.string().optional(),
+  icon: z.string().max(100, 'Icon path must be 100 characters or less').optional(),
   featured: z.boolean().default(false),
   sortOrder: z.number().int().default(0),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED', 'ACTIVE']).default('PUBLISHED'),
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = categoryCreateSchema.parse(body);
 
-    const slug = generateSlug(validatedData.name);
+    const slug = generateSlug(validatedData.name).substring(0, 150);
 
     const category = await prisma.category.create({
       data: {
