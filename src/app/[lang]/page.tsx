@@ -17,14 +17,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
 
   return {
-    title: dict.homeTitle || 'Global Market Research Reports & Consulting | The Brainy Insights',
-    description: dict.homeDescription || 'The Brainy Insights provides comprehensive market research reports, industry analysis, and consulting services to help businesses grow globally.',
-    keywords: ['market research', 'consulting services', 'global market reports', 'industry analysis', 'business intelligence', 'market forecasting'],
+    title: dict.homeTitle || 'Global Market Research Reports & Consulting',
+    description: dict.homeDesc || 'The Brainy Insights provides comprehensive market research reports, industry analysis, and consulting services to help businesses grow globally.',
+    keywords: ['market research', 'consulting services', 'global market reports', 'industry analysis', 'business intelligence'],
     alternates: {
       canonical: `${siteUrl}/${lang}`,
     },
     openGraph: {
-      title: dict.homeTitle || 'Global Market Research Reports & Consulting | The Brainy Insights',
+      title: dict.homeTitle || 'Global Market Research Reports & Consulting',
       description: dict.homeDescription || 'The Brainy Insights provides comprehensive market research reports, industry analysis, and consulting services.',
       url: `${siteUrl}/${lang}`,
       siteName: 'The Brainy Insights',
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
-      title: dict.homeTitle || 'Global Market Research Reports & Consulting | The Brainy Insights',
+      title: dict.homeTitle || 'Global Market Research Reports & Consulting',
       description: dict.homeDescription || 'The Brainy Insights provides comprehensive market research reports.',
       images: ['/og-image.jpg'],
       site: '@thebrainyinsight',

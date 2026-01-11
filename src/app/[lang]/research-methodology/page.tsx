@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
 
   return {
-    title: 'Research Methodology | The Brainy Insights',
+    title: 'Research Methodology',
     description: 'Learn about our scientific and systematic research methodologies, data procurement, analysis, and validation processes.',
     alternates: {
       canonical: `${siteUrl}/${lang}/research-methodology`,

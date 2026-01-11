@@ -15,7 +15,10 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com'),
-  title: 'The Brainy Insights - Market Research Reports & Consulting',
+  title: {
+    default: 'Global Market Research Reports & Consulting',
+    template: '%s'
+  },
   description: 'The Brainy Insights provides comprehensive market research reports, industry analysis, and consulting services to help businesses grow globally.',
   keywords: ["AI", "Pipeline", "Token Optimization", "GPT-4o mini", "Report Generation"],
   verification: {

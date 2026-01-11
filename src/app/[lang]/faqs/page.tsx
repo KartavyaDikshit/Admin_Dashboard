@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
 
   return {
-    title: 'Frequently Asked Questions (FAQs) | The Brainy Insights',
+    title: 'Frequently Asked Questions (FAQs)',
     description: 'Find answers to common questions about our market research reports, ordering process, licenses, payments, and post-sale support.',
     alternates: {
       canonical: `${siteUrl}/${lang}/faqs`,

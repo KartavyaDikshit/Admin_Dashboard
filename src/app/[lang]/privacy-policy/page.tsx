@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
 
   return {
-    title: 'Privacy Policy | The Brainy Insights',
+    title: 'Privacy Policy',
     description: 'Learn how we collect, use, store, and protect your personal information.',
     alternates: {
       canonical: `${siteUrl}/${lang}/privacy-policy`,

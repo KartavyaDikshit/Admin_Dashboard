@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
 
   return {
-    title: dict.contactTitle || 'Contact Us | The Brainy Insights',
+    title: dict.contactTitle || 'Contact Us',
     description: dict.contactText || 'Get in touch with our expert research consultants for your market research needs.',
     alternates: {
       canonical: `${siteUrl}/${lang}/contact`,

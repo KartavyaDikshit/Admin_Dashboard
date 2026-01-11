@@ -6,6 +6,10 @@ import Recaptcha from '@/components/ui/Recaptcha';
 
 import { useRouter, useParams } from 'next/navigation';
 
+interface ContactFormProps {
+  dict: any;
+}
+
 export default function ContactForm({ dict = {} }: ContactFormProps) {
   const router = useRouter();
   const params = useParams();

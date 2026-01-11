@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
 
   return {
-    title: 'Terms and Conditions | The Brainy Insights',
+    title: 'Terms and Conditions',
     description: 'Read our terms and conditions regarding the use of our website, products, and services.',
     alternates: {
       canonical: `${siteUrl}/${lang}/terms-conditions`,

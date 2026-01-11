@@ -11,38 +11,13 @@ type Props = {
   searchParams: Promise<{ page?: string; search?: string; category?: string }>;
 };
 
-export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
-  const dict = getDictionary(lang);
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
-  const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
-
-  const languages: Record<string, string> = {};
-  locales.forEach(l => {
-    languages[l] = `${siteUrl}/${l}/reports`;
-  });
-
+  const dict = await getDictionary(lang);
+  
   return {
-    title: dict.reports || 'Market Research Reports | The Brainy Insights',
-    description: dict.reportsHeroSubtitle || 'Browse our extensive collection of market research reports across various industries.',
-    keywords: ['market research reports', 'industry analysis', 'market trends', 'strategic insights'],
-    alternates: {
-      canonical: `${siteUrl}/${lang}/reports`,
-      languages: languages,
-    },
-    openGraph: {
-      title: dict.reports || 'Market Research Reports | The Brainy Insights',
-      description: dict.reportsHeroSubtitle || 'Browse our extensive collection of market research reports across various industries.',
-      url: `${siteUrl}/${lang}/reports`,
-      siteName: 'The Brainy Insights',
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: dict.reports || 'Market Research Reports | The Brainy Insights',
-      description: dict.reportsHeroSubtitle || 'Browse our extensive collection of market research reports.',
-      site: '@thebrainyinsight',
-    }
+    title: dict.reports || 'Market Research Reports',
+    description: 'Browse our extensive collection of market research reports across various industries.',
   };
 }
 

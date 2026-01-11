@@ -21,11 +21,10 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   });
   
   return {
-    title: {
-      default: 'Global Market Research Reports & Consulting | The Brainy Insights',
-      template: '%s | The Brainy Insights'
-    },
-    description: 'The Brainy Insights offers top-notch market research reports and consulting services. Gain actionable insights and competitive analysis for your business.',
+      title: {
+        default: 'Global Market Research Reports & Consulting',
+        template: '%s'
+      },    description: 'The Brainy Insights offers top-notch market research reports and consulting services. Gain actionable insights and competitive analysis for your business.',
     metadataBase: new URL(baseUrl),
     alternates: {
       canonical: `${baseUrl}/${lang}`,
@@ -47,7 +46,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       locale: lang,
       siteName: 'The Brainy Insights',
       url: `${baseUrl}/${lang}`,
-      title: 'Global Market Research Reports & Consulting | The Brainy Insights',
+      title: 'Global Market Research Reports & Consulting',
       description: 'The Brainy Insights offers top-notch market research reports and consulting services. Gain actionable insights and competitive analysis for your business.',
       images: [
         {
@@ -62,7 +61,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       card: 'summary_large_image',
       site: '@thebrainyinsight',
       creator: '@thebrainyinsight',
-      title: 'Global Market Research Reports & Consulting | The Brainy Insights',
+      title: 'Global Market Research Reports & Consulting',
       description: 'The Brainy Insights offers top-notch market research reports and consulting services.',
     },
     keywords: ['market research', 'consulting services', 'global market reports', 'industry analysis', 'business intelligence'],
