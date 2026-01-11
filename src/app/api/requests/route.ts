@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { sendEmail, emailTemplates } from '@/lib/email';
 
 export async function GET(request: Request) {
   try {
@@ -47,6 +48,55 @@ export async function POST(request: Request) {
         source: sourceUrl,
       },
     });
+
+    // Send Emails
+    (async () => {
+        try {
+           const typeLabel = enquiryType || 'Contact Enquiry';
+           const clientName = fullName || firstName;
+           
+           let displayReportId = reportId;
+           let reportTitle = undefined;
+
+           if (reportId) {
+               try {
+                   const report = await prisma.report.findUnique({
+                       where: { id: reportId },
+                       select: { title: true, reportId: true, sku: true }
+                   });
+                   if (report) {
+                       displayReportId = report.reportId || report.sku || reportId;
+                       reportTitle = report.title;
+                   }
+               } catch (e) {
+                   console.error("Failed to fetch report details for enquiry email", e);
+               }
+           }
+
+           const enquiryData = {
+               firstName, lastName, email, phone, company, country, jobTitle: designation, message: description, 
+               reportId: displayReportId, // Use readable ID
+               reportTitle, // Pass title if we fetched it
+               sourceUrl, 
+           };
+           
+           // 1. Send to Client
+           await sendEmail({
+              to: email,
+              subject: `Thank you for contacting The Brainy Insights`,
+              html: emailTemplates.enquiryConfirmationClient(enquiryData, typeLabel),
+           });
+  
+           // 2. Send to Owner
+           await sendEmail({
+              to: 'sales@thebrainyinsights.com',
+              subject: `New Enquiry - ${typeLabel}`,
+              html: emailTemplates.enquiryNotificationOwner(enquiryData, typeLabel),
+           });
+        } catch (err) {
+           console.error('Failed to send enquiry emails', err);
+        }
+      })();
 
     return NextResponse.json(enquiry, { status: 201 });
   } catch (error) {

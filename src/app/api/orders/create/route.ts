@@ -2,10 +2,12 @@ import { NextResponse } from 'next/server';
 import client from '@/lib/paypal';
 import paypal from '@paypal/checkout-server-sdk';
 import { prisma } from '@/lib/prisma';
+import { sendEmail, emailTemplates } from '@/lib/email';
 
 export async function POST(request: Request) {
   try {
     const { reportId, licenseType, userEmail, userName, userPhone, userCompany } = await request.json();
+
 
     if (!reportId || !licenseType) {
       return NextResponse.json({ error: 'Missing reportId or licenseType' }, { status: 400 });
@@ -83,6 +85,40 @@ export async function POST(request: Request) {
         },
       },
     });
+
+    // Send Emails (Async - don't block response)
+    (async () => {
+      try {
+        const orderWithReport = {
+          ...newOrder,
+          // Need to fetch or pass the report info. 
+          // Since we already have 'report' object above, we can assume structure.
+        };
+        const items = [{
+          report: { title: report.title, sku: report.sku },
+          licenseType: dbLicenseType,
+          price: amount
+        }];
+
+        // 1. Send to Customer
+        if (newOrder.customerEmail) {
+          await sendEmail({
+            to: newOrder.customerEmail,
+            subject: `Order Confirmation - ${newOrder.orderNumber}`,
+            html: emailTemplates.orderConfirmationClient(newOrder, items),
+          });
+        }
+
+        // 2. Send to Owner
+        await sendEmail({
+          to: 'sales@thebrainyinsights.com',
+          subject: `New Order Received - ${newOrder.orderNumber}`,
+          html: emailTemplates.orderNotificationOwner(newOrder, items),
+        });
+      } catch (err) {
+        console.error('Failed to send order emails', err);
+      }
+    })();
 
     // 4. Create PayPal Request
     const isProduction = process.env.NODE_ENV === 'production';
