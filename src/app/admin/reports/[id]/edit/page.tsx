@@ -159,7 +159,6 @@ export default function EditReportPage() {
       const newBlob = await upload(selectedFile.name, selectedFile, {
         access: 'public',
         handleUploadUrl: '/api/upload/client',
-        addRandomSuffix: true,
       });
 
       toast.dismiss();

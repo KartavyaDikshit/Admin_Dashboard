@@ -149,8 +149,14 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Delete report error:', error);
+    if (error.code === 'P2003') {
+        return NextResponse.json(
+            { error: 'Cannot delete this report because it has associated orders or other related data. Please archive it instead.' },
+            { status: 400 }
+        );
+    }
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

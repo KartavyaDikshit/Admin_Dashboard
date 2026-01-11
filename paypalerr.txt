@@ -1,0 +1,153 @@
+{"error":"Payment initialization failed","details":"{\"error\":\"invalid_client\",\"error_description\":\"Client Authentication failed\"}","dbOrderId":"cf657613-57a3-44d2-8d5d-4da461c2f5be"}
+Request URL
+https://www.brainyinsights.com/api/orders/create
+Request Method
+POST
+Status Code
+500 Internal Server Error
+Remote Address
+[64:ff9b::d8c6:4f01]:443
+Referrer Policy
+strict-origin-when-cross-origin
+cache-control
+public, max-age=0, must-revalidate
+content-type
+application/json
+date
+Sat, 10 Jan 2026 16:16:21 GMT
+server
+Vercel
+strict-transport-security
+max-age=63072000
+vary
+rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+x-matched-path
+/api/orders/create
+x-vercel-cache
+MISS
+x-vercel-id
+fra1::iad1::vqfvr-1768061779411-4d1cd55cdcd7
+:authority
+www.brainyinsights.com
+:method
+POST
+:path
+/api/orders/create
+:scheme
+https
+accept
+*/*
+accept-encoding
+gzip, deflate, br, zstd
+accept-language
+en-US,en;q=0.9
+cache-control
+no-cache
+content-length
+232
+content-type
+application/json
+cookie
+__Host-next-auth.csrf-token=46bf31ee2d73ac28b52d15da6da4f856c726a701b3618d094c408012b7b32000%7C7c61489be500456a80d19a2e02874d9a1e824796923ae1aa39a8e414cb6051c6; __Secure-next-auth.callback-url=https%3A%2F%2Fwww.brainyinsights.com%2Fadmin; _ga=GA1.1.325614921.1767988705; __Secure-next-auth.session-token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..PhwLyirhOE7dr7md.aqslurGSBru37hxXzo93Tthrax4_C3wBWuyyOM3Z3hsHbShr1ADWzwVmJgQv7VJhO9n-MG3_1i09TtVod93jJ27GoSh-3ShfvnlvBeTQ1F9WOxUalDU4Zeo1SXSa5EMwd190mGMeo3fCH6zWw-HcaJuuhKPIeIMeyuF2yIFrchAp3R1_RrKpIvqtj_WXSQWHkQXqwT-z3zGqsyi9VJx-Mo42g6aFs59ZdJMKX4ExvbDwdrbit-IhyVMDSg04MfPoYQSNAkd_Fj2BqWRqwLs8LrNTz4T-RmEQKqJhwjL3KsrZhepZVTop3woLoZs247gE2jDORq5PUlrRQzYT4uMA0HxO4atIERHWZQ66pFaNY5QU9KJzjBZV8zS93ru6YOIaseWMVRxyyMJ-fC_EM-1K1niXQ_I6KajVDHjOO_dXmX2zOn6cFtvw9I1w.gX70IOzZM5CwRmVZn_B19g; _ga_V78VZDBEHZ=GS2.1.s1768060371$o4$g1$t1768061742$j28$l0$h0
+origin
+https://www.brainyinsights.com
+pragma
+no-cache
+priority
+u=1, i
+referer
+https://www.brainyinsights.com/en/buy-now/TBI-96251/singleUser
+sec-ch-ua
+"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"
+sec-ch-ua-mobile
+?0
+sec-ch-ua-platform
+"Windows"
+sec-fetch-dest
+empty
+sec-fetch-mode
+cors
+sec-fetch-site
+same-origin
+user-agent
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36
+
+
+Request URL
+https://www.brainyinsights.com/api/orders/create
+Request Method
+POST
+Status Code
+500 Internal Server Error
+Remote Address
+[64:ff9b::d8c6:4f01]:443
+Referrer Policy
+strict-origin-when-cross-origin
+cache-control
+public, max-age=0, must-revalidate
+content-type
+application/json
+date
+Sat, 10 Jan 2026 16:16:21 GMT
+server
+Vercel
+strict-transport-security
+max-age=63072000
+vary
+rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+x-matched-path
+/api/orders/create
+x-vercel-cache
+MISS
+x-vercel-id
+fra1::iad1::vqfvr-1768061779411-4d1cd55cdcd7
+:authority
+www.brainyinsights.com
+:method
+POST
+:path
+/api/orders/create
+:scheme
+https
+accept
+*/*
+accept-encoding
+gzip, deflate, br, zstd
+accept-language
+en-US,en;q=0.9
+cache-control
+no-cache
+content-length
+232
+content-type
+application/json
+cookie
+__Host-next-auth.csrf-token=46bf31ee2d73ac28b52d15da6da4f856c726a701b3618d094c408012b7b32000%7C7c61489be500456a80d19a2e02874d9a1e824796923ae1aa39a8e414cb6051c6; __Secure-next-auth.callback-url=https%3A%2F%2Fwww.brainyinsights.com%2Fadmin; _ga=GA1.1.325614921.1767988705; __Secure-next-auth.session-token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..PhwLyirhOE7dr7md.aqslurGSBru37hxXzo93Tthrax4_C3wBWuyyOM3Z3hsHbShr1ADWzwVmJgQv7VJhO9n-MG3_1i09TtVod93jJ27GoSh-3ShfvnlvBeTQ1F9WOxUalDU4Zeo1SXSa5EMwd190mGMeo3fCH6zWw-HcaJuuhKPIeIMeyuF2yIFrchAp3R1_RrKpIvqtj_WXSQWHkQXqwT-z3zGqsyi9VJx-Mo42g6aFs59ZdJMKX4ExvbDwdrbit-IhyVMDSg04MfPoYQSNAkd_Fj2BqWRqwLs8LrNTz4T-RmEQKqJhwjL3KsrZhepZVTop3woLoZs247gE2jDORq5PUlrRQzYT4uMA0HxO4atIERHWZQ66pFaNY5QU9KJzjBZV8zS93ru6YOIaseWMVRxyyMJ-fC_EM-1K1niXQ_I6KajVDHjOO_dXmX2zOn6cFtvw9I1w.gX70IOzZM5CwRmVZn_B19g; _ga_V78VZDBEHZ=GS2.1.s1768060371$o4$g1$t1768061742$j28$l0$h0
+origin
+https://www.brainyinsights.com
+pragma
+no-cache
+priority
+u=1, i
+referer
+https://www.brainyinsights.com/en/buy-now/TBI-96251/singleUser
+sec-ch-ua
+"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"
+sec-ch-ua-mobile
+?0
+sec-ch-ua-platform
+"Windows"
+sec-fetch-dest
+empty
+sec-fetch-mode
+cors
+sec-fetch-site
+same-origin
+user-agent
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36
+
+{
+    "error": "Payment initialization failed",
+    "details": "{\"error\":\"invalid_client\",\"error_description\":\"Client Authentication failed\"}",
+    "dbOrderId": "cf657613-57a3-44d2-8d5d-4da461c2f5be"
+}

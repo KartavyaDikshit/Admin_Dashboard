@@ -46,7 +46,18 @@ export default async function BuyNowPage({ params }: Props) {
   }
 
   const validLicenses = ['single', 'multiple', 'corporate', 'enterprise'];
-  const normalizedLicense = validLicenses.find(l => licenseType.toLowerCase().includes(l)) || 'single';
+  let normalizedLicense = 'single';
+  const lowerLicenseType = licenseType.toLowerCase();
+
+  if (lowerLicenseType.includes('multi') || lowerLicenseType.includes('multiple')) {
+    normalizedLicense = 'multiple';
+  } else if (lowerLicenseType.includes('corporate')) {
+    normalizedLicense = 'corporate';
+  } else if (lowerLicenseType.includes('enterprise')) {
+    normalizedLicense = 'enterprise';
+  } else {
+    normalizedLicense = 'single';
+  }
   
   // Map normalized license to DB price field and display name
   let price: number | null = null;
