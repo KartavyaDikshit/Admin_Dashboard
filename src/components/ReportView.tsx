@@ -124,14 +124,32 @@ export default function ReportView({ report, lang, dict }: ReportViewProps) {
   ];
   const dynamicsSections = parseContent(report.marketDynamics, dynamicsMarkers);
   
-  const playersMarkers = ['Key Market Players', 'Recent Strategic Developments', 'Company Profiles', 'Key Players'];
+  const playersMarkers = [
+    'Key Market Players', 'Recent Strategic Developments', 'Company Profiles', 'Key Players',
+    'Wichtige Marktteilnehmer', 'Jüngste strategische Entwicklungen', // DE
+    'Principaux acteurs du marché', 'Développements stratégiques récents', // FR
+    'Principali attori del mercato', 'Recenti sviluppi strategici', // IT
+    'Principales actores del mercado', 'Desarrollos estratégicos recientes', // ES
+    '主要な市場プレーヤー', '最近の戦略的動向', // JA
+    '주요 시장 플레이어', '최근 전략적 개발' // KO
+  ];
   const playersSections = parseContent(report.keyMarketPlayers, playersMarkers);
   
+  // Helper to identify Strategic Development sections across languages
+  const isStrategicDev = (title: string) => {
+      const t = title.toLowerCase();
+      return t.includes('strategic development') || 
+             t.includes('recent development') ||
+             t.includes('strategische entwicklungen') ||
+             t.includes('développements stratégiques') ||
+             t.includes('sviluppi strategici') ||
+             t.includes('desarrollos estratégicos') ||
+             t.includes('戦略的') ||
+             t.includes('전략적');
+  };
+
   // Extract Recent Strategic Developments from parsed sections if not in DB
-  const parsedRecentDev = playersSections.find(s => 
-      s.title.toLowerCase().includes('strategic development') || 
-      s.title.toLowerCase().includes('recent development')
-  );
+  const parsedRecentDev = playersSections.find(s => isStrategicDev(s.title));
   const recentStrategicDevelopmentsContent = report.recentStrategicDevelopments || (parsedRecentDev ? parsedRecentDev.content : null);
 
   const stats = extractMarketStats(report.marketResearchSummary || report.summary || report.description);
@@ -196,7 +214,7 @@ export default function ReportView({ report, lang, dict }: ReportViewProps) {
         {recentStrategicDevelopmentsContent && (
            <div>
              <div className="mt-6 mb-3">
-               <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">Recent Strategic Developments</h3>
+               <h3 className="font-bold text-xl text-gray-900 border-b-2 border-indigo-200 pb-2">{dict.recentStrategicDevelopments || 'Recent Strategic Developments'}</h3>
              </div>
              <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
                <div className="space-y-3">
@@ -301,7 +319,7 @@ export default function ReportView({ report, lang, dict }: ReportViewProps) {
         {/* Key Market Players */}
         {playersSections.map((section, index) => {
              // Skip Recent Strategic Developments if it's already displayed above
-             if ((section.title.toLowerCase().includes('strategic development') || section.title.toLowerCase().includes('recent development')) && recentStrategicDevelopmentsContent) return null;
+             if (isStrategicDev(section.title) && recentStrategicDevelopmentsContent) return null;
 
              return (
              <div key={index} className="bg-slate-50 p-5 rounded-lg border border-slate-200 mb-4">
