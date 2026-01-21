@@ -1,0 +1,121 @@
+Skip to content
+BrainyInsights
+BrainyInsights
+
+Pro
+
+thebrainyinsights
+
+
+Find…
+F
+
+Project Settings
+Go to Team Settings
+Search...
+General
+Build and Deployment
+Domains
+Environments
+Environment Variables
+Git
+Integrations
+Deployment Protection
+Functions
+Caches
+Cron Jobs
+Microfrontends
+Project Members
+Webhooks
+Drains
+Security
+Connectivity
+Advanced
+Fluid Compute
+Enable fluid compute for your Vercel Functions to automatically manage concurrency and optimize performance. Vercel will handle the defaults to ensure the best experience for your workload.
+
+A new Deployment is required for your changes to take effect.
+
+Enabled
+View Fluid compute metrics
+Learn more about Fluid compute
+
+Function Regions
+These are the regions on Vercel's network that your Vercel Functions will execute in. You can use up to 3 regions on your current Pro plan.
+
+A new Deployment is required for your changes to take effect.
+
+
+Europe
+
+North America
+iad1
+
+South America
+
+Asia Pacific
+
+Africa
+
+Middle East
+Learn more about Function Regions
+
+Function CPU
+This controls the maximum amount of CPU utilization your Vercel Functions can use while executing. Standard is optimal for most frontend workloads.
+
+A new Deployment is required for your changes to take effect.
+
+​
+Standard
+
+1 vCPU
+2 GB Memory
+Predictable performance for production workloads
+
+​
+Performance
+
+2 vCPUs
+4 GB Memory
+Increased performance for latency-sensitive applications and SSR workloads
+
+Learn more about Function CPU and Pricing
+
+
+Advanced Settings
+Configure detailed function settings manually.
+Function Max Duration
+This setting controls the default maximum duration for all Vercel Functions in this project. You can optionally override this setting at the function level.
+
+A new Deployment is required for your changes to take effect.
+
+Default Max Duration
+800
+seconds
+Learn more about Function Max Duration
+
+Function Failover
+Automatically failover Vercel Functions to the nearest region. You can customize regions through vercel.json.
+
+A new Deployment is required for your changes to take effect.
+
+Disabled
+
+This feature is Enterprise only. Contact Sales
+
+Home
+Docs
+Knowledge Base
+Academy
+Help
+Contact
+All systems normal.
+
+Select a display theme:
+
+system
+
+light
+
+dark
+thebrainyinsights - Overview – Vercel

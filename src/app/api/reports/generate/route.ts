@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { generateSlug, generateSKU, getMarketYears } from '@/lib/utils';
 import { calculateCost, openai } from '@/lib/openai'; // Import openai and calculateCost
 
-export const maxDuration = 300; // 5 minutes timeout for Vercel Pro
+export const maxDuration = 800; // Updated to match VPS Enhanced limit
 
 // Helper function to get prompt content from DB
 async function getPrompt(promptName: string): Promise<string> {
