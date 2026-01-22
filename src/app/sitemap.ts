@@ -7,24 +7,18 @@ const ITEMS_PER_SITEMAP = 1000;
 
 export async function generateSitemaps() {
   // Calculate total items to determine how many sitemaps we need
-  const [reportCount, categoryCount, prCount] = await Promise.all([
+  const [reportCount, prCount] = await Promise.all([
     prisma.report.count({ where: { status: 'PUBLISHED' } }),
-    prisma.category.count({ where: { status: 'PUBLISHED' } }),
     prisma.pressRelease.count({ where: { published: true } })
   ]);
 
-  const totalItems = (reportCount + categoryCount + prCount) * locales.length;
+  const totalItems = (reportCount + prCount) * locales.length;
   const totalChunks = Math.ceil(totalItems / ITEMS_PER_SITEMAP);
 
   const sitemaps = [{ id: 'static' }];
   
   for (let i = 0; i < totalChunks; i++) {
     sitemaps.push({ id: `dynamic-${i}` });
-  }
-
-  // If no dynamic items, ensure at least one dynamic sitemap is generated (though empty) or just return static
-  if (sitemaps.length === 1 && totalItems > 0) {
-      sitemaps.push({ id: 'dynamic-0' });
   }
 
   return sitemaps;
