@@ -2,6 +2,8 @@ import { Metadata, Viewport } from 'next';
 import Header from '@/components/new_ui/Header';
 import Footer from '@/components/new_ui/Footer';
 import { getDictionary } from '@/i18n/dictionaries';
+import { isValidLocale, locales } from '@/i18n/config';
+import { notFound } from 'next/navigation';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -11,8 +13,12 @@ export const viewport: Viewport = {
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
+  
+  if (!isValidLocale(lang)) {
+    notFound();
+  }
+
   const baseUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
-  const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
 
   // Construct hreflang alternates
   const languageAlternates: Record<string, string> = {};
@@ -76,6 +82,11 @@ export default async function Layout({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
+  
+  if (!isValidLocale(lang)) {
+    notFound();
+  }
+
   const dict = getDictionary(lang);
 
   return (

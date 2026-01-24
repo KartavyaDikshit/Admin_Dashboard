@@ -6,6 +6,8 @@ import FeaturedCategories from '@/components/new_ui/FeaturedCategories';
 import FeaturedReports from '@/components/new_ui/FeaturedReports';
 import Testimonials from '@/components/new_ui/Testimonials';
 import { Metadata } from 'next';
+import { isValidLocale } from '@/i18n/config';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: Promise<{ lang: string }>;
@@ -13,6 +15,11 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
+  
+  if (!isValidLocale(lang)) {
+    notFound();
+  }
+
   const dict = getDictionary(lang) as any;
   const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
 
@@ -51,6 +58,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Home({ params }: Props) {
   const { lang } = await params;
+  
+  if (!isValidLocale(lang)) {
+    notFound();
+  }
+
   const dict = getDictionary(lang);
   const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
   
