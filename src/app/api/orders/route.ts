@@ -86,3 +86,32 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const body = await request.json()
+    const { ids } = body
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
+    }
+
+    const result = await prisma.order.deleteMany({
+      where: {
+        id: {
+          in: ids
+        }
+      }
+    })
+
+    return NextResponse.json({ success: true, count: result.count })
+  } catch (error) {
+    console.error('Delete orders error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendEmail, emailTemplates } from '@/lib/email';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth';
 
 export async function POST(req: NextRequest) {
   try {
@@ -80,6 +82,35 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(requests);
   } catch (error) {
     console.error('Error fetching customization requests:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await req.json();
+    const { ids } = body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+    }
+
+    const result = await prisma.customizationRequest.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+
+    return NextResponse.json({ success: true, count: result.count });
+  } catch (error) {
+    console.error('Error deleting customization requests:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

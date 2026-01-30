@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendEmail, emailTemplates } from '@/lib/email';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth';
 
 export async function GET(request: Request) {
   try {
@@ -102,5 +104,34 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error creating enquiry:', error);
     return NextResponse.json({ message: 'Failed to create enquiry' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { ids } = body;
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return NextResponse.json({ message: 'Invalid request' }, { status: 400 });
+    }
+
+    const result = await prisma.enquiry.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+
+    return NextResponse.json({ success: true, count: result.count });
+  } catch (error) {
+    console.error('Error deleting enquiries:', error);
+    return NextResponse.json({ message: 'Failed to delete enquiries' }, { status: 500 });
   }
 }

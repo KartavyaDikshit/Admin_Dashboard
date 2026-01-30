@@ -32,6 +32,8 @@ export default function OrderList({ searchParams }: OrderListProps) {
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [pagination, setPagination] = useState({ page: 1, limit: 25, total: 0, totalPages: 0 })
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const fetchOrders = useCallback(async () => {
     setLoading(true)
@@ -72,6 +74,51 @@ export default function OrderList({ searchParams }: OrderListProps) {
     fetchOrders()
   }, [fetchOrders])
 
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(new Set(orders.map(o => o.id)))
+    } else {
+      setSelectedIds(new Set())
+    }
+  }
+
+  const handleSelectOne = (id: string) => {
+    const newSelected = new Set(selectedIds)
+    if (newSelected.has(id)) {
+      newSelected.delete(id)
+    } else {
+      newSelected.add(id)
+    }
+    setSelectedIds(newSelected)
+  }
+
+  const handleDelete = async () => {
+    if (selectedIds.size === 0) return
+    if (!confirm(`Are you sure you want to delete ${selectedIds.size} orders?`)) return
+
+    setIsDeleting(true)
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: Array.from(selectedIds) })
+      })
+
+      if (response.ok) {
+        toast.success('Orders deleted successfully')
+        setSelectedIds(new Set())
+        fetchOrders()
+      } else {
+        const data = await response.json()
+        toast.error(data.error || 'Failed to delete orders')
+      }
+    } catch {
+      toast.error('Failed to delete orders')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -82,11 +129,30 @@ export default function OrderList({ searchParams }: OrderListProps) {
             Manage customer orders ({pagination.total} total)
           </p>
         </div>
-        {/* No create button for orders, as they are typically created via frontend */}
+        {selectedIds.size > 0 && (
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 disabled:opacity-50"
+          >
+            {isDeleting ? 'Deleting...' : `Delete Selected (${selectedIds.size})`}
+          </button>
+        )}
       </div>
 
       {/* Table */}
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
+        {orders.length > 0 && (
+            <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 flex items-center">
+                <input
+                    type="checkbox"
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                    checked={orders.length > 0 && selectedIds.size === orders.length}
+                    onChange={handleSelectAll}
+                />
+                <span className="ml-2 text-sm text-gray-500">Select All</span>
+            </div>
+        )}
         {loading ? (
           <div className="p-6">
             <div className="animate-pulse space-y-4">
@@ -102,17 +168,22 @@ export default function OrderList({ searchParams }: OrderListProps) {
         ) : (
           <ul className="divide-y divide-gray-200">
             {orders.map((order) => (
-              <li key={order.id} className="px-4 py-4 hover:bg-gray-50">
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0">
-                        <Link
-                          href={`/admin/orders/${order.id}`} // Link to order detail page (if implemented)
-                          className="text-sm font-medium text-gray-900 hover:text-indigo-600"
-                        >
-                          Order #{order.orderNumber}
-                        </Link>
+              <li key={order.id} className="px-4 py-4 hover:bg-gray-50 flex items-center">
+                <input
+                    type="checkbox"
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded mr-4"
+                    checked={selectedIds.has(order.id)}
+                    onChange={() => handleSelectOne(order.id)}
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <Link
+                        href={`/admin/orders/${order.id}`}
+                        className="text-sm font-medium text-gray-900 hover:text-indigo-600"
+                      >
+                        Order #{order.orderNumber}
+                      </Link>
                         <div className="mt-1 flex items-center space-x-4 text-xs text-gray-500">
                           <span>Customer: {order.customerName} ({order.customerEmail})</span>
                           <span>Items: {order.items.length}</span>
@@ -148,7 +219,6 @@ export default function OrderList({ searchParams }: OrderListProps) {
                       </div>
                     </div>
                   </div>
-                </div>
               </li>
             ))}
           </ul>

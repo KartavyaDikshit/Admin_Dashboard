@@ -20,7 +20,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
-  const canonicalUrl = report.canonicalUrl || `${siteUrl}/${lang}/reports/${slug}`;
+  // Always use dynamic canonical URL to ensure correct locale is used
+  // This overrides potentially incorrect hardcoded URLs in the database
+  const canonicalUrl = `${siteUrl}/${lang}/reports/${slug}`;
 
   // Combine all keywords for better SEO
   const allKeywords = [
@@ -123,12 +125,6 @@ export default async function ReportDetailPage({ params }: Props) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(report.schemaMarkup) }}
-        />
-      )}
-      {report.breadcrumbData && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(report.breadcrumbData) }}
         />
       )}
       {report.faqData && (

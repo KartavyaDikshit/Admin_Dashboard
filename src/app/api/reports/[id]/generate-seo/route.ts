@@ -35,6 +35,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
         description: true,
         summary: true,
         slug: true,
+        imageUrl: true,
       },
     });
 
@@ -42,7 +43,8 @@ export async function POST(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'Report not found' }, { status: 404 });
     }
 
-    const { currentYear, forecastPeriod } = getMarketYears();
+    const { currentYear, forecastPeriod, forecastEndYear } = getMarketYears();
+    const baseYear = currentYear - 1;
 
     const prompt = `
       You are an expert in SEO and content strategy for market research reports.
@@ -51,27 +53,34 @@ export async function POST(request: NextRequest, context: RouteContext) {
       Report Title: "${report.title}"
       ${report.description ? `Report Description: "${report.description}"` : 'Report Description: (Not provided, generate based on title)'}
       ${report.summary ? `Report Summary: "${report.summary}"` : ''}
-      Base Slug: "${report.slug}" (for canonical URL)
+      Base Slug: "${report.slug}"
       Current Year: ${currentYear}
+      Base Domain: "https://www.brainyinsights.com"
 
       IMPORTANT: 
       1. Ensure all metadata is optimized for the year ${currentYear}. 
       2. If you include years in the meta title or description (e.g., "Market Analysis ${currentYear}"), use ${currentYear} or future forecast years (e.g., ${forecastPeriod}). 
-      3. DO NOT use previous years like ${currentYear - 1} or ${currentYear - 2}.
+      3. DO NOT use previous years like ${currentYear - 1} or ${currentYear - 2} unless referring to historical data.
+      4. For any URLs generated (in Schema Markup), ALWAYS use "https://www.brainyinsights.com" as the domain. Do NOT use "yourdomain.com" or "example.com".
+
+      CRITICAL: Generate the metaDescription strictly using this format:
+      "The {title} was valued at USD XX [Billion/Million] in ${baseYear}. The market is projected to reach USD XX [Billion/Million] by ${forecastEndYear}, growing at a CAGR of XX% during the ${forecastPeriod} period."
+      
+      Replace "XX" with realistic estimates based on the market type (e.g., if it's a niche market use Million, if large use Billion).
+      - Ensure the values are plausible.
+      - DO NOT use placeholders like "XX" in the final output.
+      - DO NOT add extra fluff to the start or end of this sentence.
 
       Please provide the output as a JSON object with the following keys. Ensure all fields are optimized for SEO and target relevant market research keywords.
       - metaTitle (String, max ~60 characters, based on title, including high-value keywords)
-      - metaDescription (String, max ~160 characters, based on description/summary or title, compelling and keyword-rich)
+      - metaDescription (String, max ~160 characters, strictly following the format above)
       - keywords (Array of Strings, list of primary and secondary keywords relevant to this market report)
       - semanticKeywords (Array of Strings, LSI keywords and related terms)
-      - canonicalUrl (String, derived from base slug, e.g., "https://www.brainyinsights.com/reports/base-slug")
       - ogTitle (String, for Open Graph, similar to metaTitle)
       - ogDescription (String, for Open Graph, similar to metaDescription)
-      - ogImage (String, a placeholder URL like "https://www.brainyinsights.com/og-report-image.jpg")
       - twitterTitle (String, similar to ogTitle)
       - twitterDescription (String, similar to ogDescription)
-      - schemaMarkup (JSON object for Report or Article schema, include title, description, and placeholder image)
-      - breadcrumbData (JSON object for BreadcrumbList schema, include home, categories, and report)
+      - schemaMarkup (JSON object for Report or Article schema, include title, description)
       - faqData (JSON object for FAQPage schema, generate 2-3 relevant questions and answers)
 
       Ensure all generated content is highly relevant and professional for a market research context.
@@ -100,10 +109,14 @@ export async function POST(request: NextRequest, context: RouteContext) {
 
       const generatedSeoData = JSON.parse(generatedContentString);
 
-      // Sanitize canonical URL to match expected format
-      const canonicalUrl = `https://www.brainyinsights.com/reports/${report.slug}`; // Assuming a fixed domain
+      // Handle OG Image logic - Force specific URL format as requested
+      // User requested format: https://www.brainyinsights.com/upload/${slug}.jpg
+      const ogImage = `https://www.brainyinsights.com/upload/${report.slug}.jpg`;
 
       // Update the report in the database
+      // Note: We are deliberately NOT updating 'canonicalUrl' here. 
+      // It should be generated dynamically on the frontend to ensure the correct locale is always used.
+      // We also do NOT update breadcrumbData, relying on frontend dynamic generation.
       const updatedReport = await prisma.report.update({
         where: { id: reportId },
         data: {
@@ -111,14 +124,14 @@ export async function POST(request: NextRequest, context: RouteContext) {
           metaDescription: generatedSeoData.metaDescription,
           keywords: generatedSeoData.keywords || [],
           semanticKeywords: generatedSeoData.semanticKeywords || [],
-          canonicalUrl: canonicalUrl,
+          // canonicalUrl: DO NOT UPDATE - Leave dynamic
           ogTitle: generatedSeoData.ogTitle,
           ogDescription: generatedSeoData.ogDescription,
-          ogImage: generatedSeoData.ogImage,
+          ogImage: ogImage,
           twitterTitle: generatedSeoData.twitterTitle,
           twitterDescription: generatedSeoData.twitterDescription,
           schemaMarkup: generatedSeoData.schemaMarkup,
-          breadcrumbData: generatedSeoData.breadcrumbData,
+          // breadcrumbData: DO NOT UPDATE - Leave dynamic from frontend
           faqData: generatedSeoData.faqData,
         },
       });

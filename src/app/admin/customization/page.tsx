@@ -23,6 +23,8 @@ export default function AdminCustomizationPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchRequests();
@@ -34,6 +36,7 @@ export default function AdminCustomizationPage() {
       if (res.ok) {
         const data = await res.json();
         setRequests(data);
+        setSelectedIds(new Set()); // Reset on fetch
       } else {
         toast.error('Failed to fetch customization requests');
       }
@@ -61,6 +64,50 @@ export default function AdminCustomizationPage() {
     if (end && requestDate > end) return false;
     return true;
   });
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(new Set(filteredRequests.map(r => r.id)));
+    } else {
+      setSelectedIds(new Set());
+    }
+  };
+
+  const handleSelectOne = (id: string) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const handleDelete = async () => {
+    if (selectedIds.size === 0) return;
+    if (!confirm(`Are you sure you want to delete ${selectedIds.size} requests?`)) return;
+
+    setIsDeleting(true);
+    try {
+      const response = await fetch('/api/customization', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: Array.from(selectedIds) }),
+      });
+
+      if (response.ok) {
+        toast.success('Requests deleted successfully');
+        fetchRequests();
+      } else {
+        const data = await response.json();
+        toast.error(data.error || 'Failed to delete requests');
+      }
+    } catch {
+      toast.error('Failed to delete requests');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const handleExport = () => {
     if (filteredRequests.length === 0) {
@@ -117,6 +164,15 @@ export default function AdminCustomizationPage() {
                     placeholder="End Date"
                 />
             </div>
+            {selectedIds.size > 0 && (
+                <button
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                    className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
+                >
+                    {isDeleting ? 'Deleting...' : `Delete (${selectedIds.size})`}
+                </button>
+            )}
             <button 
             onClick={handleExport}
             className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
@@ -132,6 +188,14 @@ export default function AdminCustomizationPage() {
           <table className="min-w-full leading-normal">
             <thead>
               <tr>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-10">
+                    <input
+                        type="checkbox"
+                        checked={filteredRequests.length > 0 && selectedIds.size === filteredRequests.length}
+                        onChange={handleSelectAll}
+                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                    />
+                </th>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Date
                 </th>
@@ -155,19 +219,27 @@ export default function AdminCustomizationPage() {
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={6} className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+                  <td colSpan={7} className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                     Loading...
                   </td>
                 </tr>
               ) : filteredRequests.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+                  <td colSpan={7} className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                     No requests found.
                   </td>
                 </tr>
               ) : (
                 filteredRequests.map((request) => (
                   <tr key={request.id}>
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <input
+                            type="checkbox"
+                            checked={selectedIds.has(request.id)}
+                            onChange={() => handleSelectOne(request.id)}
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                        />
+                    </td>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm whitespace-nowrap">
                        {new Date(request.createdAt).toLocaleDateString()}
                     </td>
