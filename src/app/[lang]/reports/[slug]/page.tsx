@@ -106,9 +106,27 @@ export default async function ReportDetailPage({ params }: Props) {
     ));
   };
 
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  
+  // Patch schemaMarkup URL to include correct locale
+  if (report.schemaMarkup && typeof report.schemaMarkup === 'object' && !Array.isArray(report.schemaMarkup)) {
+    const patchedSchema = { ...(report.schemaMarkup as object) };
+    (patchedSchema as any).url = `${siteUrl}/${lang}/reports/${report.slug}`;
+    report.schemaMarkup = patchedSchema as any;
+  }
+
+  // Patch faqData URL to include correct locale if it exists
+  if (report.faqData && typeof report.faqData === 'object' && !Array.isArray(report.faqData)) {
+    // Only patch if url property exists or if we want to enforce it.
+    if ('url' in report.faqData) {
+        const patchedFaq = { ...(report.faqData as object) };
+        (patchedFaq as any).url = `${siteUrl}/${lang}/reports/${report.slug}`;
+        report.faqData = patchedFaq as any;
+    }
+  }
+
   const serializedReport = safeSerialize(report);
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: dict.home || 'Home', item: `${siteUrl}/${lang}` },
     { name: dict.reports || 'Reports', item: `${siteUrl}/${lang}/reports` },
