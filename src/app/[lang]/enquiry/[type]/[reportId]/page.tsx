@@ -2,6 +2,7 @@ import { getReport } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import EnquiryPageForm from '@/components/new_ui/EnquiryPageForm';
 import { getDictionary } from '@/i18n/dictionaries';
+import { Metadata } from 'next';
 
 interface Props {
   params: Promise<{
@@ -9,6 +10,15 @@ interface Props {
     type: string;
     reportId: string;
   }>;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    robots: {
+      index: false,
+      follow: true,
+    },
+  };
 }
 
 export default async function EnquiryPage({ params }: Props) {

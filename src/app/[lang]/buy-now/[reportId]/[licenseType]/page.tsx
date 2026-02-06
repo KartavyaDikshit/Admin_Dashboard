@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import BuyNowForm from '@/components/new_ui/BuyNowForm';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { Metadata } from 'next';
 
 interface Props {
   params: Promise<{
@@ -11,6 +12,15 @@ interface Props {
     reportId: string;
     licenseType: string;
   }>;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    robots: {
+      index: false,
+      follow: true,
+    },
+  };
 }
 
 export default async function BuyNowPage({ params }: Props) {

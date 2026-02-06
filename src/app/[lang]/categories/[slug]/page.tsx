@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Category Not Found' };
   }
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com';
   const canonicalUrl = category.canonicalUrl || `${siteUrl}/${lang}/categories/${slug}`;
   const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
 
@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   locales.forEach(l => {
     languages[l] = `${siteUrl}/${l}/categories/${slug}`;
   });
+  languages['x-default'] = `${siteUrl}/en/categories/${slug}`;
 
   return {
     title: category.metaTitle || category.name,
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: (category.ogDescription || category.metaDescription || category.description) ?? undefined,
       type: 'website',
       url: canonicalUrl,
-      images: category.ogImage ? [{ url: category.ogImage }] : [],
+      images: category.icon ? [{ url: `${siteUrl}/upload/${category.slug}.png` }] : [],
       siteName: 'The Brainy Insights',
       locale: lang,
     },
@@ -47,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title: category.ogTitle || category.metaTitle || category.name,
       description: (category.ogDescription || category.metaDescription || category.description) ?? undefined,
-      images: category.ogImage ? [category.ogImage] : [],
+      images: category.icon ? [`${siteUrl}/upload/${category.slug}.png`] : [],
       site: '@thebrainyinsight',
     },
     other: {
@@ -65,7 +66,7 @@ export default async function CategoryDetailPage({ params }: Props) {
     notFound();
   }
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: dict.home || 'Home', item: `${siteUrl}/${lang}` },
     { name: dict.categoriesLabel || 'Categories', item: `${siteUrl}/${lang}/categories` },
@@ -105,8 +106,8 @@ export default async function CategoryDetailPage({ params }: Props) {
           <div className="flex items-start space-x-6 flex-1 pb-6">
             <div className="flex-shrink-0">
               <div className="h-24 w-24 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center text-white">
-                {category.icon && (category.icon.startsWith('http') || category.icon.startsWith('/')) ? (
-                  <img src={category.icon} alt={category.name} className="w-16 h-16 object-contain" />
+                {category.icon ? (
+                  <img src={`/upload/${category.slug}.png`} alt={category.name} className="w-16 h-16 object-contain" />
                 ) : (
                   <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="32" cy="32" r="24" stroke="currentColor" strokeWidth="2.5" fill="none"></circle>
@@ -143,9 +144,9 @@ export default async function CategoryDetailPage({ params }: Props) {
                     <div className="text-card-foreground rounded-xl border border-gray-200 bg-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden h-full flex flex-col sm:flex-row">
                       {/* Image Section */}
                       <div className="relative w-full sm:w-48 h-32 sm:h-auto bg-gray-100 shrink-0">
-                        {category.icon && (category.icon.startsWith('http') || category.icon.startsWith('/')) ? (
+                        {category.icon ? (
                           <img 
-                            src={category.icon} 
+                            src={`/upload/${category.slug}.png`} 
                             alt={category.name}
                             className="w-full h-full object-cover"
                           />

@@ -19,10 +19,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com';
   // Always use dynamic canonical URL to ensure correct locale is used
   // This overrides potentially incorrect hardcoded URLs in the database
   const canonicalUrl = `${siteUrl}/${lang}/reports/${slug}`;
+
+  // Construct hreflang alternates
+  const localesList = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
+  const languageAlternates: Record<string, string> = {};
+  localesList.forEach(locale => {
+    languageAlternates[locale] = `${siteUrl}/${locale}/reports/${slug}`;
+  });
+  languageAlternates['x-default'] = `${siteUrl}/en/reports/${slug}`;
 
   // Combine all keywords for better SEO
   const allKeywords = [
@@ -53,6 +61,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     alternates: {
       canonical: canonicalUrl,
+      languages: languageAlternates,
     },
     openGraph: {
       title: report.ogTitle || report.metaTitle || report.title,
@@ -106,24 +115,61 @@ export default async function ReportDetailPage({ params }: Props) {
     ));
   };
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com';
   
-  // Patch schemaMarkup URL to include correct locale
-  if (report.schemaMarkup && typeof report.schemaMarkup === 'object' && !Array.isArray(report.schemaMarkup)) {
-    const patchedSchema = { ...(report.schemaMarkup as object) };
-    (patchedSchema as any).url = `${siteUrl}/${lang}/reports/${report.slug}`;
-    report.schemaMarkup = patchedSchema as any;
+  // Patch schemaMarkup and other fields to include correct locale and streamlined image URLs
+  const localizedReportUrl = `${siteUrl}/${lang}/reports/${report.slug}`;
+  const streamlinedImageUrl = `${siteUrl}/upload/${report.slug}.jpg`;
+
+  const patchSchema = (schema: any) => {
+    if (!schema || typeof schema !== 'object') return schema;
+    
+    if (Array.isArray(schema)) {
+      return schema.map(item => patchSchema(item));
+    }
+
+    const patched = { ...schema };
+    
+    // Patch any URL property that looks like a report URL or is the main url property
+    if (patched.url && typeof patched.url === 'string') {
+      patched.url = localizedReportUrl;
+    }
+    if (patched['@id'] && typeof patched['@id'] === 'string' && patched['@id'].includes(report.slug)) {
+      patched['@id'] = localizedReportUrl;
+    }
+    if (patched.image && typeof patched.image === 'string' && (patched.image.includes('/upload/') || patched.image.includes('vercel-storage'))) {
+      patched.image = streamlinedImageUrl;
+    }
+    
+    if (patched.mainEntityOfPage && typeof patched.mainEntityOfPage === 'object') {
+       patched.mainEntityOfPage = { ...patched.mainEntityOfPage };
+       patched.mainEntityOfPage['@id'] = localizedReportUrl;
+       if (patched.mainEntityOfPage.url) {
+         patched.mainEntityOfPage.url = localizedReportUrl;
+       }
+    }
+    
+    // Recursively patch other objects
+    for (const key in patched) {
+      if (typeof patched[key] === 'object' && key !== 'mainEntityOfPage') {
+        patched[key] = patchSchema(patched[key]);
+      }
+    }
+    
+    return patched;
+  };
+
+  if (report.schemaMarkup) {
+    report.schemaMarkup = patchSchema(report.schemaMarkup);
   }
 
-  // Patch faqData URL to include correct locale if it exists
-  if (report.faqData && typeof report.faqData === 'object' && !Array.isArray(report.faqData)) {
-    // Only patch if url property exists or if we want to enforce it.
-    if ('url' in report.faqData) {
-        const patchedFaq = { ...(report.faqData as object) };
-        (patchedFaq as any).url = `${siteUrl}/${lang}/reports/${report.slug}`;
-        report.faqData = patchedFaq as any;
-    }
+  if (report.faqData) {
+    report.faqData = patchSchema(report.faqData);
   }
+  
+  // Also ensure report top-level fields are streamlined
+  report.ogImage = streamlinedImageUrl;
+  report.twitterImage = streamlinedImageUrl;
 
   const serializedReport = safeSerialize(report);
 

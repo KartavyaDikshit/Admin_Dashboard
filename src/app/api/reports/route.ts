@@ -56,6 +56,8 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status')
     const featured = searchParams.get('featured')
     const aiGenerated = searchParams.get('aiGenerated')
+    const startDate = searchParams.get('startDate')
+    const endDate = searchParams.get('endDate')
     const isExport = searchParams.get('export') === 'true'
 
     const skip = isExport ? undefined : (page - 1) * limit
@@ -86,6 +88,12 @@ export async function GET(request: NextRequest) {
     }
     if (featured !== null) where.featured = featured === 'true'
     if (aiGenerated !== null) where.aiGenerated = aiGenerated === 'true'
+
+    if (startDate || endDate) {
+      where.publishedDate = {};
+      if (startDate) where.publishedDate.gte = new Date(startDate);
+      if (endDate) where.publishedDate.lte = new Date(endDate);
+    }
 
     const reports: any[] = await prisma.report.findMany({
       where,

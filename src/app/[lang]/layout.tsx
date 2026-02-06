@@ -18,13 +18,14 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     notFound();
   }
 
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com';
 
   // Construct hreflang alternates
   const languageAlternates: Record<string, string> = {};
   locales.forEach(locale => {
     languageAlternates[locale] = `${baseUrl}/${locale}`;
   });
+  languageAlternates['x-default'] = `${baseUrl}/en`;
   
   return {
       title: {
@@ -35,6 +36,9 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     alternates: {
       canonical: `${baseUrl}/${lang}`,
       languages: languageAlternates,
+    },
+    icons: {
+      icon: '/favicon.png',
     },
     robots: {
       index: true,

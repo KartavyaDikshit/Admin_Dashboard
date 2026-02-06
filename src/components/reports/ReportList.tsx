@@ -310,6 +310,26 @@ export default function ReportList() {
             <option key={cat.id} value={cat.id}>{cat.name}</option>
           ))}
         </select>
+
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500">From:</span>
+          <input 
+            type="date" 
+            className="border rounded p-2 text-sm"
+            value={searchParams.get('startDate') || ''}
+            onChange={(e) => updateFilters('startDate', e.target.value)}
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500">To:</span>
+          <input 
+            type="date" 
+            className="border rounded p-2 text-sm"
+            value={searchParams.get('endDate') || ''}
+            onChange={(e) => updateFilters('endDate', e.target.value)}
+          />
+        </div>
       </div>
 
       <div className="bg-white shadow overflow-hidden sm:rounded-md">

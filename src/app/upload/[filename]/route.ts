@@ -15,24 +15,34 @@ export async function GET(
   const slug = filename.replace(/\.(jpg|jpeg|png|webp)$/i, '');
 
   try {
+    // Try to find as a report first
     const report = await prisma.report.findFirst({
       where: {
         OR: [
             { slug: slug },
-            // Also try to find by checking if slug matches report.slug (exact)
+            { reportId: slug }
         ]
       },
-      select: { imageUrl: true, imageAlt: true }
+      select: { imageUrl: true }
     });
 
-    if (!report || !report.imageUrl) {
-      // Fallback: Check if the filename IS the imageUrl (e.g. uploaded locally)
-      // Or return 404
+    let sourceUrl = report?.imageUrl;
+
+    // If not found as report, try to find as a category
+    if (!sourceUrl) {
+      const category = await prisma.category.findFirst({
+        where: { slug: slug },
+        select: { icon: true }
+      });
+      sourceUrl = category?.icon;
+    }
+
+    if (!sourceUrl) {
       return new NextResponse('Image not found', { status: 404 });
     }
 
     // Fetch the actual image
-    const imageResponse = await fetch(report.imageUrl);
+    const imageResponse = await fetch(sourceUrl);
 
     if (!imageResponse.ok) {
         return new NextResponse('Failed to fetch image source', { status: 502 });

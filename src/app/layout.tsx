@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   },
   description: 'The Brainy Insights provides comprehensive market research reports, industry analysis, and consulting services to help businesses grow globally.',
   keywords: ["AI", "Pipeline", "Token Optimization", "GPT-4o mini", "Report Generation"],
+  icons: {
+    icon: '/favicon.png',
+  },
   verification: {
     google: "-a-fjg9Wj3dXNQcvPx4v418rK52VsWdjL87OdUWNotU",
   },
