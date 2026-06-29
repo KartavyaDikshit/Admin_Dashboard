@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     notFound();
   }
 
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com';
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
 
   // Construct hreflang alternates
   const languageAlternates: Record<string, string> = {};
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       title: {
         default: 'Global Market Research Reports & Consulting',
         template: '%s'
-      },    description: 'The Brainy Insights offers top-notch market research reports and consulting services. Gain actionable insights and competitive analysis for your business.',
+      },    description: 'Fior Markets offers top-notch market research reports and consulting services. Gain actionable insights and competitive analysis for your business.',
     metadataBase: new URL(baseUrl),
     alternates: {
       canonical: `${baseUrl}/${lang}`,
@@ -54,25 +54,25 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     openGraph: {
       type: 'website',
       locale: lang,
-      siteName: 'The Brainy Insights',
+      siteName: 'Fior Markets',
       url: `${baseUrl}/${lang}`,
       title: 'Global Market Research Reports & Consulting',
-      description: 'The Brainy Insights offers top-notch market research reports and consulting services. Gain actionable insights and competitive analysis for your business.',
+      description: 'Fior Markets offers top-notch market research reports and consulting services. Gain actionable insights and competitive analysis for your business.',
       images: [
         {
             url: '/og-image.jpg', // Assuming you'd have a default OG image
             width: 1200,
             height: 630,
-            alt: 'The Brainy Insights',
+            alt: 'Fior Markets',
         }
       ]
     },
     twitter: {
       card: 'summary_large_image',
-      site: '@thebrainyinsight',
-      creator: '@thebrainyinsight',
+      site: '@fiormarkets',
+      creator: '@fiormarkets',
       title: 'Global Market Research Reports & Consulting',
-      description: 'The Brainy Insights offers top-notch market research reports and consulting services.',
+      description: 'Fior Markets offers top-notch market research reports and consulting services.',
     },
     keywords: ['market research', 'consulting services', 'global market reports', 'industry analysis', 'business intelligence'],
   };

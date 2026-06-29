@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 export const revalidate = 3600; // Revalidate every hour
 
 const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
-const baseUrl = process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com';
+const baseUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
 const ITEMS_PER_SITEMAP = 1000;
 
 export async function generateSitemaps() {

@@ -7,7 +7,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
 
   return {
     title: 'Research Methodology',
@@ -30,12 +30,12 @@ export default async function ResearchMethodology({ params }: Props) {
 
       <div className="max-w-5xl mx-auto px-6 py-16">
         <div className="bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-gray-100 prose max-w-none text-gray-700 leading-relaxed text-justify">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Research Methodology – The Brainy Insights</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Research Methodology – Fior Markets</h2>
             <p>
                 Research plays a critical role in enabling efficient and effective marketing strategies. In today’s highly competitive business environment, organizations require timely and accurate information across all industry verticals—covering customer preferences, market demand, competitive dynamics, industry trends, and distribution channels. As businesses operate in an ever-changing marketplace, this information must be continuously updated to support informed decision-making.
             </p>
             <p>
-                Brainy Insights adopts scientific and systematic research methodologies to deliver actionable market insights and comprehensive industry analysis that drive business success. Our approach involves in-depth market evaluation at a granular level, supported by advanced statistical tools that ensure accuracy, reliability, and precision in data analysis.
+                Fior Markets adopts scientific and systematic research methodologies to deliver actionable market insights and comprehensive industry analysis that drive business success. Our approach involves in-depth market evaluation at a granular level, supported by advanced statistical tools that ensure accuracy, reliability, and precision in data analysis.
             </p>
             <p>
                 Our research reports integrate both quantitative and qualitative dimensions of market analysis. Qualitative research is fundamental to understanding customer needs, preferences, usage behavior, and consumption patterns across specific industries. It helps marketers and investors gain deeper insight into customer perceptions, evaluate product concepts and designs, assess service offerings, define marketing challenges, and identify emerging opportunities.
@@ -44,7 +44,7 @@ export default async function ResearchMethodology({ params }: Props) {
                 Quantitative research focuses on structured data collection through surveys, interviews, email interactions, and pilot studies. This approach validates hypotheses developed during qualitative research, identifies empirical data patterns using statistical techniques, and supports accurate market estimation and forecasting.
             </p>
             <p>
-                Brainy Insights delivers comprehensive research and analysis based on factual insights obtained through interviews with CXOs, industry experts, and global specialists, complemented by secondary data from trusted sources. Our analysts and industry specialists design analytical frameworks and statistical models that convert raw data into actionable intelligence.
+                Fior Markets delivers comprehensive research and analysis based on factual insights obtained through interviews with CXOs, industry experts, and global specialists, complemented by secondary data from trusted sources. Our analysts and industry specialists design analytical frameworks and statistical models that convert raw data into actionable intelligence.
             </p>
 
             <h3 className="text-xl font-bold text-gray-900 mt-8 mb-4">Market Research Process</h3>
@@ -84,7 +84,7 @@ export default async function ResearchMethodology({ params }: Props) {
 
             <h4 className="font-bold text-gray-900 mt-6">In-House Library</h4>
             <p>
-                The Brainy Insights maintains a robust in-house repository of qualitative and quantitative data across multiple industries. This includes historical databases, internal audit reports, and archived research materials, which are updated regularly to reflect changing market conditions.
+                Fior Markets maintains a robust in-house repository of qualitative and quantitative data across multiple industries. This includes historical databases, internal audit reports, and archived research materials, which are updated regularly to reflect changing market conditions.
             </p>
 
             <h4 className="font-bold text-gray-900 mt-6">Market Estimation & Forecasting</h4>

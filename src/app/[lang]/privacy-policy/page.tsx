@@ -7,7 +7,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
 
   return {
     title: 'Privacy Policy',
@@ -29,13 +29,13 @@ export default async function PrivacyPolicy({ params }: Props) {
         <div className="prose max-w-none text-gray-700 leading-relaxed text-justify space-y-6">
           <h3 className="font-bold text-gray-900 text-lg">INTRODUCTION</h3>
           <p>
-            Brainy Insights Private Limited (“Company,” “we,” “us,” or “our”) is committed to protecting the privacy and personal information of its customers, website visitors, and users (collectively, “users”). This Website Privacy Policy (“Policy”) is designed to inform users about how we collect, use, store, and protect personal information when accessing or using our website (the “Site”).
+            Fior Markets Private Limited (“Company,” “we,” “us,” or “our”) is committed to protecting the privacy and personal information of its customers, website visitors, and users (collectively, “users”). This Website Privacy Policy (“Policy”) is designed to inform users about how we collect, use, store, and protect personal information when accessing or using our website (the “Site”).
             This Policy applies solely to information collected through the Site and does not extend to any third-party websites that may be accessed through links on our Site. Such third-party websites operate under their own privacy policies and data handling practices, which may differ materially from this Policy.
           </p>
 
           <h3 className="font-bold text-gray-900 text-lg">GENERAL DATA PROTECTION REGULATION (GDPR)</h3>
           <p>
-            This Policy is compliant with the General Data Protection Regulation (GDPR), which governs the protection and privacy of personal data of users accessing our website from the European Union. Users may contact us at sales@thebrainyinsights.com for any queries or concerns related to GDPR compliance.
+            This Policy is compliant with the General Data Protection Regulation (GDPR), which governs the protection and privacy of personal data of users accessing our website from the European Union. Users may contact us at sales@fiormarkets.com for any queries or concerns related to GDPR compliance.
           </p>
 
           <h3 className="font-bold text-gray-900 text-lg">USER PERSONAL DATA AND COMPANY RESPONSIBILITIES</h3>
@@ -55,7 +55,7 @@ export default async function PrivacyPolicy({ params }: Props) {
           </ul>
           <p>
             In the event of a purchase, users may be required to submit financial information such as credit or debit card details. Please note that we do not store or retain any financial information. Such data is processed securely by authorized third-party payment processors solely for the purpose of completing transactions.
-            For users located in the European Union, explicit consent is obtained before processing payment-related data. Users may withdraw their consent at any time by contacting us at payments@thebrainyinsights.com.
+            For users located in the European Union, explicit consent is obtained before processing payment-related data. Users may withdraw their consent at any time by contacting us at payments@fiormarkets.com.
           </p>
 
           <h3 className="font-bold text-gray-900 text-lg">PERSONAL DATA STORAGE AND USE</h3>

@@ -55,13 +55,13 @@ export async function POST(request: NextRequest, context: RouteContext) {
       ${report.summary ? `Report Summary: "${report.summary}"` : ''}
       Base Slug: "${report.slug}"
       Current Year: ${currentYear}
-      Base Domain: "https://www.brainyinsights.com"
+      Base Domain: "https://www.fiormarkets.com"
 
       IMPORTANT: 
       1. Ensure all metadata is optimized for the year ${currentYear}. 
       2. If you include years in the meta title or description (e.g., "Market Analysis ${currentYear}"), use ${currentYear} or future forecast years (e.g., ${forecastPeriod}). 
       3. DO NOT use previous years like ${currentYear - 1} or ${currentYear - 2} unless referring to historical data.
-      4. For any URLs generated (in Schema Markup), ALWAYS use "https://www.brainyinsights.com" as the domain. Do NOT use "yourdomain.com" or "example.com".
+      4. For any URLs generated (in Schema Markup), ALWAYS use "https://www.fiormarkets.com" as the domain. Do NOT use "yourdomain.com" or "example.com".
 
       CRITICAL: Generate the metaDescription strictly using this format:
       "The {title} was valued at USD XX [Billion/Million] in ${baseYear}. The market is projected to reach USD XX [Billion/Million] by ${forecastEndYear}, growing at a CAGR of XX% during the ${forecastPeriod} period."
@@ -110,8 +110,8 @@ export async function POST(request: NextRequest, context: RouteContext) {
       const generatedSeoData = JSON.parse(generatedContentString);
 
       // Handle OG Image logic - Force specific URL format as requested
-      // User requested format: https://www.brainyinsights.com/upload/${slug}.jpg
-      const ogImage = `https://www.brainyinsights.com/upload/${report.slug}.jpg`;
+      // User requested format: https://www.fiormarkets.com/upload/${slug}.jpg
+      const ogImage = `https://www.fiormarkets.com/upload/${report.slug}.jpg`;
 
       // Update the report in the database
       // Note: We are deliberately NOT updating 'canonicalUrl' here. 

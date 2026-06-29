@@ -7,7 +7,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
 
   return {
     title: 'Terms and Conditions',
@@ -27,35 +27,35 @@ export default async function TermsConditions({ params }: Props) {
         <h1 className="text-3xl font-bold text-gray-900 mb-8 border-b pb-4">Terms and Conditions</h1>
         
         <div className="prose max-w-none text-gray-700 leading-relaxed text-justify space-y-6">
-          <p><strong>Welcome to The Brainy Insights</strong></p>
+          <p><strong>Welcome to Fior Markets</strong></p>
           <p>
-            These Terms and Conditions govern your use of the website operated by The Brainy Insights, accessible at https://brainyinsights.com/ (the “Website”).
-            By accessing or using this Website, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you must not continue to use The Brainy Insights Website.
+            These Terms and Conditions govern your use of the website operated by Fior Markets, accessible at https://fiormarkets.com/ (the “Website”).
+            By accessing or using this Website, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you must not continue to use Fior Markets Website.
           </p>
 
           <h3 className="font-bold text-gray-900 text-lg">Definitions and Interpretation</h3>
           <p>
             The following terminology applies to these Terms and Conditions, the Privacy Policy, Disclaimer, and all related agreements:
             “Client,” “You,” “Your” refers to the individual accessing or using this Website and complying with the Company’s terms.
-            “The Company,” “We,” “Us,” “Our,” “Ourselves” refers to The Brainy Insights.
+            “The Company,” “We,” “Us,” “Our,” “Ourselves” refers to Fior Markets.
             “Party,” “Parties” refers collectively to the Client and the Company.
             All terms refer to the offer, acceptance, and consideration of payment necessary to provide our services in the most appropriate manner to meet the Client’s needs, in accordance with applicable laws of the Netherlands. Words used in the singular or plural, or any gender references, shall be deemed interchangeable.
           </p>
 
           <h3 className="font-bold text-gray-900 text-lg">Cookies</h3>
           <p>
-            We use cookies to enhance user experience. By accessing The Brainy Insights Website, you consent to the use of cookies in accordance with our Privacy Policy.
+            We use cookies to enhance user experience. By accessing Fior Markets Website, you consent to the use of cookies in accordance with our Privacy Policy.
             Cookies help us retrieve user details, enable website functionality, and improve usability. Some affiliate or third-party partners may also use cookies.
           </p>
 
           <h3 className="font-bold text-gray-900 text-lg">Intellectual Property Rights</h3>
           <p>
-            Unless otherwise stated, The Brainy Insights and/or its licensors own all intellectual property rights for the content published on this Website. All rights are reserved.
-            You may access content from The Brainy Insights for personal use only, subject to the restrictions outlined below.
+            Unless otherwise stated, Fior Markets and/or its licensors own all intellectual property rights for the content published on this Website. All rights are reserved.
+            You may access content from Fior Markets for personal use only, subject to the restrictions outlined below.
           </p>
           <p>You must not:</p>
           <ul className="list-disc pl-5">
-            <li>Republish material from The Brainy Insights</li>
+            <li>Republish material from Fior Markets</li>
             <li>Sell, rent, or sub-license material</li>
             <li>Reproduce, duplicate, or copy material</li>
             <li>Redistribute content</li>
@@ -63,22 +63,22 @@ export default async function TermsConditions({ params }: Props) {
           <p>This Agreement becomes effective from the date you access the Website.</p>
 
           <h3 className="font-bold text-gray-900 text-lg">Products and Services</h3>
-          <p>The Brainy Insights reserves the right to modify, update, suspend, or discontinue any product or service at its sole discretion without prior notice.</p>
+          <p>Fior Markets reserves the right to modify, update, suspend, or discontinue any product or service at its sole discretion without prior notice.</p>
 
           <h3 className="font-bold text-gray-900 text-lg">Delivery of Products</h3>
           <p>Purchased reports and products will generally be delivered within three (3) working days. Delivery timelines may vary depending on client-specific requirements or customization.</p>
 
           <h3 className="font-bold text-gray-900 text-lg">Limitation of Liability</h3>
-          <p>The Brainy Insights shall not be held liable for any direct, indirect, incidental, consequential, monetary, or statutory loss or damage arising from the use of our products, services, or information.</p>
+          <p>Fior Markets shall not be held liable for any direct, indirect, incidental, consequential, monetary, or statutory loss or damage arising from the use of our products, services, or information.</p>
 
           <h3 className="font-bold text-gray-900 text-lg">Payments</h3>
-          <p>Payments made on The Brainy Insights Website are processed through third-party payment gateways. By purchasing from our Website, you agree to the processing of payments through these third-party service providers.</p>
+          <p>Payments made on Fior Markets Website are processed through third-party payment gateways. By purchasing from our Website, you agree to the processing of payments through these third-party service providers.</p>
 
           <h3 className="font-bold text-gray-900 text-lg">Refund and Cancellation Policy</h3>
           <p>Due to the nature of our products and services, all sales are final. No refunds or cancellations will be provided once an order has been placed.</p>
 
           <h3 className="font-bold text-gray-900 text-lg">Warranty Disclaimer</h3>
-          <p>The Brainy Insights does not provide any warranties or guarantees, express or implied, regarding its products or services.</p>
+          <p>Fior Markets does not provide any warranties or guarantees, express or implied, regarding its products or services.</p>
 
           <h3 className="font-bold text-gray-900 text-lg">Hyperlinking to Our Content</h3>
           <p>The following organizations may link to our Website without prior written approval:</p>
@@ -108,7 +108,7 @@ export default async function TermsConditions({ params }: Props) {
           </ul>
           <p>
             Approval is subject to our discretion based on reputation, relevance, and mutual benefit.
-            Interested organizations must email The Brainy Insights with relevant details. Please allow 2–3 weeks for a response.
+            Interested organizations must email Fior Markets with relevant details. Please allow 2–3 weeks for a response.
             Approved organizations may link using:
           </p>
           <ul className="list-disc pl-5">

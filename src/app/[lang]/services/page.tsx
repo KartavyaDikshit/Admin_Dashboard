@@ -9,7 +9,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   const dict = getDictionary(lang);
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
 
   return {
     title: dict.services || 'Market Research Services',

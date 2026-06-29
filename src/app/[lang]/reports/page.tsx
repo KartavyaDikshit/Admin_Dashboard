@@ -31,7 +31,7 @@ export default async function ReportsPage({ params, searchParams }: Props) {
   const categoryId = resolvedSearchParams.category || '';
   const limit = 10;
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: dict.home || 'Home', item: `${siteUrl}/${lang}` },
     { name: dict.reports || 'Reports', item: `${siteUrl}/${lang}/reports` }

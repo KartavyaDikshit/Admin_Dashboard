@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Fetch Report Details to get the readable Report ID (TBI-XXXX)
+    // Fetch Report Details to get the readable Report ID (FM-XXXX)
     let displayReportId = reportId;
     try {
         const report = await prisma.report.findUnique({
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
 
          // 2. Send to Owner
          await sendEmail({
-            to: 'sales@thebrainyinsights.com',
+            to: 'sales@fiormarkets.com',
             subject: `New Customization Request - ${reportTitle?.substring(0, 30)}...`,
             html: emailTemplates.enquiryNotificationOwner(emailBody, requestType),
          });

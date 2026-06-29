@@ -25,8 +25,8 @@ export default async function EnquiryPage({ params }: Props) {
   const { lang, type, reportId } = await params;
   
   // We need to fetch report to get the title.
-  // reportId in URL is likely the friendly ID (TBI-XXXX) or slug?
-  // Request said ".../14822" (last 5 digits). My IDs are TBI-XXXX.
+  // reportId in URL is likely the friendly ID (FM-XXXX) or slug?
+  // Request said ".../14822" (last 5 digits). My IDs are FM-XXXX.
   // I'll assume reportId param IS the ID or I can try to fetch by ID.
   // getReport usually takes slug. I don't have slug here, I have reportId.
   // I need a way to fetch by ID.

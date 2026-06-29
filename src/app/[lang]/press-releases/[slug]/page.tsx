@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Press Release Not Found' };
   }
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
   const canonicalUrl = `${siteUrl}/${lang}/press-releases/${slug}`;
 
   return {
@@ -32,14 +32,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: pressRelease.description.substring(0, 160),
       url: canonicalUrl,
       type: 'article',
-      siteName: 'The Brainy Insights',
+      siteName: 'Fior Markets',
       publishedTime: pressRelease.publishedAt?.toISOString() || pressRelease.createdAt.toISOString(),
     },
     twitter: {
       card: 'summary_large_image',
       title: pressRelease.title,
       description: pressRelease.description.substring(0, 160),
-      site: '@thebrainyinsight',
+      site: '@fiormarkets',
     }
   };
 }
@@ -53,7 +53,7 @@ export default async function PressReleaseDetail({ params }: Props) {
     notFound();
   }
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: dict.home || 'Home', item: `${siteUrl}/${lang}` },
     { name: 'Press Releases', item: `${siteUrl}/${lang}/press-releases` },

@@ -20,7 +20,7 @@ export default async function PressReleases({ params }: { params: Promise<{ lang
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-8">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">{dict.pressReleases || 'Press Releases'}</h1>
-            <p className="text-xl md:text-2xl text-indigo-100 max-w-4xl mx-auto leading-relaxed">{dict.pressReleasesSubtitle || 'Latest news and updates from The Brainy Insights.'}</p>
+            <p className="text-xl md:text-2xl text-indigo-100 max-w-4xl mx-auto leading-relaxed">{dict.pressReleasesSubtitle || 'Latest news and updates from Fior Markets.'}</p>
           </div>
           <div className="w-24 h-1 bg-gradient-to-r from-purple-400 to-indigo-300 mx-auto rounded-full"></div>
         </div>

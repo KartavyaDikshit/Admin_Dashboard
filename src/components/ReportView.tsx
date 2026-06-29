@@ -113,7 +113,7 @@ const parseContent = (text: string | null, markers: string[]) => {
 };
 
 export default function ReportView({ report, lang, dict }: ReportViewProps) {
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.fiormarkets.com';
   
   // Markers used for fallback text parsing
   const dynamicsMarkers = [
@@ -467,7 +467,7 @@ export default function ReportView({ report, lang, dict }: ReportViewProps) {
                      currency: report.currency || 'USD'
                   }}
                   labels={dict}
-                  reportId={report.reportId || report.sku || undefined} // Use reportId (TBI-XXXX) preferred
+                  reportId={report.reportId || report.sku || undefined} // Use reportId (FM-XXXX) preferred
                   reportDbId={report.id}
                   reportTitle={report.title}
                   lang={lang}

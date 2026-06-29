@@ -36,7 +36,7 @@ jest.mock('@/lib/prisma', () => ({
 // Mock @/lib/utils
 jest.mock('@/lib/utils', () => ({
   generateSlug: jest.fn((title) => title.toLowerCase().replace(/\s/g, '-')),
-  generateSKU: jest.fn(() => 'TBI-SKU-123'),
+  generateSKU: jest.fn(() => 'FM-SKU-123'),
 }));
 
 // Mock OpenAI

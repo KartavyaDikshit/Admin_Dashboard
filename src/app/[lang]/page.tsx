@@ -21,26 +21,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const dict = getDictionary(lang) as any;
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
 
   return {
     title: dict.homeTitle || 'Global Market Research Reports & Consulting',
-    description: dict.homeDesc || 'The Brainy Insights provides comprehensive market research reports, industry analysis, and consulting services to help businesses grow globally.',
+    description: dict.homeDesc || 'Fior Markets provides comprehensive market research reports, industry analysis, and consulting services to help businesses grow globally.',
     keywords: ['market research', 'consulting services', 'global market reports', 'industry analysis', 'business intelligence'],
     alternates: {
       canonical: `${siteUrl}/${lang}`,
     },
     openGraph: {
       title: dict.homeTitle || 'Global Market Research Reports & Consulting',
-      description: dict.homeDescription || 'The Brainy Insights provides comprehensive market research reports, industry analysis, and consulting services.',
+      description: dict.homeDescription || 'Fior Markets provides comprehensive market research reports, industry analysis, and consulting services.',
       url: `${siteUrl}/${lang}`,
-      siteName: 'The Brainy Insights',
+      siteName: 'Fior Markets',
       images: [
         {
           url: '/og-image.jpg',
           width: 1200,
           height: 630,
-          alt: 'The Brainy Insights',
+          alt: 'Fior Markets',
         }
       ],
       locale: lang,
@@ -49,9 +49,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: 'summary_large_image',
       title: dict.homeTitle || 'Global Market Research Reports & Consulting',
-      description: dict.homeDescription || 'The Brainy Insights provides comprehensive market research reports.',
+      description: dict.homeDescription || 'Fior Markets provides comprehensive market research reports.',
       images: ['/og-image.jpg'],
-      site: '@thebrainyinsight',
+      site: '@fiormarkets',
     },
   };
 }
@@ -64,24 +64,24 @@ export default async function Home({ params }: Props) {
   }
 
   const dict = getDictionary(lang);
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
   
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "The Brainy Insights",
+    "name": "Fior Markets",
     "url": siteUrl,
     "logo": `${siteUrl}/logo.png`,
     "sameAs": [
-      "https://www.linkedin.com/company/thebrainyinsights",
-      "https://www.facebook.com/thebrainyinsights",
-      "https://twitter.com/thebrainyinsight"
+      "https://www.linkedin.com/company/fior-markets",
+      "https://www.facebook.com/fiormarkets/",
+      "https://x.com/fiormarkets"
     ],
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+1-315-215-1633",
       "contactType": "sales",
-      "email": "sales@thebrainyinsights.com"
+      "email": "sales@fiormarkets.com"
     }
   };
 

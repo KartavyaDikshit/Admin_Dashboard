@@ -6,7 +6,7 @@ const transporter = nodemailer.createTransport({
   port: 587, 
   secure: false, 
   auth: {
-    user: 'sales@thebrainyinsights.com', 
+    user: 'sales@fiormarkets.com', 
     pass: '7H#Q%o@B@Th8',
   },
   tls: {
@@ -26,7 +26,7 @@ interface EmailOptions {
 export async function sendEmail({ to, subject, html, cc }: EmailOptions) {
   try {
     const info = await transporter.sendMail({
-      from: '"The Brainy Insights" <sales@thebrainyinsights.com>',
+      from: '"Fior Markets" <sales@fiormarkets.com>',
       to,
       cc,
       subject,
@@ -47,7 +47,7 @@ export const emailTemplates = {
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
       <h2 style="color: #4f46e5; border-bottom: 2px solid #eee; padding-bottom: 10px;">Order Confirmation</h2>
       <p>Dear ${order.customerName},</p>
-      <p>Thank you for your purchase with The Brainy Insights. We are pleased to confirm your order.</p>
+      <p>Thank you for your purchase with Fior Markets. We are pleased to confirm your order.</p>
       
       <div style="background-color: #f9fafb; padding: 15px; border-radius: 5px; margin: 20px 0;">
         <p><strong>Order Number:</strong> ${order.orderNumber}</p>
@@ -77,7 +77,7 @@ export const emailTemplates = {
 
       <p>Your report(s) will be delivered to your email shortly after payment verification.</p>
       
-      <p style="margin-top: 30px;">Best regards,<br><strong>The Brainy Insights Team</strong><br><a href="mailto:sales@thebrainyinsights.com">sales@thebrainyinsights.com</a></p>
+      <p style="margin-top: 30px;">Best regards,<br><strong>Fior Markets Team</strong><br><a href="mailto:sales@fiormarkets.com">sales@fiormarkets.com</a></p>
     </div>
   `,
 
@@ -120,7 +120,7 @@ export const emailTemplates = {
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
       <h2 style="color: #4f46e5; border-bottom: 2px solid #eee; padding-bottom: 10px;">We Received Your Request</h2>
       <p>Dear ${data.firstName || data.name || 'Customer'},</p>
-      <p>Thank you for contacting The Brainy Insights. We have successfully received your request for <strong>${type}</strong>.</p>
+      <p>Thank you for contacting Fior Markets. We have successfully received your request for <strong>${type}</strong>.</p>
       
       ${data.reportTitle ? `
       <div style="background-color: #f9fafb; padding: 15px; border-radius: 5px; margin: 20px 0;">
@@ -131,7 +131,7 @@ export const emailTemplates = {
 
       <p>Our team of analysts is reviewing your requirements and will get back to you within 24 business hours.</p>
       
-      <p style="margin-top: 30px;">Best regards,<br><strong>The Brainy Insights Team</strong><br><a href="mailto:sales@thebrainyinsights.com">sales@thebrainyinsights.com</a></p>
+      <p style="margin-top: 30px;">Best regards,<br><strong>Fior Markets Team</strong><br><a href="mailto:sales@fiormarkets.com">sales@fiormarkets.com</a></p>
     </div>
   `,
 

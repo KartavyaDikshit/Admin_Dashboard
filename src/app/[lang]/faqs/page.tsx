@@ -7,7 +7,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
 
   return {
     title: 'Frequently Asked Questions (FAQs)',
@@ -25,16 +25,16 @@ export default async function FAQs({ params }: Props) {
       {
           category: "Report Related FAQs",
           items: [
-              { q: "I’m visiting this website for the first time. How can I trust your service quality?", a: "We encourage you to explore our website to review the depth and relevance of our content. You may also contact our sales team at sales@thebrainyinsights.com to request free sample copies of reports you are interested in and schedule a product review call with our analysts." },
-              { q: "Are samples available for all studies published by The Brainy Insights?", a: "Yes. Upon receiving your inquiry, our sales team will share a sample copy of the requested study. For upcoming reports, a demo sample is provided. These samples offer an overview of the report structure, methodology, and representative market insights to help validate data quality prior to purchase." },
-              { q: "What should I do if I have additional questions or customization requirements?", a: "Our syndicated studies are designed to serve a broad audience. However, if you require specific customizations or have additional queries, please submit your request via the inquiry form available alongside the report description page or email us at sales@thebrainyinsights.com." },
+              { q: "I’m visiting this website for the first time. How can I trust your service quality?", a: "We encourage you to explore our website to review the depth and relevance of our content. You may also contact our sales team at sales@fiormarkets.com to request free sample copies of reports you are interested in and schedule a product review call with our analysts." },
+              { q: "Are samples available for all studies published by Fior Markets?", a: "Yes. Upon receiving your inquiry, our sales team will share a sample copy of the requested study. For upcoming reports, a demo sample is provided. These samples offer an overview of the report structure, methodology, and representative market insights to help validate data quality prior to purchase." },
+              { q: "What should I do if I have additional questions or customization requirements?", a: "Our syndicated studies are designed to serve a broad audience. However, if you require specific customizations or have additional queries, please submit your request via the inquiry form available alongside the report description page or email us at sales@fiormarkets.com." },
               { q: "How do I ensure my requirements are clearly understood by the research team?", a: "Your customization request—shared via email or discussion with our team—is forwarded to our research analysts. After assessing feasibility, the team designs a client-centric study aligned with your objectives. A follow-up call may also be scheduled to discuss requirements and propose optimal solutions." },
-              { q: "What is the pricing and delivery timeline for a customized report?", a: "Pricing and timelines are communicated by our sales representative after finalizing the scope and deliverables. The Brainy Insights offers up to 10% free customization on all reports. Please contact our sales team for further details." },
-              { q: "How frequently does The Brainy Insights update its studies?", a: "Reports are typically updated every 6 to 12 months, depending on market dynamics and demand. For the latest update status of any report, please reach out to our sales team." },
-              { q: "What if the report I’m looking for is not listed in your catalogue?", a: "The Brainy Insights maintains an extensive internal database of market intelligence and industry updates, not all of which are listed publicly. If you cannot find a specific study, please contact our sales team to schedule an analyst discussion or submit your requirements." },
-              { q: "What pre-purchase services do you offer?", a: "At The Brainy Insights, we focus on delivering targeted, client-centric research. Our pre-sale offerings include: Free product review call with the report author or analyst, Customized research support for due diligence, Targeted purchase options to maximize value." },
+              { q: "What is the pricing and delivery timeline for a customized report?", a: "Pricing and timelines are communicated by our sales representative after finalizing the scope and deliverables. Fior Markets offers up to 10% free customization on all reports. Please contact our sales team for further details." },
+              { q: "How frequently does Fior Markets update its studies?", a: "Reports are typically updated every 6 to 12 months, depending on market dynamics and demand. For the latest update status of any report, please reach out to our sales team." },
+              { q: "What if the report I’m looking for is not listed in your catalogue?", a: "Fior Markets maintains an extensive internal database of market intelligence and industry updates, not all of which are listed publicly. If you cannot find a specific study, please contact our sales team to schedule an analyst discussion or submit your requirements." },
+              { q: "What pre-purchase services do you offer?", a: "At Fior Markets, we focus on delivering targeted, client-centric research. Our pre-sale offerings include: Free product review call with the report author or analyst, Customized research support for due diligence, Targeted purchase options to maximize value." },
               { q: "What formats are reports delivered in?", a: "Reports are delivered in PDF and spreadsheet formats. Presentation (PPT) formats can also be provided upon special request." },
-              { q: "Are discounts available?", a: "We support students, academicians, NGOs, startups, and early-stage businesses through special pricing and flexible payment options. Please contact our sales team at sales@thebrainyinsights.com to learn more." },
+              { q: "Are discounts available?", a: "We support students, academicians, NGOs, startups, and early-stage businesses through special pricing and flexible payment options. Please contact our sales team at sales@fiormarkets.com to learn more." },
           ]
       },
       {
@@ -42,8 +42,8 @@ export default async function FAQs({ params }: Props) {
           items: [
               { q: "How can I purchase a report?", a: "A “Buy Now” option is available on the right side of each report description page. Purchase Process: Select the desired report, Complete payment via online checkout or wire transfer, Receive the invoice (purchase contract required for wire transfers), Report dispatched within 2–48 hours." },
               { q: "How soon will I receive the report?", a: "Reports are delivered within 2 to 48 hours after payment confirmation. Delays may occur due to time zone differences. Orders placed on weekends or holidays are processed on the next business day." },
-              { q: "How will I receive the report?", a: "The report will be sent electronically to your registered email address. To ensure smooth delivery, please whitelist @thebrainyinsights.com and mark our emails as “Not Spam” if needed." },
-              { q: "What ordering methods are available?", a: "Authorized buyers may place orders through Email Ordering: Send requirements, billing details, delivery address, and preferred payment method to sales@thebrainyinsights.com. Our team will respond within one business day." },
+              { q: "How will I receive the report?", a: "The report will be sent electronically to your registered email address. To ensure smooth delivery, please whitelist @fiormarkets.com and mark our emails as “Not Spam” if needed." },
+              { q: "What ordering methods are available?", a: "Authorized buyers may place orders through Email Ordering: Send requirements, billing details, delivery address, and preferred payment method to sales@fiormarkets.com. Our team will respond within one business day." },
           ]
       },
       {
@@ -68,7 +68,7 @@ export default async function FAQs({ params }: Props) {
           category: "Post-Sale Queries",
           items: [
               { q: "Can I speak with the analyst after purchasing a report?", a: "Yes. Every purchase includes 30 minutes of complimentary analyst access to address report-related questions and provide expert insights." },
-              { q: "The report doesn’t fully meet my needs. How can The Brainy Insights help?", a: "While our reports are comprehensive, specific needs may vary. We recommend sharing customization requirements prior to purchase. If additional needs arise post-purchase, you may request post-sale customization." },
+              { q: "The report doesn’t fully meet my needs. How can Fior Markets help?", a: "While our reports are comprehensive, specific needs may vary. We recommend sharing customization requirements prior to purchase. If additional needs arise post-purchase, you may request post-sale customization." },
               { q: "Is post-sale customization chargeable?", a: "We offer up to 10% free customization on syndicated reports. Additional customization, if required, will be evaluated by our research team and quoted with timelines accordingly." },
           ]
       }

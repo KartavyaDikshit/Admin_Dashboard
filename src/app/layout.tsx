@@ -14,12 +14,12 @@ import "./globals.css";
 // });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com'),
+  metadataBase: new URL(process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com'),
   title: {
     default: 'Global Market Research Reports & Consulting',
     template: '%s'
   },
-  description: 'The Brainy Insights provides comprehensive market research reports, industry analysis, and consulting services to help businesses grow globally.',
+  description: 'Fior Markets provides comprehensive market research reports, industry analysis, and consulting services to help businesses grow globally.',
   keywords: ["AI", "Pipeline", "Token Optimization", "GPT-4o mini", "Report Generation"],
   icons: {
     icon: '/favicon.png',

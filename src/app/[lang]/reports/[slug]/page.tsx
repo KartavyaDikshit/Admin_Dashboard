@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
   // Always use dynamic canonical URL to ensure correct locale is used
   // This overrides potentially incorrect hardcoded URLs in the database
   const canonicalUrl = `${siteUrl}/${lang}/reports/${slug}`;
@@ -46,8 +46,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: report.metaTitle || report.title,
     description: report.metaDescription || report.summary || report.description?.substring(0, 160) || '',
     keywords: report.keywords || [],
-    authors: [{ name: 'The Brainy Insights' }],
-    publisher: 'The Brainy Insights',
+    authors: [{ name: 'Fior Markets' }],
+    publisher: 'Fior Markets',
     robots: {
       index: true,
       follow: true,
@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           alt: report.title,
         }
       ],
-      siteName: 'The Brainy Insights',
+      siteName: 'Fior Markets',
       locale: lang,
     },
     twitter: {
@@ -86,11 +86,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: report.twitterTitle || report.ogTitle || report.metaTitle || report.title,
       description: report.twitterDescription || report.ogDescription || report.metaDescription || report.summary || report.description,
       images: [report.ogImage || report.imageUrl || '/logo.png'],
-      site: '@thebrainyinsight',
-      creator: '@thebrainyinsight',
+      site: '@fiormarkets',
+      creator: '@fiormarkets',
     },
     other: {
-      'article:publisher': 'https://www.facebook.com/thebrainyinsights',
+      'article:publisher': 'https://www.facebook.com/fiormarkets/',
       'article:section': report.industryTags?.[0] || 'Market Research',
       'report-id': report.reportId || report.sku || '',
     }
@@ -115,7 +115,7 @@ export default async function ReportDetailPage({ params }: Props) {
     ));
   };
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
   
   // Patch schemaMarkup and other fields to include correct locale and streamlined image URLs
   const localizedReportUrl = `${siteUrl}/${lang}/reports/${report.slug}`;

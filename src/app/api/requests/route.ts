@@ -85,13 +85,13 @@ export async function POST(request: Request) {
            // 1. Send to Client
            await sendEmail({
               to: email,
-              subject: `Thank you for contacting The Brainy Insights`,
+              subject: `Thank you for contacting Fior Markets`,
               html: emailTemplates.enquiryConfirmationClient(enquiryData, typeLabel),
            });
   
            // 2. Send to Owner
            await sendEmail({
-              to: 'sales@thebrainyinsights.com',
+              to: 'sales@fiormarkets.com',
               subject: `New Enquiry - ${typeLabel}`,
               html: emailTemplates.enquiryNotificationOwner(enquiryData, typeLabel),
            });

@@ -315,7 +315,7 @@ export async function POST(request: NextRequest) {
 
     while (!isUnique && counter < 10) {
       const randomNum = Math.floor(10000 + Math.random() * 90000); // 5 digits
-      reportId = `TBI-${randomNum}`;
+      reportId = `FM-${randomNum}`;
       slug = `${generateSlug(rest.title)}-${randomNum}`;
 
       const existing = await prisma.report.findFirst({

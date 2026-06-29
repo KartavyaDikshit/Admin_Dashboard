@@ -54,7 +54,7 @@ export function generateSlug(text: string): string {
 }
 
 export function generateSKU(title: string, id?: string): string {
-  const prefix = 'TBI'
+  const prefix = 'FM'
   const year = new Date().getFullYear()
   const titlePart = title
     .replace(/[^a-zA-Z0-9]/g, '')

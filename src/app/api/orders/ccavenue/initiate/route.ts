@@ -84,7 +84,7 @@ export async function POST(request: Request) {
     // We will use relative path or configured base URL.
     // In production, force the live domain to avoid Vercel preview URL issues.
     const isProduction = process.env.NODE_ENV === 'production';
-    const baseUrl = isProduction ? 'https://www.brainyinsights.com' : (process.env.NEXTAUTH_URL || 'http://localhost:3000');
+    const baseUrl = isProduction ? 'https://www.fiormarkets.com' : (process.env.NEXTAUTH_URL || 'http://localhost:3000');
     
     const redirectUrl = `${baseUrl}/api/orders/ccavenue/handle`;
     const cancelUrl = `${baseUrl}/api/orders/ccavenue/handle`; // Handle cancellation same way or different

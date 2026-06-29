@@ -126,7 +126,7 @@ export default function Sidebar({ open, userRole }: SidebarProps) {
             <div className="relative h-8 w-auto">
               <Image
                 src="/logo.png"
-                alt="TBI Logo"
+                alt="FM Logo"
                 width={0}
                 height={0}
                 sizes="100vw"
@@ -136,7 +136,7 @@ export default function Sidebar({ open, userRole }: SidebarProps) {
             </div>
             <div>
               <p className="text-lg font-semibold text-gray-900 leading-none">Admin</p>
-              <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-0.5">The Brainy Insights</p>
+              <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-0.5">Fior Markets</p>
             </div>
           </Link>
         </div>

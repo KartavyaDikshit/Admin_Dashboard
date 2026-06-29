@@ -9,7 +9,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   const dict = getDictionary(lang);
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
 
   return {
     title: dict.contactTitle || 'Contact Us',
@@ -89,10 +89,10 @@ export default async function Contact({ params }: Props) {
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">{dict.email || 'Email Us'}</h3>
                 <p className="text-gray-600 mb-6">{dict.emailSupportDesc || 'Send us detailed information about your project requirements and we\'ll respond within 24 hours.'}</p>
                 <div className="space-y-2 mb-6">
-                  <p className="font-semibold text-indigo-600">sales@thebrainyinsights.com</p>
+                  <p className="font-semibold text-indigo-600">sales@fiormarkets.com</p>
                   <p className="text-sm text-gray-500">{dict.emailResponseTime || 'Response within 24 hours'}</p>
                 </div>
-                <a href="mailto:sales@thebrainyinsights.com" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-bold transition-all h-11 px-4 py-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">{dict.sendEmail || 'Send Email'}</a>
+                <a href="mailto:sales@fiormarkets.com" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-bold transition-all h-11 px-4 py-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">{dict.sendEmail || 'Send Email'}</a>
               </div>
             </div>
           </div>
@@ -108,7 +108,7 @@ export default async function Contact({ params }: Props) {
                 <h2 className="text-3xl font-bold text-gray-900">{dict.address || 'Visit Our Office'}</h2>
               </div>
               <div className="space-y-4 text-gray-600">
-                <div><p className="text-lg font-semibold text-gray-900 mb-2">Brainy Insights Pvt. Ltd</p><p>Solitaire Business Hub Balewadi highstreet</p><p>Baner, Pune, Maharashtra 411045</p><p>Office Number 1311</p></div>
+                <div><p className="text-lg font-semibold text-gray-900 mb-2">Fior Markets Pvt. Ltd</p><p>Solitaire Business Hub Balewadi highstreet</p><p>Baner, Pune, Maharashtra 411045</p><p>Office Number 1311</p></div>
                 <div className="pt-4"><p className="text-sm text-gray-500 mb-2">Office Hours:</p><p className="text-sm">Monday - Friday: 9:00 AM - 6:00 PM IST</p></div>
                 <div className="pt-4"><a href="https://www.google.com/maps/search/?api=1&query=Solitaire+Business+Hub+Balewadi+highstreet,+Baner,+Pune,+Maharashtra+411045" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-indigo-600 hover:text-indigo-700 font-semibold transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-navigation h-4 w-4 mr-2" aria-hidden="true"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>Get Directions</a></div>
               </div>

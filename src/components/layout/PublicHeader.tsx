@@ -14,7 +14,7 @@ export default function PublicHeader({ lang }: { lang: string }) {
              <div className="relative w-48 h-12">
                <Image 
                   src="/logo.png" 
-                  alt="The Brainy Insights" 
+                  alt="Fior Markets" 
                   fill 
                   className="object-contain"
                   priority

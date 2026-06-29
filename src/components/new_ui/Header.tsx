@@ -42,7 +42,7 @@ export default function Header({ dict, lang }: HeaderProps) {
           <div className="relative h-12 w-48 py-1 px-2">
             <Image 
               src="/logo.png" 
-              alt="The Brainy Insights" 
+              alt="Fior Markets" 
               fill 
               className="object-contain"
               priority
@@ -96,9 +96,9 @@ export default function Header({ dict, lang }: HeaderProps) {
           </div>
 
           <div className="hidden sm:flex flex-col items-end text-right mr-4">
-             <a href="mailto:sales@thebrainyinsights.com" className="text-xs font-semibold text-gray-700 hover:text-indigo-600 transition-colors flex items-center gap-1">
+             <a href="mailto:sales@fiormarkets.com" className="text-xs font-semibold text-gray-700 hover:text-indigo-600 transition-colors flex items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/></svg>
-                sales@thebrainyinsights.com
+                sales@fiormarkets.com
              </a>
              <a href="tel:+919370600191" className="text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors flex items-center gap-1 mt-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>

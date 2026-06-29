@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Category Not Found' };
   }
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
   const canonicalUrl = category.canonicalUrl || `${siteUrl}/${lang}/categories/${slug}`;
   const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
 
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'website',
       url: canonicalUrl,
       images: category.icon ? [{ url: `${siteUrl}/upload/${category.slug}.png` }] : [],
-      siteName: 'The Brainy Insights',
+      siteName: 'Fior Markets',
       locale: lang,
     },
     twitter: {
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: category.ogTitle || category.metaTitle || category.name,
       description: (category.ogDescription || category.metaDescription || category.description) ?? undefined,
       images: category.icon ? [`${siteUrl}/upload/${category.slug}.png`] : [],
-      site: '@thebrainyinsight',
+      site: '@fiormarkets',
     },
     other: {
       'category-slug': slug,
@@ -66,7 +66,7 @@ export default async function CategoryDetailPage({ params }: Props) {
     notFound();
   }
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.brainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: dict.home || 'Home', item: `${siteUrl}/${lang}` },
     { name: dict.categoriesLabel || 'Categories', item: `${siteUrl}/${lang}/categories` },

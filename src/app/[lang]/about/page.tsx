@@ -9,11 +9,11 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   const dict = getDictionary(lang);
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
 
   return {
-    title: 'About The Brainy Insights - Market Research & Consulting',
-    description: 'The Brainy Insights is a global market research and consulting firm delivering accurate, actionable data-driven insights.',
+    title: 'About Fior Markets - Market Research & Consulting',
+    description: 'Fior Markets is a global market research and consulting firm delivering accurate, actionable data-driven insights.',
     alternates: {
       canonical: `${siteUrl}/${lang}/about`,
     },
@@ -56,16 +56,16 @@ export default async function About({ params }: Props) {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
             <div className="mb-16">
-               <h2 className="text-3xl font-bold text-gray-900 mb-6 border-b pb-4">About Brainy Insights</h2>
+               <h2 className="text-3xl font-bold text-gray-900 mb-6 border-b pb-4">About Fior Markets</h2>
                 <div className="prose max-w-none text-gray-700 leading-relaxed text-justify space-y-4">
                     <p>
-                        Brainy Insights is a global market research and consulting firm committed to delivering accurate, actionable, and data-driven insights that empower organizations to make confident strategic decisions. By integrating advanced data analytics, industry expertise, and a rigorous research framework, we help businesses enhance market intelligence, optimize performance, and unlock sustainable growth opportunities.
+                        Fior Markets is a global market research and consulting firm committed to delivering accurate, actionable, and data-driven insights that empower organizations to make confident strategic decisions. By integrating advanced data analytics, industry expertise, and a rigorous research framework, we help businesses enhance market intelligence, optimize performance, and unlock sustainable growth opportunities.
                     </p>
                     <p>
                         Our core strength lies in our robust forecasting, estimation, and analytical models, which are designed to deliver high-quality and reliable outputs within accelerated timelines. We focus on transforming complex datasets into clear, meaningful insights that support business planning, investment decisions, product development, and market entry strategies.
                     </p>
                     <p>
-                        Brainy Insights offers a comprehensive portfolio of syndicated and customized market research reports. Our syndicated research repository spans a wide range of industries, sectors, and sub-segments, providing in-depth coverage across global, regional, and country-level markets. These reports are designed to reflect evolving market dynamics, emerging technologies, and competitive developments.
+                        Fior Markets offers a comprehensive portfolio of syndicated and customized market research reports. Our syndicated research repository spans a wide range of industries, sectors, and sub-segments, providing in-depth coverage across global, regional, and country-level markets. These reports are designed to reflect evolving market dynamics, emerging technologies, and competitive developments.
                     </p>
                 </div>
             </div>
@@ -80,7 +80,7 @@ export default async function About({ params }: Props) {
                         Our market research reports are developed through a comprehensive blend of primary and secondary research methodologies. Each report includes a detailed market overview, market sizing and forecasting, competitive landscape analysis, profiling of key players, evaluation of major trends, growth drivers, restraints, opportunities, and assessment of the current and future market scenario.
                     </p>
                     <p className="mt-4">
-                        Brainy Insights is supported by a dedicated team of highly experienced analysts, domain specialists, and consultants. Our experts continuously track industry developments, regulatory changes, technological advancements, and macroeconomic indicators. By systematically analyzing and interpreting these factors, we deliver up-to-date insights and forward-looking forecasts that help clients stay competitive in dynamic global markets.
+                        Fior Markets is supported by a dedicated team of highly experienced analysts, domain specialists, and consultants. Our experts continuously track industry developments, regulatory changes, technological advancements, and macroeconomic indicators. By systematically analyzing and interpreting these factors, we deliver up-to-date insights and forward-looking forecasts that help clients stay competitive in dynamic global markets.
                     </p>
                 </div>
                 

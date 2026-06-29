@@ -11,7 +11,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   const dict = getDictionary(lang);
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
   const locales = ['en', 'de', 'fr', 'it', 'ja', 'ko', 'es'];
 
   const languages: Record<string, string> = {};
@@ -34,7 +34,7 @@ export default async function CategoriesPage({ params }: Props) {
   const dict = getDictionary(lang);
   const categories = await getCategories(lang);
 
-  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.thebrainyinsights.com';
+  const siteUrl = process.env.NEXTAUTH_URL || 'https://www.fiormarkets.com';
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: dict.home || 'Home', item: `${siteUrl}/${lang}` },
     { name: dict.categories || 'Categories', item: `${siteUrl}/${lang}/categories` }
