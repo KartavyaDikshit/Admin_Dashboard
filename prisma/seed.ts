@@ -1,12 +1,11 @@
 import { PrismaClient } from '@prisma/client'
-import { withAccelerate } from '@prisma/extension-accelerate'
 import bcrypt from 'bcryptjs'
 
-const url = process.env.PRISMA_DATABASE_URL?.replace('prisma+postgres://', 'prisma://')
+const url = process.env.PRISMA_DATABASE_URL || process.env.DATABASE_URL
 
 const prisma = new PrismaClient({
   datasourceUrl: url,
-}).$extends(withAccelerate())
+})
 
 function generateSlug(text: string): string {
   return text
@@ -25,10 +24,10 @@ async function main() {
   const hashedPassword = await bcrypt.hash('admin123', 12)
   
   const admin = await prisma.admin.upsert({
-    where: { email: 'admin@thebrainyinsights.com' },
+    where: { email: 'admin@fiormarkets.com' },
     update: {},
     create: {
-      email: 'admin@thebrainyinsights.com',
+      email: 'admin@fiormarkets.com',
       username: 'superadmin',
       firstName: 'Super',
       lastName: 'Admin',
@@ -57,7 +56,7 @@ async function main() {
       shortcode: 'HC',
       description_en: 'Comprehensive Healthcare market research reports covering key trends, market size, and growth opportunities.',
       seoKeywords: ['healthcare market research', 'healthcare industry analysis', 'medical device market', 'pharmaceutical market'],
-      metaTitle: 'Healthcare Market Research Reports | TheBrainyInsights',
+      metaTitle: 'Healthcare Market Research Reports | Fior Markets',
       metaDescription: 'Leading Healthcare market research reports with comprehensive global market analysis.',
     },
     {
@@ -65,7 +64,7 @@ async function main() {
       shortcode: 'ITS',
       description_en: 'In-depth Information Technology & Semiconductors market research reports on software, hardware, and semiconductor trends.',
       seoKeywords: ['IT market research', 'semiconductor industry analysis', 'software market', 'hardware market'],
-      metaTitle: 'Information Technology & Semiconductors Market Research Reports | TheBrainyInsights',
+      metaTitle: 'Information Technology & Semiconductors Market Research Reports | Fior Markets',
       metaDescription: 'Leading Information Technology & Semiconductors market research reports with comprehensive global market analysis.',
     },
     {
@@ -73,7 +72,7 @@ async function main() {
       shortcode: 'ME',
       description_en: 'Detailed Machinery & Equipment market research reports covering industrial machinery, construction equipment, and manufacturing trends.',
       seoKeywords: ['machinery market research', 'equipment industry analysis', 'industrial machinery', 'construction equipment'],
-      metaTitle: 'Machinery & Equipment Market Research Reports | TheBrainyInsights',
+      metaTitle: 'Machinery & Equipment Market Research Reports | Fior Markets',
       metaDescription: 'Leading Machinery & Equipment market research reports with comprehensive global market analysis.',
     },
     {
@@ -81,7 +80,7 @@ async function main() {
       shortcode: 'AD',
       description_en: 'Exclusive Aerospace & Defence market research reports on aviation, space, and military technologies.',
       seoKeywords: ['aerospace market research', 'defence industry analysis', 'aviation market', 'space technology'],
-      metaTitle: 'Aerospace & Defence Market Research Reports | TheBrainyInsights',
+      metaTitle: 'Aerospace & Defence Market Research Reports | Fior Markets',
       metaDescription: 'Leading Aerospace & Defence market research reports with comprehensive global market analysis.',
     },
     {
@@ -89,7 +88,7 @@ async function main() {
       shortcode: 'CM',
       description_en: 'Extensive Chemicals & Materials market research reports covering specialty chemicals, polymers, and advanced materials.',
       seoKeywords: ['chemicals market research', 'materials industry analysis', 'specialty chemicals', 'polymers'],
-      metaTitle: 'Chemicals & Materials Market Research Reports | TheBrainyInsights',
+      metaTitle: 'Chemicals & Materials Market Research Reports | Fior Markets',
       metaDescription: 'Leading Chemicals & Materials market research reports with comprehensive global market analysis.',
     },
     {
@@ -97,7 +96,7 @@ async function main() {
       shortcode: 'FB',
       description_en: 'Thorough Food & Beverages market research reports on consumer food, alcoholic beverages, and non-alcoholic beverages.',
       seoKeywords: ['food market research', 'beverages industry analysis', 'consumer food', 'alcoholic beverages'],
-      metaTitle: 'Food & Beverages Market Research Reports | TheBrainyInsights',
+      metaTitle: 'Food & Beverages Market Research Reports | Fior Markets',
       metaDescription: 'Leading Food & Beverages market research reports with comprehensive global market analysis.',
     },
     {
@@ -105,7 +104,7 @@ async function main() {
       shortcode: 'AG',
       description_en: 'Comprehensive Agriculture market research reports covering crop production, livestock, and agricultural technology.',
       seoKeywords: ['agriculture market research', 'farming industry analysis', 'crop production', 'agritech'],
-      metaTitle: 'Agriculture Market Research Reports | TheBrainyInsights',
+      metaTitle: 'Agriculture Market Research Reports | Fior Markets',
       metaDescription: 'Leading Agriculture market research reports with comprehensive global market analysis.',
     },
     {
@@ -113,7 +112,7 @@ async function main() {
       shortcode: 'EP',
       description_en: 'In-depth Energy & Power market research reports on renewable energy, oil & gas, and power generation.',
       seoKeywords: ['energy market research', 'power industry analysis', 'renewable energy', 'oil & gas'],
-      metaTitle: 'Energy & Power Market Research Reports | TheBrainyInsights',
+      metaTitle: 'Energy & Power Market Research Reports | Fior Markets',
       metaDescription: 'Leading Energy & Power market research reports with comprehensive global market analysis.',
     },
     {
@@ -121,7 +120,7 @@ async function main() {
       shortcode: 'CG',
       description_en: 'Detailed Consumer Goods market research reports covering personal care, home care, and consumer electronics.',
       seoKeywords: ['consumer goods market research', 'retail industry analysis', 'personal care', 'home care'],
-      metaTitle: 'Consumer Goods Market Research Reports | TheBrainyInsights',
+      metaTitle: 'Consumer Goods Market Research Reports | Fior Markets',
       metaDescription: 'Leading Consumer Goods market research reports with comprehensive global market analysis.',
     },
     {
@@ -129,7 +128,7 @@ async function main() {
       shortcode: 'AT',
       description_en: 'Exclusive Automotive & Transportation market research reports on electric vehicles, autonomous driving, and logistics.',
       seoKeywords: ['automotive market research', 'transportation industry analysis', 'electric vehicles', 'autonomous driving'],
-      metaTitle: 'Automotive & Transportation Market Research Reports | TheBrainyInsights',
+      metaTitle: 'Automotive & Transportation Market Research Reports | Fior Markets',
       metaDescription: 'Leading Automotive & Transportation market research reports with comprehensive global market analysis.',
     },
   ];
