@@ -11,7 +11,7 @@ import { Fragment } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import { upload } from '@vercel/blob/client';
-
+import imageCompression from 'browser-image-compression';
 import RichTextEditor from '@/components/RichTextEditor';
 
 type ReportWithCategories = Report & { categories: { id: string; name: string }[] };
@@ -153,10 +153,20 @@ export default function EditReportPage() {
     if (!selectedFile) return;
 
     setIsUploading(true);
-    toast.loading('Uploading image...');
+    toast.loading('Compressing image...');
 
     try {
-      const newBlob = await upload(selectedFile.name, selectedFile, {
+      // Compress the image before uploading to speed up Vercel blob uploads
+      const options = {
+        maxSizeMB: 0.8,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true
+      };
+      
+      const compressedFile = await imageCompression(selectedFile, options);
+      toast.loading('Uploading compressed image...');
+
+      const newBlob = await upload(compressedFile.name, compressedFile, {
         access: 'public',
         handleUploadUrl: '/api/upload/client',
       });

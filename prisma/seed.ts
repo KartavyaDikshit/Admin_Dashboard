@@ -166,7 +166,10 @@ async function main() {
   console.log('📁 Created categories:', categories.length)
 
   // Create AI prompt templates
-  const prompt1Content = `Generate an authoritative and insightful market research summary on the {title} with a strong focus on data-driven storytelling and strategic relevance. The content should be structured to meet the needs of C-level decision-makers, investors, and analysts, while being optimized for search engines. Make sure the word count remains under 300 words. Follow the structure below and remember to provide the content in paragraph format only, do not provide bullet point lists
+  const prompt1Content = `Generate an authoritative and insightful market research summary on the {title} with a strong focus on data-driven storytelling and strategic relevance. The content should be structured to meet the needs of C-level decision-makers, investors, and analysts, while being optimized for search engines. Make sure the word count remains under 300 words. Follow the structure below and remember to provide the content in paragraph format only, do not provide bullet point lists.
+
+IMPORTANT: You MUST format your output entirely in HTML. Use <b>, <strong>, <h3>, <ul>, <li>, and <p> tags appropriately. DO NOT output any markdown (e.g. no **, no ##, no \`\`\`).
+
 1.	Compelling Market Opening:
 	Begin with: “The {title} was valued at USD XX Billion in {currentYear}…”
 	Clearly mention the market size in {currentYear}, forecasted market size for {forecastEndYear}, and CAGR during the {forecastPeriod} period.
@@ -182,8 +185,10 @@ async function main() {
 	Ensure content includes primary and secondary keywords naturally to boost SEO.`;
 
   const prompt2Content = `now create content for this section for {title} 
-Objective: Generate a compelling "Market Dynamics" section for the {title} report, clearly segmented into Market Drivers, Market Restraints, and Market Opportunities. The tone must be analytical, data-backed, and tailored for a strategic audience (executives, investors, policymakers), while ensuring SEO-rich content that ranks on SERPs. Follow the structure below and remember to provide the content in paragraph format only, do not provide bullet point lists
-📌 Prompt Structure and Instructions:
+Objective: Generate a compelling "Market Dynamics" section for the {title} report. The goal is to provide a balanced, data-rich analysis of the factors driving, restraining, and creating opportunities in the market. Focus on recent data (2024–2025), industry shifts, and actionable insights.
+
+IMPORTANT: You MUST format your output entirely in HTML. Use <b>, <strong>, <h3>, <ul>, <li>, and <p> tags appropriately. DO NOT output any markdown (e.g. no **, no ##, no \`\`\`).
+
 ________________________________________
 🔹 A. Market Drivers
 •	List 2–4 key growth drivers that are accelerating the market’s expansion.
@@ -224,7 +229,11 @@ SEO and Style Guidelines:
 •	Keep paragraphs concise and logically connected for enhanced readability and SEO.`;
 
   const prompt3Content = `now create content for this section for {title} 
-Objective: Generate an in-depth “Regional Insights” section for the {title} report, Select the one with largest market share out of these 3 regions (North America, Asia-Pacific, and Europe). The regional subsection must open with current and forecasted market size, CAGR, and key growth factors that are relevant to the region and {title}. The language should appeal to executives and analysts, while supporting SEO goals with keyword-rich, authoritative content.
+Instructions: Write a detailed "Regional Insights" section for the {title} report. 
+
+IMPORTANT: You MUST format your output entirely in HTML. Use <b>, <strong>, <h3>, <ul>, <li>, and <p> tags appropriately. DO NOT output any markdown (e.g. no **, no ##, no \`\`\`).
+
+You must cover at least 3 major regions (e.g., North America, Europe, Asia-Pacific) and highlight the dominant region. Support each section with facts, figures, trends, and regulations. Include current and forecasted market size, CAGR, and key growth factors that are relevant to the region and {title}. The language should appeal to executives and analysts, while supporting SEO goals with keyword-rich, authoritative content.
 
 ________________________________________
 📌 Prompt Structure and Instructions:
@@ -306,6 +315,9 @@ ________________________________________
 •	Do not use generic summaries or cite unnamed research firms.`;
 
   const prompt4Content = `now create content for this section for {title} 
+
+IMPORTANT: You MUST format your output entirely in HTML. Use <b>, <strong>, <h3>, <ul>, <li>, and <p> tags appropriately. DO NOT output any markdown (e.g. no **, no ##, no \`\`\`).
+
 PART 1: Some of the Key Market Players
 Instructions:
 •	Generate a bullet-point list of the Top 10 companies operating in the {title}.

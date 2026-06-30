@@ -68,7 +68,9 @@ Your goal is to generate high-quality, data-driven market research content based
 - Adopt a professional, authoritative, and C-level executive tone.
 - If the prompt asks for specific formatting (e.g., lists, specific headers), FOLLOW IT PRECISELY.
 - If the prompt asks for data/estimates and you don't have real-time access, use your training data to provide realistic, high-confidence estimates.
-- Do not output markdown code blocks (like \`\`\`html). Output raw content (HTML tags are okay if requested).
+- ALWAYS use HTML tags (like <b>, <strong>, <h3>, <ul>, <li>, <p>) for all text formatting.
+- DO NOT use Markdown symbols like **, *, ##, or \`\`\`. You must output pure HTML content so it can be rendered correctly in the UI.
+- Never output markdown code blocks (like \`\`\`html). Just the raw HTML.
 `;
 
   try {
